@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlexDom104</title>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <!-- FontAwesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pzw5X8W6iJHwVZ42F0lXGZfVXbWWj5Lxq+6v2Y+Kx9o9h+bmsbXrLe7LcL3vJOfDSh9LK9A6b3VdAzR1z+5q2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #111; color: #fff; }
+    header { background: #fff; color: #000; position: relative; }
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; position: relative; height: 80px; }
+    .nav-menu { list-style: none; display: flex; gap: 20px; }
+    .nav-menu a { text-decoration: none; color: inherit; font-weight: bold; }
+    .logo-container {
+      position: absolute;
+      top: 50%; /* Centra verticalmente */
+      left: 50%; /* Centra horizontalmente */
+      transform: translate(-50%, -50%); /* Ajusta el desplazamiento exacto */
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #000;
+      background: #fff;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 15px; position: relative; }
+    .search-container { position: absolute; top: 40px; right: 0; background: #fff; padding: 5px 10px; border-radius: 4px; }
+    .search-container.hidden { display: none; }
+    .search-container input { border: 1px solid #ccc; padding: 5px; border-radius: 4px; }
+    .search-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+    .contact-link { text-decoration: none; color: inherit; font-weight: bold; }
+    main { padding: 20px; }
+    .swiper { width: 100%; max-width: 1200px; margin: 0 auto; height: 500px; }
+    .swiper-slide { background: #222; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; border-radius: 8px; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <!-- Menú de navegación -->
+      <ul class="nav-menu">
+        <li><a href="#sobremi">Sobre mí</a></li>
+        <li><a href="#musica">Música</a></li>
+        <li><a href="#apoyame">Apóyame</a></li>
+      </ul>
+      <!-- Logo centrado -->
+      <div class="logo-container">
+        <div class="logo">Logo</div>
+      </div>
+      <!-- Acciones de navegación -->
+      <div class="nav-actions">
+        <button id="search-btn" class="search-btn"><i class="fas fa-search"></i></button>
+        <div id="search-container" class="search-container hidden">
+          <input type="text" placeholder="Buscar..." />
+        </div>
+        <a href="#contacto" class="contact-link">Contacto</a>
+      </div>
+    </nav>
+  </header>
 
+  <main>
+    <!-- Carousel con Swiper.js -->
+    <div class="swiper swiper-container">
+      <div class="swiper-wrapper">
+        <!-- 1. Twitch: En vivo -->
+        <div class="swiper-slide twitch-slide hidden">
+          <iframe src="https://player.twitch.tv/?channel=alexdom104&parent=localhost&parent=alexdom104.com" allowfullscreen></iframe>
+        </div>
+        <!-- 2. Kick: En vivo -->
+        <div class="swiper-slide kick-slide hidden">
+          <iframe src="https://kick.com/embed/channel/alexdom104?layout=video" allowfullscreen></iframe>
+        </div>
+        <!-- 3. Video de bienvenida -->
+        <div class="swiper-slide">
+          <iframe src="https://www.youtube.com/embed/ri2sHPVG-MQ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <!-- 4. TikTok -->
+        <div class="swiper-slide">
+          <iframe src="https://www.tiktok.com/embed/@alexdom104" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inicializar Swiper
+      const swiper = new Swiper('.swiper-container', {
+        effect: 'slide',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        loop: true,
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+      });
+
+      // Mostrar u ocultar Twitch y Kick según el horario
+      const twitchSlide = document.querySelector('.twitch-slide');
+      const kickSlide = document.querySelector('.kick-slide');
+      const currentTime = new Date();
+      const currentHour = currentTime.getHours();
+      const currentMinutes = currentTime.getMinutes();
+
+      // Convertir la hora de 24 horas a minutos totales
+      const currentTotalMinutes = currentHour * 60 + currentMinutes;
+      const startTime = 20 * 60 + 50; // 8:50 PM en minutos totales
+      const endTime = 1 * 60; // 1:00 AM en minutos totales (al día siguiente)
+
+      // Mostrar Twitch y Kick solo si estamos dentro del rango horario
+      if ((currentTotalMinutes >= startTime && currentTotalMinutes < 1440) || (currentTotalMinutes >= 0 && currentTotalMinutes < endTime)) {
+        twitchSlide.classList.remove('hidden');
+        kickSlide.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
