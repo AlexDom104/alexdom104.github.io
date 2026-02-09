@@ -3,301 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AlexDom104 </title>
+  <title>AlexDom104 | Home</title>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #111; color: #fff; }
-    header { background: #fff; color: #000; position: relative; }
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      height: 80px;
-      position: relative;
-    }
-    .nav-menu { list-style: none; display: flex; gap: 20px; }
-    .nav-menu a,
-    .contact-link {
-      text-decoration: none;
-      color: inherit;
-      font-weight: bold;
-    }
-    .nav-menu a:hover,
-    .contact-link:hover { opacity: 0.7; }
-    .logo-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-    .logo img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .search-input {
-      padding: 5px 10px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      outline: none;
-      font-size: 1rem;
-      width: 160px;
-      background: #fff;
-      color: #000;
-    }
-    .search-btn {
-      background: none;
-      border: none;
-      color: inherit;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-    main { padding: 20px; }
-    .swiper { width: 100%; max-width: 1200px; margin: 0 auto; height: 500px; }
-    .swiper-slide {
-      background: #222;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color: #fff; }
+    
+    /* Header Minimalista */
+    header { background: #fff; color: #000; height: 80px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .logo img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+
+    main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+
+    /* Carrusel */
+    .swiper { width: 100%; height: 400px; margin-bottom: 40px; border-radius: 15px; }
+    .swiper-slide { background: #222; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     iframe { width: 100%; height: 100%; border: none; }
-    .preview-wrapper { position: relative; width: 100%; height: 100%; }
-    .preview-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transition: transform 0.3s ease;
+
+    /* Grid de Cuadros Interactivos */
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
     }
-    .preview-image:hover { transform: scale(1.03); }
-    .platform-logo {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      width: 40px;
-      background: rgba(0,0,0,0.6);
-      padding: 4px;
-      border-radius: 6px;
+
+    .nav-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
     }
-    .sobre-mi-section {
-      background: #333333;
-      border-radius: 12px;
-      padding: 20px;
-      width: 100%;
-      max-width: 1200px;
-      margin: 40px auto;
-      color: #fff;
+
+    .nav-card:hover {
+      transform: translateY(-10px);
+      background: #252525;
+      border-color: #fff;
+      box-shadow: 0 10px 20px rgba(255,255,255,0.1);
     }
-    .sobre-mi-section h2 { margin-bottom: 10px; font-size: 1.8rem; }
-    .sobre-mi-section p { line-height: 1.5; margin-bottom: 15px; }
-    /* Back to Top */
-    #back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      padding: 12px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      z-index: 100;
-    }
-    #back-to-top.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-    #back-to-top:hover { background: #f0f0f0; }
+
+    .nav-card i { font-size: 2.5rem; color: #fff; }
+    .nav-card h3 { font-size: 1.5rem; }
+    .nav-card p { font-size: 0.9rem; color: #aaa; }
+
+    /* Estilo para el cuadro de Sorteos (Destaque) */
+    .card-sorteos { background: linear-gradient(145deg, #1a1a1a, #2c3e50); border-color: #f1c40f; }
   </style>
 </head>
 <body>
+
   <header>
-    <nav class="navbar">
-      <ul class="nav-menu">
-        <li><a href="#sobremi">Sobre mí</a></li>
-        <li><a href="#musica">Música</a></li>
-        <li><a href="#apoyame">Apóyame</a></li>
-      </ul>
-      <div class="logo-container">
-        <div class="logo">
-          <img src="https://imgur.com/dSIZrFm.png" alt="Logo AlexDom104" />
-        </div>
-      </div>
-      <div class="nav-actions">
-        <input type="text" id="search-input" class="search-input" placeholder="Buscar sección..." />
-        <button id="search-btn" class="search-btn"><i class="fas fa-search"></i></button>
-        <a href="#contacto" class="contact-link">Contacto</a>
-      </div>
-    </nav>
+    <div class="logo">
+      <img src="https://imgur.com/dSIZrFm.png" alt="Logo AlexDom104" />
+    </div>
   </header>
 
   <main>
-    <!-- Carrusel -->
     <div class="swiper swiper-container">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <iframe src="https://www.youtube.com/embed/ri2sHPVG-MQ" allowfullscreen></iframe>
-        </div>
-        <div class="swiper-slide">
-          <iframe src="https://www.tiktok.com/embed/@alexdom104" allowfullscreen></iframe>
-        </div>
-        <div class="swiper-slide">
-          <a href="https://www.twitch.tv/alexdom104" target="_blank" class="preview-wrapper">
-            <img class="preview-image" src="https://imgur.com/pQBmU0f.png" alt="Twitch Preview">
-            <img class="platform-logo" src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png" alt="Twitch Logo">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="https://kick.com/alexdom104" target="_blank" class="preview-wrapper">
-            <img class="preview-image" src="https://imgur.com/jStwEvO.png" alt="Kick Preview">
-            <img class="platform-logo" src="https://logos-world.net/wp-content/uploads/2024/01/Kick-Symbol.png" alt="Kick Logo">
-          </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="https://www.facebook.com/AlexDom104.of" target="_blank" class="preview-wrapper">
-            <img class="preview-image" src="https://imgur.com/8YPED08.png" alt="Facebook Preview">
-            <img class="platform-logo" src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook Logo">
-          </a>
-        </div>
+        <div class="swiper-slide"><iframe src="https://www.youtube.com/embed/ri2sHPVG-MQ"></iframe></div>
+        <div class="swiper-slide"><img src="https://imgur.com/pQBmU0f.png" style="width:100%; object-fit:cover;"></div>
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </div>
 
-    <!-- Sección Sobre mí -->
-    <section id="sobremi" class="sobre-mi-section">
-      <h2>Sobre mí</h2>
-      <p>
-        ¡Hola! Soy <strong>Alexis</strong>, pero quizá me conozcas como <em>AlexDom104</em> en Twitch y redes sociales. Nací en 1997 y soy licenciado en Mercadotecnia. Desde siempre me ha apasionado conectar con la gente: crear contenido, compartir música y acompañar a mi comunidad en cada paso.
-      </p>
-      <p>
-        A lo largo de mi carrera me he especializado como <strong>Community Manager</strong> y gestor de proyectos digitales. Fui Jefe de Redacción, donde diseñé campañas visuales y contenido para redes, adaptándome a las normas de cada plataforma. Todo esto lo he aprendido de forma autodidacta y aplicándolo día a día en mi trabajo.
-      </p>
-      <p>
-        Domino herramientas como Photoshop, Corel Draw, Premiere, Audition, After Effects, OBS y Streambot. Además, empleo <strong>IA</strong> (ChatGPT, Stable Diffusion, Suno) para optimizar procesos y generar contenido original sin problemas de copyright. Me considero meticuloso, creativo y un gran jugador de equipo.
-      </p>
-    </section>
+    <h2 style="text-align: center; margin-bottom: 30px;">Explora mi contenido</h2>
 
-    <!-- Sección Proyectos -->
-    <section id="proyectos" class="sobre-mi-section">
-      <h2>Proyectos</h2>
-      <h3>AlexDom104</h3>
-      <p>
-        Como marca personal, AlexDom104 nació alrededor de 2011, fusionando mi nombre (Alexis), Dominic Santiago de Gears of War y el número 104 del Spartan Frederic-104 en Halo.
-      </p>
-      <h3>Planeta Marketiniano</h3>
-      <p>
-        Planeta Marketiniano es un emprendimiento iniciado en 2018. Aunque aún informal, refleja mi visión de una agencia de marketing y diseño gráfico, construida con pasión y esfuerzo de un solo creador.
-      </p>
-    </section>
+    <nav class="nav-grid">
+      
+      <a href="sobre-mi.html" class="nav-card">
+        <i class="fas fa-user"></i>
+        <h3>Sobre Mí</h3>
+        <p>Conoce mi trayectoria como Marketer y Creador.</p>
+      </a>
 
-    <!-- Sección Música -->
-    <section id="musica" class="sobre-mi-section">
-      <h2>Música</h2>
-      <p>
-        Utilizando la Inteligencia Artificial, he creado diversas canciones con varios estilos, solo por la experiencia de hacerlo, no por buscar fama ni dinero.
-      </p>
-      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
-        <!-- Álbum 1 -->
-        <a href="https://www.youtube.com/watch?v=dELrc_EeqeE&list=OLAK5uy_kmrJ3gneTxAaWuQcS2YcfF2ur3gwXwoYk" target="_blank" style="text-align: center; text-decoration: none; color: inherit;">
-          <img src="https://imgur.com/VsaobqC.png" alt="Caminos de Melodía" style="width: 200px; border-radius: 12px;" />
-          <h3 style="margin-top: 10px;">Caminos de Melodía</h3>
-        </a>
-        <!-- Álbum 2 -->
-        <a href="https://www.youtube.com/watch?v=bYSwJGzjCfg&list=OLAK5uy_n3CQsANB9V0TH7hvJ_0ZNIdl8r5nLitzU" target="_blank" style="text-align: center; text-decoration: none; color: inherit;">
-          <img src="https://imgur.com/v9NQlEy.png" alt="Sombras del Camino" style="width: 200px; border-radius: 12px;" />
-          <h3 style="margin-top: 10px;">Sombras del Camino</h3>
-        </a>
-        <!-- Álbum 3 -->
-        <div style="text-align: center;">
-          <img src="https://imgur.com/1QyppRE.png" alt="El Corazón Se Eleva" style="width: 200px; border-radius: 12px;" />
-          <h3 style="margin-top: 10px;">
-            El Corazón Se Eleva<br><span style="font-size: 0.8rem; font-weight: normal;">(En producción)</span>
-          </h3>
-        </div>
-      </div>
-    </section>
+      <a href="musica.html" class="nav-card">
+        <i class="fas fa-music"></i>
+        <h3>Música</h3>
+        <p>Mis álbumes creados con Inteligencia Artificial.</p>
+      </a>
 
-    <!-- Sección Apóyame -->
-    <section id="apoyame" class="sobre-mi-section">
-      <h2>Apóyame</h2>
-      <p>
-        Si te gusta mi contenido y quieres apoyarme, puedes hacerlo de las siguientes maneras:
-        <!-- enlaces a donaciones, merch, etc. -->
-      </p>
-    </section>
+      <a href="sorteos.html" class="nav-card card-sorteos">
+        <i class="fas fa-gift" style="color: #f1c40f;"></i>
+        <h3>Sorteos</h3>
+        <p>Participa en las dinámicas de la comunidad.</p>
+      </a>
 
-    <!-- Sección Contacto -->
-    <section id="contacto" class="sobre-mi-section">
-      <h2>Contacto</h2>
-      <p>
-        ¿Dudas, sugerencias o propuestas? Escríbeme a
-        <a href="mailto:tuemail@ejemplo.com" style="color: #fff; text-decoration: underline;">tuemail@ejemplo.com</a>
-        o completa el formulario.
-      </p>
-      <!-- formulario aquí -->
-    </section>
+      <a href="contacto.html" class="nav-card">
+        <i class="fas fa-envelope"></i>
+        <h3>Contacto</h3>
+        <p>¿Tienes una propuesta? Hablemos.</p>
+      </a>
+
+    </nav>
   </main>
-
-  <!-- Back to Top Button -->
-  <button id="back-to-top" title="Volver arriba"><i class="fas fa-arrow-up"></i></button>
 
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script>
-    // Inicializar Swiper
     const swiper = new Swiper('.swiper-container', {
-      effect: 'slide',
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: 1,
       loop: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      speed: 500
-    });
-
-    // Búsqueda secciones
-    document.getElementById('search-btn').addEventListener('click', () => {
-      const term = document.getElementById('search-input').value.trim().toLowerCase();
-      if (!term) return;
-      const target = document.getElementById(term);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        alert('No se encontró la sección: ' + term);
-      }
-    });
-
-    // Back to Top
-    const backToTop = document.getElementById('back-to-top');
-    const header = document.querySelector('header');
-    window.addEventListener('scroll', () => {
-      if (header.getBoundingClientRect().bottom < 0) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
     });
   </script>
 </body>
