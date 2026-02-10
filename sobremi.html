@@ -8,30 +8,45 @@
   <style>
     body { background: #333333; color: white; font-family: 'Segoe UI', sans-serif; line-height: 1.6; }
     .container { max-width: 800px; margin: 50px auto; padding: 20px; }
-    .back-link { color: #EF5085; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+    
+    .back-link { color: #EF5085; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; transition: 0.3s; }
+    .back-link:hover { color: #70DDD8; }
+
     .profile-header { text-align: center; margin-bottom: 40px; }
-    .profile-header img { width: 150px; border-radius: 50%; border: 4px solid #EF5085; margin-bottom: 20px; }
-    .bio-section { background: #262626; padding: 30px; border-radius: 15px; border-left: 5px solid #70DDD8; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .skill-tag { background: #0A315B; color: #70DDD8; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin: 5px; display: inline-block; }
-    h1 { color: #EF5085; }
+    .profile-header img { width: 150px; border-radius: 50%; border: 4px solid #EF5085; margin-bottom: 20px; box-shadow: 0 0 15px #A64062; }
+    
+    h1 { font-size: 2.5rem; margin-bottom: 10px; color: #EF5085; }
+    
+    .bio-section { 
+        background: #262626; 
+        padding: 30px; 
+        border-radius: 15px; 
+        border-left: 5px solid #0A315B; 
+        box-shadow: 5px 5px 0px #A64062;
+    }
+
+    .skill-tag { background: #0A315B; color: #70DDD8; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin-top: 20px; display: inline-block; }
   </style>
 </head>
 <body>
   <div class="container">
     <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+    
     <div class="profile-header">
       <img src="https://imgur.com/dSIZrFm.png" alt="Alexis Pérez">
       <h1>Alexis Pérez</h1>
-      <p>Marketing | Content Creator | Tech</p>
+      <p>Lic. en Mercadotecnia | Creador de Contenido | Tech Enthusiast</p>
     </div>
+
     <div class="bio-section">
-      <p>Soy <strong>AlexDom104</strong>, un profesional del marketing con enfoque técnico y creativo. Domino herramientas de diseño, edición y automatización con IA.</p>
-      <div style="margin-top:20px;">
-        <span class="skill-tag">Photoshop</span>
-        <span class="skill-tag">Python</span>
-        <span class="skill-tag">Meta Ads</span>
-        <span class="skill-tag">IA Generativa</span>
-      </div>
+      <p>¡Hola! Soy <strong>Alexis</strong>, conocido en el mundo digital como <strong>AlexDom104</strong>. Mi trayectoria combina la estrategia del marketing profesional con la pasión por la creación de contenido y la tecnología.</p>
+      <br>
+      <p>Me especializo en gestión de comunidades, diseño gráfico y automatización mediante IA. He trabajado en proyectos que van desde la redacción de noticias hasta la administración de CRMs y campañas publicitarias.</p>
+      
+      <div class="skill-tag">Photoshop</div>
+      <div class="skill-tag">Premiere Pro</div>
+      <div class="skill-tag">Python (Básico)</div>
+      <div class="skill-tag">IA (Suno/ChatGPT)</div>
     </div>
   </div>
 </body>
