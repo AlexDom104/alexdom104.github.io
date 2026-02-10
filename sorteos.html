@@ -25,19 +25,21 @@
         .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--rosa-principal); animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Contenedores de estado (Ocultos por defecto) */
+        /* Contenedores */
         .main-container, #no-sorteo, #sorteo-terminado { display: none; max-width: 600px; margin: 0 auto; }
         
-        /* Estilos Mensajes de Estado */
         #no-sorteo, #sorteo-terminado { margin-top: 80px; }
         #no-sorteo h1, #sorteo-terminado h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 20px; line-height: 1.2; }
         
         .twitch-link { color: var(--cian-brillo); text-decoration: none; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid var(--cian-brillo); }
 
-        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
+        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 10px; }
         .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
+
+        /* Nuevo estilo para la hora local */
+        .local-time-msg { color: var(--cian-brillo); font-size: 0.9rem; margin-bottom: 25px; font-weight: bold; background: rgba(0,0,0,0.3); display: inline-block; padding: 5px 15px; border-radius: 20px; border: 1px solid #444; }
 
         .info-msg { font-size: 1rem; line-height: 1.5; color: #ccc; margin-bottom: 25px; }
 
@@ -80,7 +82,7 @@
 
     <div id="loading-screen">
         <div class="spinner"></div>
-        <p>Sincronizando reloj del servidor...</p>
+        <p>Sincronizando reloj con CDMX...</p>
     </div>
 
     <div id="no-sorteo">
@@ -111,6 +113,8 @@
             <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
             <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
         </div>
+
+        <div id="timezone-display" class="local-time-msg">Calculando hora local...</div>
 
         <p class="info-msg">
             Tener todos los puntos canjeables no te dará más chances de ganar, pero no te lo asegura al 100%, es suerte, así como los tickets que puedes canjear hasta 3 tickets en cada directo en Twitch.
@@ -190,7 +194,6 @@
         
         async function loadConfig() {
             try {
-                // Estado inicial: Cargando
                 document.getElementById('loading-screen').style.display = 'block';
                 document.getElementById('no-sorteo').style.display = 'none';
                 document.getElementById('sorteo-terminado').style.display = 'none';
@@ -199,17 +202,18 @@
                 const response = await fetch(scriptURL);
                 const data = await response.json();
                 
+                // Las fechas YA vienen con zona horaria desde el Apps Script
                 const inicio = new Date(data.inicio);
                 const fin = new Date(data.fin);
                 const ahora = new Date();
 
-                // Identificador único del sorteo (Fecha fin como ID)
+                // ID Sorteo
                 const giveawayID = data.fin; 
 
-                // Reseteo inteligente si hay un NUEVO sorteo
+                // Reseteo si es nuevo
                 const lastGiveaway = localStorage.getItem('alexdom_gw_id');
                 if (lastGiveaway !== giveawayID) {
-                    localStorage.removeItem('alexdom_sent'); // Permite participar de nuevo
+                    localStorage.removeItem('alexdom_sent');
                     localStorage.removeItem('alexdom_pts');
                     localStorage.removeItem('alexdom_done');
                     localStorage.setItem('alexdom_gw_id', giveawayID);
@@ -217,28 +221,34 @@
 
                 document.getElementById('loading-screen').style.display = 'none';
 
-                // Lógica de 3 Estados
                 if (ahora < inicio) {
-                    // 1. Aún no empieza
                     document.getElementById('no-sorteo').style.display = 'block';
                 } 
                 else if (ahora > fin) {
-                    // 2. Ya terminó
                     document.getElementById('sorteo-terminado').style.display = 'block';
                 } 
                 else {
-                    // 3. Activo
                     document.getElementById('sorteo-activo').style.display = 'block';
+                    // Mostrar hora local convertida
+                    showLocalTime(fin);
                     startTimer(fin);
                     loadUserData();
                 }
 
             } catch (e) {
                 console.error("Error:", e);
-                // Si falla la conexión, asumimos "No sorteo"
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('no-sorteo').style.display = 'block';
             }
+        }
+
+        // Función para mostrar la hora convertida
+        function showLocalTime(finDate) {
+            // Formatea la fecha a la hora local del usuario
+            const horaLocal = finDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const fechaLocal = finDate.toLocaleDateString();
+            document.getElementById('timezone-display').innerText = 
+                `Termina el ${fechaLocal} a las ${horaLocal} de tu zona horaria`;
         }
 
         // Datos del Usuario
@@ -281,7 +291,7 @@
         function startTimer(target) {
             setInterval(() => {
                 const diff = target - new Date().getTime();
-                if (diff <= 0) return location.reload(); // Recarga para mostrar pantalla "Terminado"
+                if (diff <= 0) return location.reload(); // Si llega a 0, recarga y mostrará "Sorteo Terminado"
                 document.getElementById("days").innerText = Math.floor(diff / 864e5);
                 document.getElementById("hours").innerText = Math.floor((diff % 864e5) / 36e5);
                 document.getElementById("minutes").innerText = Math.floor((diff % 36e5) / 6e4);
@@ -319,8 +329,8 @@
 
         function enviarSorteo() {
             const nick = document.getElementById('twitchNick').value.trim();
-            if(!nick) return alert("Nick obligatorio");
-            if(totalPoints === 0) return alert("Acumula puntos primero.");
+            if(!nick) return alert("¡El Nick de Twitch es obligatorio!");
+            if(totalPoints === 0) return alert("Debes acumular puntos antes de enviar.");
 
             localStorage.setItem('alexdom_nick', nick);
             const btn = document.getElementById('mainSubmit');
