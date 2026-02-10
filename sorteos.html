@@ -18,21 +18,25 @@
         header { background: var(--contraste); height: 90px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--rosa-oscuro); margin: -25px -25px 35px -25px; }
         .logo img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
 
-        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
+        .back-link { color: var(--rosa-principal); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; position: absolute; top: 30px; left: 20px; transition: 0.3s; z-index: 100; }
+        .back-link:hover { color: var(--cian-brillo); }
+
+        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; }
         .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
-        .reglas-box { max-width: 580px; margin: 0 auto 30px; background: var(--contraste); padding: 20px; border-radius: 12px; text-align: left; font-size: 0.9rem; border: 1px solid #444; }
-        .reglas-box h4 { color: var(--cian-brillo); margin-bottom: 10px; text-align: center; }
-        .reglas-box p { margin-bottom: 8px; line-height: 1.4; }
+        .info-msg { max-width: 600px; margin: 0 auto 30px; font-size: 0.95rem; line-height: 1.4; color: #ccc; }
 
         .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 18px; max-width: 460px; margin: 0 auto 30px; border: 2px solid var(--cian-brillo); }
         .score-banner h2 { font-size: 3.2rem; margin: 10px 0; }
 
+        .nick-section { max-width: 580px; margin: 0 auto 25px; text-align: left; }
+        .nick-input { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid var(--rosa-principal); background: var(--contraste); color: white; font-size: 1.1rem; outline: none; }
+        .nick-input:disabled { opacity: 0.6; border-color: #555; cursor: not-allowed; }
+
         .actions-list { max-width: 580px; margin: 0 auto; text-align: left; }
         .action-item { background: var(--contraste); display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-radius: 14px; margin-bottom: 12px; border: 1px solid #444; }
-        .action-info { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; }
         .action-info i { font-size: 1.4rem; color: var(--rosa-principal); width: 25px; text-align: center; }
         .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.85rem; }
 
@@ -40,18 +44,21 @@
         .btn-action.waiting { background: #555; border-color: #888; cursor: wait; }
         .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; opacity: 0.6; }
 
-        .nick-input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 8px; border: 2px solid var(--rosa-principal); background: var(--contraste); color: white; font-size: 1.1rem; }
-        .nick-input:focus { border-color: var(--cian-brillo); outline: none; }
+        .rules-section { max-width: 580px; margin: 40px auto; text-align: left; background: rgba(0,0,0,0.2); padding: 25px; border-radius: 15px; border: 1px solid #555; }
+        .rules-section h3 { color: var(--rosa-principal); margin-bottom: 15px; }
+        .rules-section li { margin-bottom: 12px; font-size: 0.9rem; line-height: 1.4; padding-left: 20px; position: relative; }
+        .rules-section li::before { content: "•"; color: var(--cian-brillo); position: absolute; left: 0; }
 
-        .btn-submit { background: var(--rosa-principal); color: white; border: none; width: 100%; padding: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; font-size: 1.3rem; margin-top: 10px; }
+        .btn-submit { background: var(--rosa-principal); color: white; border: none; width: 100%; max-width: 580px; padding: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; font-size: 1.3rem; margin-top: 25px; }
         .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        @media (max-width: 480px) { .action-item { flex-direction: column; gap: 15px; text-align: center; } }
     </style>
 </head>
 <body>
 
-    <header><div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div></header>
+    <header>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
+    </header>
 
     <div class="countdown-container" id="timer">
         <div class="time-box"><span id="days">00</span><label>Días</label></div>
@@ -60,69 +67,44 @@
         <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
     </div>
 
-    <div class="reglas-box">
-        <h4>IMPORTANTE</h4>
-        <p>Tener todos los puntos canjeables no te dará más chances de ganar, pero no te lo asegura al 100%, es suerte, así como los tickets que puedes canjear hasta 3 tickets en cada directo en Twitch.</p>
-        <p><strong>Reglas:</strong></p>
-        <p>• El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</p>
-        <p>• Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado y tachado de la comunidad.</p>
-        <p>• El <strong>GANADOR</strong> será anunciado el día de finalización del sorteo.</p>
-        <p>• Si el <strong>GANADOR</strong> no responde al mensaje en Twitch las siguientes 48 horas terminadas el sorteo, el premio será otorgado a un segundo ganador que será anotado pero no anunciado públicamente.</p>
-        <p>• Puedes canjear más de 5 tickets si la duración de los directos se extiende más de lo normal ya que cada ticket es igual a 2 puntos, entre más puntos, más chances hay de ganar.</p>
-        <p>• Es obligatorio que el Nick ingresado coincida exactamente con tu nombre de usuario en Twitch para validar la entrega.</p>
-        <p>• El registro de puntos es final; asegúrate de haber completado todas las acciones antes de enviar el formulario.</p>
-        <p style="text-align:center; font-weight:bold; color:var(--rosa-principal); margin-top:10px;">¡SUERTE!</p>
-    </div>
+    <p class="info-msg">Tener todos los puntos canjeables no te dará más chances de ganar, pero no te lo asegura al 100%, es suerte.</p>
 
     <div class="score-banner">
         <p>PUNTOS ACUMULADOS</p>
         <h2 id="totalPoints">0</h2>
     </div>
 
+    <div class="nick-section">
+        <label style="display:block; margin-bottom:10px; font-weight:bold; color:var(--cian-brillo);">NICK DE TWITCH (OBLIGATORIO)</label>
+        <input type="text" id="twitchNick" class="nick-input" placeholder="Tu Nick aquí..." required>
+    </div>
+
     <div class="actions-list">
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-twitch"></i> Twitch <span class="action-points">+5 PTS</span></div>
-            <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-twc" onclick="validateWithTimer(5, 'btn-twc')">SEGUIR</a>
+            <div class="action-info"><i class="fab fa-twitch"></i> Twitch <span class="action-points">+10 PTS</span></div>
+            <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-twc" onclick="validateWithTimer(10, 'btn-twc')">SEGUIR</a>
         </div>
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-youtube"></i> Youtube <span class="action-points">+5 PTS</span></div>
-            <a href="https://www.youtube.com/@AlexDom104" target="_blank" class="btn-action" id="btn-yt" onclick="validateWithTimer(5, 'btn-yt')">SEGUIR</a>
+            <div class="action-info"><i class="fab fa-youtube"></i> Youtube <span class="action-points">+10 PTS</span></div>
+            <a href="https://www.youtube.com/@AlexDom104" target="_blank" class="btn-action" id="btn-yt" onclick="validateWithTimer(10, 'btn-yt')">SEGUIR</a>
         </div>
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-tiktok"></i> Tiktok <span class="action-points">+5 PTS</span></div>
-            <a href="https://www.tiktok.com/@alexdom104" target="_blank" class="btn-action" id="btn-tk" onclick="validateWithTimer(5, 'btn-tk')">SEGUIR</a>
+            <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+30 PTS</span></div>
+            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-dsc" onclick="validateWithTimer(30, 'btn-dsc')">UNIRME</a>
         </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-facebook"></i> Facebook <span class="action-points">+5 PTS</span></div>
-            <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" id="btn-fbs" onclick="validateWithTimer(5, 'btn-fbs')">SEGUIR</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+5 PTS</span></div>
-            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-igs" onclick="validateWithTimer(5, 'btn-igs')">SEGUIR</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-x-twitter"></i> X / Twitter <span class="action-points">+5 PTS</span></div>
-            <a href="https://x.com/AlexDom104" target="_blank" class="btn-action" id="btn-xtw" onclick="validateWithTimer(5, 'btn-xtw')">SEGUIR</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fas fa-bolt"></i> Kick <span class="action-points">+5 PTS</span></div>
-            <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" id="btn-kck" onclick="validateWithTimer(5, 'btn-kck')">SEGUIR</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+10 PTS</span></div>
-            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-dsc" onclick="validateWithTimer(10, 'btn-dsc')">UNIRSE</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-facebook-f"></i> Facebook <span class="action-points">+30 PTS</span></div>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://twitch.tv/alexdom104&quote=Ven a ver el directo de AlexDom104 en... https://twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-fbc" onclick="validateWithTimer(30, 'btn-fbc')">COMPARTIR</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+30 PTS</span></div>
-            <a href="https://www.instagram.com/reels/" target="_blank" class="btn-action" id="btn-igc" onclick="validateWithTimer(30, 'btn-igc')">COMPARTIR</a>
+        <div class="rules-section">
+            <h3>Reglas:</h3>
+            <ul>
+                <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
+                <li><strong>Solo es válido rellenar el formulario una sola vez.</strong></li>
+                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado.</li>
+                <li>Si el <strong>GANADOR</strong> no responde en 48 horas, se elegirá un segundo ganador.</li>
+                <li>Cada ticket de directo equivale a 2 puntos extra (canjeables en Twitch).</li>
+                <li>¡SUERTE!</li>
+            </ul>
         </div>
 
-        <input type="text" id="twitchNick" class="nick-input" placeholder="ESCRIBE TU NICK DE TWITCH AQUÍ" required>
-        <button class="btn-submit" id="mainSubmit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button> 
+        <button class="btn-submit" id="mainSubmit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
     </div>
 
     <script>
@@ -130,9 +112,20 @@
         
         let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
         let completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
+        let savedNick = localStorage.getItem('alexdom_nick') || "";
+        let yaParticipo = localStorage.getItem('alexdom_sent') === "true";
 
         window.onload = () => {
             document.getElementById('totalPoints').innerText = totalPoints;
+            const nickInput = document.getElementById('twitchNick');
+            
+            if(savedNick) nickInput.value = savedNick;
+            if(yaParticipo) {
+                nickInput.disabled = true;
+                document.getElementById('mainSubmit').disabled = true;
+                document.getElementById('mainSubmit').innerText = "YA ESTÁS PARTICIPANDO";
+            }
+
             completed.forEach(id => {
                 const b = document.getElementById(id);
                 if(b) { b.innerText = "✓"; b.classList.add('completed'); }
@@ -140,7 +133,7 @@
         };
 
         function validateWithTimer(pts, id) {
-            if (completed.includes(id)) return;
+            if (completed.includes(id) || yaParticipo) return;
             const btn = document.getElementById(id);
             
             window.addEventListener('focus', function onFocus() {
@@ -175,9 +168,9 @@
 
         function enviarSorteo() {
             const nick = document.getElementById('twitchNick').value.trim();
-            if(!nick) return alert("¡DEBES PONER TU NICK DE TWITCH PARA PARTICIPAR!");
-            if(totalPoints === 0) return alert("¡Sigue al menos una red!");
+            if(!nick) return alert("¡El Nick es obligatorio!");
             
+            localStorage.setItem('alexdom_nick', nick);
             const btn = document.getElementById('mainSubmit');
             btn.disabled = true;
             btn.innerText = "REGISTRANDO...";
@@ -185,18 +178,14 @@
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify({
-                    nick: nick, // Se envía a la columna B del sheet
-                    puntos: totalPoints,
-                    plataformas: completed.join(", ") // Se envía a la columna E del sheet
-                })
+                body: JSON.stringify({ nick: nick, puntos: totalPoints, plataformas: completed.join(", ") })
             }).then(() => {
+                localStorage.setItem('alexdom_sent', "true");
                 alert("¡Puntos registrados correctamente! ¡Mucha suerte!");
-                btn.innerText = "✓ PARTICIPANDO";
+                window.location.href = "index.html";
             }).catch(() => {
                 alert("Error al enviar.");
                 btn.disabled = false;
-                btn.innerText = "CONFIRMAR PARTICIPACIÓN";
             });
         }
 
