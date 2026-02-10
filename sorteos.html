@@ -93,6 +93,7 @@
     </div>
 
     <script>
+        // URL ACTUALIZADA
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DXdqTtgPxcdTJY5bfXdj43xB1X7T0u8OvBqxPRgk2JV4brTPgpIcPolwL30t1g3J/exec';
         
         let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
@@ -134,7 +135,6 @@
                 plataformas: completed.join(", ")
             };
 
-            // Método híbrido para asegurar el envío
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -149,6 +149,7 @@
             });
         }
 
+        // Contador de tiempo (30 de Marzo)
         const target = new Date("March 30, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
