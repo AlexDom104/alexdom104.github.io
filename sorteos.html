@@ -98,14 +98,20 @@
 
     <div id="no-sorteo">
         <h1>AUN NO HAY SORTEOS</h1>
-        <p style="color:#ccc; font-size: 1.1rem;">
+        <p style="color:#888;">
             Verifica en <a href="https://twitch.tv/alexdom104" target="_blank" class="twitch-link">twitch.tv/AlexDom104</a> para futuros sorteos.
         </p>
     </div>
 
     <div id="sorteo-terminado">
+        <div class="countdown-container">
+            <div class="time-box"><span>00</span><label>Días</label></div>
+            <div class="time-box"><span>00</span><label>Horas</label></div>
+            <div class="time-box"><span>00</span><label>Min</label></div>
+            <div class="time-box"><span>00</span><label>Seg</label></div>
+        </div>
         <h1>El sorteo activo ha terminado</h1>
-        <p style="color:#ccc; font-size: 1.1rem;">
+        <p style="color:#ccc; font-size: 1.1rem; margin-top:20px;">
             Espera el anuncio en <br><br>
             <a href="https://twitch.tv/alexdom104" target="_blank" class="twitch-link">twitch.tv/alexdom104</a>
         </p>
@@ -207,15 +213,14 @@
 
                 const response = await fetch(scriptURL);
                 const data = await response.json();
-
-                // Lógica CRÍTICA: Si las fechas vienen vacías (null) desde Google Apps Script
-                // mostramos "AUN NO HAY SORTEOS" en lugar de "TERMINADO"
+                
+                // LÓGICA CORREGIDA: Si las fechas vienen vacías (null) desde Apps Script = NO SORTEO
                 if (!data.inicio || !data.fin) {
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('no-sorteo').style.display = 'block';
                     return; 
                 }
-                
+
                 const inicio = new Date(data.inicio);
                 const fin = new Date(data.fin);
                 const ahora = new Date();
@@ -234,15 +239,15 @@
 
                 // Lógica de 3 Estados
                 if (ahora < inicio) {
-                    // Estado 1: Aún no empieza
+                    // 1. Aún no empieza
                     document.getElementById('no-sorteo').style.display = 'block';
                 } 
                 else if (ahora > fin) {
-                    // Estado 2: Ya terminó
+                    // 2. Ya terminó
                     document.getElementById('sorteo-terminado').style.display = 'block';
                 } 
                 else {
-                    // Estado 3: Activo
+                    // 3. Activo
                     document.getElementById('sorteo-activo').style.display = 'block';
                     showLocalTime(fin);
                     startTimer(fin);
@@ -251,7 +256,7 @@
 
             } catch (e) {
                 console.error("Error:", e);
-                // Si falla la conexión, asumimos que no hay sorteo
+                // Si falla la conexión, asumimos NO SORTEO
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('no-sorteo').style.display = 'block';
             }
