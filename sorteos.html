@@ -2,16 +2,112 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorteos | AlexDom104</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-        body { background: #0f0f0f; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
-        .btn-volver { color: white; text-decoration: none; border: 1px solid #fff; padding: 10px 20px; border-radius: 5px; }
+        :root { 
+            --fondo: #333333; --contraste: #262626;
+            --rosa: #EF5085; --rosa-dark: #A64062;
+            --cian: #70DDD8; --azul: #0A315B;
+        }
+        body { background: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
+        
+        /* Cuenta Regresiva */
+        .countdown-container { display: flex; justify-content: center; gap: 15px; margin: 30px 0; }
+        .time-box { background: var(--contraste); padding: 15px; border-radius: 10px; border: 1px solid var(--rosa); min-width: 80px; }
+        .time-box span { display: block; font-size: 2rem; font-weight: bold; color: var(--cian); }
+
+        /* Lista de Acciones */
+        .actions-list { max-width: 500px; margin: 0 auto; text-align: left; background: var(--contraste); padding: 20px; border-radius: 15px; }
+        .action-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 15px; border-bottom: 1px solid #444; transition: 0.3s;
+        }
+        .action-item:hover { background: #2d2d2d; }
+        .btn-action { 
+            background: var(--azul); color: white; border: none; padding: 8px 15px; 
+            border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 0.9rem;
+        }
+        .btn-action.done { background: var(--rosa-dark); pointer-events: none; }
+        
+        .score-counter { font-size: 1.5rem; margin: 20px 0; color: var(--rosa); font-weight: bold; }
+        input[type="text"], input[type="email"] {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid var(--azul); background: #444; color: white;
+        }
+        .btn-submit { 
+            background: var(--rosa); border: none; width: 100%; padding: 15px; 
+            color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Sorteos Activos</h1>
-    <p>Próximamente más sorpresas para la comunidad.</p>
-    <br><br>
-    <a href="index.html" class="btn-volver">Volver al Home</a>
+
+    <h1>¡Gana el juego que quieras!</h1>
+    <p>Participa y acumula puntos siguiendo mis redes</p>
+
+    <div class="countdown-container" id="timer">
+        <div class="time-box"><span id="days">00</span>Días</div>
+        <div class="time-box"><span id="hours">00</span>Hrs</div>
+        <div class="time-box"><span id="minutes">00</span>Min</div>
+        <div class="time-box"><span id="seconds">00</span>Seg</div>
+    </div>
+
+    <div class="score-counter">Tus Puntos: <span id="totalPoints">0</span> pts</div>
+
+    <div class="actions-list">
+        <div class="action-item">
+            <span><i class="fab fa-instagram"></i> Sígueme en Instagram (+1 pt)</span>
+            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" onclick="addPoint(1, this)">Ir</a>
+        </div>
+        <div class="action-item">
+            <span><i class="fab fa-discord"></i> Únete al Discord (+2 pts)</span>
+            <a href="URL_DISCORD" target="_blank" class="btn-action" onclick="addPoint(2, this)">Unirme</a>
+        </div>
+        <div class="action-item">
+            <span><i class="fab fa-twitch"></i> Comparte el directo (+3 pts)</span>
+            <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" onclick="addPoint(3, this)">Compartir</a>
+        </div>
+
+        <form id="entryForm">
+            <input type="text" placeholder="Tu Nombre de Usuario" required id="u_name">
+            <input type="email" placeholder="Tu Correo Electrónico" required id="u_email">
+            <button type="submit" class="btn-submit">REGISTRAR ENTRADA</button>
+        </form>
+    </div>
+
+    <script>
+        let points = 0;
+        // Lógica de puntos (Frontend)
+        function addPoint(val, btn) {
+            points += val;
+            document.getElementById('totalPoints').innerText = points;
+            btn.innerText = "✓";
+            btn.classList.add('done');
+        }
+
+        // Cuenta regresiva configurable (Configura tu fecha aquí)
+        const targetDate = new Date("March 1, 2026 00:00:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d;
+            document.getElementById("hours").innerText = h;
+            document.getElementById("minutes").innerText = m;
+            document.getElementById("seconds").innerText = s;
+
+            if (diff < 0) {
+                clearInterval(timer);
+                document.getElementById("timer").innerHTML = "<h3>SORTEO FINALIZADO</h3>";
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
