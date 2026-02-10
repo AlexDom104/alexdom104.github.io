@@ -17,49 +17,34 @@
         
         header { background: var(--contraste); height: 90px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--rosa-oscuro); margin: -25px -25px 35px -25px; position: relative; }
         .logo img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
-
         .back-link { color: var(--rosa-principal); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; position: absolute; left: 20px; transition: 0.3s; }
         .back-link:hover { color: var(--cian-brillo); }
 
-        /* Contenedores */
-        .main-container { max-width: 600px; margin: 0 auto; }
+        .main-container { max-width: 600px; margin: 0 auto; display: none; } /* Oculto por defecto */
+        #no-sorteo { display: block; margin-top: 100px; }
+        #no-sorteo h1 { font-size: 3rem; color: var(--rosa-principal); }
 
         .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
         .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
-        .info-msg { font-size: 1rem; line-height: 1.5; color: #ccc; margin-bottom: 25px; }
-
         .rules-section { text-align: left; background: rgba(0,0,0,0.2); padding: 25px; border-radius: 15px; border: 1px solid #555; margin-bottom: 30px; }
-        .rules-section h3 { color: var(--rosa-principal); margin-bottom: 15px; text-transform: uppercase; font-size: 1.1rem; }
-        .rules-section ul { list-style: none; }
-        .rules-section li { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; position: relative; padding-left: 20px; }
+        .rules-section li { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; padding-left: 20px; position: relative; }
         .rules-section li::before { content: "•"; color: var(--cian-brillo); position: absolute; left: 0; font-weight: bold; }
 
-        .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 18px; border: 2px solid var(--cian-brillo); box-shadow: 0 0 20px rgba(112, 221, 216, 0.2); margin-bottom: 30px; }
+        .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 18px; border: 2px solid var(--cian-brillo); margin-bottom: 30px; }
         .score-banner h2 { font-size: 3.2rem; margin: 10px 0; }
 
-        .nick-section { text-align: left; margin-bottom: 25px; }
-        .nick-input { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid var(--rosa-principal); background: var(--contraste); color: white; font-size: 1.1rem; outline: none; }
-        .nick-input:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .action-item { background: var(--contraste); display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-radius: 14px; margin-bottom: 12px; border: 1px solid #444; }
-        .action-info { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; }
-        .action-info i { font-size: 1.4rem; color: var(--rosa-principal); width: 25px; text-align: center; }
-        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.85rem; display: block; }
-
-        .btn-action { background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); padding: 10px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
-        .btn-action.waiting { background: #555; border-color: #888; cursor: wait; }
-        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; opacity: 0.6; }
+        .nick-input { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid var(--rosa-principal); background: var(--contraste); color: white; font-size: 1.1rem; outline: none; margin-bottom: 25px; }
+        
+        .action-item { background: var(--contraste); display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-radius: 14px; margin-bottom: 12px; border: 1px solid #444; text-align: left; }
+        .btn-action { background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); padding: 10px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; }
+        .btn-action.waiting { background: #555; cursor: wait; }
+        .btn-action.completed { background: var(--rosa-oscuro); pointer-events: none; opacity: 0.6; }
 
         .btn-submit { background: var(--rosa-principal); color: white; border: none; width: 100%; padding: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; font-size: 1.3rem; margin-top: 25px; }
-        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; background: #555; }
-
-        @media (max-width: 480px) {
-            .action-item { flex-direction: column; gap: 15px; text-align: center; }
-            .btn-action { width: 100%; }
-        }
+        .btn-submit:disabled { background: #555; opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -69,32 +54,32 @@
         <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
     </header>
 
-    <div class="main-container">
-        <div class="countdown-container" id="timer">
+    <div id="no-sorteo">
+        <div class="countdown-container">
+            <div class="time-box"><span>00</span><label>Días</label></div>
+            <div class="time-box"><span>00</span><label>Horas</label></div>
+            <div class="time-box"><span>00</span><label>Min</label></div>
+            <div class="time-box"><span>00</span><label>Seg</label></div>
+        </div>
+        <h1>NO HAY SORTEOS AÚN</h1>
+        <p style="margin-top:20px; color:#888;">Vuelve pronto para nuevas dinámicas.</p>
+    </div>
+
+    <div id="sorteo-activo" class="main-container">
+        <div class="countdown-container">
             <div class="time-box"><span id="days">00</span><label>Días</label></div>
             <div class="time-box"><span id="hours">00</span><label>Horas</label></div>
             <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
             <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
         </div>
 
-        <p class="info-msg">
-            Tener todos los puntos canjeables no te dará más chances de ganar, pero no te lo asegura al 100%, es suerte, así como los tickets que puedes canjear hasta 3 tickets en cada directo en Twitch.
-        </p>
-
         <div class="rules-section">
             <h3>Reglas:</h3>
             <ul>
                 <li><strong>Solo es válido rellenar este formulario 1 sola vez.</strong></li>
-                <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
-                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado y tachado de la comunidad.</li>
-                <li>El <strong>GANADOR</strong> será anunciado el día de finalización del sorteo.</li>
-                <li>Si el <strong>GANADOR</strong> no responde al mensaje privado en Twitch las siguientes 72 horas (3 días) terminadas el sorteo, el premio será otorgado a un segundo ganador.</li>
-                <li>El segundo <strong>GANADOR POR DEFAULT</strong> tendrá 48 horas para reclamar el premio igual por mensaje privado en Twitch, sino el premio será otorgado a un tercero en la lista.</li>
-                <li>El tercer <strong>GANADOR POR DEFAULT</strong> tendrá 24 horas para reclamar el premio igual por mensaje privado en Twitch, sino el premio será acumulado para el siguiente <strong>SORTEO</strong>.</li>
-                <li>Puedes canjear más de 5 tickets en los <strong>DIRECTOS DE TWITCH</strong> si la duración de los directos se extiende más de lo normal, ya que cada ticket es igual a 2 puntos, entre más puntos, más chances hay de ganar.</li>
-                <li>Los puntos otorgados en esta página son independientes a los puntos de canal obtenidos en Twitch.</li>
+                <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch.</li>
+                <li>Si el <strong>GANADOR</strong> no responde en 48h, se elegirá otro.</li>
             </ul>
-            <h3 style="text-align:center; margin-top:10px; color:var(--cian-brillo);">¡SUERTE!</h3>
         </div>
 
         <div class="score-banner">
@@ -102,97 +87,53 @@
             <h2 id="totalPoints">0</h2>
         </div>
 
-        <div class="nick-section">
-            <label style="display:block; margin-bottom:10px; font-weight:bold; color:var(--cian-brillo);">NICK DE TWITCH (OBLIGATORIO)</label>
-            <input type="text" id="twitchNick" class="nick-input" placeholder="Escribe tu Nick de Twitch aquí..." required>
-        </div>
+        <input type="text" id="twitchNick" class="nick-input" placeholder="NICK DE TWITCH (OBLIGATORIO)">
 
-        <div class="actions-list">
+        <div id="actions-wrapper">
             <div class="action-item">
-                <div class="action-info"><i class="fab fa-twitch"></i> Twitch <span class="action-points">+10 PTS</span></div>
+                <span>Twitch (+10 pts)</span>
                 <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-twc" onclick="validateWithTimer(10, 'btn-twc')">SEGUIR</a>
             </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-youtube"></i> Youtube <span class="action-points">+10 PTS</span></div>
-                <a href="https://www.youtube.com/@AlexDom104" target="_blank" class="btn-action" id="btn-yt" onclick="validateWithTimer(10, 'btn-yt')">SEGUIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-tiktok"></i> Tiktok <span class="action-points">+10 PTS</span></div>
-                <a href="https://www.tiktok.com/@alexdom104" target="_blank" class="btn-action" id="btn-tk" onclick="validateWithTimer(10, 'btn-tk')">SEGUIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-facebook"></i> Facebook <span class="action-points">+10 PTS</span></div>
-                <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" id="btn-fbs" onclick="validateWithTimer(10, 'btn-fbs')">SEGUIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+10 PTS</span></div>
-                <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-igs" onclick="validateWithTimer(10, 'btn-igs')">SEGUIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-x-twitter"></i> X / Twitter <span class="action-points">+10 PTS</span></div>
-                <a href="https://x.com/AlexDom104" target="_blank" class="btn-action" id="btn-xtw" onclick="validateWithTimer(10, 'btn-xtw')">SEGUIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fas fa-bolt"></i> Kick <span class="action-points">+10 PTS</span></div>
-                <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" id="btn-kck" onclick="validateWithTimer(10, 'btn-kck')">SEGUIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+30 PTS</span></div>
-                <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-dsc" onclick="validateWithTimer(30, 'btn-dsc')">UNIRME</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-facebook-f"></i> Facebook <span class="action-points">+30 PTS</span></div>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://twitch.tv/alexdom104&quote=Ven a ver el directo de AlexDom104 en... https://twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-fbc" onclick="validateWithTimer(30, 'btn-fbc')">COMPARTIR</a>
-            </div>
-            <div class="action-item">
-                <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+30 PTS</span></div>
-                <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-igc" onclick="validateWithTimer(30, 'btn-igc')">COMPARTIR</a>
             </div>
 
-            <button class="btn-submit" id="mainSubmit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
-        </div>
+        <button class="btn-submit" id="mainSubmit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DXdqTtgPxcdTJY5bfXdj43xB1X7T0u8OvBqxPRgk2JV4brTPgpIcPolwL30t1g3J/exec';
+        const scriptURL = 'TU_URL_DE_APPS_SCRIPT_AQUI';
         
+        async function fetchDates() {
+            try {
+                const response = await fetch(scriptURL);
+                const dates = await response.json();
+                checkStatus(new Date(dates.inicio), new Date(dates.fin));
+            } catch (e) { console.error("Error leyendo fechas"); }
+        }
+
+        function checkStatus(inicio, fin) {
+            const ahora = new Date();
+            if (ahora >= inicio && ahora <= fin) {
+                document.getElementById('no-sorteo').style.display = 'none';
+                document.getElementById('sorteo-activo').style.display = 'block';
+                startTimer(fin);
+            }
+        }
+
+        // Lógica de persistencia y puntos (Lo que ya teníamos)
         let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
         let completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
         let yaParticipo = localStorage.getItem('alexdom_sent') === "true";
-        let nickGuardado = localStorage.getItem('alexdom_nick') || "";
-
-        window.onload = () => {
-            document.getElementById('totalPoints').innerText = totalPoints;
-            const inputNick = document.getElementById('twitchNick');
-            inputNick.value = nickGuardado;
-
-            if(yaParticipo) {
-                inputNick.disabled = true;
-                const btn = document.getElementById('mainSubmit');
-                btn.disabled = true;
-                btn.innerText = "YA ESTÁS PARTICIPANDO";
-            }
-
-            completed.forEach(id => {
-                const b = document.getElementById(id);
-                if(b) { b.innerText = "✓"; b.classList.add('completed'); }
-            });
-        };
 
         function validateWithTimer(pts, id) {
             if (completed.includes(id) || yaParticipo) return;
             const btn = document.getElementById(id);
-            
             window.addEventListener('focus', function onFocus() {
                 let timeLeft = 5;
                 btn.classList.add('waiting');
-                btn.innerText = `ESPERA ${timeLeft}s`;
-
                 const countdown = setInterval(() => {
                     timeLeft--;
-                    if (timeLeft > 0) {
-                        btn.innerText = `ESPERA ${timeLeft}s`;
-                    } else {
+                    btn.innerText = `ESPERA ${timeLeft}s`;
+                    if (timeLeft <= 0) {
                         clearInterval(countdown);
                         addPointsFinal(pts, id);
                     }
@@ -208,45 +149,35 @@
             localStorage.setItem('alexdom_done', JSON.stringify(completed));
             document.getElementById('totalPoints').innerText = totalPoints;
             const b = document.getElementById(id);
-            b.innerText = "✓";
-            b.classList.remove('waiting');
-            b.classList.add('completed');
+            b.innerText = "✓"; b.classList.add('completed');
         }
 
         function enviarSorteo() {
             const nick = document.getElementById('twitchNick').value.trim();
-            if(!nick) return alert("¡El Nick de Twitch es obligatorio!");
-            if(totalPoints === 0) return alert("¡Acumula puntos para participar!");
-            
-            localStorage.setItem('alexdom_nick', nick);
-            const btn = document.getElementById('mainSubmit');
-            btn.disabled = true;
-            btn.innerText = "REGISTRANDO...";
-
+            if(!nick) return alert("¡Nick obligatorio!");
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify({ nick: nick, puntos: totalPoints, plataformas: completed.join(", ") })
+                body: JSON.stringify({ nick, puntos: totalPoints, plataformas: completed.join(", ") })
             }).then(() => {
                 localStorage.setItem('alexdom_sent', "true");
-                alert("¡Puntos registrados correctamente! ¡Mucha suerte!");
+                alert("¡Registrado! Volviendo al inicio...");
                 window.location.href = "index.html";
-            }).catch(() => {
-                alert("Error al enviar.");
-                btn.disabled = false;
             });
         }
 
-        const target = new Date("March 30, 2026 00:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const d = target - now;
-            if (d < 0) return;
-            document.getElementById("days").innerText = Math.floor(d / 864e5);
-            document.getElementById("hours").innerText = Math.floor((d % 864e5) / 36e5);
-            document.getElementById("minutes").innerText = Math.floor((d % 36e5) / 6e4);
-            document.getElementById("seconds").innerText = Math.floor((d % 6e4) / 1000);
-        }, 1000);
+        function startTimer(target) {
+            setInterval(() => {
+                const d = target - new Date().getTime();
+                if (d < 0) return location.reload();
+                document.getElementById("days").innerText = Math.floor(d / 864e5);
+                document.getElementById("hours").innerText = Math.floor((d % 864e5) / 36e5);
+                document.getElementById("minutes").innerText = Math.floor((d % 36e5) / 6e4);
+                document.getElementById("seconds").innerText = Math.floor((d % 6e4) / 1000);
+            }, 1000);
+        }
+
+        fetchDates();
     </script>
 </body>
 </html>
