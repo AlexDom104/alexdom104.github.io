@@ -25,11 +25,11 @@
         .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--rosa-principal); animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Contenedores */
+        /* Contenedores de estado */
         .main-container, #no-sorteo, #sorteo-terminado { display: none; max-width: 600px; margin: 0 auto; }
         
         #no-sorteo, #sorteo-terminado { margin-top: 80px; }
-        #no-sorteo h1, #sorteo-terminado h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 20px; line-height: 1.2; }
+        #no-sorteo h1, #sorteo-terminado h1 { font-size: 2.2rem; color: var(--rosa-principal); margin-bottom: 20px; line-height: 1.2; }
         
         .twitch-link { color: var(--cian-brillo); text-decoration: none; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid var(--cian-brillo); }
 
@@ -38,8 +38,14 @@
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
-        /* Nuevo estilo para la hora local */
-        .local-time-msg { color: var(--cian-brillo); font-size: 0.9rem; margin-bottom: 25px; font-weight: bold; background: rgba(0,0,0,0.3); display: inline-block; padding: 5px 15px; border-radius: 20px; border: 1px solid #444; }
+        /* ESTILO IDENTICO A TU IMAGEN PARA LA HORA */
+        .local-time-msg { 
+            color: #EF5085; /* Color Rosa exacto */
+            font-size: 1.1rem; 
+            margin-bottom: 25px; 
+            display: block;
+            text-align: center;
+        }
 
         .info-msg { font-size: 1rem; line-height: 1.5; color: #ccc; margin-bottom: 25px; }
 
@@ -97,7 +103,12 @@
     </div>
 
     <div id="sorteo-terminado">
-        <i class="fas fa-flag-checkered" style="font-size: 4rem; color: var(--rosa-principal); margin-bottom: 20px;"></i>
+        <div class="countdown-container">
+            <div class="time-box"><span>00</span><label>Días</label></div>
+            <div class="time-box"><span>00</span><label>Horas</label></div>
+            <div class="time-box"><span>00</span><label>Min</label></div>
+            <div class="time-box"><span>00</span><label>Seg</label></div>
+        </div>
         <h1>El sorteo activo ha terminado</h1>
         <p style="color:#ccc; font-size: 1.1rem; margin-top:20px;">
             Espera el anuncio en <br><br>
@@ -114,14 +125,14 @@
             <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
         </div>
 
-        <div id="timezone-display" class="local-time-msg">Calculando hora local...</div>
+        <div id="timezone-display" class="local-time-msg">Calculando hora...</div>
 
         <p class="info-msg">
             Tener todos los puntos canjeables no te dará más chances de ganar, pero no te lo asegura al 100%, es suerte, así como los tickets que puedes canjear hasta 3 tickets en cada directo en Twitch.
         </p>
 
         <div class="rules-section">
-            <h3>Reglas:</h3>
+            <h3 style="color:#EF5085;">REGLAS:</h3>
             <ul>
                 <li><strong>Solo es válido rellenar este formulario 1 sola vez.</strong></li>
                 <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
@@ -202,15 +213,13 @@
                 const response = await fetch(scriptURL);
                 const data = await response.json();
                 
-                // Las fechas YA vienen con zona horaria desde el Apps Script
+                // Fechas (El script de Google las envía ya con zona horaria correcta)
                 const inicio = new Date(data.inicio);
                 const fin = new Date(data.fin);
                 const ahora = new Date();
 
-                // ID Sorteo
+                // Lógica de reseteo si el sorteo es nuevo
                 const giveawayID = data.fin; 
-
-                // Reseteo si es nuevo
                 const lastGiveaway = localStorage.getItem('alexdom_gw_id');
                 if (lastGiveaway !== giveawayID) {
                     localStorage.removeItem('alexdom_sent');
@@ -221,6 +230,7 @@
 
                 document.getElementById('loading-screen').style.display = 'none';
 
+                // Lógica de 3 Estados
                 if (ahora < inicio) {
                     document.getElementById('no-sorteo').style.display = 'block';
                 } 
@@ -229,7 +239,6 @@
                 } 
                 else {
                     document.getElementById('sorteo-activo').style.display = 'block';
-                    // Mostrar hora local convertida
                     showLocalTime(fin);
                     startTimer(fin);
                     loadUserData();
@@ -242,13 +251,12 @@
             }
         }
 
-        // Función para mostrar la hora convertida
+        // Muestra la hora convertida al local del usuario
         function showLocalTime(finDate) {
-            // Formatea la fecha a la hora local del usuario
             const horaLocal = finDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const fechaLocal = finDate.toLocaleDateString();
             document.getElementById('timezone-display').innerText = 
-                `Termina el ${fechaLocal} a las ${horaLocal} de tu zona horaria`;
+                `Termina el día ${fechaLocal} a las ${horaLocal}`;
         }
 
         // Datos del Usuario
@@ -289,9 +297,17 @@
         }
 
         function startTimer(target) {
-            setInterval(() => {
+            const interval = setInterval(() => {
                 const diff = target - new Date().getTime();
-                if (diff <= 0) return location.reload(); // Si llega a 0, recarga y mostrará "Sorteo Terminado"
+                
+                // Si el tiempo se acaba, cambia la pantalla automáticamente
+                if (diff <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('sorteo-activo').style.display = 'none';
+                    document.getElementById('sorteo-terminado').style.display = 'block';
+                    return;
+                }
+
                 document.getElementById("days").innerText = Math.floor(diff / 864e5);
                 document.getElementById("hours").innerText = Math.floor((diff % 864e5) / 36e5);
                 document.getElementById("minutes").innerText = Math.floor((diff % 36e5) / 6e4);
