@@ -7,168 +7,121 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         :root { 
-            --fondo: #333333; 
-            --contraste: #262626;
-            --rosa-principal: #EF5085; 
-            --rosa-oscuro: #A64062;
-            --cian-brillo: #70DDD8;
-            --azul-boton: #0A315B;
-            --blanco: #ffffff; 
+            --fondo: #333333; --contraste: #262626;
+            --rosa-principal: #EF5085; --rosa-oscuro: #A64062;
+            --cian-brillo: #70DDD8; --azul-boton: #0A315B;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); text-align: center; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: white; text-align: center; padding: 20px; }
         
-        header { background: var(--contraste); height: 80px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--rosa-oscuro); margin: -20px -20px 30px -20px; }
-        .logo img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
-
-        h1 { color: var(--rosa-principal); margin-bottom: 10px; text-transform: uppercase; }
-        .subtitle { color: var(--cian-brillo); margin-bottom: 30px; font-weight: bold; }
-
-        /* Cuenta Regresiva */
-        .countdown-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
-        .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 75px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
-        .time-box label { font-size: 0.7rem; text-transform: uppercase; color: var(--cian-brillo); }
-
-        /* Sección de Puntos */
-        .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 15px; max-width: 500px; margin: 0 auto 30px; border: 1px solid var(--cian-brillo); }
+        .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 15px; max-width: 400px; margin: 20px auto; border: 1px solid var(--cian-brillo); }
         .score-banner h2 { font-size: 2.5rem; color: var(--blanco); }
 
-        /* Lista de Acciones */
         .actions-list { max-width: 500px; margin: 0 auto; text-align: left; }
         .action-item { 
             background: var(--contraste); display: flex; align-items: center; justify-content: space-between; 
-            padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #444; transition: 0.3s;
+            padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #444;
         }
-        .action-item:hover { border-color: var(--cian-brillo); }
-        .action-info { display: flex; align-items: center; gap: 15px; }
-        .action-info i { font-size: 1.4rem; color: var(--rosa-principal); width: 25px; }
-        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.8rem; }
 
         .btn-action { 
             background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); 
             padding: 8px 18px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.8rem; font-weight: bold;
         }
-        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; }
-
-        /* Registro Final */
-        #registration { margin-top: 40px; padding-top: 20px; border-top: 1px solid #444; }
-        .btn-submit { 
-            background: var(--rosa-principal); color: white; border: none; width: 100%; max-width: 500px; 
-            padding: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(239, 80, 133, 0.3); transition: 0.3s;
-        }
-        .btn-submit:hover { background: var(--rosa-oscuro); transform: scale(1.02); box-shadow: 0 0 20px var(--cian-brillo); }
         
-        .footer-note { font-size: 0.8rem; color: #888; margin-top: 20px; }
+        /* Estado cuando está esperando que el usuario regrese */
+        .waiting { background: #f1c40f; color: black; border-color: black; animation: pulse 1s infinite; }
+        .completed { background: var(--rosa-oscuro) !important; border-color: var(--rosa-principal) !important; pointer-events: none; opacity: 0.7; }
+
+        @keyframes pulse {
+            0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
-    </header>
-
     <h1>Sorteo AlexDom104</h1>
-    <p class="subtitle">¡Acumula puntos y gana!</p>
-
-    <div class="countdown-container" id="timer">
-        <div class="time-box"><span id="days">00</span><label>Días</label></div>
-        <div class="time-box"><span id="hours">00</span><label>Horas</label></div>
-        <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
-        <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
-    </div>
-
+    
     <div class="score-banner">
-        <p>TUS PUNTOS ACTUALES</p>
+        <p>PUNTOS ACUMULADOS</p>
         <h2 id="totalPoints">0</h2>
+        <button onclick="resetPoints()" style="background:none; border:none; color:grey; font-size:0.6rem; cursor:pointer;">(Reiniciar para pruebas)</button>
     </div>
 
     <div class="actions-list">
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-instagram"></i> <div>Instagram <div class="action-points">+1 PUNTO</div></div></div>
-            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
+            <div><i class="fab fa-instagram"></i> Instagram (+1 pt)</div>
+            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-ig" onclick="startAction(1, 'btn-ig')">SEGUIR</a>
         </div>
 
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-facebook"></i> <div>Facebook <div class="action-points">+1 PUNTO</div></div></div>
-            <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
+            <div><i class="fab fa-discord"></i> Discord (+2 pts)</div>
+            <a href="TU_LINK" target="_blank" class="btn-action" id="btn-dc" onclick="startAction(2, 'btn-dc')">UNIRME</a>
         </div>
-
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-twitter"></i> <div>X (Twitter) <div class="action-points">+1 PUNTO</div></div></div>
-            <a href="https://twitter.com/AlexDom104" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
-        </div>
-
-        <div class="action-item">
-            <div class="action-info"><i class="fas fa-bolt"></i> <div>Kick <div class="action-points">+1 PUNTO</div></div></div>
-            <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
-        </div>
-
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-discord"></i> <div>Discord <div class="action-points">+2 PUNTOS</div></div></div>
-            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" onclick="addPoints(2, this)">UNIRME</a>
-        </div>
-
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-twitch"></i> <div>Compartir Directo <div class="action-points">+3 PUNTOS</div></div></div>
-            <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" onclick="addPoints(3, this)">COMPARTIR</a>
-        </div>
-
-        <div id="registration">
-            <button class="btn-submit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
-            <p class="footer-note">Al confirmar, se abrirá tu cuenta de Google para validar tu entrada única.</p>
-        </div>
+        
+        <p style="font-size: 0.8rem; color: #aaa; margin-top: 20px;">* El punto se otorga al regresar a esta pestaña tras realizar la acción.</p>
     </div>
 
     <script>
-        let totalPoints = 0;
+        let totalPoints = parseInt(localStorage.getItem('puntosSorteo')) || 0;
+        let pendingPoints = 0;
+        let activeBtnId = null;
 
-        // Función para sumar puntos
-        function addPoints(pts, btn) {
-            totalPoints += pts;
-            document.getElementById('totalPoints').innerText = totalPoints;
-            btn.innerText = "✓ LISTO";
-            btn.classList.add('completed');
+        // Al cargar la página, ponemos los puntos que ya tenía
+        document.getElementById('totalPoints').innerText = totalPoints;
+
+        function startAction(pts, btnId) {
+            const btn = document.getElementById(btnId);
+            if (btn.classList.contains('completed')) return;
+
+            pendingPoints = pts;
+            activeBtnId = btnId;
+
+            btn.innerText = "VERIFICANDO...";
+            btn.classList.add('waiting');
+
+            // Detectar cuando el usuario regresa a la pestaña
+            window.addEventListener('focus', finishAction, { once: true });
         }
 
-        // --- CONFIGURACIÓN DEL SORTEO ---
-        // Cambia la fecha aquí para que el contador se actualice
-        const fechaTermino = new Date("March 30, 2026 00:00:00").getTime();
+        function finishAction() {
+            if (activeBtnId) {
+                const btn = document.getElementById(activeBtnId);
+                
+                totalPoints += pendingPoints;
+                
+                // Guardar permanentemente en el navegador
+                localStorage.setItem('puntosSorteo', totalPoints);
+                
+                document.getElementById('totalPoints').innerText = totalPoints;
 
-        const x = setInterval(function() {
-            const ahora = new Date().getTime();
-            const distancia = fechaTermino - ahora;
+                btn.innerText = "✓ COMPLETADO";
+                btn.classList.remove('waiting');
+                btn.classList.add('completed');
 
-            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+                // Guardar qué botones ya fueron pulsados
+                localStorage.setItem(activeBtnId, 'true');
 
-            document.getElementById("days").innerHTML = dias;
-            document.getElementById("hours").innerHTML = horas;
-            document.getElementById("minutes").innerHTML = minutos;
-            document.getElementById("seconds").innerHTML = segundos;
-
-            if (distancia < 0) {
-                clearInterval(x);
-                document.getElementById("timer").innerHTML = "<h3>EL SORTEO HA COMENZADO O TERMINADO</h3>";
+                activeBtnId = null;
+                pendingPoints = 0;
             }
-        }, 1000);
+        }
 
-        // Envío a Google Sheets
-        function enviarSorteo() {
-            if(totalPoints === 0) {
-                alert("Primero realiza algunas acciones para ganar puntos.");
-                return;
-            }
-            
-            // Aquí pegas la URL de tu Aplicación Web de Google Apps Script
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyAA6VqWdr5nfjznNPq4gct-VK2ptvU0Ptu0Ut3jikwbxZBpY1mHVFeecG4h0xkOefE/exec';
-            
-            alert("Redirigiendo a validación de Google... Puntos acumulados: " + totalPoints);
-            // Lógica de envío Fetch aquí
+        // Recuperar estado de los botones al recargar
+        window.onload = () => {
+            const botones = ['btn-ig', 'btn-dc']; // Añade aquí todos tus IDs
+            botones.forEach(id => {
+                if (localStorage.getItem(id) === 'true') {
+                    const btn = document.getElementById(id);
+                    if(btn) {
+                        btn.innerText = "✓ COMPLETADO";
+                        btn.classList.add('completed');
+                    }
+                }
+            });
+        };
+
+        function resetPoints() {
+            localStorage.clear();
+            location.reload();
         }
     </script>
 </body>
