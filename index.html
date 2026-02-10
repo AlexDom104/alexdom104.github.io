@@ -7,63 +7,62 @@
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    :root {
-      --rosa: #EF5085;
+    :root { 
+      --fondo: #333333; 
+      --contraste-fondo: #262626;
+      --rosa-principal: #EF5085; 
       --rosa-oscuro: #A64062;
       --cian-brillo: #70DDD8;
-      --azul-sombra: #0A315B;
-      --fondo: #333333;
-      --contraste-fondo: #262626;
-      --blanco: #ffffff;
+      --azul-boton: #0A315B;
+      --blanco: #ffffff; 
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--fondo); color: var(--blanco); }
     
     header { background: var(--blanco); height: 80px; display: flex; align-items: center; justify-content: center; }
-    .logo img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--rosa); }
+    .logo img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--azul-boton); }
 
     main { padding: 20px; max-width: 1200px; margin: 0 auto; }
 
     /* Carrusel */
-    .swiper { width: 100%; height: 450px; margin: 20px 0 40px 0; border-radius: 15px; border: 1px solid var(--contraste-fondo); }
-    .swiper-slide { background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .swiper { width: 100%; height: 450px; margin: 20px 0 40px 0; border-radius: 15px; border: 1px solid var(--rosa-oscuro); }
+    .swiper-slide { background: #000; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
     iframe { width: 100%; height: 100%; border: none; }
+    
+    .platform-badge {
+      position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8);
+      padding: 8px 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--rosa-principal);
+    }
 
     /* Grid de Navegación */
     .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
     
     .nav-card {
-      background: var(--contraste-fondo);
-      border: 2px solid var(--rosa-oscuro);
+      background: var(--contraste-fondo); 
+      border: 1px solid var(--azul-boton); 
       border-radius: 12px;
-      padding: 30px 15px;
-      text-align: center;
-      text-decoration: none;
-      color: white;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 0 var(--azul-sombra); /* Sombra sin presionar */
+      padding: 30px 15px; text-align: center; text-decoration: none; color: white; transition: 0.3s ease;
     }
 
-    .nav-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--rosa);
-      box-shadow: 0 6px 15px rgba(112, 221, 216, 0.3); /* Brillo cian suave al pasar el mouse */
+    .nav-card:hover { 
+      transform: translateY(-8px); 
+      border-color: var(--rosa-principal); 
+      box-shadow: 0 5px 20px var(--cian-brillo); /* Sombra cian al presionar/hover */
     }
 
-    .nav-card:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 10px var(--cian-brillo); /* Sombra cian al presionar */
-    }
+    .nav-card i { font-size: 2.5rem; margin-bottom: 15px; display: block; color: var(--rosa-principal); }
 
-    .nav-card i { font-size: 2.5rem; margin-bottom: 15px; display: block; color: var(--rosa); }
-    
-    /* Especial Sorteos */
-    .special { border-color: var(--rosa); position: relative; overflow: hidden; }
-    .special::after {
-      content: 'LIVE';
-      position: absolute; top: 10px; right: 10px;
-      background: var(--rosa); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;
+    /* Botón Especial de Sorteos */
+    .special { 
+      background: var(--azul-boton); 
+      border: 2px solid var(--rosa-principal);
+      box-shadow: 0 0 10px rgba(112, 221, 216, 0.3);
+    }
+    .special i { color: var(--cian-brillo) !important; }
+    .special:hover {
+        background: var(--rosa-oscuro);
+        box-shadow: 0 0 25px var(--cian-brillo);
     }
   </style>
 </head>
@@ -80,9 +79,16 @@
         <div class="swiper-slide">
           <a href="https://www.twitch.tv/alexdom104" target="_blank" style="width:100%; height:100%;">
             <img src="https://imgur.com/pQBmU0f.png" style="width:100%; height:100%; object-fit:cover;">
+            <div class="platform-badge"><i class="fab fa-twitch" style="color:#9146ff"></i> Twitch</div>
           </a>
         </div>
         <div class="swiper-slide"><iframe src="https://www.tiktok.com/embed/@alexdom104" allowfullscreen></iframe></div>
+        <div class="swiper-slide">
+          <a href="https://kick.com/alexdom104" target="_blank" style="width:100%; height:100%;">
+            <img src="https://imgur.com/jStwEvO.png" style="width:100%; height:100%; object-fit:cover;">
+            <div class="platform-badge"><i class="fas fa-bolt" style="color:#53fc18"></i> Kick</div>
+          </a>
+        </div>
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
