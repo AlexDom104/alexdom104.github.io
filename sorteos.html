@@ -20,12 +20,12 @@
         .back-link { color: var(--rosa-principal); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; position: absolute; left: 20px; transition: 0.3s; }
         .back-link:hover { color: var(--cian-brillo); }
 
-        /* Loader para evitar el parpadeo */
+        /* Loader */
         #loading-screen { margin-top: 100px; }
         .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--rosa-principal); animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Contenedores de estado (Ocultos por defecto) */
+        /* Contenedores */
         .main-container { max-width: 600px; margin: 0 auto; display: none; }
         #no-sorteo { display: none; margin-top: 80px; }
         #no-sorteo h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 20px; }
@@ -108,12 +108,12 @@
             <ul>
                 <li><strong>Solo es válido rellenar este formulario 1 sola vez.</strong></li>
                 <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
-                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado y tachado de la comunidad.</li>
+                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado.</li>
                 <li>El <strong>GANADOR</strong> será anunciado el día de finalización del sorteo.</li>
                 <li>Si el <strong>GANADOR</strong> no responde al mensaje privado en Twitch las siguientes 72 horas (3 días) terminadas el sorteo, el premio será otorgado a un segundo ganador.</li>
                 <li>El segundo <strong>GANADOR POR DEFAULT</strong> tendrá 48 horas para reclamar el premio igual por mensaje privado en Twitch, sino el premio será otorgado a un tercero en la lista.</li>
                 <li>El tercer <strong>GANADOR POR DEFAULT</strong> tendrá 24 horas para reclamar el premio igual por mensaje privado en Twitch, sino el premio será acumulado para el siguiente <strong>SORTEO</strong>.</li>
-                <li>Puedes canjear más de 5 tickets en los <strong>DIRECTOS DE TWITCH</strong> si la duración de los directos se extiende más de lo normal, ya que cada ticket es igual a 2 puntos, entre más puntos, más chances hay de ganar.</li>
+                <li>Puedes canjear más de 5 tickets en los <strong>DIRECTOS DE TWITCH</strong> si la duración de los directos se extiende más de lo normal, ya que cada ticket es igual a 2 puntos.</li>
                 <li>Los puntos otorgados en esta página son independientes a los puntos de canal obtenidos en Twitch.</li>
             </ul>
             <h3 style="text-align:center; margin-top:10px; color:var(--cian-brillo);">¡SUERTE!</h3>
@@ -173,12 +173,12 @@
     </div>
 
     <script>
+        // URL DE TU APPS SCRIPT
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DXdqTtgPxcdTJY5bfXdj43xB1X7T0u8OvBqxPRgk2JV4brTPgpIcPolwL30t1g3J/exec';
         
-        // Función principal de carga
+        // --- 1. Lógica de Carga y Reinicio Automático ---
         async function loadConfig() {
             try {
-                // Muestra loading, oculta todo lo demás
                 document.getElementById('loading-screen').style.display = 'block';
                 document.getElementById('no-sorteo').style.display = 'none';
                 document.getElementById('sorteo-activo').style.display = 'none';
@@ -190,47 +190,67 @@
                 const fin = new Date(data.fin);
                 const ahora = new Date();
 
+                // Identificador único del sorteo (usamos la fecha de fin como ID)
+                const giveawayID = data.fin; 
+
+                // Verificamos si es un NUEVO sorteo comparando con lo guardado
+                const lastGiveaway = localStorage.getItem('alexdom_gw_id');
+                
+                if (lastGiveaway !== giveawayID) {
+                    // ¡Es un sorteo nuevo! Borramos todo lo viejo
+                    console.log("Nuevo sorteo detectado. Reseteando...");
+                    localStorage.removeItem('alexdom_sent');
+                    localStorage.removeItem('alexdom_pts');
+                    localStorage.removeItem('alexdom_done');
+                    // Actualizamos el ID del sorteo actual
+                    localStorage.setItem('alexdom_gw_id', giveawayID);
+                }
+
                 document.getElementById('loading-screen').style.display = 'none';
 
                 if (ahora >= inicio && ahora <= fin) {
                     document.getElementById('sorteo-activo').style.display = 'block';
                     startTimer(fin);
-                    loadUserData();
+                    loadUserData(); // Cargar datos (ahora limpios si era nuevo)
                 } else {
                     document.getElementById('no-sorteo').style.display = 'block';
                 }
             } catch (e) {
                 console.error("Error:", e);
-                // Si falla, asumimos que no hay sorteo por seguridad
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('no-sorteo').style.display = 'block';
             }
         }
 
-        // Datos del Usuario
-        let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
-        let completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
-        let yaParticipo = localStorage.getItem('alexdom_sent') === "true";
-        let nickGuardado = localStorage.getItem('alexdom_nick') || "";
+        // --- 2. Gestión de Usuario y Puntos ---
+        let totalPoints = 0;
+        let completed = [];
+        let yaParticipo = false;
+        let nickGuardado = "";
 
         function loadUserData() {
+            // Recargar variables desde LocalStorage
+            totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
+            completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
+            yaParticipo = localStorage.getItem('alexdom_sent') === "true";
+            nickGuardado = localStorage.getItem('alexdom_nick') || "";
+
+            // Actualizar interfaz
             document.getElementById('totalPoints').innerText = totalPoints;
             const input = document.getElementById('twitchNick');
             input.value = nickGuardado;
 
-            // Marcar botones completados
             completed.forEach(id => {
                 const b = document.getElementById(id);
                 if(b) { b.innerText = "✓"; b.classList.add('completed'); }
             });
 
-            // Si ya participó, bloquear todo
             if(yaParticipo) {
                 input.disabled = true;
                 const btn = document.getElementById('mainSubmit');
                 btn.disabled = true;
                 btn.innerText = "YA ESTÁS PARTICIPANDO";
-                // Bloquear también los botones de acción si ya participó
+                // Bloquear acciones
                 const allActions = document.querySelectorAll('.btn-action');
                 allActions.forEach(b => {
                     if(!b.classList.contains('completed')) {
@@ -256,7 +276,6 @@
         function validateWithTimer(pts, id) {
             if (completed.includes(id) || yaParticipo) return;
             const btn = document.getElementById(id);
-            
             window.addEventListener('focus', function onFocus() {
                 let timeLeft = 5;
                 btn.classList.add('waiting');
@@ -284,8 +303,8 @@
 
         function enviarSorteo() {
             const nick = document.getElementById('twitchNick').value.trim();
-            if(!nick) return alert("Nick obligatorio");
-            if(totalPoints === 0) return alert("Acumula puntos primero.");
+            if(!nick) return alert("¡El Nick de Twitch es obligatorio!");
+            if(totalPoints === 0) return alert("Debes acumular puntos antes de enviar.");
 
             localStorage.setItem('alexdom_nick', nick);
             const btn = document.getElementById('mainSubmit');
@@ -305,6 +324,7 @@
             });
         }
 
+        // Iniciar
         loadConfig();
     </script>
 </body>
