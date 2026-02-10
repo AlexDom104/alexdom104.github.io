@@ -18,6 +18,7 @@
         header { background: var(--contraste); height: 90px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--rosa-oscuro); margin: -25px -25px 35px -25px; position: relative; }
         .logo img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
         .back-link { color: var(--rosa-principal); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; position: absolute; left: 20px; transition: 0.3s; }
+        .back-link:hover { color: var(--cian-brillo); }
         
         /* Loader */
         #loading-screen { margin-top: 100px; }
@@ -37,15 +38,15 @@
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
-        /* ESTILO CIAN TIPO PILL (Igual a tu imagen) */
+        /* ESTILO CIAN TIPO PILL */
         .local-time-msg { 
-            background: #222; /* Fondo oscuro */
-            color: var(--cian-brillo); /* Texto Cian */
+            background: #222; 
+            color: var(--cian-brillo); 
             font-size: 0.95rem; 
             margin-bottom: 30px; 
             display: inline-block;
             padding: 8px 20px;
-            border-radius: 50px; /* Bordes redondos */
+            border-radius: 50px; 
             border: 1px solid #444;
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -96,25 +97,15 @@
     </div>
 
     <div id="no-sorteo">
-        <div class="countdown-container">
-            <div class="time-box"><span>00</span><label>Días</label></div>
-            <div class="time-box"><span>00</span><label>Horas</label></div>
-            <div class="time-box"><span>00</span><label>Min</label></div>
-            <div class="time-box"><span>00</span><label>Seg</label></div>
-        </div>
-        <h1>NO HAY SORTEOS AÚN</h1>
-        <p style="color:#888;">Espera noticias en mis redes sociales.</p>
+        <h1>AUN NO HAY SORTEOS</h1>
+        <p style="color:#ccc; font-size: 1.1rem;">
+            Verifica en <a href="https://twitch.tv/alexdom104" target="_blank" class="twitch-link">twitch.tv/AlexDom104</a> para futuros sorteos.
+        </p>
     </div>
 
     <div id="sorteo-terminado">
-        <div class="countdown-container">
-            <div class="time-box"><span>00</span><label>Días</label></div>
-            <div class="time-box"><span>00</span><label>Horas</label></div>
-            <div class="time-box"><span>00</span><label>Min</label></div>
-            <div class="time-box"><span>00</span><label>Seg</label></div>
-        </div>
         <h1>El sorteo activo ha terminado</h1>
-        <p style="color:#ccc; font-size: 1.1rem; margin-top:20px;">
+        <p style="color:#ccc; font-size: 1.1rem;">
             Espera el anuncio en <br><br>
             <a href="https://twitch.tv/alexdom104" target="_blank" class="twitch-link">twitch.tv/alexdom104</a>
         </p>
@@ -216,11 +207,20 @@
 
                 const response = await fetch(scriptURL);
                 const data = await response.json();
+
+                // Lógica CRÍTICA: Si las fechas vienen vacías (null) desde Google Apps Script
+                // mostramos "AUN NO HAY SORTEOS" en lugar de "TERMINADO"
+                if (!data.inicio || !data.fin) {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('no-sorteo').style.display = 'block';
+                    return; 
+                }
                 
                 const inicio = new Date(data.inicio);
                 const fin = new Date(data.fin);
                 const ahora = new Date();
 
+                // Reseteo si es nuevo
                 const giveawayID = data.fin; 
                 const lastGiveaway = localStorage.getItem('alexdom_gw_id');
                 if (lastGiveaway !== giveawayID) {
@@ -232,13 +232,17 @@
 
                 document.getElementById('loading-screen').style.display = 'none';
 
+                // Lógica de 3 Estados
                 if (ahora < inicio) {
+                    // Estado 1: Aún no empieza
                     document.getElementById('no-sorteo').style.display = 'block';
                 } 
                 else if (ahora > fin) {
+                    // Estado 2: Ya terminó
                     document.getElementById('sorteo-terminado').style.display = 'block';
                 } 
                 else {
+                    // Estado 3: Activo
                     document.getElementById('sorteo-activo').style.display = 'block';
                     showLocalTime(fin);
                     startTimer(fin);
@@ -247,13 +251,13 @@
 
             } catch (e) {
                 console.error("Error:", e);
+                // Si falla la conexión, asumimos que no hay sorteo
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('no-sorteo').style.display = 'block';
             }
         }
 
         function showLocalTime(finDate) {
-            // Convierte la fecha a un formato legible en la zona horaria del usuario
             const horaLocal = finDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const fechaLocal = finDate.toLocaleDateString();
             document.getElementById('timezone-display').innerText = 
@@ -303,7 +307,6 @@
                 
                 if (diff <= 0) {
                     clearInterval(interval);
-                    // Ocultar activo, mostrar terminado automáticamente
                     document.getElementById('sorteo-activo').style.display = 'none';
                     document.getElementById('sorteo-terminado').style.display = 'block';
                     return;
