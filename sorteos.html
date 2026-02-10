@@ -25,10 +25,14 @@
         .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--rosa-principal); animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Contenedores */
-        .main-container { max-width: 600px; margin: 0 auto; display: none; }
-        #no-sorteo { display: none; margin-top: 80px; }
-        #no-sorteo h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 20px; }
+        /* Contenedores de estado (Ocultos por defecto) */
+        .main-container, #no-sorteo, #sorteo-terminado { display: none; max-width: 600px; margin: 0 auto; }
+        
+        /* Estilos Mensajes de Estado */
+        #no-sorteo, #sorteo-terminado { margin-top: 80px; }
+        #no-sorteo h1, #sorteo-terminado h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 20px; line-height: 1.2; }
+        
+        .twitch-link { color: var(--cian-brillo); text-decoration: none; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid var(--cian-brillo); }
 
         .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
         .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
@@ -76,7 +80,7 @@
 
     <div id="loading-screen">
         <div class="spinner"></div>
-        <p>Verificando sorteos activos...</p>
+        <p>Sincronizando reloj del servidor...</p>
     </div>
 
     <div id="no-sorteo">
@@ -88,6 +92,15 @@
         </div>
         <h1>NO HAY SORTEOS AÚN</h1>
         <p style="color:#888;">Espera noticias en mis redes sociales.</p>
+    </div>
+
+    <div id="sorteo-terminado">
+        <i class="fas fa-flag-checkered" style="font-size: 4rem; color: var(--rosa-principal); margin-bottom: 20px;"></i>
+        <h1>El sorteo activo ha terminado</h1>
+        <p style="color:#ccc; font-size: 1.1rem; margin-top:20px;">
+            Espera el anuncio en <br><br>
+            <a href="https://twitch.tv/alexdom104" target="_blank" class="twitch-link">twitch.tv/alexdom104</a>
+        </p>
     </div>
 
     <div id="sorteo-activo" class="main-container">
@@ -108,7 +121,7 @@
             <ul>
                 <li><strong>Solo es válido rellenar este formulario 1 sola vez.</strong></li>
                 <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
-                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado.</li>
+                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado y tachado de la comunidad.</li>
                 <li>El <strong>GANADOR</strong> será anunciado el día de finalización del sorteo.</li>
                 <li>Si el <strong>GANADOR</strong> no responde al mensaje privado en Twitch las siguientes 72 horas (3 días) terminadas el sorteo, el premio será otorgado a un segundo ganador.</li>
                 <li>El segundo <strong>GANADOR POR DEFAULT</strong> tendrá 48 horas para reclamar el premio igual por mensaje privado en Twitch, sino el premio será otorgado a un tercero en la lista.</li>
@@ -173,14 +186,14 @@
     </div>
 
     <script>
-        // URL DE TU APPS SCRIPT
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DXdqTtgPxcdTJY5bfXdj43xB1X7T0u8OvBqxPRgk2JV4brTPgpIcPolwL30t1g3J/exec';
         
-        // --- 1. Lógica de Carga y Reinicio Automático ---
         async function loadConfig() {
             try {
+                // Estado inicial: Cargando
                 document.getElementById('loading-screen').style.display = 'block';
                 document.getElementById('no-sorteo').style.display = 'none';
+                document.getElementById('sorteo-terminado').style.display = 'none';
                 document.getElementById('sorteo-activo').style.display = 'none';
 
                 const response = await fetch(scriptURL);
@@ -190,52 +203,56 @@
                 const fin = new Date(data.fin);
                 const ahora = new Date();
 
-                // Identificador único del sorteo (usamos la fecha de fin como ID)
+                // Identificador único del sorteo (Fecha fin como ID)
                 const giveawayID = data.fin; 
 
-                // Verificamos si es un NUEVO sorteo comparando con lo guardado
+                // Reseteo inteligente si hay un NUEVO sorteo
                 const lastGiveaway = localStorage.getItem('alexdom_gw_id');
-                
                 if (lastGiveaway !== giveawayID) {
-                    // ¡Es un sorteo nuevo! Borramos todo lo viejo
-                    console.log("Nuevo sorteo detectado. Reseteando...");
-                    localStorage.removeItem('alexdom_sent');
+                    localStorage.removeItem('alexdom_sent'); // Permite participar de nuevo
                     localStorage.removeItem('alexdom_pts');
                     localStorage.removeItem('alexdom_done');
-                    // Actualizamos el ID del sorteo actual
                     localStorage.setItem('alexdom_gw_id', giveawayID);
                 }
 
                 document.getElementById('loading-screen').style.display = 'none';
 
-                if (ahora >= inicio && ahora <= fin) {
+                // Lógica de 3 Estados
+                if (ahora < inicio) {
+                    // 1. Aún no empieza
+                    document.getElementById('no-sorteo').style.display = 'block';
+                } 
+                else if (ahora > fin) {
+                    // 2. Ya terminó
+                    document.getElementById('sorteo-terminado').style.display = 'block';
+                } 
+                else {
+                    // 3. Activo
                     document.getElementById('sorteo-activo').style.display = 'block';
                     startTimer(fin);
-                    loadUserData(); // Cargar datos (ahora limpios si era nuevo)
-                } else {
-                    document.getElementById('no-sorteo').style.display = 'block';
+                    loadUserData();
                 }
+
             } catch (e) {
                 console.error("Error:", e);
+                // Si falla la conexión, asumimos "No sorteo"
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('no-sorteo').style.display = 'block';
             }
         }
 
-        // --- 2. Gestión de Usuario y Puntos ---
+        // Datos del Usuario
         let totalPoints = 0;
         let completed = [];
         let yaParticipo = false;
         let nickGuardado = "";
 
         function loadUserData() {
-            // Recargar variables desde LocalStorage
             totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
             completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
             yaParticipo = localStorage.getItem('alexdom_sent') === "true";
             nickGuardado = localStorage.getItem('alexdom_nick') || "";
 
-            // Actualizar interfaz
             document.getElementById('totalPoints').innerText = totalPoints;
             const input = document.getElementById('twitchNick');
             input.value = nickGuardado;
@@ -250,7 +267,6 @@
                 const btn = document.getElementById('mainSubmit');
                 btn.disabled = true;
                 btn.innerText = "YA ESTÁS PARTICIPANDO";
-                // Bloquear acciones
                 const allActions = document.querySelectorAll('.btn-action');
                 allActions.forEach(b => {
                     if(!b.classList.contains('completed')) {
@@ -265,7 +281,7 @@
         function startTimer(target) {
             setInterval(() => {
                 const diff = target - new Date().getTime();
-                if (diff <= 0) return location.reload();
+                if (diff <= 0) return location.reload(); // Recarga para mostrar pantalla "Terminado"
                 document.getElementById("days").innerText = Math.floor(diff / 864e5);
                 document.getElementById("hours").innerText = Math.floor((diff % 864e5) / 36e5);
                 document.getElementById("minutes").innerText = Math.floor((diff % 36e5) / 6e4);
@@ -303,8 +319,8 @@
 
         function enviarSorteo() {
             const nick = document.getElementById('twitchNick').value.trim();
-            if(!nick) return alert("¡El Nick de Twitch es obligatorio!");
-            if(totalPoints === 0) return alert("Debes acumular puntos antes de enviar.");
+            if(!nick) return alert("Nick obligatorio");
+            if(totalPoints === 0) return alert("Acumula puntos primero.");
 
             localStorage.setItem('alexdom_nick', nick);
             const btn = document.getElementById('mainSubmit');
@@ -324,7 +340,6 @@
             });
         }
 
-        // Iniciar
         loadConfig();
     </script>
 </body>
