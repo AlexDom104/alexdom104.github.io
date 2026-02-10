@@ -18,8 +18,7 @@
         header { background: var(--contraste); height: 90px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--rosa-oscuro); margin: -25px -25px 35px -25px; position: relative; }
         .logo img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
         .back-link { color: var(--rosa-principal); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; position: absolute; left: 20px; transition: 0.3s; }
-        .back-link:hover { color: var(--cian-brillo); }
-
+        
         /* Loader */
         #loading-screen { margin-top: 100px; }
         .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: var(--rosa-principal); animation: spin 1s linear infinite; margin: 0 auto 20px; }
@@ -33,18 +32,23 @@
         
         .twitch-link { color: var(--cian-brillo); text-decoration: none; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid var(--cian-brillo); }
 
-        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 10px; }
+        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; }
         .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
-        /* ESTILO IDENTICO A TU IMAGEN PARA LA HORA */
+        /* ESTILO CIAN TIPO PILL (Igual a tu imagen) */
         .local-time-msg { 
-            color: #EF5085; /* Color Rosa exacto */
-            font-size: 1.1rem; 
-            margin-bottom: 25px; 
-            display: block;
-            text-align: center;
+            background: #222; /* Fondo oscuro */
+            color: var(--cian-brillo); /* Texto Cian */
+            font-size: 0.95rem; 
+            margin-bottom: 30px; 
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px; /* Bordes redondos */
+            border: 1px solid #444;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .info-msg { font-size: 1rem; line-height: 1.5; color: #ccc; margin-bottom: 25px; }
@@ -132,7 +136,7 @@
         </p>
 
         <div class="rules-section">
-            <h3 style="color:#EF5085;">REGLAS:</h3>
+            <h3>Reglas:</h3>
             <ul>
                 <li><strong>Solo es válido rellenar este formulario 1 sola vez.</strong></li>
                 <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
@@ -213,12 +217,10 @@
                 const response = await fetch(scriptURL);
                 const data = await response.json();
                 
-                // Fechas (El script de Google las envía ya con zona horaria correcta)
                 const inicio = new Date(data.inicio);
                 const fin = new Date(data.fin);
                 const ahora = new Date();
 
-                // Lógica de reseteo si el sorteo es nuevo
                 const giveawayID = data.fin; 
                 const lastGiveaway = localStorage.getItem('alexdom_gw_id');
                 if (lastGiveaway !== giveawayID) {
@@ -230,7 +232,6 @@
 
                 document.getElementById('loading-screen').style.display = 'none';
 
-                // Lógica de 3 Estados
                 if (ahora < inicio) {
                     document.getElementById('no-sorteo').style.display = 'block';
                 } 
@@ -251,12 +252,12 @@
             }
         }
 
-        // Muestra la hora convertida al local del usuario
         function showLocalTime(finDate) {
+            // Convierte la fecha a un formato legible en la zona horaria del usuario
             const horaLocal = finDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const fechaLocal = finDate.toLocaleDateString();
             document.getElementById('timezone-display').innerText = 
-                `Termina el día ${fechaLocal} a las ${horaLocal}`;
+                `Termina el ${fechaLocal} a las ${horaLocal} de tu zona horaria`;
         }
 
         // Datos del Usuario
@@ -300,9 +301,9 @@
             const interval = setInterval(() => {
                 const diff = target - new Date().getTime();
                 
-                // Si el tiempo se acaba, cambia la pantalla automáticamente
                 if (diff <= 0) {
                     clearInterval(interval);
+                    // Ocultar activo, mostrar terminado automáticamente
                     document.getElementById('sorteo-activo').style.display = 'none';
                     document.getElementById('sorteo-terminado').style.display = 'block';
                     return;
