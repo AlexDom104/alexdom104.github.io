@@ -10,119 +10,152 @@
             --fondo: #333333; --contraste: #262626;
             --rosa-principal: #EF5085; --rosa-oscuro: #A64062;
             --cian-brillo: #70DDD8; --azul-boton: #0A315B;
+            --blanco: #ffffff; 
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: white; text-align: center; padding: 20px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); text-align: center; padding: 20px; }
         
-        .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 15px; max-width: 400px; margin: 20px auto; border: 1px solid var(--cian-brillo); }
+        header { background: var(--contraste); height: 80px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--rosa-oscuro); margin: -20px -20px 30px -20px; }
+        .logo img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
+
+        .countdown-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .time-box { background: var(--contraste); padding: 12px; border-radius: 10px; border: 1px solid var(--azul-boton); min-width: 70px; }
+        .time-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--rosa-principal); }
+        .time-box label { font-size: 0.6rem; text-transform: uppercase; color: var(--cian-brillo); }
+
+        .score-banner { background: var(--azul-boton); padding: 15px; border-radius: 15px; max-width: 400px; margin: 0 auto 25px; border: 1px solid var(--cian-brillo); box-shadow: 0 0 15px rgba(112, 221, 216, 0.2); }
         .score-banner h2 { font-size: 2.5rem; color: var(--blanco); }
 
         .actions-list { max-width: 500px; margin: 0 auto; text-align: left; }
         .action-item { 
             background: var(--contraste); display: flex; align-items: center; justify-content: space-between; 
-            padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #444;
+            padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #444; 
         }
+        .action-info i { font-size: 1.2rem; color: var(--rosa-principal); margin-right: 10px; }
+        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.75rem; }
 
         .btn-action { 
             background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); 
-            padding: 8px 18px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.8rem; font-weight: bold;
+            padding: 8px 15px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.8rem; font-weight: bold;
         }
-        
-        /* Estado cuando está esperando que el usuario regrese */
-        .waiting { background: #f1c40f; color: black; border-color: black; animation: pulse 1s infinite; }
-        .completed { background: var(--rosa-oscuro) !important; border-color: var(--rosa-principal) !important; pointer-events: none; opacity: 0.7; }
+        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; opacity: 0.6; }
 
-        @keyframes pulse {
-            0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; }
+        .btn-submit { 
+            background: var(--rosa-principal); color: white; border: none; width: 100%; max-width: 500px; 
+            padding: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; font-size: 1.1rem; margin-top: 20px;
         }
+        .btn-submit:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
     </style>
 </head>
 <body>
 
-    <h1>Sorteo AlexDom104</h1>
-    
+    <header><div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div></header>
+
+    <div class="countdown-container" id="timer">
+        <div class="time-box"><span id="days">00</span><label>Días</label></div>
+        <div class="time-box"><span id="hours">00</span><label>Horas</label></div>
+        <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
+        <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
+    </div>
+
     <div class="score-banner">
         <p>PUNTOS ACUMULADOS</p>
         <h2 id="totalPoints">0</h2>
-        <button onclick="resetPoints()" style="background:none; border:none; color:grey; font-size:0.6rem; cursor:pointer;">(Reiniciar para pruebas)</button>
     </div>
 
     <div class="actions-list">
         <div class="action-item">
-            <div><i class="fab fa-instagram"></i> Instagram (+1 pt)</div>
-            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-ig" onclick="startAction(1, 'btn-ig')">SEGUIR</a>
+            <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+1 PT</span></div>
+            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-ig" onclick="validateAction(1, 'btn-ig')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-facebook"></i> Facebook <span class="action-points">+1 PT</span></div>
+            <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" id="btn-fb" onclick="validateAction(1, 'btn-fb')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-twitter"></i> X (Twitter) <span class="action-points">+1 PT</span></div>
+            <a href="https://twitter.com/AlexDom104" target="_blank" class="btn-action" id="btn-tw" onclick="validateAction(1, 'btn-tw')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fas fa-bolt"></i> Kick <span class="action-points">+1 PT</span></div>
+            <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" id="btn-ki" onclick="validateAction(1, 'btn-ki')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+2 PTS</span></div>
+            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-ds" onclick="validateAction(2, 'btn-ds')">UNIRME</a>
         </div>
 
-        <div class="action-item">
-            <div><i class="fab fa-discord"></i> Discord (+2 pts)</div>
-            <a href="TU_LINK" target="_blank" class="btn-action" id="btn-dc" onclick="startAction(2, 'btn-dc')">UNIRME</a>
-        </div>
-        
-        <p style="font-size: 0.8rem; color: #aaa; margin-top: 20px;">* El punto se otorga al regresar a esta pestaña tras realizar la acción.</p>
+        <button class="btn-submit" id="submitParticipation" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
     </div>
 
     <script>
-        let totalPoints = parseInt(localStorage.getItem('puntosSorteo')) || 0;
-        let pendingPoints = 0;
-        let activeBtnId = null;
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyAA6VqWdr5nfjznNPq4gct-VK2ptvU0Ptu0Ut3jikwbxZBpY1mHVFeecG4h0xkOefE/exec';
+        let totalPoints = parseInt(localStorage.getItem('alexdom_points')) || 0;
+        let completedActions = JSON.parse(localStorage.getItem('alexdom_actions')) || [];
 
-        // Al cargar la página, ponemos los puntos que ya tenía
-        document.getElementById('totalPoints').innerText = totalPoints;
-
-        function startAction(pts, btnId) {
-            const btn = document.getElementById(btnId);
-            if (btn.classList.contains('completed')) return;
-
-            pendingPoints = pts;
-            activeBtnId = btnId;
-
-            btn.innerText = "VERIFICANDO...";
-            btn.classList.add('waiting');
-
-            // Detectar cuando el usuario regresa a la pestaña
-            window.addEventListener('focus', finishAction, { once: true });
-        }
-
-        function finishAction() {
-            if (activeBtnId) {
-                const btn = document.getElementById(activeBtnId);
-                
-                totalPoints += pendingPoints;
-                
-                // Guardar permanentemente en el navegador
-                localStorage.setItem('puntosSorteo', totalPoints);
-                
-                document.getElementById('totalPoints').innerText = totalPoints;
-
-                btn.innerText = "✓ COMPLETADO";
-                btn.classList.remove('waiting');
-                btn.classList.add('completed');
-
-                // Guardar qué botones ya fueron pulsados
-                localStorage.setItem(activeBtnId, 'true');
-
-                activeBtnId = null;
-                pendingPoints = 0;
-            }
-        }
-
-        // Recuperar estado de los botones al recargar
+        // Inicializar estado al cargar
         window.onload = () => {
-            const botones = ['btn-ig', 'btn-dc']; // Añade aquí todos tus IDs
-            botones.forEach(id => {
-                if (localStorage.getItem(id) === 'true') {
-                    const btn = document.getElementById(id);
-                    if(btn) {
-                        btn.innerText = "✓ COMPLETADO";
-                        btn.classList.add('completed');
-                    }
-                }
+            document.getElementById('totalPoints').innerText = totalPoints;
+            completedActions.forEach(id => {
+                const btn = document.getElementById(id);
+                if(btn) { btn.innerText = "✓ LISTO"; btn.classList.add('completed'); }
             });
         };
 
-        function resetPoints() {
-            localStorage.clear();
-            location.reload();
+        function validateAction(pts, btnId) {
+            if (completedActions.includes(btnId)) return;
+            
+            // Simular validación: Esperamos a que el usuario regrese a la pestaña
+            window.addEventListener('focus', function onFocus() {
+                totalPoints += pts;
+                completedActions.push(btnId);
+                
+                // Guardar en el navegador (no se borra al recargar)
+                localStorage.setItem('alexdom_points', totalPoints);
+                localStorage.setItem('alexdom_actions', JSON.stringify(completedActions));
+                
+                document.getElementById('totalPoints').innerText = totalPoints;
+                const btn = document.getElementById(btnId);
+                btn.innerText = "✓ LISTO";
+                btn.classList.add('completed');
+                
+                window.removeEventListener('focus', onFocus);
+            }, { once: true });
         }
+
+        async function enviarSorteo() {
+            const btn = document.getElementById('submitParticipation');
+            if(totalPoints === 0) return alert("¡Haz al menos una acción para participar!");
+
+            btn.disabled = true;
+            btn.innerText = "ENVIANDO...";
+
+            const payload = {
+                nombre: "Usuario_Web", 
+                puntos: totalPoints,
+                email: "vía_localStorage"
+            };
+
+            try {
+                await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                alert("¡Entrada registrada! Puntos guardados en la base de datos.");
+                btn.innerText = "✓ PARTICIPANDO";
+            } catch (e) {
+                alert("Error al conectar. Intenta de nuevo.");
+                btn.disabled = false;
+            }
+        }
+
+        // Contador
+        const target = new Date("March 30, 2026 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const d = target - now;
+            document.getElementById("days").innerText = Math.floor(d / (864e5));
+            document.getElementById("hours").innerText = Math.floor((d % 864e5) / 36e5);
+            document.getElementById("minutes").innerText = Math.floor((d % 36e5) / 6e4);
+            document.getElementById("seconds").innerText = Math.floor((d % 6e4) / 1000);
+        }, 1000);
     </script>
 </body>
 </html>
