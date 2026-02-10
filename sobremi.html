@@ -25,10 +25,9 @@
         box-shadow: 5px 5px 0px #A64062;
     }
 
-    h3 { color: #70DDD8; margin: 25px 0 12px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-    h3 i { font-size: 1.2rem; color: #EF5085; }
+    h3 { color: #70DDD8; margin: 25px 0 12px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; }
 
-    .skills-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .skills-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
 
     .skill-tag { 
         background: #0A315B; 
@@ -39,20 +38,19 @@
         border: 1px solid #1a4a7a;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 8px; /* Espacio entre icono y texto */
         transition: 0.3s;
     }
     
     .skill-tag i { font-size: 0.9rem; }
-    .skill-tag:hover { border-color: #70DDD8; transform: translateY(-2px); }
 
-    /* Colores específicos para logos */
-    .fa-adobe { color: #FF0000; }
-    .fa-microsoft { color: #00a4ef; }
-    .fa-python { color: #3776ab; }
-    .fa-code { color: #70DDD8; }
-    .fa-brain { color: #EF5085; }
-    .fa-pen-nib { color: #00deff; } /* Para Corel/Diseño */
+    .skill-tag:hover {
+        border-color: #70DDD8;
+        transform: translateY(-2px);
+    }
+
+    .tag-ia { border-color: #EF5085; }
+    .tag-ia i { color: #EF5085; }
   </style>
 </head>
 <body>
@@ -70,49 +68,54 @@
       <br>
       <p>Me especializo en gestión de comunidades, diseño gráfico y automatización mediante IA. He trabajado en proyectos que van desde la redacción de noticias hasta la administración de CRMs y campañas publicitarias.</p>
       
-      <h3><i class="fab fa-adobe"></i> Ecosistema Adobe</h3>
+      <h3>Ecosistema Adobe</h3>
       <div class="skills-group">
-        <span class="skill-tag"><i class="fas fa-image"></i> Photoshop</span>
-        <span class="skill-tag"><i class="fas fa-bezier-curve"></i> Illustrator</span>
-        <span class="skill-tag"><i class="fas fa-video"></i> Premiere Pro</span>
-        <span class="skill-tag"><i class="fas fa-magic"></i> After Effects</span>
-        <span class="skill-tag"><i class="fas fa-wave-square"></i> Audacity</span>
+        <div class="skill-tag"><i class="fas fa-bezier-curve"></i> Photoshop</div>
+        <div class="skill-tag"><i class="fas fa-pen-nib"></i> Illustrator</div>
+        <div class="skill-tag"><i class="fas fa-video"></i> Premiere Pro</div>
+        <div class="skill-tag"><i class="fas fa-magic"></i> After Effects</div>
+        <div class="skill-tag"><i class="fas fa-microphone"></i> Audacity</div>
       </div>
 
-      <h3><i class="fas fa-palette"></i> Diseño y Producción Digital</h3>
+      <h3>Diseño y Producción Digital</h3>
       <div class="skills-group">
-        <span class="skill-tag"><i class="fas fa-pen-nib"></i> Corel Draw</span>
-        <span class="skill-tag"><i class="fas fa-cube"></i> Blender</span>
-        <span class="skill-tag"><i class="fas fa-film"></i> Filmora / Capcut</span>
-        <span class="skill-tag"><i class="fas fa-broadcast-tower"></i> OBS Studio</span>
-        <span class="skill-tag"><i class="fas fa-clapperboard"></i> Canva</span>
+        <div class="skill-tag"><i class="fas fa-palette"></i> Corel Draw</div>
+        <div class="skill-tag"><i class="fas fa-cube"></i> Blender</div>
+        <div class="skill-tag"><i class="fas fa-film"></i> Filmora</div>
+        <div class="skill-tag"><i class="fas fa-cut"></i> Capcut</div>
+        <div class="skill-tag"><i class="fas fa-broadcast-tower"></i> OBS Studio</div>
+        <div class="skill-tag"><i class="fas fa-clover"></i> Canva</div>
       </div>
 
-      <h3><i class="fab fa-microsoft"></i> Microsoft Office</h3>
+      <h3>Microsoft Office</h3>
       <div class="skills-group">
-        <span class="skill-tag"><i class="fas fa-file-word"></i> Word</span>
-        <span class="skill-tag"><i class="fas fa-file-excel"></i> Excel</span>
-        <span class="skill-tag"><i class="fas fa-file-powerpoint"></i> Power Point</span>
+        <div class="skill-tag"><i class="fas fa-file-word"></i> Word</div>
+        <div class="skill-tag"><i class="fas fa-file-excel"></i> Excel</div>
+        <div class="skill-tag"><i class="fas fa-file-powerpoint"></i> Power Point</div>
       </div>
 
-      <h3><i class="fas fa-bullhorn"></i> Gestión Web y Marketing</h3>
+      <h3>Gestión Web y Marketing</h3>
       <div class="skills-group">
-        <span class="skill-tag"><i class="fab fa-wordpress"></i> WordPress</span>
-        <span class="skill-tag"><i class="fab fa-facebook-square"></i> Meta Business</span>
+        <div class="skill-tag"><i class="fab fa-wordpress"></i> WordPress</div>
+        <div class="skill-tag"><i class="fab fa-facebook-square"></i> Facebook Business</div>
+        <div class="skill-tag"><i class="fas fa-briefcase"></i> Paquetería Office</div>
       </div>
 
-      <h3><i class="fas fa-terminal"></i> Programación y Desarrollo</h3>
+      <h3>Programación y Desarrollo</h3>
       <div class="skills-group">
-        <span class="skill-tag"><i class="fas fa-code"></i> HTML + CSS</span>
-        <span class="skill-tag"><i class="fab fa-python"></i> Python</span>
+        <div class="skill-tag"><i class="fas fa-code"></i> HTML + CSS</div>
+        <div class="skill-tag"><i class="fab fa-python"></i> Python</div>
       </div>
 
-      <h3><i class="fas fa-robot"></i> Inteligencia Artificial</h3>
+      <h3>Inteligencia Artificial</h3>
       <div class="skills-group">
-        <span class="skill-tag"><i class="fas fa-comment-dots"></i> ChatGPT / Gemini</span>
-        <span class="skill-tag"><i class="fas fa-eye"></i> Stable Diffusion / Foocus</span>
-        <span class="skill-tag"><i class="fas fa-brain"></i> Grok / DeepSeek</span>
-        <span class="skill-tag"><i class="fas fa-music"></i> Suno IA</span>
+        <div class="skill-tag tag-ia"><i class="fas fa-robot"></i> ChatGPT</div>
+        <div class="skill-tag tag-ia"><i class="fas fa-brain"></i> Gemini</div>
+        <div class="skill-tag tag-ia"><i class="fas fa-images"></i> Stable Diffusion</div>
+        <div class="skill-tag tag-ia"><i class="fas fa-microchip"></i> Foocus</div>
+        <div class="skill-tag tag-ia"><i class="fas fa-terminal"></i> Grok</div>
+        <div class="skill-tag tag-ia"><i class="fas fa-search"></i> DeepSeek</div>
+        <div class="skill-tag tag-ia"><i class="fas fa-music"></i> Suno IA</div>
       </div>
     </div>
   </div>
