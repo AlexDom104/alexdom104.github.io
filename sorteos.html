@@ -7,107 +7,169 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         :root { 
-            --fondo: #333333; --contraste: #262626;
-            --rosa: #EF5085; --rosa-dark: #A64062;
-            --cian: #70DDD8; --azul: #0A315B;
+            --fondo: #333333; 
+            --contraste: #262626;
+            --rosa-principal: #EF5085; 
+            --rosa-oscuro: #A64062;
+            --cian-brillo: #70DDD8;
+            --azul-boton: #0A315B;
+            --blanco: #ffffff; 
         }
-        body { background: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); text-align: center; padding: 20px; }
         
+        header { background: var(--contraste); height: 80px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--rosa-oscuro); margin: -20px -20px 30px -20px; }
+        .logo img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
+
+        h1 { color: var(--rosa-principal); margin-bottom: 10px; text-transform: uppercase; }
+        .subtitle { color: var(--cian-brillo); margin-bottom: 30px; font-weight: bold; }
+
         /* Cuenta Regresiva */
-        .countdown-container { display: flex; justify-content: center; gap: 15px; margin: 30px 0; }
-        .time-box { background: var(--contraste); padding: 15px; border-radius: 10px; border: 1px solid var(--rosa); min-width: 80px; }
-        .time-box span { display: block; font-size: 2rem; font-weight: bold; color: var(--cian); }
+        .countdown-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
+        .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 75px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
+        .time-box label { font-size: 0.7rem; text-transform: uppercase; color: var(--cian-brillo); }
+
+        /* Sección de Puntos */
+        .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 15px; max-width: 500px; margin: 0 auto 30px; border: 1px solid var(--cian-brillo); }
+        .score-banner h2 { font-size: 2.5rem; color: var(--blanco); }
 
         /* Lista de Acciones */
-        .actions-list { max-width: 500px; margin: 0 auto; text-align: left; background: var(--contraste); padding: 20px; border-radius: 15px; }
+        .actions-list { max-width: 500px; margin: 0 auto; text-align: left; }
         .action-item { 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 15px; border-bottom: 1px solid #444; transition: 0.3s;
+            background: var(--contraste); display: flex; align-items: center; justify-content: space-between; 
+            padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #444; transition: 0.3s;
         }
-        .action-item:hover { background: #2d2d2d; }
+        .action-item:hover { border-color: var(--cian-brillo); }
+        .action-info { display: flex; align-items: center; gap: 15px; }
+        .action-info i { font-size: 1.4rem; color: var(--rosa-principal); width: 25px; }
+        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.8rem; }
+
         .btn-action { 
-            background: var(--azul); color: white; border: none; padding: 8px 15px; 
-            border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 0.9rem;
+            background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); 
+            padding: 8px 18px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.8rem; font-weight: bold;
         }
-        .btn-action.done { background: var(--rosa-dark); pointer-events: none; }
-        
-        .score-counter { font-size: 1.5rem; margin: 20px 0; color: var(--rosa); font-weight: bold; }
-        input[type="text"], input[type="email"] {
-            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid var(--azul); background: #444; color: white;
-        }
+        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; }
+
+        /* Registro Final */
+        #registration { margin-top: 40px; padding-top: 20px; border-top: 1px solid #444; }
         .btn-submit { 
-            background: var(--rosa); border: none; width: 100%; padding: 15px; 
-            color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px;
+            background: var(--rosa-principal); color: white; border: none; width: 100%; max-width: 500px; 
+            padding: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(239, 80, 133, 0.3); transition: 0.3s;
         }
+        .btn-submit:hover { background: var(--rosa-oscuro); transform: scale(1.02); box-shadow: 0 0 20px var(--cian-brillo); }
+        
+        .footer-note { font-size: 0.8rem; color: #888; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <h1>¡Gana el juego que quieras!</h1>
-    <p>Participa y acumula puntos siguiendo mis redes</p>
+    <header>
+        <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
+    </header>
+
+    <h1>Sorteo AlexDom104</h1>
+    <p class="subtitle">¡Acumula puntos y gana!</p>
 
     <div class="countdown-container" id="timer">
-        <div class="time-box"><span id="days">00</span>Días</div>
-        <div class="time-box"><span id="hours">00</span>Hrs</div>
-        <div class="time-box"><span id="minutes">00</span>Min</div>
-        <div class="time-box"><span id="seconds">00</span>Seg</div>
+        <div class="time-box"><span id="days">00</span><label>Días</label></div>
+        <div class="time-box"><span id="hours">00</span><label>Horas</label></div>
+        <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
+        <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
     </div>
 
-    <div class="score-counter">Tus Puntos: <span id="totalPoints">0</span> pts</div>
+    <div class="score-banner">
+        <p>TUS PUNTOS ACTUALES</p>
+        <h2 id="totalPoints">0</h2>
+    </div>
 
     <div class="actions-list">
         <div class="action-item">
-            <span><i class="fab fa-instagram"></i> Sígueme en Instagram (+1 pt)</span>
-            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" onclick="addPoint(1, this)">Ir</a>
-        </div>
-        <div class="action-item">
-            <span><i class="fab fa-discord"></i> Únete al Discord (+2 pts)</span>
-            <a href="URL_DISCORD" target="_blank" class="btn-action" onclick="addPoint(2, this)">Unirme</a>
-        </div>
-        <div class="action-item">
-            <span><i class="fab fa-twitch"></i> Comparte el directo (+3 pts)</span>
-            <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" onclick="addPoint(3, this)">Compartir</a>
+            <div class="action-info"><i class="fab fa-instagram"></i> <div>Instagram <div class="action-points">+1 PUNTO</div></div></div>
+            <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
         </div>
 
-        <form id="entryForm">
-            <input type="text" placeholder="Tu Nombre de Usuario" required id="u_name">
-            <input type="email" placeholder="Tu Correo Electrónico" required id="u_email">
-            <button type="submit" class="btn-submit">REGISTRAR ENTRADA</button>
-        </form>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-facebook"></i> <div>Facebook <div class="action-points">+1 PUNTO</div></div></div>
+            <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
+        </div>
+
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-twitter"></i> <div>X (Twitter) <div class="action-points">+1 PUNTO</div></div></div>
+            <a href="https://twitter.com/AlexDom104" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
+        </div>
+
+        <div class="action-item">
+            <div class="action-info"><i class="fas fa-bolt"></i> <div>Kick <div class="action-points">+1 PUNTO</div></div></div>
+            <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" onclick="addPoints(1, this)">SEGUIR</a>
+        </div>
+
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-discord"></i> <div>Discord <div class="action-points">+2 PUNTOS</div></div></div>
+            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" onclick="addPoints(2, this)">UNIRME</a>
+        </div>
+
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-twitch"></i> <div>Compartir Directo <div class="action-points">+3 PUNTOS</div></div></div>
+            <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" onclick="addPoints(3, this)">COMPARTIR</a>
+        </div>
+
+        <div id="registration">
+            <button class="btn-submit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
+            <p class="footer-note">Al confirmar, se abrirá tu cuenta de Google para validar tu entrada única.</p>
+        </div>
     </div>
 
     <script>
-        let points = 0;
-        // Lógica de puntos (Frontend)
-        function addPoint(val, btn) {
-            points += val;
-            document.getElementById('totalPoints').innerText = points;
-            btn.innerText = "✓";
-            btn.classList.add('done');
+        let totalPoints = 0;
+
+        // Función para sumar puntos
+        function addPoints(pts, btn) {
+            totalPoints += pts;
+            document.getElementById('totalPoints').innerText = totalPoints;
+            btn.innerText = "✓ LISTO";
+            btn.classList.add('completed');
         }
 
-        // Cuenta regresiva configurable (Configura tu fecha aquí)
-        const targetDate = new Date("March 1, 2026 00:00:00").getTime();
+        // --- CONFIGURACIÓN DEL SORTEO ---
+        // Cambia la fecha aquí para que el contador se actualice
+        const fechaTermino = new Date("March 30, 2026 00:00:00").getTime();
 
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const diff = targetDate - now;
+        const x = setInterval(function() {
+            const ahora = new Date().getTime();
+            const distancia = fechaTermino - ahora;
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
 
-            document.getElementById("days").innerText = d;
-            document.getElementById("hours").innerText = h;
-            document.getElementById("minutes").innerText = m;
-            document.getElementById("seconds").innerText = s;
+            document.getElementById("days").innerHTML = dias;
+            document.getElementById("hours").innerHTML = horas;
+            document.getElementById("minutes").innerHTML = minutos;
+            document.getElementById("seconds").innerHTML = segundos;
 
-            if (diff < 0) {
-                clearInterval(timer);
-                document.getElementById("timer").innerHTML = "<h3>SORTEO FINALIZADO</h3>";
+            if (distancia < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "<h3>EL SORTEO HA COMENZADO O TERMINADO</h3>";
             }
         }, 1000);
+
+        // Envío a Google Sheets
+        function enviarSorteo() {
+            if(totalPoints === 0) {
+                alert("Primero realiza algunas acciones para ganar puntos.");
+                return;
+            }
+            
+            // Aquí pegas la URL de tu Aplicación Web de Google Apps Script
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyAA6VqWdr5nfjznNPq4gct-VK2ptvU0Ptu0Ut3jikwbxZBpY1mHVFeecG4h0xkOefE/exec';
+            
+            alert("Redirigiendo a validación de Google... Puntos acumulados: " + totalPoints);
+            // Lógica de envío Fetch aquí
+        }
     </script>
 </body>
 </html>
