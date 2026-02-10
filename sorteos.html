@@ -13,38 +13,47 @@
             --blanco: #ffffff; 
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); text-align: center; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); text-align: center; padding: 25px; font-size: 1.2rem; } /* Escala 20% */
         
-        header { background: var(--contraste); height: 80px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--rosa-oscuro); margin: -20px -20px 30px -20px; }
-        .logo img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
+        header { background: var(--contraste); height: 95px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--rosa-oscuro); margin: -25px -25px 35px -25px; }
+        .logo img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--rosa-principal); }
 
-        .countdown-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; }
-        .time-box { background: var(--contraste); padding: 10px; border-radius: 10px; border: 1px solid var(--azul-boton); min-width: 65px; }
-        .time-box span { display: block; font-size: 1.4rem; font-weight: bold; color: var(--rosa-principal); }
-        .time-box label { font-size: 0.6rem; text-transform: uppercase; color: var(--cian-brillo); }
+        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
+        .time-box span { display: block; font-size: 2rem; font-weight: bold; color: var(--rosa-principal); }
+        .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
-        .score-banner { background: var(--azul-boton); padding: 15px; border-radius: 15px; max-width: 400px; margin: 0 auto 20px; border: 1px solid var(--cian-brillo); }
-        .score-banner h2 { font-size: 2.2rem; margin: 5px 0; }
+        .score-banner { background: var(--azul-boton); padding: 25px; border-radius: 18px; max-width: 550px; margin: 0 auto 30px; border: 2px solid var(--cian-brillo); }
+        .score-banner h2 { font-size: 3rem; margin: 10px 0; }
 
-        .actions-list { max-width: 500px; margin: 0 auto; text-align: left; }
+        .actions-list { max-width: 600px; margin: 0 auto; text-align: left; }
         .action-item { 
             background: var(--contraste); display: flex; align-items: center; justify-content: space-between; 
-            padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; border: 1px solid #444; 
+            padding: 18px 22px; border-radius: 14px; margin-bottom: 12px; border: 1px solid #444; 
         }
-        .action-info i { font-size: 1.1rem; color: var(--rosa-principal); margin-right: 8px; width: 20px; text-align: center; }
-        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.7rem; display: block; }
+        .action-info i { font-size: 1.5rem; color: var(--rosa-principal); margin-right: 12px; width: 30px; text-align: center; }
+        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.9rem; display: block; margin-top: 4px; }
 
         .btn-action { 
-            background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); 
-            padding: 6px 12px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.75rem; font-weight: bold;
+            background: var(--azul-boton); color: white; border: 1.5px solid var(--cian-brillo); 
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s;
+            min-width: 120px; text-align: center;
         }
-        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; opacity: 0.6; }
+        .btn-action.waiting { background: #444; color: var(--cian-brillo); border-color: #666; pointer-events: none; }
+        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; opacity: 0.7; }
 
         .btn-submit { 
-            background: var(--rosa-principal); color: white; border: none; width: 100%; max-width: 500px; 
-            padding: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; font-size: 1.1rem; margin-top: 15px; transition: 0.3s;
+            background: var(--rosa-principal); color: white; border: none; width: 100%; max-width: 600px; 
+            padding: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; font-size: 1.3rem; margin-top: 20px; transition: 0.3s;
         }
         .btn-submit:disabled { background: #555; opacity: 0.7; cursor: not-allowed; }
+
+        @media (max-width: 480px) {
+            body { font-size: 1rem; padding: 15px; }
+            .time-box { min-width: 65px; padding: 10px; }
+            .action-item { flex-direction: column; gap: 15px; text-align: center; }
+            .action-info { flex-direction: column; gap: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -59,41 +68,48 @@
     </div>
 
     <div class="score-banner">
-        <p style="font-size: 0.8rem;">PUNTOS ACUMULADOS</p>
+        <p style="font-size: 1rem;">PUNTOS ACUMULADOS</p>
         <h2 id="totalPoints">0</h2>
     </div>
 
     <div class="actions-list">
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-youtube"></i> Suscríbete <span class="action-points">+1 PT</span></div>
+            <div class="action-info"><i class="fab fa-twitch"></i> Twitch <span class="action-points">+1 PT</span></div>
+            <a href="https://www.twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-tw" onclick="validateAction(1, 'btn-tw')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-youtube"></i> YouTube <span class="action-points">+1 PT</span></div>
             <a href="https://www.youtube.com/@AlexDom104" target="_blank" class="btn-action" id="btn-yt" onclick="validateAction(1, 'btn-yt')">SUSCRIBIRSE</a>
         </div>
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-tiktok"></i> Sígueme <span class="action-points">+1 PT</span></div>
+            <div class="action-info"><i class="fab fa-tiktok"></i> TikTok <span class="action-points">+1 PT</span></div>
             <a href="https://www.tiktok.com/@alexdom104" target="_blank" class="btn-action" id="btn-tk" onclick="validateAction(1, 'btn-tk')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-facebook"></i> Facebook <span class="action-points">+5 PTS</span></div>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.twitch.tv/alexdom104&quote=Ven a ver el directo de AlexDom104 en Twitch!" target="_blank" class="btn-action" id="btn-fb-share" onclick="validateAction(5, 'btn-fb-share')">COMPARTIR</a>
         </div>
         <div class="action-item">
             <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+1 PT</span></div>
             <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-ig" onclick="validateAction(1, 'btn-ig')">SEGUIR</a>
         </div>
         <div class="action-item">
-            <div class="action-info"><i class="fab fa-facebook"></i> Facebook <span class="action-points">+1 PT</span></div>
-            <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" id="btn-fb" onclick="validateAction(1, 'btn-fb')">SEGUIR</a>
-        </div>
-        <div class="action-item">
-            <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+2 PTS</span></div>
-            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-ds" onclick="validateAction(2, 'btn-ds')">UNIRME</a>
+            <div class="action-info"><i class="fab fa-twitter"></i> X / Twitter <span class="action-points">+1 PT</span></div>
+            <a href="https://twitter.com/AlexDom104" target="_blank" class="btn-action" id="btn-x" onclick="validateAction(1, 'btn-x')">SEGUIR</a>
         </div>
         <div class="action-item">
             <div class="action-info"><i class="fas fa-bolt"></i> Kick <span class="action-points">+1 PT</span></div>
             <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" id="btn-ki" onclick="validateAction(1, 'btn-ki')">SEGUIR</a>
+        </div>
+        <div class="action-item">
+            <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+3 PTS</span></div>
+            <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-ds" onclick="validateAction(3, 'btn-ds')">UNIRME</a>
         </div>
 
         <button class="btn-submit" id="submitBtn" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
     </div>
 
     <script>
-        // URL ACTUALIZADA
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DXdqTtgPxcdTJY5bfXdj43xB1X7T0u8OvBqxPRgk2JV4brTPgpIcPolwL30t1g3J/exec';
         
         let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
@@ -109,17 +125,35 @@
 
         function validateAction(pts, id) {
             if (completed.includes(id)) return;
+            
+            // Esperar a que el usuario regrese
             window.addEventListener('focus', function onFocus() {
-                totalPoints += pts;
-                completed.push(id);
-                localStorage.setItem('alexdom_pts', totalPoints);
-                localStorage.setItem('alexdom_done', JSON.stringify(completed));
-                document.getElementById('totalPoints').innerText = totalPoints;
                 const b = document.getElementById(id);
-                b.innerText = "✓";
-                b.classList.add('completed');
+                b.classList.add('waiting');
+                let count = 5;
+                
+                const timer = setInterval(() => {
+                    b.innerText = "ESPERA " + count + "s";
+                    count--;
+                    if(count < 0) {
+                        clearInterval(timer);
+                        finalizeAction(pts, id, b);
+                    }
+                }, 1000);
+                
                 window.removeEventListener('focus', onFocus);
             }, { once: true });
+        }
+
+        function finalizeAction(pts, id, b) {
+            totalPoints += pts;
+            completed.push(id);
+            localStorage.setItem('alexdom_pts', totalPoints);
+            localStorage.setItem('alexdom_done', JSON.stringify(completed));
+            document.getElementById('totalPoints').innerText = totalPoints;
+            b.innerText = "✓";
+            b.classList.remove('waiting');
+            b.classList.add('completed');
         }
 
         function enviarSorteo() {
@@ -128,17 +162,14 @@
             btn.disabled = true;
             btn.innerText = "REGISTRANDO...";
 
-            const data = {
-                nombre: "Usuario_Web_" + Math.floor(Math.random()*999),
-                puntos: totalPoints,
-                email: "navegador_id",
-                plataformas: completed.join(", ")
-            };
-
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    nombre: "Usuario_Web_" + Math.floor(Math.random()*999),
+                    puntos: totalPoints,
+                    plataformas: completed.join(", ")
+                })
             }).then(() => {
                 alert("¡Puntos registrados correctamente!");
                 btn.innerText = "✓ PARTICIPANDO";
@@ -149,7 +180,6 @@
             });
         }
 
-        // Contador de tiempo (30 de Marzo)
         const target = new Date("March 30, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
