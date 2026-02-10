@@ -20,31 +20,47 @@
         .back-link { color: var(--rosa-principal); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; position: absolute; left: 20px; transition: 0.3s; }
         .back-link:hover { color: var(--cian-brillo); }
 
-        .main-container { max-width: 600px; margin: 0 auto; display: none; } /* Oculto por defecto */
-        #no-sorteo { display: block; margin-top: 100px; }
-        #no-sorteo h1 { font-size: 3rem; color: var(--rosa-principal); }
+        /* Contenedores de estado */
+        .main-container { max-width: 600px; margin: 0 auto; display: none; }
+        #no-sorteo { display: block; margin-top: 80px; }
+        #no-sorteo h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 20px; }
 
         .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
         .time-box { background: var(--contraste); padding: 15px; border-radius: 12px; border: 1px solid var(--azul-boton); min-width: 85px; }
         .time-box span { display: block; font-size: 1.8rem; font-weight: bold; color: var(--rosa-principal); }
         .time-box label { font-size: 0.75rem; text-transform: uppercase; color: var(--cian-brillo); }
 
+        .info-msg { font-size: 1rem; line-height: 1.5; color: #ccc; margin-bottom: 25px; }
+
         .rules-section { text-align: left; background: rgba(0,0,0,0.2); padding: 25px; border-radius: 15px; border: 1px solid #555; margin-bottom: 30px; }
-        .rules-section li { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; padding-left: 20px; position: relative; }
+        .rules-section h3 { color: var(--rosa-principal); margin-bottom: 15px; text-transform: uppercase; }
+        .rules-section li { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; position: relative; padding-left: 20px; }
         .rules-section li::before { content: "•"; color: var(--cian-brillo); position: absolute; left: 0; font-weight: bold; }
 
         .score-banner { background: var(--azul-boton); padding: 20px; border-radius: 18px; border: 2px solid var(--cian-brillo); margin-bottom: 30px; }
         .score-banner h2 { font-size: 3.2rem; margin: 10px 0; }
 
-        .nick-input { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid var(--rosa-principal); background: var(--contraste); color: white; font-size: 1.1rem; outline: none; margin-bottom: 25px; }
-        
-        .action-item { background: var(--contraste); display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-radius: 14px; margin-bottom: 12px; border: 1px solid #444; text-align: left; }
-        .btn-action { background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); padding: 10px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; }
-        .btn-action.waiting { background: #555; cursor: wait; }
-        .btn-action.completed { background: var(--rosa-oscuro); pointer-events: none; opacity: 0.6; }
+        .nick-section { text-align: left; margin-bottom: 25px; }
+        .nick-input { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid var(--rosa-principal); background: var(--contraste); color: white; font-size: 1.1rem; outline: none; }
+        .nick-input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .actions-list { text-align: left; }
+        .action-item { background: var(--contraste); display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-radius: 14px; margin-bottom: 12px; border: 1px solid #444; }
+        .action-info { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; }
+        .action-info i { font-size: 1.4rem; color: var(--rosa-principal); width: 25px; text-align: center; }
+        .action-points { color: var(--cian-brillo); font-weight: bold; font-size: 0.85rem; }
+
+        .btn-action { background: var(--azul-boton); color: white; border: 1px solid var(--cian-brillo); padding: 10px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
+        .btn-action.waiting { background: #555; border-color: #888; cursor: wait; }
+        .btn-action.completed { background: var(--rosa-oscuro); border-color: var(--rosa-principal); pointer-events: none; opacity: 0.6; }
 
         .btn-submit { background: var(--rosa-principal); color: white; border: none; width: 100%; padding: 22px; font-weight: bold; border-radius: 12px; cursor: pointer; font-size: 1.3rem; margin-top: 25px; }
-        .btn-submit:disabled { background: #555; opacity: 0.5; }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; background: #555; }
+
+        @media (max-width: 480px) {
+            .action-item { flex-direction: column; gap: 15px; text-align: center; }
+            .btn-action { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -54,7 +70,7 @@
         <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
     </header>
 
-    <div id="no-sorteo">
+    <div class="main-container" id="no-sorteo">
         <div class="countdown-container">
             <div class="time-box"><span>00</span><label>Días</label></div>
             <div class="time-box"><span>00</span><label>Horas</label></div>
@@ -62,10 +78,10 @@
             <div class="time-box"><span>00</span><label>Seg</label></div>
         </div>
         <h1>NO HAY SORTEOS AÚN</h1>
-        <p style="margin-top:20px; color:#888;">Vuelve pronto para nuevas dinámicas.</p>
+        <p style="color:#888;">Mantente atento a las redes sociales para el próximo inicio.</p>
     </div>
 
-    <div id="sorteo-activo" class="main-container">
+    <div class="main-container" id="sorteo-activo">
         <div class="countdown-container">
             <div class="time-box"><span id="days">00</span><label>Días</label></div>
             <div class="time-box"><span id="hours">00</span><label>Horas</label></div>
@@ -73,13 +89,21 @@
             <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
         </div>
 
+        <p class="info-msg">
+            Tener todos los puntos canjeables no te dará más chances de ganar, pero no te lo asegura al 100%, es suerte, así como los tickets que puedes canjear hasta 3 tickets en cada directo en Twitch.
+        </p>
+
         <div class="rules-section">
             <h3>Reglas:</h3>
             <ul>
                 <li><strong>Solo es válido rellenar este formulario 1 sola vez.</strong></li>
-                <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch.</li>
-                <li>Si el <strong>GANADOR</strong> no responde en 48h, se elegirá otro.</li>
+                <li>El <strong>GANADOR</strong> deberá poner su NICK de Twitch para ser identificado.</li>
+                <li>Solo puedes registrarte una vez, si se detecta el uso de multicuentas, serás baneado.</li>
+                <li>El <strong>GANADOR</strong> será anunciado el día de finalización del sorteo.</li>
+                <li>Si el <strong>GANADOR</strong> no responde en 48 horas, el premio se otorgará a un segundo ganador.</li>
+                <li>Cada ticket de directo equivale a 2 puntos extra.</li>
             </ul>
+            <h3 style="text-align:center; margin-top:10px; color:var(--cian-brillo);">¡SUERTE!</h3>
         </div>
 
         <div class="score-banner">
@@ -87,42 +111,106 @@
             <h2 id="totalPoints">0</h2>
         </div>
 
-        <input type="text" id="twitchNick" class="nick-input" placeholder="NICK DE TWITCH (OBLIGATORIO)">
+        <div class="nick-section">
+            <label style="display:block; margin-bottom:10px; font-weight:bold; color:var(--cian-brillo);">NICK DE TWITCH (OBLIGATORIO)</label>
+            <input type="text" id="twitchNick" class="nick-input" placeholder="Escribe tu Nick de Twitch aquí..." required>
+        </div>
 
-        <div id="actions-wrapper">
+        <div class="actions-list">
             <div class="action-item">
-                <span>Twitch (+10 pts)</span>
+                <div class="action-info"><i class="fab fa-twitch"></i> Twitch <span class="action-points">+10 PTS</span></div>
                 <a href="https://twitch.tv/alexdom104" target="_blank" class="btn-action" id="btn-twc" onclick="validateWithTimer(10, 'btn-twc')">SEGUIR</a>
             </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-youtube"></i> Youtube <span class="action-points">+10 PTS</span></div>
+                <a href="https://www.youtube.com/@AlexDom104" target="_blank" class="btn-action" id="btn-yt" onclick="validateWithTimer(10, 'btn-yt')">SEGUIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-tiktok"></i> Tiktok <span class="action-points">+10 PTS</span></div>
+                <a href="https://www.tiktok.com/@alexdom104" target="_blank" class="btn-action" id="btn-tk" onclick="validateWithTimer(10, 'btn-tk')">SEGUIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-facebook"></i> Facebook <span class="action-points">+10 PTS</span></div>
+                <a href="https://facebook.com/AlexDom104.of" target="_blank" class="btn-action" id="btn-fbs" onclick="validateWithTimer(10, 'btn-fbs')">SEGUIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+10 PTS</span></div>
+                <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-igs" onclick="validateWithTimer(10, 'btn-igs')">SEGUIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-x-twitter"></i> X / Twitter <span class="action-points">+10 PTS</span></div>
+                <a href="https://x.com/AlexDom104" target="_blank" class="btn-action" id="btn-xtw" onclick="validateWithTimer(10, 'btn-xtw')">SEGUIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fas fa-bolt"></i> Kick <span class="action-points">+10 PTS</span></div>
+                <a href="https://kick.com/alexdom104" target="_blank" class="btn-action" id="btn-kck" onclick="validateWithTimer(10, 'btn-kck')">SEGUIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-discord"></i> Discord <span class="action-points">+30 PTS</span></div>
+                <a href="https://discord.gg/mQMZhHz2SG" target="_blank" class="btn-action" id="btn-dsc" onclick="validateWithTimer(30, 'btn-dsc')">UNIRME</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-facebook-f"></i> Facebook <span class="action-points">+30 PTS</span></div>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://twitch.tv/alexdom104&quote=Ven a ver el directo de AlexDom104 en..." target="_blank" class="btn-action" id="btn-fbc" onclick="validateWithTimer(30, 'btn-fbc')">COMPARTIR</a>
+            </div>
+            <div class="action-item">
+                <div class="action-info"><i class="fab fa-instagram"></i> Instagram <span class="action-points">+30 PTS</span></div>
+                <a href="https://instagram.com/AlexDom104" target="_blank" class="btn-action" id="btn-igc" onclick="validateWithTimer(30, 'btn-igc')">COMPARTIR</a>
             </div>
 
-        <button class="btn-submit" id="mainSubmit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
+            <button class="btn-submit" id="mainSubmit" onclick="enviarSorteo()">CONFIRMAR PARTICIPACIÓN</button>
+        </div>
     </div>
 
     <script>
-        const scriptURL = 'TU_URL_DE_APPS_SCRIPT_AQUI';
+        // LA URL DE TU APPS SCRIPT
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DXdqTtgPxcdTJY5bfXdj43xB1X7T0u8OvBqxPRgk2JV4brTPgpIcPolwL30t1g3J/exec';
         
-        async function fetchDates() {
+        let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
+        let completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
+        let yaParticipo = localStorage.getItem('alexdom_sent') === "true";
+        let nickGuardado = localStorage.getItem('alexdom_nick') || "";
+
+        // Consultar fechas al iniciar
+        async function fetchConfig() {
             try {
                 const response = await fetch(scriptURL);
-                const dates = await response.json();
-                checkStatus(new Date(dates.inicio), new Date(dates.fin));
-            } catch (e) { console.error("Error leyendo fechas"); }
+                const config = await response.json();
+                initApp(new Date(config.inicio), new Date(config.fin));
+            } catch (e) {
+                console.error("Error cargando configuración");
+                document.getElementById('no-sorteo').style.display = 'block';
+            }
         }
 
-        function checkStatus(inicio, fin) {
+        function initApp(inicio, fin) {
             const ahora = new Date();
             if (ahora >= inicio && ahora <= fin) {
                 document.getElementById('no-sorteo').style.display = 'none';
                 document.getElementById('sorteo-activo').style.display = 'block';
-                startTimer(fin);
+                startCountdown(fin);
+                loadUserData();
+            } else {
+                document.getElementById('no-sorteo').style.display = 'block';
+                document.getElementById('sorteo-activo').style.display = 'none';
             }
         }
 
-        // Lógica de persistencia y puntos (Lo que ya teníamos)
-        let totalPoints = parseInt(localStorage.getItem('alexdom_pts')) || 0;
-        let completed = JSON.parse(localStorage.getItem('alexdom_done')) || [];
-        let yaParticipo = localStorage.getItem('alexdom_sent') === "true";
+        function loadUserData() {
+            document.getElementById('totalPoints').innerText = totalPoints;
+            const input = document.getElementById('twitchNick');
+            input.value = nickGuardado;
+            if(yaParticipo) {
+                input.disabled = true;
+                const btn = document.getElementById('mainSubmit');
+                btn.disabled = true;
+                btn.innerText = "YA ESTÁS PARTICIPANDO";
+            }
+            completed.forEach(id => {
+                const b = document.getElementById(id);
+                if(b) { b.innerText = "✓"; b.classList.add('completed'); }
+            });
+        }
 
         function validateWithTimer(pts, id) {
             if (completed.includes(id) || yaParticipo) return;
@@ -130,54 +218,58 @@
             window.addEventListener('focus', function onFocus() {
                 let timeLeft = 5;
                 btn.classList.add('waiting');
-                const countdown = setInterval(() => {
+                const timer = setInterval(() => {
                     timeLeft--;
                     btn.innerText = `ESPERA ${timeLeft}s`;
                     if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        addPointsFinal(pts, id);
+                        clearInterval(timer);
+                        addPoints(pts, id);
                     }
                 }, 1000);
                 window.removeEventListener('focus', onFocus);
             }, { once: true });
         }
 
-        function addPointsFinal(pts, id) {
+        function addPoints(pts, id) {
             totalPoints += pts;
             completed.push(id);
             localStorage.setItem('alexdom_pts', totalPoints);
             localStorage.setItem('alexdom_done', JSON.stringify(completed));
             document.getElementById('totalPoints').innerText = totalPoints;
             const b = document.getElementById(id);
-            b.innerText = "✓"; b.classList.add('completed');
+            b.innerText = "✓"; b.classList.remove('waiting'); b.classList.add('completed');
         }
 
         function enviarSorteo() {
             const nick = document.getElementById('twitchNick').value.trim();
-            if(!nick) return alert("¡Nick obligatorio!");
+            if(!nick) return alert("Nick obligatorio");
+            localStorage.setItem('alexdom_nick', nick);
+            const btn = document.getElementById('mainSubmit');
+            btn.disabled = true; btn.innerText = "ENVIANDO...";
+
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
                 body: JSON.stringify({ nick, puntos: totalPoints, plataformas: completed.join(", ") })
             }).then(() => {
                 localStorage.setItem('alexdom_sent', "true");
-                alert("¡Registrado! Volviendo al inicio...");
+                alert("¡Puntos registrados! Mucha suerte.");
                 window.location.href = "index.html";
             });
         }
 
-        function startTimer(target) {
+        function startCountdown(target) {
             setInterval(() => {
-                const d = target - new Date().getTime();
-                if (d < 0) return location.reload();
-                document.getElementById("days").innerText = Math.floor(d / 864e5);
-                document.getElementById("hours").innerText = Math.floor((d % 864e5) / 36e5);
-                document.getElementById("minutes").innerText = Math.floor((d % 36e5) / 6e4);
-                document.getElementById("seconds").innerText = Math.floor((d % 6e4) / 1000);
+                const diff = target - new Date().getTime();
+                if (diff <= 0) return location.reload();
+                document.getElementById("days").innerText = Math.floor(diff / 864e5);
+                document.getElementById("hours").innerText = Math.floor((diff % 864e5) / 36e5);
+                document.getElementById("minutes").innerText = Math.floor((diff % 36e5) / 6e4);
+                document.getElementById("seconds").innerText = Math.floor((diff % 6e4) / 1000);
             }, 1000);
         }
 
-        fetchDates();
+        fetchConfig();
     </script>
 </body>
 </html>
