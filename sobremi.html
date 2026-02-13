@@ -6,7 +6,7 @@
   <title>Sobre Mí | AlexDom104</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Variables de color */
+    /* Variables de color de index.html */
     :root { 
       --fondo: #333333; 
       --contraste-fondo: #262626;
@@ -28,7 +28,7 @@
     
     h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--rosa-principal); }
     
-    .bio-section, .experience-section { 
+    .bio-section { 
         background: var(--contraste-fondo); 
         padding: 30px; 
         border-radius: 15px; 
@@ -37,6 +37,7 @@
         margin-bottom: 40px;
     }
 
+    /* Estilos de los botones tipo index.html */
     .nav-grid { 
         display: grid; 
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
@@ -58,10 +59,10 @@
     }
 
     .nav-card i { font-size: 2rem; margin-bottom: 10px; display: block; color: var(--rosa-principal); }
-    .nav-card h3 { color: white !important; font-size: 1.1rem !important; text-transform: none !important; border: none !important; margin: 0 !important; padding: 0 !important; letter-spacing: normal !important; }
+    .nav-card h3 { color: white; font-size: 1.1rem; text-transform: none; border: none; margin: 0; padding: 0; letter-spacing: normal; }
 
+    /* Estilos originales de habilidades */
     h3 { color: var(--cian-brillo); margin: 25px 0 12px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-    
     .skills-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
     .skill-tag { 
         background: var(--azul-boton); 
@@ -79,14 +80,19 @@
     .tag-ia { border-color: var(--rosa-principal); }
     .tag-ia i { color: var(--rosa-principal); }
 
-    /* Estilos de Experiencia */
-    .exp-item { margin-bottom: 30px; position: relative; padding-left: 20px; border-left: 2px solid var(--rosa-principal); }
-    .exp-item:last-child { margin-bottom: 0; }
-    .exp-title { color: var(--rosa-principal); font-weight: bold; font-size: 1.2rem; display: block; }
-    .exp-company { color: var(--cian-brillo); font-size: 0.95rem; font-weight: bold; }
-    .exp-date { display: block; font-size: 0.85rem; color: #bbb; margin-bottom: 10px; font-style: italic; }
-    .exp-desc { font-size: 0.9rem; margin: 0; }
-    .exp-desc li { margin-bottom: 5px; }
+    /* Estilos para la Experiencia */
+    .experience-item {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #444;
+    }
+    .experience-item:last-child { border-bottom: none; }
+    .exp-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 10px; }
+    .exp-title { color: var(--rosa-principal); font-weight: bold; font-size: 1.2rem; }
+    .exp-company { color: var(--cian-brillo); font-weight: bold; }
+    .exp-date { font-size: 0.9rem; color: #aaa; font-style: italic; }
+    .exp-list { margin: 10px 0; padding-left: 20px; list-style-type: square; }
+    .exp-list li { margin-bottom: 5px; font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -96,7 +102,7 @@
     <div class="profile-header">
       <img src="https://imgur.com/dSIZrFm.png" alt="Alexis Pérez">
       <h1>Alexis Pérez</h1>
-      <p>Lic. en Mercadotecnia | Especialista en Automatización | Tech Enthusiast</p>
+      <p>Lic. en Mercadotecnia | Perfil Tecnológico | Especialista en Automatización</p>
 
       <div class="nav-grid">
         <a href="https://drive.google.com/file/d/17CmmYiOBJi9BHYVzmZkaE5nNZp-152Vb/view?usp=sharing" target="_blank" class="nav-card">
@@ -134,18 +140,12 @@
         <div class="skill-tag"><i class="fas fa-clover"></i> Canva</div>
       </div>
 
-      <h3>Microsoft Office</h3>
-      <div class="skills-group">
-        <div class="skill-tag"><i class="fas fa-file-word"></i> Word</div>
-        <div class="skill-tag"><i class="fas fa-file-excel"></i> Excel</div>
-        <div class="skill-tag"><i class="fas fa-file-powerpoint"></i> Power Point</div>
-      </div>
-
       <h3>Gestión Web y Marketing</h3>
       <div class="skills-group">
         <div class="skill-tag"><i class="fab fa-wordpress"></i> WordPress</div>
         <div class="skill-tag"><i class="fab fa-facebook-square"></i> Facebook Business</div>
-        <div class="skill-tag"><i class="fas fa-cogs"></i> Bitrix24 (CRM)</div>
+        <div class="skill-tag"><i class="fas fa-envelope"></i> Email Marketing</div>
+        <div class="skill-tag"><i class="fas fa-users"></i> Bitrix24 (CRM)</div>
       </div>
 
       <h3>Programación y Desarrollo</h3>
@@ -153,7 +153,7 @@
         <div class="skill-tag"><i class="fas fa-code"></i> HTML + CSS</div>
         <div class="skill-tag"><i class="fab fa-js"></i> JavaScript</div>
         <div class="skill-tag"><i class="fab fa-python"></i> Python</div>
-        <div class="skill-tag"><i class="fas fa-terminal"></i> Google App Script</div>
+        <div class="skill-tag"><i class="fas fa-gears"></i> Google App Script</div>
       </div>
 
       <h3>Inteligencia Artificial</h3>
@@ -164,63 +164,73 @@
         <div class="skill-tag tag-ia"><i class="fas fa-music"></i> Suno IA</div>
         <div class="skill-tag tag-ia"><i class="fas fa-search"></i> DeepSeek</div>
       </div>
-    </div>
 
-    <div class="experience-section">
-      <h2 style="color: var(--rosa-principal); border-bottom: 2px solid var(--azul-boton); padding-bottom: 10px;">Experiencia Profesional</h2>
+      <h3>Experiencia Profesional</h3>
 
-      <div class="exp-item">
-        <span class="exp-title">Administrador de Marketing</span>
-        <span class="exp-company">UHA Global (EE. UU. - Remoto)</span>
-        <span class="exp-date">Julio 2025 - Actual</span>
-        <ul class="exp-desc">
-          <li>Gestión y optimización avanzada de Bitrix24 y automatización con Google Apps Script[cite: 17].</li>
-          <li>Estrategia de Meta Ads y nutrición de prospectos[cite: 19].</li>
-          <li>Mantenimiento técnico web utilizando HTML, CSS, JS y Python[cite: 21].</li>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Administrador de Marketing</span>
+          <span class="exp-date">Julio 2025 - Actual</span>
+        </div>
+        <div class="exp-company">UHA GLOBAL (EE. UU. - Remoto)</div>
+        <ul class="exp-list">
+          <li>Gestión y optimización avanzada de Bitrix24 y automatización mediante Google Apps Script.</li>
+          <li>Estrategia de Meta Ads y configuración de campañas para mercado internacional.</li>
+          <li>Implementación de email marketing masivo y personalizado (Brevo, Constant Contact).</li>
+          <li>Mantenimiento técnico web utilizando HTML, CSS, JS y Python.</li>
         </ul>
       </div>
 
-      <div class="exp-item">
-        <span class="exp-title">Community Manager y Gestor Web</span>
-        <span class="exp-company">Grupo Gremol (Remoto)</span>
-        <span class="exp-date">Enero 2024 - Febrero 2025</span>
-        <ul class="exp-desc">
-          <li>Creación de contenido editorial y cobertura noticiosa especializada[cite: 24].</li>
-          <li>Diseño multimedia y edición de video adaptado a la línea editorial[cite: 25].</li>
-          <li>Administración de CMS (WordPress) y monitoreo de métricas[cite: 26].</li>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Community Manager y Gestor Web</span>
+          <span class="exp-date">Enero 2024 - Febrero 2025</span>
+        </div>
+        <div class="exp-company">GRUPO GREMOL (Remoto)</div>
+        <ul class="exp-list">
+          <li>Liderazgo editorial y redacción especializada para Revista Guinda y En Cambio Diario.</li>
+          <li>Administración de CMS (WordPress) y monitoreo de métricas de impacto.</li>
+          <li>Producción multimedia, diseño gráfico y edición de video adaptado a línea editorial.</li>
         </ul>
       </div>
 
-      <div class="exp-item">
-        <span class="exp-title">Jefe de Edición</span>
-        <span class="exp-company">Grupo Multimedios 620 AM Sin Reservas</span>
-        <span class="exp-date">Agosto 2022 - Enero 2024</span>
-        <ul class="exp-desc">
-          <li>Liderazgo de la estrategia digital para noticias de última hora[cite: 29].</li>
-          <li>Creación de material gráfico de alto impacto para maximizar el engagement[cite: 30].</li>
-          <li>Soporte técnico y asistencia de producción en vivo para radio[cite: 31].</li>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Jefe de Edición</span>
+          <span class="exp-date">Agosto 2022 - Enero 2024</span>
+        </div>
+        <div class="exp-company">GRUPO MULTIMEDIOS 620 AM SIN RESERVAS</div>
+        <ul class="exp-list">
+          <li>Dirección de la estrategia digital para noticias de última hora y cobertura nacional.</li>
+          <li>Creación de contenido audiovisual de alto impacto para redes sociales.</li>
+          <li>Soporte técnico y asistencia de producción en vivo para programas estelares de radio.</li>
         </ul>
       </div>
 
-      <div class="exp-item">
-        <span class="exp-title">Streamer & Creador de Contenido</span>
-        <span class="exp-company">Twitch (AlexDom104)</span>
-        <span class="exp-date">Enero 2022 - Actual</span>
-        <ul class="exp-desc">
-          <li>Composición de música original y activos visuales mediante IA para evitar copyright[cite: 34].</li>
-          <li>Gestión técnica de transmisiones en vivo y fidelización de comunidades[cite: 35].</li>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Streamer e Innovación con IA</span>
+          <span class="exp-date">Enero 2022 - Actual</span>
+        </div>
+        <div class="exp-company">TWITCH / ALEXDOM104</div>
+        <ul class="exp-list">
+          <li>Composición de música original con Suno IA y generación de activos con Stable Diffusion.</li>
+          <li>Conducción técnica de transmisiones en vivo y gestión de comunidades digitales.</li>
         </ul>
       </div>
 
-      <div class="exp-item">
-        <span class="exp-title">Diseñador Junior / Coordinador Audiovisual</span>
-        <span class="exp-company">Depec Seminuevos / RMJP Tabasco</span>
-        <span class="exp-date">Junio 2020 - Diciembre 2021</span>
-        <ul class="exp-desc">
-          <li>Levantamiento de fotografía y video para catálogos digitales[cite: 38].</li>
-          <li>Diseño publicitario y administración de redes sociales[cite: 39].</li>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Diseñador Junior</span>
+          <span class="exp-date">Junio 2020 - Diciembre 2021</span>
+        </div>
+        <div class="exp-company">DEPEC SEMINUEVOS / RMJP TABASCO</div>
+        <ul class="exp-list">
+          <li>Producción audiovisual y levantamiento fotográfico de inventario vehicular.</li>
+          <li>Diseño de catálogos digitales, flyers y administración de publicaciones web.</li>
         </ul>
       </div>
+
     </div>
   </div>
 </body>
