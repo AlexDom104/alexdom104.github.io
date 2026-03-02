@@ -190,6 +190,37 @@
       border-radius: 8px;
     }
 
+    .spotify-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #1DB954;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 12px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+    }
+    .spotify-btn:hover {
+      background: #1ed760;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(29, 185, 84, 0.5);
+    }
+    .spotify-soon {
+      opacity: 0.5;
+      cursor: default;
+      background: #555;
+      color: #ccc;
+    }
+    .spotify-soon:hover {
+      transform: none;
+      box-shadow: none;
+      background: #555;
+    }
+
     /* Floating icon */
     .floating-icon {
       position: fixed;
@@ -243,13 +274,19 @@
         <div class="album-label">Sombras del Camino</div>
       </div>
       <div class="album" onclick="selectAlbum(2)">
-        <img src="https://imgur.com/uxScrDR" alt="El Corazón Se Eleva">
+        <img src="https://drive.google.com/uc?export=view&id=1Vfj-XQgjbeNoBdo2PAjIvmBifT8rKguf" alt="El Corazón Se Eleva">
         <div class="album-label">El Corazón Se Eleva</div>
       </div>
       <div class="album" onclick="selectAlbum(3)">
-        <img src="https://imgur.com/36GpRad" alt="Álbum 4">
-        <div class="album-label" id="album4-label">Mirando Atrás4</div>
+        <img src="https://drive.google.com/uc?export=view&id=1N67l0g629IotHY40zO2JUaEmg6J6iuXZ" alt="Álbum 4">
+        <div class="album-label" id="album4-label">Álbum 4</div>
       </div>
+    </div>
+
+    <div id="spotify-btn-container" style="text-align:center; margin-bottom: 25px;">
+      <a href="https://open.spotify.com/intl-es/album/1D8m5LtybUBxlm2hYqupfQ?si=CE9aqWALSNuIUNREXis95w" target="_blank" class="spotify-btn">
+        <i class="fab fa-spotify"></i> Escuchar en Spotify
+      </a>
     </div>
 
     <div class="tracklist-wrapper">
@@ -349,7 +386,13 @@
     ];
 
     const albums = [caminosDeMelodia, sombrasDelCamino, elCorazonSeEleva, album4];
-    const albumNames = ["Caminos de Melodía", "Sombras del Camino", "El Corazón Se Eleva", "Álbum 4"];
+    const albumNames = ["Caminos de Melodía", "Sombras del Camino", "El Corazón Se Eleva", "Mirando Atrás"];
+    const albumSpotify = [
+      "https://open.spotify.com/intl-es/album/1D8m5LtybUBxlm2hYqupfQ?si=CE9aqWALSNuIUNREXis95w",
+      "https://open.spotify.com/intl-es/album/2w15CKYIfnzrWN50c9S5pX?si=55buwkhjRAeKXx4JEh2EFw",
+      "https://open.spotify.com/intl-es/album/47zQFnrFUocqeFwZLSWkus?si=JdZ5mBDtSeWhfT6SZzNtFQ",
+      null
+    ];
 
     let currentPlayer = null;
 
@@ -407,6 +450,21 @@
         currentPlayer = null;
       }
       document.getElementById("album-title").innerHTML = `<i class="fas fa-compact-disc"></i> ${albumNames[index]}`;
+
+      // Spotify button
+      const spotifyContainer = document.getElementById("spotify-btn-container");
+      if (albumSpotify[index]) {
+        spotifyContainer.innerHTML = `
+          <a href="${albumSpotify[index]}" target="_blank" class="spotify-btn">
+            <i class="fab fa-spotify"></i> Escuchar en Spotify
+          </a>`;
+      } else {
+        spotifyContainer.innerHTML = `
+          <span class="spotify-btn spotify-soon">
+            <i class="fab fa-spotify"></i> Próximamente en Spotify
+          </span>`;
+      }
+
       renderTracks(index);
     }
 
