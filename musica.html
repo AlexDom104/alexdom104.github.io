@@ -283,11 +283,34 @@
       </div>
     </div>
 
-    <div id="spotify-btn-container" style="text-align:center; margin-bottom: 25px;">
-      <a href="https://open.spotify.com/intl-es/album/1D8m5LtybUBxlm2hYqupfQ?si=CE9aqWALSNuIUNREXis95w" target="_blank" class="spotify-btn">
-        <i class="fab fa-spotify"></i> Escuchar en Spotify
-      </a>
-    </div>
+const spotifyContainer = document.getElementById("spotify-btn-container");
+      let spotifyHTML = '';
+      
+      if (albumSpotify[index]) {
+        spotifyHTML = `
+          <a href="${albumSpotify[index]}" target="_blank" class="spotify-btn">
+            <i class="fab fa-spotify"></i> Escuchar en Spotify
+          </a>`;
+      } else {
+        spotifyHTML = `
+          <span class="spotify-btn spotify-soon">
+            <i class="fab fa-spotify"></i> Próximamente en Spotify
+          </span>`;
+      }
+
+      // Botón constante de Beacons
+      const beaconsHTML = `
+        <a href="https://beacons.ai/alexdom104" target="_blank" class="beacons-btn">
+          <img src="https://i.imgur.com/fPL6XAt.png" alt="Beacons AlexDom104"> Apoyar Creador
+        </a>`;
+
+      // Inyectamos ambos botones en el contenedor y les damos formato
+      spotifyContainer.innerHTML = spotifyHTML + beaconsHTML;
+      spotifyContainer.style.display = "flex";
+      spotifyContainer.style.flexDirection = "column";
+      spotifyContainer.style.alignItems = "center";
+      spotifyContainer.style.gap = "15px";
+      spotifyContainer.style.marginTop = "20px";
 
     <div class="tracklist-wrapper">
       <div class="tracklist-title" id="tracklist-title">Lista de canciones</div>
