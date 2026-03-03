@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlexDom104 | Streams y Comunidad</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Estilos específicos del carrusel */
+    .swiper { width: 100%; height: 600px; margin: 20px 0 40px 0; border-radius: 15px; border: 1px solid var(--rosa-oscuro); }
+    .swiper-slide { background: #000; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; }
+    .preview-link { width: 100%; height: 100%; display: block; position: relative; }
+    .preview-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .preview-link:hover .preview-img { transform: scale(1.05); }
+    .platform-badge { position: absolute; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); padding: 8px 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--rosa-principal); z-index: 10; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver</a>
+    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
+  </header>
+
+  <main>
+    <h2 style="text-align: center; color: var(--cian-brillo); margin-bottom: 20px;">Ecosistema AlexDom104</h2>
+    
+    <div class="swiper swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><iframe src="https://www.youtube.com/embed/ri2sHPVG-MQ" allowfullscreen></iframe></div>
+        <div class="swiper-slide">
+          <a href="https://www.twitch.tv/alexdom104" target="_blank" class="preview-link">
+            <img src="https://imgur.com/pQBmU0f.png" class="preview-img">
+            <div class="platform-badge"><i class="fab fa-twitch" style="color:#9146ff"></i> Twitch</div>
+          </a>
+        </div>
+        <div class="swiper-slide"><iframe src="https://www.tiktok.com/embed/@alexdom104" allowfullscreen></iframe></div>
+        <div class="swiper-slide">
+          <a href="https://kick.com/alexdom104" target="_blank" class="preview-link">
+            <img src="https://imgur.com/jStwEvO.png" class="preview-img">
+            <div class="platform-badge"><i class="fas fa-bolt" style="color:#53fc18"></i> Kick</div>
+          </a>
+        </div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
+    <div class="nav-grid">
+      <a href="musica.html" class="nav-card">
+        <i class="fas fa-compact-disc"></i>
+        <h3>Música Original</h3>
+      </a>
+      <a href="sorteos.html" class="nav-card">
+        <i class="fas fa-ticket-alt"></i>
+        <h3>Sorteos Activos</h3>
+      </a>
+      <a href="https://linktr.ee/alexdom104" target="_blank" class="nav-card">
+        <i class="fas fa-paper-plane"></i>
+        <h3>Todas mis Redes</h3>
+      </a>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: { delay: 8000, disableOnInteraction: false },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+    });
+  </script>
+</body>
+</html>
