@@ -70,7 +70,7 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 20px;
-      margin-bottom: 35px;
+      margin-bottom: 25px;
     }
 
     .album {
@@ -110,6 +110,15 @@
     .album.selected .album-label {
       color: var(--cian-brillo);
       font-weight: bold;
+    }
+
+    /* Contenedor de botones (Añadido) */
+    #spotify-btn-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
     /* Tracklist */
@@ -221,6 +230,36 @@
       background: #555;
     }
 
+    /* Estilos para el botón de Beacons */
+    .beacons-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--contraste-fondo);
+      color: var(--blanco);
+      text-decoration: none;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      border: 2px solid var(--cian-brillo);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
+    }
+
+    .beacons-btn img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .beacons-btn:hover {
+      background: rgba(112, 221, 216, 0.1);
+      box-shadow: 0 0 15px rgba(112, 221, 216, 0.4);
+      transform: translateY(-3px);
+    }
+
     /* Floating icon */
     .floating-icon {
       position: fixed;
@@ -283,34 +322,7 @@
       </div>
     </div>
 
-const spotifyContainer = document.getElementById("spotify-btn-container");
-      let spotifyHTML = '';
-      
-      if (albumSpotify[index]) {
-        spotifyHTML = `
-          <a href="${albumSpotify[index]}" target="_blank" class="spotify-btn">
-            <i class="fab fa-spotify"></i> Escuchar en Spotify
-          </a>`;
-      } else {
-        spotifyHTML = `
-          <span class="spotify-btn spotify-soon">
-            <i class="fab fa-spotify"></i> Próximamente en Spotify
-          </span>`;
-      }
-
-      // Botón constante de Beacons
-      const beaconsHTML = `
-        <a href="https://beacons.ai/alexdom104" target="_blank" class="beacons-btn">
-          <img src="https://i.imgur.com/fPL6XAt.png" alt="Beacons AlexDom104"> Apoyar Creador
-        </a>`;
-
-      // Inyectamos ambos botones en el contenedor y les damos formato
-      spotifyContainer.innerHTML = spotifyHTML + beaconsHTML;
-      spotifyContainer.style.display = "flex";
-      spotifyContainer.style.flexDirection = "column";
-      spotifyContainer.style.alignItems = "center";
-      spotifyContainer.style.gap = "15px";
-      spotifyContainer.style.marginTop = "20px";
+    <div id="spotify-btn-container"></div>
 
     <div class="tracklist-wrapper">
       <div class="tracklist-title" id="tracklist-title">Lista de canciones</div>
@@ -399,63 +411,62 @@ const spotifyContainer = document.getElementById("spotify-btn-container");
       { title: "El Verdadero Reguetón", url: "https://youtube.com/embed/cYEjuWomzCI?autoplay=1" }
     ];
 
-const elCorazonSeEleva = [
-  { title: "Deja Que el Viento Nos Lleve", url: "https://www.youtube.com/embed/_hhSXnzKLaE?autoplay=1" },
-  { title: "Dime Lo Que Quieres", url: "https://www.youtube.com/embed/58zHdJMv2W4?autoplay=1" },
-  { title: "Tan Afortunada", url: "https://www.youtube.com/embed/5_xd5BLfU1M?autoplay=1" },
-  { title: "Quiero ser alguien", url: "https://www.youtube.com/embed/YDBGABvetrc?autoplay=1" },
-  { title: "Luces Encendidas", url: "https://www.youtube.com/embed/zKYMbDEd18M?autoplay=1" },
-  { title: "Caminé Sin Rumbo Bajo el Neón", url: "https://www.youtube.com/embed/RMfscD4sdQ0?autoplay=1" },
-  { title: "Volviendo a Casa", url: "https://www.youtube.com/embed/PRwcIvfNj7o?autoplay=1" },
-  { title: "Vienes de la Nada", url: "https://www.youtube.com/embed/tp4gIBeGpjY?autoplay=1" },
-  { title: "Nostalgyc", url: "https://www.youtube.com/embed/oAjNAnl1-pc?autoplay=1" },
-  { title: "Afortunado", url: "https://www.youtube.com/embed/Diqsx_ztN2E?autoplay=1" },
-  { title: "Nos Eleva", url: "https://www.youtube.com/embed/LX_pDlGQjo0?autoplay=1" },
-  { title: "Quiero Olvidarte", url: "https://www.youtube.com/embed/hplpuGbE4pc?autoplay=1" },
-  { title: "Vuela Libre", url: "https://www.youtube.com/embed/tRiCaSNBbGk?autoplay=1" },
-  { title: "Quiero Sentirte", url: "https://www.youtube.com/embed/Sk05iiXU9oI?autoplay=1" },
-  { title: "Nostal", url: "https://www.youtube.com/embed/ii1MmB3HbFk?autoplay=1" },
-  { title: "México X Colombia", url: "https://www.youtube.com/embed/Rbm7JG3vSRc?autoplay=1" },
-  { title: "Solo Quiero Tiempo", url: "https://www.youtube.com/embed/-lykg_TNQWk?autoplay=1" },
-  { title: "Mareas y Destellos", url: "https://www.youtube.com/embed/L5CNODLUPUk?autoplay=1" },
-  { title: "Puedo Verlo", url: "https://www.youtube.com/embed/ErMxzGYa9e4?autoplay=1" },
-  { title: "Hacia el Horizonte", url: "https://www.youtube.com/embed/MdC0cyI-_Lk?autoplay=1" },
-  { title: "No me rendiré", url: "https://www.youtube.com/embed/g9QmE6u_YHc?autoplay=1" },
-  { title: "Lo Que Quedó", url: "https://www.youtube.com/embed/PCMMudwliAI?autoplay=1" },
-  { title: "Tiempo Perdido", url: "https://www.youtube.com/embed/KIh-6hA8VJQ?autoplay=1" },
-  { title: "Mona Lisa", url: "https://www.youtube.com/embed/kqrVoK7ZoRw?autoplay=1" },
-  { title: "Caída Libre V1", url: "https://www.youtube.com/embed/14X1rZOzcLg?autoplay=1" },
-  { title: "Eres Muy Lindo", url: "https://www.youtube.com/embed/WR3549U4t30?autoplay=1" },
-  { title: "Bajo Cielos Rosados", url: "https://www.youtube.com/embed/CEEBkj7k5nY?autoplay=1" },
-  { title: "Vivir para Siempre Esta Noche", url: "https://www.youtube.com/embed/64q88_Rfl6Y?autoplay=1" },
-  { title: "El Horizonte Es Mio", url: "https://www.youtube.com/embed/VekAFqJVbgs?autoplay=1" },
-  { title: "La Razón Eres Tú", url: "https://www.youtube.com/embed/0nkZnnoeGUs?autoplay=1" },
-  { title: "Caída Libre V2", url: "https://www.youtube.com/embed/gaa6pNF8TFc?autoplay=1" },
-  { title: "Nadie Como Yo", url: "https://www.youtube.com/embed/g0kSQBeGVpY?autoplay=1" },
-  { title: "Te Pregunté", url: "https://www.youtube.com/embed/-d6siCfLM8A?autoplay=1" },
-  { title: "Atrapado", url: "https://www.youtube.com/embed/4i-QmvKE1SI?autoplay=1" },
-  { title: "Efímero", url: "https://www.youtube.com/embed/ZIyuAgUpfrk?autoplay=1" },
-  { title: "Un Poco de Sol", url: "https://www.youtube.com/embed/8ccK_6e1cCk?autoplay=1" },
-  { title: "Lo Sabrías", url: "https://www.youtube.com/embed/qGZ8TkaZk-I?autoplay=1" },
-  { title: "Luces Azules", url: "https://www.youtube.com/embed/0hh2VUYvaZk?autoplay=1" },
-  { title: "Hermosa para Mi", url: "https://www.youtube.com/embed/NWiIu-PEbXM?autoplay=1" },
-  { title: "Todo por lo que luchamos", url: "https://www.youtube.com/embed/2mj4Vlp4y14?autoplay=1" },
-  { title: "Aqui Estoy", url: "https://www.youtube.com/embed/KEkyYpsloDY?autoplay=1" },
-  { title: "Quiero salir", url: "https://www.youtube.com/embed/c9f-CENQ4sQ?autoplay=1" },
-  { title: "Cielos Azules", url: "https://www.youtube.com/embed/3Hg8SiWhiWg?autoplay=1" },
-  { title: "Hasta el final", url: "https://www.youtube.com/embed/9o31D6jjf_Q?autoplay=1" },
-  { title: "No me despiertes", url: "https://www.youtube.com/embed/DcK98MEATYs?autoplay=1" },
-  { title: "Tejados V4", url: "https://www.youtube.com/embed/YdVUxmU3Oms?autoplay=1" },
-  { title: "Mona Lisa (Emo Rock)", url: "https://www.youtube.com/embed/4bKYUCFr9t4?autoplay=1" },
-  { title: "El Evangelio de los Caídos (Rock)", url: "https://www.youtube.com/embed/x0VlTPqUjdk?autoplay=1" },
-  { title: "Cielo", url: "https://www.youtube.com/embed/Uo930YgXoVE?autoplay=1" },
-  { title: "Un regalo", url: "https://www.youtube.com/embed/ZN7CTi-Sq14?autoplay=1" }
-];
+    const elCorazonSeEleva = [
+      { title: "Deja Que el Viento Nos Lleve", url: "https://www.youtube.com/embed/_hhSXnzKLaE?autoplay=1" },
+      { title: "Dime Lo Que Quieres", url: "https://www.youtube.com/embed/58zHdJMv2W4?autoplay=1" },
+      { title: "Tan Afortunada", url: "https://www.youtube.com/embed/5_xd5BLfU1M?autoplay=1" },
+      { title: "Quiero ser alguien", url: "https://www.youtube.com/embed/YDBGABvetrc?autoplay=1" },
+      { title: "Luces Encendidas", url: "https://www.youtube.com/embed/zKYMbDEd18M?autoplay=1" },
+      { title: "Caminé Sin Rumbo Bajo el Neón", url: "https://www.youtube.com/embed/RMfscD4sdQ0?autoplay=1" },
+      { title: "Volviendo a Casa", url: "https://www.youtube.com/embed/PRwcIvfNj7o?autoplay=1" },
+      { title: "Vienes de la Nada", url: "https://www.youtube.com/embed/tp4gIBeGpjY?autoplay=1" },
+      { title: "Nostalgyc", url: "https://www.youtube.com/embed/oAjNAnl1-pc?autoplay=1" },
+      { title: "Afortunado", url: "https://www.youtube.com/embed/Diqsx_ztN2E?autoplay=1" },
+      { title: "Nos Eleva", url: "https://www.youtube.com/embed/LX_pDlGQjo0?autoplay=1" },
+      { title: "Quiero Olvidarte", url: "https://www.youtube.com/embed/hplpuGbE4pc?autoplay=1" },
+      { title: "Vuela Libre", url: "https://www.youtube.com/embed/tRiCaSNBbGk?autoplay=1" },
+      { title: "Quiero Sentirte", url: "https://www.youtube.com/embed/Sk05iiXU9oI?autoplay=1" },
+      { title: "Nostal", url: "https://www.youtube.com/embed/ii1MmB3HbFk?autoplay=1" },
+      { title: "México X Colombia", url: "https://www.youtube.com/embed/Rbm7JG3vSRc?autoplay=1" },
+      { title: "Solo Quiero Tiempo", url: "https://www.youtube.com/embed/-lykg_TNQWk?autoplay=1" },
+      { title: "Mareas y Destellos", url: "https://www.youtube.com/embed/L5CNODLUPUk?autoplay=1" },
+      { title: "Puedo Verlo", url: "https://www.youtube.com/embed/ErMxzGYa9e4?autoplay=1" },
+      { title: "Hacia el Horizonte", url: "https://www.youtube.com/embed/MdC0cyI-_Lk?autoplay=1" },
+      { title: "No me rendiré", url: "https://www.youtube.com/embed/g9QmE6u_YHc?autoplay=1" },
+      { title: "Lo Que Quedó", url: "https://www.youtube.com/embed/PCMMudwliAI?autoplay=1" },
+      { title: "Tiempo Perdido", url: "https://www.youtube.com/embed/KIh-6hA8VJQ?autoplay=1" },
+      { title: "Mona Lisa", url: "https://www.youtube.com/embed/kqrVoK7ZoRw?autoplay=1" },
+      { title: "Caída Libre V1", url: "https://www.youtube.com/embed/14X1rZOzcLg?autoplay=1" },
+      { title: "Eres Muy Lindo", url: "https://www.youtube.com/embed/WR3549U4t30?autoplay=1" },
+      { title: "Bajo Cielos Rosados", url: "https://www.youtube.com/embed/CEEBkj7k5nY?autoplay=1" },
+      { title: "Vivir para Siempre Esta Noche", url: "https://www.youtube.com/embed/64q88_Rfl6Y?autoplay=1" },
+      { title: "El Horizonte Es Mio", url: "https://www.youtube.com/embed/VekAFqJVbgs?autoplay=1" },
+      { title: "La Razón Eres Tú", url: "https://www.youtube.com/embed/0nkZnnoeGUs?autoplay=1" },
+      { title: "Caída Libre V2", url: "https://www.youtube.com/embed/gaa6pNF8TFc?autoplay=1" },
+      { title: "Nadie Como Yo", url: "https://www.youtube.com/embed/g0kSQBeGVpY?autoplay=1" },
+      { title: "Te Pregunté", url: "https://www.youtube.com/embed/-d6siCfLM8A?autoplay=1" },
+      { title: "Atrapado", url: "https://www.youtube.com/embed/4i-QmvKE1SI?autoplay=1" },
+      { title: "Efímero", url: "https://www.youtube.com/embed/ZIyuAgUpfrk?autoplay=1" },
+      { title: "Un Poco de Sol", url: "https://www.youtube.com/embed/8ccK_6e1cCk?autoplay=1" },
+      { title: "Lo Sabrías", url: "https://www.youtube.com/embed/qGZ8TkaZk-I?autoplay=1" },
+      { title: "Luces Azules", url: "https://www.youtube.com/embed/0hh2VUYvaZk?autoplay=1" },
+      { title: "Hermosa para Mi", url: "https://www.youtube.com/embed/NWiIu-PEbXM?autoplay=1" },
+      { title: "Todo por lo que luchamos", url: "https://www.youtube.com/embed/2mj4Vlp4y14?autoplay=1" },
+      { title: "Aqui Estoy", url: "https://www.youtube.com/embed/KEkyYpsloDY?autoplay=1" },
+      { title: "Quiero salir", url: "https://www.youtube.com/embed/c9f-CENQ4sQ?autoplay=1" },
+      { title: "Cielos Azules", url: "https://www.youtube.com/embed/3Hg8SiWhiWg?autoplay=1" },
+      { title: "Hasta el final", url: "https://www.youtube.com/embed/9o31D6jjf_Q?autoplay=1" },
+      { title: "No me despiertes", url: "https://www.youtube.com/embed/DcK98MEATYs?autoplay=1" },
+      { title: "Tejados V4", url: "https://www.youtube.com/embed/YdVUxmU3Oms?autoplay=1" },
+      { title: "Mona Lisa (Emo Rock)", url: "https://www.youtube.com/embed/4bKYUCFr9t4?autoplay=1" },
+      { title: "El Evangelio de los Caídos (Rock)", url: "https://www.youtube.com/embed/x0VlTPqUjdk?autoplay=1" },
+      { title: "Cielo", url: "https://www.youtube.com/embed/Uo930YgXoVE?autoplay=1" },
+      { title: "Un regalo", url: "https://www.youtube.com/embed/ZN7CTi-Sq14?autoplay=1" }
+    ];
 
     // 4to álbum - agrega tus canciones aquí
     const album4 = [
       { title: "Desperté", url: "https://www.youtube.com/embed/64N-UY-5j0E?autoplay=1" }
-      // { title: "Nombre de la canción", url: "https://www.youtube.com/embed/VIDEO_ID?autoplay=1" },
     ];
 
     const albums = [caminosDeMelodia, sombrasDelCamino, elCorazonSeEleva, album4];
@@ -524,24 +535,28 @@ const elCorazonSeEleva = [
       }
       document.getElementById("album-title").innerHTML = `<i class="fas fa-compact-disc"></i> ${albumNames[index]}`;
 
-      // Spotify button
+      // Inyección correcta de los botones de Spotify y Beacons
       const spotifyContainer = document.getElementById("spotify-btn-container");
+      let spotifyHTML = '';
+      
       if (albumSpotify[index]) {
-        spotifyContainer.innerHTML = `
+        spotifyHTML = `
           <a href="${albumSpotify[index]}" target="_blank" class="spotify-btn">
             <i class="fab fa-spotify"></i> Escuchar en Spotify
           </a>`;
       } else {
-        spotifyContainer.innerHTML = `
+        spotifyHTML = `
           <span class="spotify-btn spotify-soon">
             <i class="fab fa-spotify"></i> Próximamente en Spotify
           </span>`;
       }
 
+      const beaconsHTML = `
+        <a href="https://beacons.ai/alexdom104" target="_blank" class="beacons-btn">
+          <img src="https://i.imgur.com/fPL6XAt.png" alt="Beacons AlexDom104"> Apoyar Creador
+        </a>`;
+
+      spotifyContainer.innerHTML = spotifyHTML + beaconsHTML;
+
       renderTracks(index);
     }
-
-    renderTracks(0);
-  </script>
-</body>
-</html>
