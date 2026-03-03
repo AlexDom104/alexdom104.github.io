@@ -102,3 +102,34 @@ main, .container {
   color: #aaa;
   margin-top: 10px;
 }
+
+/* Estilos para el botón de Beacons */
+.beacons-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--contraste-fondo);
+  color: var(--blanco);
+  text-decoration: none;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  border: 2px solid var(--cian-brillo);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
+  width: fit-content;
+}
+
+.beacons-btn img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%; /* Hace que la imagen sea circular */
+  object-fit: cover;
+}
+
+.beacons-btn:hover {
+  background: rgba(112, 221, 216, 0.1);
+  box-shadow: 0 0 15px rgba(112, 221, 216, 0.4);
+  transform: translateY(-3px);
+}
