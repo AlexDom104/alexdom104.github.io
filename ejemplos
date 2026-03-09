@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flyer UHA Médico</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1a1a2e;
+    font-family: 'Lato', sans-serif;
+  }
+
+  .flyer {
+    width: 540px;
+    height: 540px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0a2342 0%, #1a4a7a 60%, #0d6b8c 100%);
+  }
+
+  /* Fondo abstracto - formas geométricas sutiles */
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.07;
+  }
+  .bg-circle-1 {
+    width: 400px; height: 400px;
+    background: white;
+    top: -100px; right: -100px;
+  }
+  .bg-circle-2 {
+    width: 250px; height: 250px;
+    background: #4fc3f7;
+    bottom: -80px; left: -60px;
+  }
+
+  /* Franja diagonal decorativa */
+  .diagonal {
+    position: absolute;
+    width: 200%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #4fc3f7, transparent);
+    top: 42%;
+    left: -50%;
+    transform: rotate(-8deg);
+    opacity: 0.4;
+  }
+
+  /* Zona de imagen placeholder */
+  .photo-zone {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(135deg, #1565c0 0%, #0288d1 50%, #26c6da 100%);
+    clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.5;
+    margin-left: 30px;
+  }
+
+  .photo-placeholder svg {
+    width: 80px;
+    height: 80px;
+    fill: white;
+  }
+
+  .photo-label {
+    color: white;
+    font-size: 11px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Contenido principal */
+  .content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 58%;
+    height: 100%;
+    padding: 28px 20px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 2;
+  }
+
+  .hashtag {
+    font-size: 11px;
+    color: #4fc3f7;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .main-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .hook {
+    font-size: 13px;
+    color: #b3e5fc;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .course-label {
+    font-size: 11px;
+    color: #4fc3f7;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .title-main {
+    font-size: 38px;
+    color: white;
+    display: block;
+  }
+
+  .title-accent {
+    font-size: 38px;
+    color: #4fc3f7;
+    display: block;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #e3f2fd;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #4fc3f7, #26c6da);
+    border-radius: 2px;
+    margin: 2px 0;
+  }
+
+  .benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .benefit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .benefit-dot {
+    width: 5px;
+    height: 5px;
+    background: #4fc3f7;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .benefit-text {
+    font-size: 10.5px;
+    color: #b3e5fc;
+    font-family: 'Lato', sans-serif;
+  }
+
+  .benefit-text strong {
+    color: white;
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cta {
+    background: linear-gradient(90deg, #4fc3f7, #26c6da);
+    color: #0a2342;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .logo-box {
+    background: white;
+    border-radius: 4px;
+    padding: 3px 7px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .logo-uha {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    color: #0a2342;
+  }
+
+  .logo-sub {
+    font-size: 7px;
+    color: #0a2342;
+    font-family: 'Lato', sans-serif;
+    line-height: 1.2;
+  }
+
+  .social {
+    font-size: 9px;
+    color: #78909c;
+    font-family: 'Lato', sans-serif;
+  }
+
+  /* Nota de diseño */
+  .design-note {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    color: #4fc3f7;
+    font-size: 10px;
+    text-align: center;
+    padding: 5px;
+    font-family: 'Lato', sans-serif;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+<div class="flyer">
+  <div class="bg-circle bg-circle-1"></div>
+  <div class="bg-circle bg-circle-2"></div>
+  <div class="diagonal"></div>
+
+  <!-- Zona de foto (reemplazar con foto real de persona en ambiente cotidiano, NO clínico artificial) -->
+  <div class="photo-zone">
+    <div class="photo-placeholder">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+      </svg>
+      <span class="photo-label">📸 Foto real aquí<br>persona en consultorio<br>o estudiando online</span>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="content">
+    <div class="hashtag">#UHAOnline</div>
+
+    <div class="main-text">
+      <p class="hook">¿Siempre quisiste trabajar<br>en el área de la salud?</p>
+      <div class="course-label">Curso</div>
+      <div class="title">
+        <span class="title-main">Asistente</span>
+        <span class="title-accent">Médico</span>
+      </div>
+      <p class="subtitle">en español</p>
+      <div class="divider"></div>
+
+      <div class="benefits">
+        <div class="benefit">
+          <div class="benefit-dot"></div>
+          <span class="benefit-text"><strong>100% online</strong> · a tu ritmo</span>
+        </div>
+        <div class="benefit">
+          <div class="benefit-dot"></div>
+          <span class="benefit-text"><strong>Prácticas presenciales</strong></span>
+        </div>
+        <div class="benefit">
+          <div class="benefit-dot"></div>
+          <span class="benefit-text"><strong>Profesores hispanohablantes</strong></span>
+        </div>
+        <div class="benefit">
+          <div class="benefit-dot"></div>
+          <span class="benefit-text"><strong>Certificación ICOES & BBB</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="cta">¡Regístrate sin compromiso!</div>
+      <div class="logo-area">
+        <div class="logo-box">
+          <span class="logo-uha">UHA</span>
+          <span class="logo-sub">Educación<br>Online</span>
+        </div>
+        <span class="social">@uhaonline · @uha.online</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="design-note">💡 Reemplazar zona derecha con foto real (persona natural, no IA)</div>
+</div>
+</body>
+</html>
