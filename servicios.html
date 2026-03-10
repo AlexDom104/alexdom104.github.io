@@ -6,8 +6,6 @@
   <title>Servicios Freelance | Alexis Pérez</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
 
     /* ══ GENERAL ══ */
@@ -730,23 +728,16 @@
   </div>
 
   <script>
-    // ══ EMAILJS — reemplaza con tus credenciales ══
-    // PASO 1: Crea cuenta en emailjs.com y conecta tu Outlook
-    // PASO 2: Pega tu Public Key aquí:
-    const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';   // ← reemplazar
-    const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';   // ← reemplazar
-    const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';  // ← reemplazar
-
-    // ══ APPS SCRIPT — reemplaza con tu URL de webhook ══
-    // Ver instrucciones en configuracion.html
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxb0O6xlOiNKAtS84tL6EORHeWHQWmIkBDYhdADlYiUyvutGPf6xZ_b7sO-qKhZdIzkmA/exec'; // ← reemplazar
-
-    emailjs.init(EMAILJS_PUBLIC_KEY);
+    // ══ ÚNICA VARIABLE A CONFIGURAR ══════════════════════════
+    // Apps Script maneja todo: guarda en Sheets + envía por Graph API
+    // Ver instrucciones completas en configuracion.html
+    const APPS_SCRIPT_URL = 'TU_URL_DE_APPS_SCRIPT'; // ← reemplazar
+    // ═════════════════════════════════════════════════════════
 
     // ── Modal ──
     function abrirModal(servicio) {
-      const overlay = document.getElementById('modal-overlay');
-      const badgeWrap = document.getElementById('servicio-badge-wrap');
+      const overlay       = document.getElementById('modal-overlay');
+      const badgeWrap     = document.getElementById('servicio-badge-wrap');
       const servicioInput = document.getElementById('f-servicio');
       const servicioGroup = document.getElementById('servicio-group');
 
@@ -786,8 +777,8 @@
       const correo   = document.getElementById('f-correo').value.trim();
       const servicio = document.getElementById('f-servicio').value.trim();
       const mensaje  = document.getElementById('f-mensaje').value.trim();
-      const msg      = document.getElementById('form-msg');
-      const btn      = document.getElementById('btn-enviar');
+      const msg = document.getElementById('form-msg');
+      const btn = document.getElementById('btn-enviar');
 
       if (!nombre || !telefono || !correo) {
         msg.className = 'form-msg err';
@@ -804,51 +795,41 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
       msg.className = 'form-msg';
 
-      const datos = { nombre: nombre + ' ' + apellido, telefono, correo, servicio: servicio || 'No especificado', mensaje: mensaje || '—', fecha: new Date().toLocaleString('es-MX') };
+      const datos = {
+        nombre:   nombre + (apellido ? ' ' + apellido : ''),
+        telefono,
+        correo,
+        servicio: servicio || 'No especificado',
+        mensaje:  mensaje  || '—',
+        fecha:    new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' })
+      };
 
-      let sheetOk = false, emailOk = false;
-
-      // 1. Guardar en Google Sheets
       try {
+        // Apps Script recibe los datos, guarda en Sheets y envía el correo
+        // vía Microsoft Graph API directamente desde tu cuenta Outlook
         await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
+          method:  'POST',
+          mode:    'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(datos)
+          body:    JSON.stringify(datos)
         });
-        sheetOk = true;
-      } catch (e) { console.warn('Sheets error:', e); }
 
-      // 2. Enviar correo a Alexis via EmailJS
-      try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          to_name:     'Alexis',
-          from_name:   datos.nombre,
-          from_email:  correo,
-          telefono:    telefono,
-          servicio:    datos.servicio,
-          mensaje:     datos.mensaje,
-          fecha:       datos.fecha,
-          reply_to:    correo
-        });
-        emailOk = true;
-      } catch (e) { console.warn('EmailJS error:', e); }
+        msg.className = 'form-msg ok';
+        msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
+        setTimeout(() => {
+          ['f-nombre','f-apellido','f-telefono','f-correo','f-servicio','f-mensaje']
+            .forEach(id => { document.getElementById(id).value = ''; });
+          cerrarModal();
+        }, 3000);
+
+      } catch (e) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'Ocurrió un error. Escríbeme directamente por WhatsApp.';
+        console.error(e);
+      }
 
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
-
-      if (sheetOk || emailOk) {
-        msg.className = 'form-msg ok';
-        msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
-        // Limpiar form después de 3 segundos y cerrar
-        setTimeout(() => {
-          ['f-nombre','f-apellido','f-telefono','f-correo','f-servicio','f-mensaje'].forEach(id => { document.getElementById(id).value = ''; });
-          cerrarModal();
-        }, 3000);
-      } else {
-        msg.className = 'form-msg err';
-        msg.textContent = 'Ocurrió un error. Escríbeme directamente por WhatsApp o email.';
-      }
     }
 
     // ── Carrusel ──
