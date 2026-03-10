@@ -30,91 +30,151 @@
     }
     .section-title i { font-size: 1.2rem; }
 
-    /* ══ PAQUETES CM – CARRUSEL ══ */
+    /* ══ PAQUETES CM – COLAPSABLE + CARRUSEL ══ */
     .paquetes-carousel-wrap {
       position: relative;
-      margin-bottom: 12px;
+      padding: 4px 8px 0;
     }
     .paquetes-grid {
       display: flex;
-      gap: 18px;
+      gap: 14px;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 16px 4px 12px;
+      padding: 10px 2px 16px;
       scrollbar-width: none;
     }
     .paquetes-grid::-webkit-scrollbar { display: none; }
-    .paquete-card {
-      border-radius: 14px; padding: 24px 20px 20px;
-      border: 2px solid #333; background: var(--contraste-fondo);
-      display: flex; flex-direction: column; position: relative;
-      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-      min-width: 230px; max-width: 230px; flex-shrink: 0;
-    }
-    .paquete-card:hover { transform: translateY(-6px); }
 
-    /* Flechas del carrusel */
-    .carousel-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--contraste-fondo); border: 2px solid var(--rosa-principal);
-      color: var(--rosa-principal); cursor: pointer; font-size: 0.9rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: 0.2s; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    /* ── Tarjeta individual ── */
+    .paquete-card {
+      border-radius: 12px;
+      border: 1.5px solid #2a2a2a;
+      background: #1e1e1e;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      min-width: 270px;
+      max-width: 270px;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
     }
-    .carousel-btn:hover { background: var(--rosa-principal); color: #fff; }
-    .carousel-btn.prev { left: -16px; }
-    .carousel-btn.next { right: -16px; }
-    @media (max-width: 600px) {
-      .carousel-btn { display: none; }
+    .paquete-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.5); }
+    .paquete-card.destacado { border-color: var(--rosa-principal); box-shadow: 0 0 22px rgba(239,80,133,0.2); }
+    .paquete-card.enterprise { border-color: #7040b0; }
+
+    /* Banda de color superior */
+    .paquete-band {
+      height: 5px;
+      background: #333;
     }
-    .paquete-card.destacado {
-      border-color: var(--rosa-principal);
-      background: linear-gradient(160deg, #1a1a2e, #0d2a3a);
-      box-shadow: 0 0 30px rgba(239,80,133,0.25);
-    }
+    .paquete-card.destacado .paquete-band { background: linear-gradient(90deg, var(--rosa-oscuro), var(--rosa-principal)); }
+    .paquete-card.enterprise .paquete-band { background: linear-gradient(90deg, #4a1a7a, #9146ff); }
+
+    /* Badge popular */
     .badge-popular {
-      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: var(--rosa-principal); color: #fff; font-size: 0.7rem;
-      font-weight: bold; padding: 3px 14px; border-radius: 20px;
+      position: absolute; top: 14px; right: 14px;
+      background: var(--rosa-principal); color: #fff; font-size: 0.62rem;
+      font-weight: bold; padding: 3px 10px; border-radius: 20px;
       text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
     }
-    .paquete-tier {
-      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px;
-      color: #888; margin-bottom: 4px;
+
+    /* Cabecera */
+    .paquete-head {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #2a2a2a;
     }
+    .paquete-tier {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
+      color: #666; margin-bottom: 6px;
+    }
+    .paquete-card.destacado .paquete-tier { color: var(--rosa-principal); }
+    .paquete-card.enterprise .paquete-tier { color: #9146ff; }
     .paquete-nombre {
-      font-size: 1.25rem; font-weight: bold; color: var(--blanco);
-      margin-bottom: 6px;
+      font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 12px;
     }
     .paquete-precio {
-      font-size: 1.8rem; font-weight: bold; color: var(--cian-brillo);
-      margin-bottom: 2px;
+      font-size: 2rem; font-weight: 800; color: var(--cian-brillo); line-height: 1;
     }
-    .paquete-precio span { font-size: 0.85rem; color: #888; font-weight: normal; }
-    .paquete-desc { font-size: 0.8rem; color: #999; margin-bottom: 14px; }
-    .paquete-incluye {
-      list-style: none; padding: 0; margin: 0 0 18px;
-      font-size: 0.82rem; color: #ccc; flex: 1;
+    .paquete-precio sub {
+      font-size: 0.9rem; font-weight: 400; color: #777;
+      vertical-align: baseline; margin-left: 3px;
     }
-    .paquete-incluye li { padding: 4px 0; border-bottom: 1px solid #333; display: flex; align-items: flex-start; gap: 8px; }
-    .paquete-incluye li:last-child { border-bottom: none; }
-    .paquete-incluye li i { color: var(--cian-brillo); font-size: 0.7rem; margin-top: 5px; flex-shrink: 0; }
+    .paquete-card.enterprise .paquete-precio { font-size: 1.6rem; color: #b080f0; }
+    .paquete-desc {
+      font-size: 0.78rem; color: #888; margin-top: 8px; line-height: 1.5;
+    }
+
+    /* Features */
+    .paquete-features {
+      padding: 16px 20px;
+      flex: 1;
+    }
+    .feat-group-label {
+      font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.5px;
+      color: #555; margin: 14px 0 8px;
+    }
+    .feat-group-label:first-child { margin-top: 0; }
+    .feat-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid #282828;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+    .feat-row:last-child { border-bottom: none; }
+    .feat-row .fi { width: 14px; flex-shrink: 0; margin-top: 2px; font-size: 0.75rem; }
+    .fi-yes  { color: #50d890; }
+    .fi-no   { color: #444; }
+    .fi-plus { color: var(--cian-brillo); }
+    .feat-yes  { color: #ccc; }
+    .feat-no   { color: #444; text-decoration: line-through; }
+    .feat-plus { color: #fff; }
+    .feat-val  { color: var(--cian-brillo); font-weight: 600; }
+    .feat-new-badge {
+      font-size: 0.58rem; background: var(--cian-brillo); color: #000;
+      padding: 1px 5px; border-radius: 4px; font-weight: bold;
+      margin-left: 4px; vertical-align: middle; text-transform: uppercase;
+    }
+
+    /* CTA */
+    .paquete-cta {
+      padding: 16px 20px;
+      border-top: 1px solid #2a2a2a;
+    }
     .btn-cotizar {
-      display: block; text-align: center; background: var(--azul-boton);
-      color: #fff; text-decoration: none; padding: 9px; border-radius: 8px;
-      font-size: 0.85rem; font-weight: bold; transition: 0.2s;
-      border: 1px solid #1a5a8a;
+      display: block; text-align: center;
+      background: #1a3a5c; color: #fff; text-decoration: none;
+      padding: 11px; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+      transition: 0.2s; border: 1px solid #1a5080; letter-spacing: 0.5px;
     }
     .btn-cotizar:hover { background: var(--rosa-principal); border-color: var(--rosa-principal); }
     .paquete-card.destacado .btn-cotizar { background: var(--rosa-principal); border-color: var(--rosa-oscuro); }
     .paquete-card.destacado .btn-cotizar:hover { background: var(--rosa-oscuro); }
+    .paquete-card.enterprise .btn-cotizar { background: #4a1a7a; border-color: #7040b0; }
+    .paquete-card.enterprise .btn-cotizar:hover { background: #6a2a9a; }
 
-    .dot-indicator {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #444; cursor: pointer; transition: 0.2s; border: none; display: inline-block;
+    /* Flechas */
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #1e1e1e; border: 1.5px solid #444;
+      color: #ccc; cursor: pointer; font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: 0.2s; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
-    .dot-indicator.active { background: var(--rosa-principal); transform: scale(1.3); }
+    .carousel-btn:hover { border-color: var(--cian-brillo); color: var(--cian-brillo); }
+    .carousel-btn.prev { left: -10px; }
+    .carousel-btn.next { right: -10px; }
+    @media (max-width: 600px) { .carousel-btn { display: none; } }
+
+    /* Puntos */
+    .dot-indicator {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #333; cursor: pointer; transition: 0.2s;
+      border: 1.5px solid #555; display: inline-block;
+    }
+    .dot-indicator.active { background: var(--rosa-principal); border-color: var(--rosa-principal); }
 
     /* ══ BLOQUES COLAPSABLES ══ */
     .cat-block {
@@ -198,122 +258,179 @@
     <!-- ══════════════════════════════════════════════════════
          SECCIÓN 1: PAQUETES COMMUNITY MANAGER
     ══════════════════════════════════════════════════════ -->
-    <div class="section-title"><i class="fas fa-users"></i> Paquetes de Community Manager</div>
-
-    <div class="paquetes-carousel-wrap">
-      <button class="carousel-btn prev" id="prev-btn" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-      <button class="carousel-btn next" id="next-btn" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
-
-      <div class="paquetes-grid" id="paquetes-carousel">
-
-        <!-- ── 1. STARTER ── -->
-        <div class="paquete-card">
-          <div class="paquete-tier">Starter</div>
-          <div class="paquete-nombre">🚀 Despegue</div>
-          <div class="paquete-precio">$1,800 <span>/mes</span></div>
-          <div class="paquete-desc">Para emprendedores que recién arrancan. Presencia básica sin complicaciones.</div>
-          <ul class="paquete-incluye">
-            <li><i class="fas fa-check-circle"></i> <strong>1 red social</strong> (FB o IG, a elección)</li>
-            <li><i class="fas fa-check-circle"></i> <strong>8 publicaciones</strong>/mes (diseño incluido)</li>
-            <li><i class="fas fa-check-circle"></i> Formatos estándar (imagen + texto)</li>
-            <li><i class="fas fa-check-circle"></i> 1 marca</li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin gestión de web</span></li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin respuesta a comentarios/DMs</span></li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin reporte de métricas</span></li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin SEO ni estrategia</span></li>
-          </ul>
-          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+    <div class="cat-block" id="bloque-paquetes" onclick="toggleCat(this)">
+      <div class="cat-header">
+        <i class="fas fa-users cat-icon" style="color:#EF5085;"></i>
+        <div class="cat-info">
+          <h2>Paquetes de Community Manager</h2>
+          <span>Gestión mensual de redes, contenido, SEO y más · 5 niveles disponibles</span>
         </div>
+        <span class="cat-count">5 paquetes</span>
+        <i class="fas fa-chevron-down chevron"></i>
+      </div>
 
-        <!-- ── 2. BÁSICO ── -->
-        <div class="paquete-card">
-          <div class="paquete-tier">Básico</div>
-          <div class="paquete-nombre">📡 Arranque Digital</div>
-          <div class="paquete-precio">$3,200 <span>/mes</span></div>
-          <div class="paquete-desc">Establece tu voz en 3 plataformas con contenido diseñado y publicado por mí.</div>
-          <ul class="paquete-incluye">
-            <li><i class="fas fa-check-circle"></i> <strong>3 redes sociales</strong> (FB, IG + 1 a elección)</li>
-            <li><i class="fas fa-check-circle"></i> <strong>12 publicaciones</strong>/mes (diseño incluido)</li>
-            <li><i class="fas fa-check-circle"></i> Formatos: imágenes y stories</li>
-            <li><i class="fas fa-check-circle"></i> Gestión de <strong>1 página web</strong></li>
-            <li><i class="fas fa-check-circle"></i> 1 marca</li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin respuesta a comentarios/DMs</span></li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin reporte ni KPIs</span></li>
-            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin SEO ni estrategia</span></li>
-          </ul>
-          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+      <div class="cat-body" onclick="event.stopPropagation()">
+        <div style="padding: 6px 16px 0;">
+          <div class="paquetes-carousel-wrap">
+            <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
+
+            <div class="paquetes-grid" id="paquetes-carousel">
+
+              <!-- ══ 1. DESPEGUE ══ -->
+              <div class="paquete-card">
+                <div class="paquete-band"></div>
+                <div class="paquete-head">
+                  <div class="paquete-tier">Starter</div>
+                  <div class="paquete-nombre">🚀 Despegue</div>
+                  <div class="paquete-precio">$1,800<sub>/mes</sub></div>
+                  <div class="paquete-desc">Para emprendedores que arrancan. Presencia mínima, sin complicaciones.</div>
+                </div>
+                <div class="paquete-features">
+                  <div class="feat-group-label">Redes y publicaciones</div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 red social</span> (FB o IG)</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">8 publicaciones</span>/mes</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imagen + texto</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Stories / Reels / Shorts</span></div>
+                  <div class="feat-group-label">Web y gestión</div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Gestión de página web</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
+                  <div class="feat-group-label">Estrategia y reportes</div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
+                </div>
+                <div class="paquete-cta">
+                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+                </div>
+              </div>
+
+              <!-- ══ 2. ARRANQUE DIGITAL ══ -->
+              <div class="paquete-card">
+                <div class="paquete-band"></div>
+                <div class="paquete-head">
+                  <div class="paquete-tier">Básico</div>
+                  <div class="paquete-nombre">📡 Arranque Digital</div>
+                  <div class="paquete-precio">$3,200<sub>/mes</sub></div>
+                  <div class="paquete-desc">3 plataformas activas con contenido publicado y una web gestionada.</div>
+                </div>
+                <div class="paquete-features">
+                  <div class="feat-group-label">Redes y publicaciones</div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">3 redes</span>: FB, IG + 1 a elección</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">12 publicaciones</span>/mes</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imágenes y stories</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reels / Shorts / Carruseles</span></div>
+                  <div class="feat-group-label">Web y gestión</div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 página web</span> gestionada</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
+                  <div class="feat-group-label">Estrategia y reportes</div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas / KPIs</span></div>
+                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
+                </div>
+                <div class="paquete-cta">
+                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+                </div>
+              </div>
+
+              <!-- ══ 3. SEÑAL FUERTE ══ -->
+              <div class="paquete-card destacado">
+                <div class="paquete-band"></div>
+                <div class="badge-popular">⭐ Más Popular</div>
+                <div class="paquete-head">
+                  <div class="paquete-tier">Intermedio</div>
+                  <div class="paquete-nombre">🔥 Señal Fuerte</div>
+                  <div class="paquete-precio">$6,500<sub>/mes</sub></div>
+                  <div class="paquete-desc">Gestión completa de 5 plataformas: contenido exclusivo, SEO, comunidad activa y entrega de recursos.</div>
+                </div>
+                <div class="paquete-features">
+                  <div class="feat-group-label">Redes y publicaciones</div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">5 redes</span>: FB, IG, X, LinkedIn, TikTok</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">18 publicaciones/mes por red</span> = 90 piezas totales</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño exclusivo y rotativo por plataforma</span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reels, Shorts, Stories, Carruseles <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-group-label">Web y gestión</div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1–2 páginas web</span> gestionadas <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Respuesta a comentarios y DMs <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-group-label">Estrategia y reportes</div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">SEO orgánico: redes + Google <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Calendario editorial mensual <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reporte mensual + Analytics <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Recursos digitales entregados al cliente <span class="feat-new-badge">nuevo</span></span></div>
+                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
+                </div>
+                <div class="paquete-cta">
+                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+                </div>
+              </div>
+
+              <!-- ══ 4. DOMINIO TOTAL ══ -->
+              <div class="paquete-card">
+                <div class="paquete-band" style="background: linear-gradient(90deg,#0a315b,#70DDD8);"></div>
+                <div class="paquete-head">
+                  <div class="paquete-tier">Profesional</div>
+                  <div class="paquete-nombre">🏆 Dominio Total</div>
+                  <div class="paquete-precio">$11,000<sub>/mes</sub></div>
+                  <div class="paquete-desc">Todo lo de Señal Fuerte, ampliado a múltiples marcas y con reportes semanales.</div>
+                </div>
+                <div class="paquete-features">
+                  <div class="feat-group-label" style="color:var(--rosa-principal);">Incluye todo de Señal Fuerte, más:</div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Hasta <span class="feat-val">15 redes sociales</span></span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus"><span class="feat-val">2 o 3 marcas</span> gestionadas simultáneamente</span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Contenido independiente por marca</span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Gestión <span class="feat-val">multisite</span> (webs por marca)</span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Producción audiovisual básica incluida</span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reporte ejecutivo <span class="feat-val">semanal</span> (en lugar de mensual)</span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reunión estratégica mensual (videollamada)</span></div>
+                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Entrega de recursos por cada marca</span></div>
+                </div>
+                <div class="paquete-cta">
+                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+                </div>
+              </div>
+
+              <!-- ══ 5. IMPERIO DIGITAL ══ -->
+              <div class="paquete-card enterprise">
+                <div class="paquete-band"></div>
+                <div class="paquete-head">
+                  <div class="paquete-tier">Enterprise</div>
+                  <div class="paquete-nombre" style="color:#c090ff;">👑 Imperio Digital</div>
+                  <div class="paquete-precio" style="color:#b080f0;">A cotizar</div>
+                  <div class="paquete-desc">Solución 360° con pauta, CRM y automatización para operaciones digitales de alto volumen.</div>
+                </div>
+                <div class="paquete-features">
+                  <div class="feat-group-label" style="color:#9146ff;">Incluye todo de Dominio Total, más:</div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Gestión de <span class="feat-val">Pauta Meta Ads</span></span></div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Automatización CRM (Bitrix24)</span></div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Email marketing segmentado</span></div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Dashboard de métricas en tiempo real</span></div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">SEO técnico + contenido para buscadores</span></div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Soporte prioritario <span class="feat-val">7 días</span></span></div>
+                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Consultoría ejecutiva mensual</span></div>
+                </div>
+                <div class="paquete-cta">
+                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Solicitar Propuesta</a>
+                </div>
+              </div>
+
+            </div><!-- /paquetes-grid -->
+          </div><!-- /carousel-wrap -->
+
+          <!-- Puntos indicadores -->
+          <div style="display:flex; justify-content:center; gap:8px; margin: 4px 0 18px;">
+            <span class="dot-indicator active" onclick="goToSlide(0)"></span>
+            <span class="dot-indicator" onclick="goToSlide(1)"></span>
+            <span class="dot-indicator" onclick="goToSlide(2)"></span>
+            <span class="dot-indicator" onclick="goToSlide(3)"></span>
+            <span class="dot-indicator" onclick="goToSlide(4)"></span>
+          </div>
         </div>
-
-        <!-- ── 3. SEÑAL FUERTE – POPULAR ── -->
-        <div class="paquete-card destacado">
-          <div class="badge-popular">⭐ Más Popular</div>
-          <div class="paquete-tier">Intermedio</div>
-          <div class="paquete-nombre">🔥 Señal Fuerte</div>
-          <div class="paquete-precio">$6,500 <span>/mes</span></div>
-          <div class="paquete-desc">Presencia activa en las 5 plataformas clave. Contenido exclusivo, SEO y gestión completa.</div>
-          <ul class="paquete-incluye">
-            <li><i class="fas fa-check-circle"></i> <strong>5 redes</strong>: FB, IG, X, LinkedIn, TikTok</li>
-            <li><i class="fas fa-check-circle"></i> <strong>18 publicaciones/mes por red</strong> (90 piezas totales, incl. Reels, Shorts, Carruseles)</li>
-            <li><i class="fas fa-check-circle"></i> Diseño de contenido <strong>exclusivo y rotativo</strong> por plataforma</li>
-            <li><i class="fas fa-check-circle"></i> <strong>SEO orgánico</strong> en redes + Google (metadatos, hashtags, palabras clave)</li>
-            <li><i class="fas fa-check-circle"></i> Respuesta a <strong>comentarios y DMs</strong></li>
-            <li><i class="fas fa-check-circle"></i> Gestión de <strong>1–2 páginas web</strong> (1 marca)</li>
-            <li><i class="fas fa-check-circle"></i> Calendario editorial mensual</li>
-            <li><i class="fas fa-check-circle"></i> Reporte mensual + Analytics básico</li>
-            <li><i class="fas fa-check-circle"></i> <strong>Recursos digitales entregados</strong> al contratante (almacenados y compartidos)</li>
-          </ul>
-          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-        </div>
-
-        <!-- ── 4. PROFESIONAL ── -->
-        <div class="paquete-card">
-          <div class="paquete-tier">Profesional</div>
-          <div class="paquete-nombre">🏆 Dominio Total</div>
-          <div class="paquete-precio">$11,000 <span>/mes</span></div>
-          <div class="paquete-desc">Todo lo de Señal Fuerte, multiplicado por marcas. Para negocios con ecosistemas digitales complejos.</div>
-          <ul class="paquete-incluye">
-            <li><i class="fas fa-check-circle" style="color:#EF5085;"></i> <strong>✅ Todo lo incluido en Señal Fuerte</strong></li>
-            <li style="border-top:1px solid #2a2a2a; margin-top:6px; padding-top:10px;"><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> Escalado a <strong>hasta 15 redes sociales</strong></li>
-            <li><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> <strong>2 o 3 marcas</strong> gestionadas simultáneamente</li>
-            <li><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> Contenido exclusivo e independiente por marca</li>
-            <li><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> Gestión multisite (webs por marca incluidas)</li>
-            <li><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> Producción audiovisual básica (Reels/Shorts)</li>
-            <li><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> Reporte ejecutivo <strong>semanal</strong> (no mensual)</li>
-            <li><i class="fas fa-plus-circle" style="color:#70DDD8;"></i> Reunión estratégica mensual (videollamada)</li>
-          </ul>
-          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-        </div>
-
-        <!-- ── 5. ENTERPRISE ── -->
-        <div class="paquete-card" style="border-color:#6a3a8a; background: linear-gradient(160deg,#1a0a2e,#0a1a2e);">
-          <div class="paquete-tier" style="color:#b070f0;">Enterprise</div>
-          <div class="paquete-nombre" style="color:#d0a0ff;">👑 Imperio Digital</div>
-          <div class="paquete-precio" style="color:#d0a0ff;">A cotizar</div>
-          <div class="paquete-desc">Solución 360° con pauta, automatización y estrategia para operaciones digitales de alto volumen.</div>
-          <ul class="paquete-incluye">
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Todo lo del plan Profesional</li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Gestión de <strong>Pauta Meta Ads</strong> incluida</li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Automatización CRM (Bitrix24)</li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Email marketing segmentado</li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Dashboard de métricas en tiempo real</li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> SEO técnico + contenido para buscadores</li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Soporte <strong>prioritario 7 días</strong></li>
-            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Consultoría ejecutiva mensual</li>
-          </ul>
-          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar" style="background:#5a2a7a; border-color:#7a4a9a;">Solicitar Propuesta</a>
-        </div>
-
-      </div><!-- /paquetes-grid -->
-    </div><!-- /carousel-wrap -->
-
-    <!-- Indicadores de puntos -->
-    <div style="display:flex; justify-content:center; gap:8px; margin: 8px 0 20px;">
-      <span class="dot-indicator active" onclick="goToSlide(0)"></span>
-      <span class="dot-indicator" onclick="goToSlide(1)"></span>
-      <span class="dot-indicator" onclick="goToSlide(2)"></span>
-      <span class="dot-indicator" onclick="goToSlide(3)"></span>
-      <span class="dot-indicator" onclick="goToSlide(4)"></span>
-    </div>
+      </div><!-- /cat-body -->
+    </div><!-- /cat-block paquetes -->
 
     <!-- ══════════════════════════════════════════════════════
          SECCIÓN 2: MARKETING DIGITAL (SERVICIOS SUELTOS)
