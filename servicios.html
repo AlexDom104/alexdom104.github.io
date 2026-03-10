@@ -6,6 +6,7 @@
   <title>Servicios Freelance | Alexis Pérez</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
 
     /* ══ GENERAL ══ */
@@ -728,11 +729,17 @@
   </div>
 
   <script>
-    // ══ ÚNICA VARIABLE A CONFIGURAR ══════════════════════════
-    // Apps Script maneja todo: guarda en Sheets + envía por Graph API
-    // Ver instrucciones completas en configuracion.html
+    // ══ CONFIGURACIÓN ══════════════════════════════════════════
+    // 1. Apps Script → guarda en Google Sheets (pestaña "Datos")
     const APPS_SCRIPT_URL = 'TU_URL_DE_APPS_SCRIPT'; // ← reemplazar
-    // ═════════════════════════════════════════════════════════
+
+    // 2. EmailJS → envía el correo desde tu Outlook
+    const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';   // ← reemplazar
+    const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';   // ← reemplazar
+    const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';  // ← reemplazar
+    // ═══════════════════════════════════════════════════════════
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
 
     // ── Modal ──
     function abrirModal(servicio) {
@@ -804,16 +811,37 @@
         fecha:    new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' })
       };
 
+      let sheetOk = false, emailOk = false;
+
+      // 1 ── Guardar en Google Sheets
       try {
-        // Apps Script recibe los datos, guarda en Sheets y envía el correo
-        // vía Microsoft Graph API directamente desde tu cuenta Outlook
         await fetch(APPS_SCRIPT_URL, {
           method:  'POST',
           mode:    'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(datos)
         });
+        sheetOk = true;
+      } catch (e) { console.warn('Sheets error:', e); }
 
+      // 2 ── Enviar correo vía EmailJS (Outlook)
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          from_name:  datos.nombre,
+          from_email: correo,
+          telefono:   telefono,
+          servicio:   datos.servicio,
+          mensaje:    datos.mensaje,
+          fecha:      datos.fecha,
+          reply_to:   correo
+        });
+        emailOk = true;
+      } catch (e) { console.warn('EmailJS error:', e); }
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
+
+      if (sheetOk || emailOk) {
         msg.className = 'form-msg ok';
         msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
         setTimeout(() => {
@@ -821,15 +849,10 @@
             .forEach(id => { document.getElementById(id).value = ''; });
           cerrarModal();
         }, 3000);
-
-      } catch (e) {
+      } else {
         msg.className = 'form-msg err';
         msg.textContent = 'Ocurrió un error. Escríbeme directamente por WhatsApp.';
-        console.error(e);
       }
-
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
     }
 
     // ── Carrusel ──
