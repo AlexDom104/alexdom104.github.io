@@ -366,26 +366,30 @@
 
     .ejemplos-body {
       max-height: 0; overflow: hidden;
-      transition: max-height 0.45s ease;
+      transition: max-height 0.4s ease;
     }
-    .ejemplos-body.open { max-height: 1000px; }
+    .ejemplos-body.open { max-height: 600px; }
 
     .ejemplos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 8px; padding: 14px 16px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 16px 18px;
     }
 
+    /* Thumbnail fijo: 110×110 px */
     .ej-thumb {
-      position: relative; border-radius: 8px; overflow: hidden;
-      aspect-ratio: 1 / 1; cursor: pointer;
+      position: relative;
+      width: 110px; height: 110px;
+      flex-shrink: 0;
+      border-radius: 8px; overflow: hidden; cursor: pointer;
       background: #111; border: 1.5px solid #2a2a2a;
       transition: transform 0.2s, border-color 0.2s;
     }
-    .ej-thumb:hover { transform: scale(1.04); border-color: #70DDD8; }
+    .ej-thumb:hover { transform: scale(1.05); border-color: #70DDD8; }
     .ej-thumb img {
       width: 100%; height: 100%; object-fit: cover;
-      display: block; transition: opacity 0.2s;
+      display: block;
     }
     .ej-thumb .ej-overlay {
       position: absolute; inset: 0;
@@ -393,67 +397,93 @@
       align-items: center; justify-content: center;
       transition: background 0.2s;
     }
-    .ej-thumb:hover .ej-overlay { background: rgba(0,0,0,0.45); }
+    .ej-thumb:hover .ej-overlay { background: rgba(0,0,0,0.5); }
     .ej-thumb .ej-overlay i {
-      color: #fff; font-size: 1.3rem; opacity: 0;
+      color: #fff; font-size: 1.4rem; opacity: 0;
       transition: opacity 0.2s;
     }
     .ej-thumb:hover .ej-overlay i { opacity: 1; }
 
-    /* Placeholder cuando no hay imagen aún */
+    /* Placeholder cuando no hay imagen */
     .ej-thumb.placeholder {
-      cursor: default; border-style: dashed; border-color: #2a2a2a;
+      cursor: default; border-style: dashed; border-color: #252525;
     }
-    .ej-thumb.placeholder:hover { transform: none; border-color: #2a2a2a; }
+    .ej-thumb.placeholder:hover { transform: none; border-color: #252525; }
     .ej-thumb.placeholder .ej-overlay {
-      background: rgba(0,0,0,0); flex-direction: column; gap: 6px;
+      background: rgba(0,0,0,0) !important;
+      flex-direction: column; gap: 5px;
     }
-    .ej-thumb.placeholder i { opacity: 1 !important; color: #333 !important; font-size: 1.2rem !important; }
-    .ej-thumb.placeholder span { font-size: 0.65rem; color: #333; text-align: center; }
+    .ej-thumb.placeholder i {
+      opacity: 1 !important; color: #2a2a2a !important; font-size: 1.3rem !important;
+    }
+    .ej-thumb.placeholder span {
+      font-size: 0.6rem; color: #2a2a2a; text-align: center;
+    }
 
-    /* ══ LIGHTBOX ══ */
+    /* ── Sync bar ── */
+    .sync-bar {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.15);
+      border-radius: 10px; padding: 10px 18px; margin-bottom: 12px;
+    }
+    #btn-sync-sheets {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(112,221,216,0.1); border: 1.5px solid rgba(112,221,216,0.3);
+      color: var(--cian-brillo); border-radius: 8px; padding: 8px 16px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: 0.2s; font-family: inherit;
+    }
+    #btn-sync-sheets:hover:not(:disabled) {
+      background: rgba(112,221,216,0.2); border-color: var(--cian-brillo);
+    }
+    #btn-sync-sheets:disabled { opacity: 0.6; cursor: default; }
+    #sync-status { font-size: 0.78rem; color: #666; }
+
+    /* ── Lightbox ──
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 1200;
-      background: rgba(0,0,0,0.92); backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.88); backdrop-filter: blur(6px);
       align-items: center; justify-content: center;
       padding: 16px;
     }
     .lightbox.visible { display: flex; }
     .lightbox-inner {
-      position: relative; max-width: 860px; width: 100%;
+      position: relative;
+      width: 500px; max-width: calc(100vw - 80px);
       animation: modalIn 0.2s ease;
     }
     .lightbox-inner img {
-      width: 100%; max-height: 80vh; object-fit: contain;
-      border-radius: 10px; display: block;
+      width: 100%; max-height: 520px; object-fit: contain;
+      border-radius: 10px; display: block; background: #111;
     }
     .lightbox-caption {
       text-align: center; color: #aaa; font-size: 0.82rem;
-      margin-top: 12px;
+      margin-top: 10px;
     }
     .lightbox-close {
       position: absolute; top: -14px; right: -14px;
       background: #EF5085; border: none; color: #fff;
       width: 32px; height: 32px; border-radius: 50%;
-      font-size: 0.85rem; cursor: pointer;
+      font-size: 0.85rem; cursor: pointer; z-index: 1;
       display: flex; align-items: center; justify-content: center;
       transition: background 0.2s;
     }
     .lightbox-close:hover { background: #A64062; }
     .lightbox-nav {
       position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(30,30,30,0.85); border: 1.5px solid #444;
+      background: rgba(20,20,20,0.9); border: 1.5px solid #444;
       color: #ccc; width: 38px; height: 38px; border-radius: 50%;
       font-size: 0.85rem; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: 0.2s;
     }
     .lightbox-nav:hover { border-color: #70DDD8; color: #70DDD8; }
-    .lightbox-nav.prev { left: -50px; }
-    .lightbox-nav.next { right: -50px; }
-    @media (max-width: 640px) {
-      .lightbox-nav.prev { left: 4px; }
-      .lightbox-nav.next { right: 4px; }
+    .lightbox-nav.prev { left: -52px; }
+    .lightbox-nav.next { right: -52px; }
+    @media (max-width: 660px) {
+      .lightbox-inner { max-width: calc(100vw - 32px); }
+      .lightbox-nav.prev { left: 6px; }
+      .lightbox-nav.next { right: 6px; }
     }
   </style>
 </head>
@@ -678,15 +708,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -717,15 +738,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -756,15 +768,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -795,15 +798,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -832,15 +826,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -870,15 +855,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -908,15 +884,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -957,15 +924,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -999,15 +957,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -1035,15 +984,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -1075,15 +1015,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -1110,15 +1041,6 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
@@ -1146,18 +1068,16 @@
             <div class="ejemplos-grid"></div>
           </div>
         </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
-            <div class="ej-thumb placeholder">
-              <div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>
-            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="sync-bar">
+      <button id="btn-sync-sheets" onclick="sincronizarDesdeSheets()">
+        <i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets
+      </button>
+      <span id="sync-status"></span>
     </div>
 
     <div class="leyenda">
@@ -1262,9 +1182,134 @@
     const EMAILJS_PUBLIC_KEY  = 'OycohWyqCo97LPgia';
     const EMAILJS_SERVICE_ID  = 'service_9zlhqd8';
     const EMAILJS_TEMPLATE_ID = 'template_xeougpd';
+
+    // ── Google Sheets: ID de tu hoja ────────────────────────────
+    // 1. Abre tu Google Sheet → Archivo → Compartir → "Cualquier persona con el enlace" (Viewer)
+    // 2. Copia el ID de la URL: docs.google.com/spreadsheets/d/[ESTE_ES_EL_ID]/edit
+    // 3. Pégalo aquí abajo:
+    const GOOGLE_SHEET_ID = 'TU_SHEET_ID_AQUI';  // ← reemplazar
     // ═══════════════════════════════════════════════════════════
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    // ══ SINCRONIZACIÓN CON GOOGLE SHEETS ════════════════════════
+    // Lee la hoja "servicios" y actualiza precios/nombres en pantalla
+    async function sincronizarDesdeSheets() {
+      const btn    = document.getElementById('btn-sync-sheets');
+      const status = document.getElementById('sync-status');
+
+      if (!GOOGLE_SHEET_ID || GOOGLE_SHEET_ID === 'TU_SHEET_ID_AQUI') {
+        status.textContent = '⚠️ Configura el GOOGLE_SHEET_ID en el script primero.';
+        status.style.color = '#f0a060';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
+      status.textContent = '';
+
+      // URL pública CSV de la hoja "servicios"
+      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=servicios`;
+
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error('No se pudo acceder al Google Sheet');
+        const text = await resp.text();
+
+        // Parsear CSV simple (sin librerías)
+        const rows = text.trim().split('\n').map(row =>
+          row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
+             .map(cell => cell.replace(/^"|"$/g, '').trim())
+        );
+
+        // Encabezado: cat_id, Categoría, Nombre, Descripción, Precio, PrecioMín, PrecioMáx, Visible
+        const headers = rows[0].map(h => h.toLowerCase().replace(/\s+/g,'_'));
+        const ciCatId  = headers.findIndex(h => h.includes('cat_id'));
+        const ciNombre = headers.findIndex(h => h.includes('nombre'));
+        const ciPrecio = headers.findIndex(h => h === 'precio');
+        const ciVisible= headers.findIndex(h => h.includes('visible'));
+
+        if (ciNombre === -1 || ciPrecio === -1) {
+          throw new Error('No encontré columnas Nombre/Precio en la hoja "servicios"');
+        }
+
+        // Construir mapa nombre → precio desde el sheet
+        const mapa = {};
+        rows.slice(1).forEach(r => {
+          if (!r[ciNombre] || !r[ciPrecio]) return;
+          const visible = ciVisible >= 0 ? r[ciVisible].toLowerCase() : 'sí';
+          if (visible === 'no') return;
+          mapa[r[ciNombre].trim()] = r[ciPrecio].trim();
+        });
+
+        // Actualizar precios en la tabla HTML
+        let actualizados = 0;
+        document.querySelectorAll('.td-servicio').forEach(tdNombre => {
+          const nombre = tdNombre.textContent.trim();
+          // Buscar coincidencia parcial
+          const key = Object.keys(mapa).find(k =>
+            k.toLowerCase() === nombre.toLowerCase() ||
+            nombre.toLowerCase().includes(k.toLowerCase().substring(0,15))
+          );
+          if (key && mapa[key]) {
+            const tdPrecio = tdNombre.nextElementSibling;
+            if (tdPrecio && tdPrecio.classList.contains('td-precio')) {
+              // Preservar el span .precio-pres si existe, sino texto simple
+              if (mapa[key].toLowerCase() === 'cotizable') {
+                tdPrecio.innerHTML = '<span class="precio-pres">Cotizable</span>';
+              } else {
+                tdPrecio.textContent = mapa[key];
+              }
+              actualizados++;
+            }
+          }
+        });
+
+        // Actualizar también el CATÁLOGO interno (buscador modal)
+        CATALOGO.forEach(item => {
+          const key = Object.keys(mapa).find(k =>
+            k.toLowerCase() === item.nombre.toLowerCase()
+          );
+          if (key) item.precio = mapa[key];
+        });
+
+        // Actualizar precios en paquetes (cards)
+        document.querySelectorAll('.paquete-precio').forEach(el => {
+          const card = el.closest('.paquete-card');
+          if (!card) return;
+          const nombreEl = card.querySelector('.paquete-nombre');
+          if (!nombreEl) return;
+          const nombreCard = nombreEl.textContent.trim();
+          const key = Object.keys(mapa).find(k => nombreCard.includes(k.substring(0,10)));
+          if (key && mapa[key]) {
+            const precio = mapa[key].replace('/mes','');
+            el.innerHTML = `${precio}<sub>/mes</sub>`;
+          }
+        });
+
+        const ts = new Date().toLocaleTimeString('es-MX');
+        status.textContent = `✅ ${actualizados} precios actualizados · ${ts}`;
+        status.style.color = '#70DDD8';
+
+        // Guardar timestamp en localStorage para referencia
+        try { localStorage.setItem('lastSync', new Date().toISOString()); } catch(e){}
+
+      } catch(err) {
+        console.error('Sync error:', err);
+        status.textContent = `❌ ${err.message}`;
+        status.style.color = '#EF5085';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets';
+      }
+    }
+
+    // Auto-intentar sync al cargar (silencioso si no hay SHEET_ID)
+    window.addEventListener('load', () => {
+      if (GOOGLE_SHEET_ID && GOOGLE_SHEET_ID !== 'TU_SHEET_ID_AQUI') {
+        sincronizarDesdeSheets();
+      }
+    });
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
     const CATALOGO = [
@@ -1683,7 +1728,6 @@
       ],
 
       folletos: [
-        { url: 'https://imgur.com/RKgVW0n.png', cap: 'Flyer UHA Educación Online' },
         // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Tríptico restaurante' },
         // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Flyer evento cultural' },
       ],
