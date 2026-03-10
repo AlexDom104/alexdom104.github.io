@@ -110,6 +110,12 @@
     .paquete-card.destacado .btn-cotizar { background: var(--rosa-principal); border-color: var(--rosa-oscuro); }
     .paquete-card.destacado .btn-cotizar:hover { background: var(--rosa-oscuro); }
 
+    .dot-indicator {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #444; cursor: pointer; transition: 0.2s; border: none; display: inline-block;
+    }
+    .dot-indicator.active { background: var(--rosa-principal); transform: scale(1.3); }
+
     /* ══ BLOQUES COLAPSABLES ══ */
     .cat-block {
       background: var(--contraste-fondo); border: 2px solid var(--azul-boton);
@@ -195,101 +201,121 @@
     <div class="section-title"><i class="fas fa-users"></i> Paquetes de Community Manager</div>
 
     <div class="paquetes-carousel-wrap">
-      <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-      <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
-    <div class="paquetes-grid" id="paquetes-carousel">
+      <button class="carousel-btn prev" id="prev-btn" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+      <button class="carousel-btn next" id="next-btn" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
 
-      <!-- STARTER -->
-      <div class="paquete-card">
-        <div class="paquete-tier">Starter</div>
-        <div class="paquete-nombre">🚀 Despegue</div>
-        <div class="paquete-precio">$1,800 <span>/mes</span></div>
-        <div class="paquete-desc">Ideal para emprendedores que recién arrancan su presencia digital.</div>
-        <ul class="paquete-incluye">
-          <li><i class="fas fa-check-circle"></i> 1 red social (FB o IG)</li>
-          <li><i class="fas fa-check-circle"></i> 8 publicaciones/mes</li>
-          <li><i class="fas fa-check-circle"></i> Diseño de contenido incluido</li>
-          <li><i class="fas fa-check-circle"></i> Reporte mensual básico</li>
-          <li><i class="fas fa-check-circle"></i> 1 marca</li>
-        </ul>
-        <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-      </div>
+      <div class="paquetes-grid" id="paquetes-carousel">
 
-      <!-- BÁSICO -->
-      <div class="paquete-card">
-        <div class="paquete-tier">Básico</div>
-        <div class="paquete-nombre">📡 Arranque Digital</div>
-        <div class="paquete-precio">$3,500 <span>/mes</span></div>
-        <div class="paquete-desc">Gestión completa para negocios que quieren establecer su voz en redes.</div>
-        <ul class="paquete-incluye">
-          <li><i class="fas fa-check-circle"></i> 3 redes sociales (FB, IG + 1)</li>
-          <li><i class="fas fa-check-circle"></i> 12 publicaciones/mes</li>
-          <li><i class="fas fa-check-circle"></i> Gestión de 1 página web</li>
-          <li><i class="fas fa-check-circle"></i> Diseño de contenido incluido</li>
-          <li><i class="fas fa-check-circle"></i> Interacción con comunidad</li>
-          <li><i class="fas fa-check-circle"></i> Reporte mensual + KPIs</li>
-          <li><i class="fas fa-check-circle"></i> 1 marca</li>
-        </ul>
-        <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-      </div>
+        <!-- ── 1. STARTER ── -->
+        <div class="paquete-card">
+          <div class="paquete-tier">Starter</div>
+          <div class="paquete-nombre">🚀 Despegue</div>
+          <div class="paquete-precio">$1,800 <span>/mes</span></div>
+          <div class="paquete-desc">Para emprendedores que recién arrancan. Presencia básica sin complicaciones.</div>
+          <ul class="paquete-incluye">
+            <li><i class="fas fa-check-circle"></i> <strong>1 red social</strong> (FB o IG, a elección)</li>
+            <li><i class="fas fa-check-circle"></i> <strong>8 publicaciones</strong>/mes (diseño incluido)</li>
+            <li><i class="fas fa-check-circle"></i> Formatos estándar (imagen + texto)</li>
+            <li><i class="fas fa-check-circle"></i> 1 marca</li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin gestión de web</span></li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin respuesta a comentarios/DMs</span></li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin reporte de métricas</span></li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin SEO ni estrategia</span></li>
+          </ul>
+          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+        </div>
 
-      <!-- MEDIO / POPULAR -->
-      <div class="paquete-card destacado">
-        <div class="badge-popular">⭐ Más Popular</div>
-        <div class="paquete-tier">Intermedio</div>
-        <div class="paquete-nombre">🔥 Señal Fuerte</div>
-        <div class="paquete-precio">$6,200 <span>/mes</span></div>
-        <div class="paquete-desc">Presencia total en todas las plataformas clave. La elección inteligente.</div>
-        <ul class="paquete-incluye">
-          <li><i class="fas fa-check-circle"></i> 5 redes (FB, IG, X, LinkedIn, TikTok)</li>
-          <li><i class="fas fa-check-circle"></i> 20 publicaciones/mes + Reels</li>
-          <li><i class="fas fa-check-circle"></i> 1 o 2 páginas web (1 marca)</li>
-          <li><i class="fas fa-check-circle"></i> Diseño de contenido premium</li>
-          <li><i class="fas fa-check-circle"></i> Calendario editorial mensual</li>
-          <li><i class="fas fa-check-circle"></i> Reporte avanzado + Analytics</li>
-          <li><i class="fas fa-check-circle"></i> Interacción y gestión de DMs</li>
-        </ul>
-        <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-      </div>
+        <!-- ── 2. BÁSICO ── -->
+        <div class="paquete-card">
+          <div class="paquete-tier">Básico</div>
+          <div class="paquete-nombre">📡 Arranque Digital</div>
+          <div class="paquete-precio">$3,200 <span>/mes</span></div>
+          <div class="paquete-desc">Establece tu voz en 3 plataformas con contenido diseñado y publicado por mí.</div>
+          <ul class="paquete-incluye">
+            <li><i class="fas fa-check-circle"></i> <strong>3 redes sociales</strong> (FB, IG + 1 a elección)</li>
+            <li><i class="fas fa-check-circle"></i> <strong>12 publicaciones</strong>/mes (diseño incluido)</li>
+            <li><i class="fas fa-check-circle"></i> Formatos: imágenes y stories</li>
+            <li><i class="fas fa-check-circle"></i> Gestión de <strong>1 página web</strong></li>
+            <li><i class="fas fa-check-circle"></i> 1 marca</li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin respuesta a comentarios/DMs</span></li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin reporte ni KPIs</span></li>
+            <li><i class="fas fa-times-circle" style="color:#666;"></i> <span style="color:#666;">Sin SEO ni estrategia</span></li>
+          </ul>
+          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+        </div>
 
-      <!-- PROFESIONAL -->
-      <div class="paquete-card">
-        <div class="paquete-tier">Profesional</div>
-        <div class="paquete-nombre">🏆 Dominio Total</div>
-        <div class="paquete-precio">$8,500 <span>/mes</span></div>
-        <div class="paquete-desc">Gestión de ecosistemas digitales complejos para marcas en crecimiento.</div>
-        <ul class="paquete-incluye">
-          <li><i class="fas fa-check-circle"></i> Hasta 15 redes sociales</li>
-          <li><i class="fas fa-check-circle"></i> 2 o 3 marcas simultáneas</li>
-          <li><i class="fas fa-check-circle"></i> Webs multisite incluidas</li>
-          <li><i class="fas fa-check-circle"></i> Estrategia de contenido mensual</li>
-          <li><i class="fas fa-check-circle"></i> Producción audiovisual básica</li>
-          <li><i class="fas fa-check-circle"></i> Reporte ejecutivo semanal</li>
-          <li><i class="fas fa-check-circle"></i> Reunión estratégica mensual</li>
-        </ul>
-        <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-      </div>
+        <!-- ── 3. SEÑAL FUERTE – POPULAR ── -->
+        <div class="paquete-card destacado">
+          <div class="badge-popular">⭐ Más Popular</div>
+          <div class="paquete-tier">Intermedio</div>
+          <div class="paquete-nombre">🔥 Señal Fuerte</div>
+          <div class="paquete-precio">$6,500 <span>/mes</span></div>
+          <div class="paquete-desc">Presencia activa en las 5 plataformas clave. Contenido exclusivo, SEO y gestión completa.</div>
+          <ul class="paquete-incluye">
+            <li><i class="fas fa-check-circle"></i> <strong>5 redes</strong>: FB, IG, X, LinkedIn, TikTok</li>
+            <li><i class="fas fa-check-circle"></i> <strong>18 publicaciones/mes por red</strong> (90 piezas totales, incl. Reels, Shorts, Carruseles)</li>
+            <li><i class="fas fa-check-circle"></i> Diseño de contenido <strong>exclusivo y rotativo</strong> por plataforma</li>
+            <li><i class="fas fa-check-circle"></i> <strong>SEO orgánico</strong> en redes + Google (metadatos, hashtags, palabras clave)</li>
+            <li><i class="fas fa-check-circle"></i> Respuesta a <strong>comentarios y DMs</strong></li>
+            <li><i class="fas fa-check-circle"></i> Gestión de <strong>1–2 páginas web</strong> (1 marca)</li>
+            <li><i class="fas fa-check-circle"></i> Calendario editorial mensual</li>
+            <li><i class="fas fa-check-circle"></i> Reporte mensual + Analytics básico</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Recursos digitales entregados</strong> al contratante (almacenados y compartidos)</li>
+          </ul>
+          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+        </div>
 
-      <!-- ENTERPRISE -->
-      <div class="paquete-card" style="border-color:#6a3a8a; background: linear-gradient(160deg,#1a0a2e,#0a1a2e);">
-        <div class="paquete-tier" style="color:#b070f0;">Enterprise</div>
-        <div class="paquete-nombre" style="color:#d0a0ff;">👑 Imperio Digital</div>
-        <div class="paquete-precio" style="color:#d0a0ff;">A cotizar</div>
-        <div class="paquete-desc">Solución 360° para empresas con operación digital intensiva y pauta incluida.</div>
-        <ul class="paquete-incluye">
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Redes ilimitadas + Pauta Meta</li>
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Automatización CRM (Bitrix24)</li>
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Email marketing + Segmentación</li>
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Estrategia digital completa</li>
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Dashboard en tiempo real</li>
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Soporte prioritario</li>
-          <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Consultoría ejecutiva incluida</li>
-        </ul>
-        <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar" style="background:#5a2a7a; border-color:#7a4a9a;">Solicitar Propuesta</a>
-      </div>
+        <!-- ── 4. PROFESIONAL ── -->
+        <div class="paquete-card">
+          <div class="paquete-tier">Profesional</div>
+          <div class="paquete-nombre">🏆 Dominio Total</div>
+          <div class="paquete-precio">$11,000 <span>/mes</span></div>
+          <div class="paquete-desc">Ecosistema digital completo para marcas en crecimiento serio. Múltiples marcas, máximo alcance.</div>
+          <ul class="paquete-incluye">
+            <li><i class="fas fa-check-circle"></i> <strong>Hasta 15 redes sociales</strong></li>
+            <li><i class="fas fa-check-circle"></i> <strong>2 o 3 marcas</strong> simultáneas</li>
+            <li><i class="fas fa-check-circle"></i> Contenido exclusivo por marca y plataforma</li>
+            <li><i class="fas fa-check-circle"></i> SEO orgánico avanzado</li>
+            <li><i class="fas fa-check-circle"></i> Respuesta a comentarios y DMs en todas las marcas</li>
+            <li><i class="fas fa-check-circle"></i> Gestión multisite (webs incluidas)</li>
+            <li><i class="fas fa-check-circle"></i> Producción audiovisual básica (Reels/Shorts)</li>
+            <li><i class="fas fa-check-circle"></i> Reporte ejecutivo <strong>semanal</strong></li>
+            <li><i class="fas fa-check-circle"></i> Reunión estratégica mensual (videollamada)</li>
+            <li><i class="fas fa-check-circle"></i> Entrega de recursos digitales por marca</li>
+          </ul>
+          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
+        </div>
 
-    </div><!-- /paquetes-grid -->
+        <!-- ── 5. ENTERPRISE ── -->
+        <div class="paquete-card" style="border-color:#6a3a8a; background: linear-gradient(160deg,#1a0a2e,#0a1a2e);">
+          <div class="paquete-tier" style="color:#b070f0;">Enterprise</div>
+          <div class="paquete-nombre" style="color:#d0a0ff;">👑 Imperio Digital</div>
+          <div class="paquete-precio" style="color:#d0a0ff;">A cotizar</div>
+          <div class="paquete-desc">Solución 360° con pauta, automatización y estrategia para operaciones digitales de alto volumen.</div>
+          <ul class="paquete-incluye">
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Todo lo del plan Profesional</li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Gestión de <strong>Pauta Meta Ads</strong> incluida</li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Automatización CRM (Bitrix24)</li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Email marketing segmentado</li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Dashboard de métricas en tiempo real</li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> SEO técnico + contenido para buscadores</li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Soporte <strong>prioritario 7 días</strong></li>
+            <li><i class="fas fa-check-circle" style="color:#b070f0;"></i> Consultoría ejecutiva mensual</li>
+          </ul>
+          <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar" style="background:#5a2a7a; border-color:#7a4a9a;">Solicitar Propuesta</a>
+        </div>
+
+      </div><!-- /paquetes-grid -->
     </div><!-- /carousel-wrap -->
+
+    <!-- Indicadores de puntos -->
+    <div style="display:flex; justify-content:center; gap:8px; margin: 8px 0 20px;">
+      <span class="dot-indicator active" onclick="goToSlide(0)"></span>
+      <span class="dot-indicator" onclick="goToSlide(1)"></span>
+      <span class="dot-indicator" onclick="goToSlide(2)"></span>
+      <span class="dot-indicator" onclick="goToSlide(3)"></span>
+      <span class="dot-indicator" onclick="goToSlide(4)"></span>
+    </div>
 
     <!-- ══════════════════════════════════════════════════════
          SECCIÓN 2: MARKETING DIGITAL (SERVICIOS SUELTOS)
@@ -649,10 +675,39 @@
 
   <script>
     function toggleCat(block) { block.classList.toggle('open'); }
-    function scrollCarousel(dir) {
-      const c = document.getElementById('paquetes-carousel');
-      c.scrollBy({ left: dir * 260, behavior: 'smooth' });
+
+    // ── Carrusel de paquetes ──
+    const carousel = document.getElementById('paquetes-carousel');
+    const dots = document.querySelectorAll('.dot-indicator');
+    let currentSlide = 0;
+    const totalSlides = 5;
+
+    function getCardWidth() {
+      const card = carousel.querySelector('.paquete-card');
+      return card ? card.offsetWidth + 18 : 248;
     }
+
+    function updateDots(index) {
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+
+    function scrollCarousel(dir) {
+      currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + dir));
+      carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' });
+      updateDots(currentSlide);
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' });
+      updateDots(currentSlide);
+    }
+
+    carousel.addEventListener('scroll', () => {
+      const w = getCardWidth();
+      currentSlide = Math.round(carousel.scrollLeft / w);
+      updateDots(currentSlide);
+    });
   </script>
 </body>
 </html>
