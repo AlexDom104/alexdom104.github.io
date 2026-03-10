@@ -1206,13 +1206,53 @@
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
     // ══ SINCRONIZACIÓN CON GOOGLE SHEETS ════════════════════════
-    // Lee la hoja "servicios" y actualiza precios/nombres en pantalla
+    // Lee la hoja "Servicios" y actualiza nombre, descripción, precio y visibilidad.
+    // No requiere API key — solo que el Sheet esté compartido como "Viewer público".
+    //
+    // Cómo activar:
+    //   1. Abre tu Google Sheet → Compartir → "Cualquier persona con el enlace" (Visor)
+    //   2. Copia el ID de la URL:  docs.google.com/spreadsheets/d/[ESTE_ID]/edit
+    //   3. Pégalo en GOOGLE_SHEET_ID arriba (línea ~1203)
+    //
+    // Columnas que lee (fila 2 de la hoja "Servicios"):
+    //   cat_id | Categoría | Nombre del Servicio | Descripción | Precio | Precio Mín | Precio Máx | Visible
+    //
+    // ¿Qué actualiza en el HTML?
+    //   · Nombre del servicio en la tabla
+    //   · Precio (soporta "Cotizable", rangos "$X–$Y", "/mes", etc.)
+    //   · Filas con Visible = "No" se ocultan automáticamente
+    //   · Precio y nombre de paquetes en las tarjetas
+    //   · Catálogo interno del buscador modal
+    // ═══════════════════════════════════════════════════════════
+
+    function parsearCSV(text) {
+      return text.trim().split('\n').map(row => {
+        const cols = [];
+        let inQuote = false, cur = '';
+        for (let i = 0; i < row.length; i++) {
+          const c = row[i];
+          if (c === '"') { inQuote = !inQuote; }
+          else if (c === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
+          else { cur += c; }
+        }
+        cols.push(cur.trim());
+        return cols;
+      });
+    }
+
+    function renderPrecio(precio) {
+      if (!precio) return '';
+      const p = precio.toLowerCase().trim();
+      if (p === 'cotizable' || p === 'a cotizar') return '<span class="precio-pres">Cotizable</span>';
+      return precio;
+    }
+
     async function sincronizarDesdeSheets() {
       const btn    = document.getElementById('btn-sync-sheets');
       const status = document.getElementById('sync-status');
 
       if (!GOOGLE_SHEET_ID || GOOGLE_SHEET_ID === 'TU_SHEET_ID_AQUI') {
-        status.textContent = '⚠️ Configura el GOOGLE_SHEET_ID en el script primero.';
+        status.textContent = '⚠️ Agrega tu GOOGLE_SHEET_ID en el script para activar la sincronización.';
         status.style.color = '#f0a060';
         return;
       }
@@ -1221,91 +1261,120 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
       status.textContent = '';
 
-      // URL pública CSV de la hoja "servicios"
-      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=servicios`;
+      // URL pública CSV — funciona sin API key mientras el Sheet sea "Viewer público"
+      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Servicios`;
 
       try {
         const resp = await fetch(url);
-        if (!resp.ok) throw new Error('No se pudo acceder al Google Sheet');
+        if (!resp.ok) throw new Error('No se pudo leer el Google Sheet. ¿Está compartido como público?');
         const text = await resp.text();
+        const rows = parsearCSV(text);
 
-        // Parsear CSV simple (sin librerías)
-        const rows = text.trim().split('\n').map(row =>
-          row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
-             .map(cell => cell.replace(/^"|"$/g, '').trim())
-        );
+        // Detectar índices de columna por nombre (fila 2 = headers reales)
+        // Fila 1 es el título decorativo, fila 2 son los headers
+        const headerRow = rows.find(r => r[0] && r[0].toLowerCase().includes('cat_id'));
+        if (!headerRow) throw new Error('No encontré la fila de encabezados en la hoja "Servicios".');
 
-        // Encabezado: cat_id, Categoría, Nombre, Descripción, Precio, PrecioMín, PrecioMáx, Visible
-        const headers = rows[0].map(h => h.toLowerCase().replace(/\s+/g,'_'));
-        const ciCatId  = headers.findIndex(h => h.includes('cat_id'));
-        const ciNombre = headers.findIndex(h => h.includes('nombre'));
-        const ciPrecio = headers.findIndex(h => h === 'precio');
-        const ciVisible= headers.findIndex(h => h.includes('visible'));
+        const h = headerRow.map(c => c.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'_'));
+        const ci = {
+          cat:     h.findIndex(c => c.includes('cat_id')),
+          nombre:  h.findIndex(c => c.includes('nombre')),
+          desc:    h.findIndex(c => c.includes('descrip')),
+          precio:  h.findIndex(c => c === 'precio'),
+          visible: h.findIndex(c => c.includes('visible')),
+        };
 
-        if (ciNombre === -1 || ciPrecio === -1) {
-          throw new Error('No encontré columnas Nombre/Precio en la hoja "servicios"');
+        if (ci.nombre === -1 || ci.precio === -1) {
+          throw new Error('No encontré columnas "Nombre del Servicio" / "Precio" en la hoja.');
         }
 
-        // Construir mapa nombre → precio desde el sheet
-        const mapa = {};
-        rows.slice(1).forEach(r => {
-          if (!r[ciNombre] || !r[ciPrecio]) return;
-          const visible = ciVisible >= 0 ? r[ciVisible].toLowerCase() : 'sí';
-          if (visible === 'no') return;
-          mapa[r[ciNombre].trim()] = r[ciPrecio].trim();
+        // ── Construir mapa: nombre_normalizado → { precio, desc, visible } ──
+        const headerIdx = rows.indexOf(headerRow);
+        const mapa = {}; // clave: nombre en minúsculas sin acentos
+        rows.slice(headerIdx + 1).forEach(r => {
+          const nombre = r[ci.nombre]?.trim();
+          if (!nombre) return;
+          const visible = ci.visible >= 0 ? r[ci.visible]?.toLowerCase().trim() : 'sí';
+          const key = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+          mapa[key] = {
+            nombre,
+            precio:  r[ci.precio]?.trim() || '',
+            desc:    ci.desc >= 0 ? r[ci.desc]?.trim() : '',
+            visible: visible !== 'no',
+            original: nombre,
+          };
         });
 
-        // Actualizar precios en la tabla HTML
+        function buscarEnMapa(textoHTML) {
+          const texto = textoHTML.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+          // 1. Coincidencia exacta
+          if (mapa[texto]) return mapa[texto];
+          // 2. El nombre del Sheet empieza igual (primeros 20 chars)
+          const found = Object.values(mapa).find(v => {
+            const k = v.original.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+            return k === texto || texto.startsWith(k.substring(0, 20)) || k.startsWith(texto.substring(0, 20));
+          });
+          return found || null;
+        }
+
+        // ── Actualizar filas de tabla ──────────────────────────
         let actualizados = 0;
-        document.querySelectorAll('.td-servicio').forEach(tdNombre => {
-          const nombre = tdNombre.textContent.trim();
-          // Buscar coincidencia parcial
-          const key = Object.keys(mapa).find(k =>
-            k.toLowerCase() === nombre.toLowerCase() ||
-            nombre.toLowerCase().includes(k.toLowerCase().substring(0,15))
-          );
-          if (key && mapa[key]) {
-            const tdPrecio = tdNombre.nextElementSibling;
-            if (tdPrecio && tdPrecio.classList.contains('td-precio')) {
-              // Preservar el span .precio-pres si existe, sino texto simple
-              if (mapa[key].toLowerCase() === 'cotizable') {
-                tdPrecio.innerHTML = '<span class="precio-pres">Cotizable</span>';
-              } else {
-                tdPrecio.textContent = mapa[key];
-              }
-              actualizados++;
-            }
-          }
+        document.querySelectorAll('tbody tr').forEach(tr => {
+          const tdNombre = tr.querySelector('.td-servicio');
+          const tdPrecio = tr.querySelector('.td-precio');
+          if (!tdNombre || !tdPrecio) return;
+
+          const data = buscarEnMapa(tdNombre.textContent);
+          if (!data) return;
+
+          // Visibilidad
+          tr.style.display = data.visible ? '' : 'none';
+          if (!data.visible) return;
+
+          // Nombre
+          if (data.nombre) tdNombre.textContent = data.nombre;
+
+          // Precio
+          if (data.precio) tdPrecio.innerHTML = renderPrecio(data.precio);
+
+          actualizados++;
         });
 
-        // Actualizar también el CATÁLOGO interno (buscador modal)
-        CATALOGO.forEach(item => {
-          const key = Object.keys(mapa).find(k =>
-            k.toLowerCase() === item.nombre.toLowerCase()
-          );
-          if (key) item.precio = mapa[key];
-        });
-
-        // Actualizar precios en paquetes (cards)
-        document.querySelectorAll('.paquete-precio').forEach(el => {
-          const card = el.closest('.paquete-card');
-          if (!card) return;
+        // ── Actualizar tarjetas de paquetes ────────────────────
+        document.querySelectorAll('.paquete-card').forEach(card => {
           const nombreEl = card.querySelector('.paquete-nombre');
+          const precioEl = card.querySelector('.paquete-precio');
+          const descEl   = card.querySelector('.paquete-desc');
           if (!nombreEl) return;
-          const nombreCard = nombreEl.textContent.trim();
-          const key = Object.keys(mapa).find(k => nombreCard.includes(k.substring(0,10)));
-          if (key && mapa[key]) {
-            const precio = mapa[key].replace('/mes','');
-            el.innerHTML = `${precio}<sub>/mes</sub>`;
+
+          const data = buscarEnMapa(nombreEl.textContent);
+          if (!data) return;
+
+          if (!data.visible) { card.style.display = 'none'; return; }
+          card.style.display = '';
+
+          if (precioEl && data.precio) {
+            const p = data.precio.replace('/mes','').trim();
+            const esCotizable = p.toLowerCase() === 'cotizable' || p.toLowerCase() === 'a cotizar';
+            precioEl.innerHTML = esCotizable
+              ? 'A cotizar'
+              : `${p}<sub>/mes</sub>`;
+          }
+          if (descEl && data.desc) descEl.textContent = data.desc;
+        });
+
+        // ── Actualizar CATÁLOGO interno (buscador modal) ───────
+        CATALOGO.forEach(item => {
+          const data = buscarEnMapa(item.nombre);
+          if (data) {
+            item.precio = data.precio || item.precio;
+            item.nombre = data.nombre || item.nombre;
           }
         });
 
         const ts = new Date().toLocaleTimeString('es-MX');
-        status.textContent = `✅ ${actualizados} precios actualizados · ${ts}`;
+        status.textContent = `✅ ${actualizados} servicios sincronizados · ${ts}`;
         status.style.color = '#70DDD8';
-
-        // Guardar timestamp en localStorage para referencia
-        try { localStorage.setItem('lastSync', new Date().toISOString()); } catch(e){}
 
       } catch(err) {
         console.error('Sync error:', err);
@@ -1317,7 +1386,7 @@
       }
     }
 
-    // Auto-intentar sync al cargar (silencioso si no hay SHEET_ID)
+    // Auto-sincronizar al cargar la página si el SHEET_ID ya está configurado
     window.addEventListener('load', () => {
       if (GOOGLE_SHEET_ID && GOOGLE_SHEET_ID !== 'TU_SHEET_ID_AQUI') {
         sincronizarDesdeSheets();
