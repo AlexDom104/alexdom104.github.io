@@ -254,8 +254,93 @@
       display: inline-flex; align-items: center; gap: 6px;
       background: rgba(112,221,216,0.1); color: var(--cian-brillo);
       border: 1px solid rgba(112,221,216,0.25); border-radius: 6px;
-      padding: 6px 12px; font-size: 0.8rem; margin-bottom: 16px;
+      padding: 6px 12px; font-size: 0.8rem; margin: 0 6px 8px 0;
     }
+    .servicio-badge .badge-remove {
+      background: none; border: none; color: rgba(112,221,216,0.5);
+      cursor: pointer; padding: 0; font-size: 0.8rem; line-height: 1;
+      transition: color 0.2s; margin-left: 2px;
+    }
+    .servicio-badge .badge-remove:hover { color: var(--rosa-principal); }
+
+    /* ── Botón agregar servicio ── */
+    .btn-add-service {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: none; border: 1.5px dashed #333; color: #666;
+      border-radius: 6px; padding: 6px 14px; font-size: 0.8rem;
+      cursor: pointer; transition: 0.2s; margin-bottom: 8px;
+    }
+    .btn-add-service:hover { border-color: var(--cian-brillo); color: var(--cian-brillo); }
+
+    /* ── Panel de búsqueda de servicios ── */
+    .service-search-panel {
+      display: none; position: fixed; inset: 0; z-index: 1100;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .service-search-panel.visible { display: flex; }
+    .service-search-box {
+      background: #1c1c1c; border: 1.5px solid #333; border-radius: 14px;
+      width: 100%; max-width: 480px; overflow: hidden;
+      animation: modalIn 0.2s ease;
+    }
+    .service-search-header {
+      padding: 16px 20px; border-bottom: 1px solid #2a2a2a;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .service-search-header input {
+      flex: 1; background: #111; border: 1.5px solid #2a2a2a;
+      color: #fff; border-radius: 8px; padding: 9px 14px;
+      font-size: 0.87rem; outline: none; font-family: inherit;
+    }
+    .service-search-header input:focus { border-color: var(--cian-brillo); }
+    .service-search-header button {
+      background: none; border: none; color: #666; cursor: pointer;
+      font-size: 1rem; padding: 4px 8px; transition: color 0.2s; flex-shrink: 0;
+    }
+    .service-search-header button:hover { color: var(--rosa-principal); }
+    .service-search-list {
+      max-height: 360px; overflow-y: auto; padding: 8px 0;
+      scrollbar-width: thin; scrollbar-color: #333 transparent;
+    }
+    .service-search-list::-webkit-scrollbar { width: 5px; }
+    .service-search-list::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    .service-search-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 20px; cursor: pointer; transition: background 0.15s;
+      font-size: 0.84rem; color: #ccc;
+    }
+    .service-search-item:hover { background: rgba(112,221,216,0.07); color: #fff; }
+    .service-search-item.selected { color: var(--cian-brillo); }
+    .service-search-item .ssi-check {
+      width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
+      border: 1.5px solid #333; display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; transition: 0.2s;
+    }
+    .service-search-item.selected .ssi-check {
+      background: var(--cian-brillo); border-color: var(--cian-brillo); color: #111;
+    }
+    .service-search-item .ssi-price {
+      margin-left: auto; font-size: 0.75rem; color: #555; white-space: nowrap; flex-shrink: 0;
+    }
+    .service-search-item.selected .ssi-price { color: var(--cian-brillo); }
+    .service-search-cat {
+      padding: 10px 20px 4px; font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 1.5px; color: #444; font-weight: bold;
+    }
+    .service-search-empty { padding: 24px; text-align: center; color: #555; font-size: 0.84rem; }
+    .service-search-footer {
+      padding: 12px 20px; border-top: 1px solid #2a2a2a;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .service-search-footer span { font-size: 0.78rem; color: #666; }
+    .service-search-footer span strong { color: var(--cian-brillo); }
+    .btn-confirm-services {
+      background: var(--rosa-principal); color: #fff; border: none;
+      border-radius: 8px; padding: 9px 20px; font-size: 0.85rem;
+      font-weight: bold; cursor: pointer; transition: 0.2s;
+    }
+    .btn-confirm-services:hover { background: var(--rosa-oscuro); }
   </style>
 </head>
 <body>
@@ -686,7 +771,16 @@
         <button class="modal-close" onclick="cerrarModal()"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body" id="modal-body-content">
-        <div id="servicio-badge-wrap"></div>
+
+        <!-- Servicios seleccionados -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:0.76rem;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Servicio(s) de interés</div>
+          <div id="servicio-badge-wrap" style="display:flex;flex-wrap:wrap;gap:0;min-height:8px;"></div>
+          <button class="btn-add-service" id="btn-add-service" onclick="abrirBuscadorServicios()">
+            <i class="fas fa-plus"></i> Seleccionar servicio
+          </button>
+          <div style="font-size:0.72rem;color:#555;margin-top:2px;" id="servicios-hint"></div>
+        </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -709,11 +803,6 @@
           <input type="email" id="f-correo" placeholder="tu@correo.com" autocomplete="email">
         </div>
 
-        <div class="form-group" id="servicio-group">
-          <label>Servicio de interés</label>
-          <input type="text" id="f-servicio" placeholder="¿En qué puedo ayudarte?">
-        </div>
-
         <div class="form-group">
           <label>Mensaje <span style="color:#555; font-size:0.9em;">(opcional)</span></label>
           <textarea id="f-mensaje" placeholder="Cuéntame brevemente sobre tu proyecto o cualquier detalle adicional..."></textarea>
@@ -728,39 +817,125 @@
     </div>
   </div>
 
+  <!-- ══ PANEL BUSCADOR DE SERVICIOS ══ -->
+  <div class="service-search-panel" id="service-search-panel" onclick="cerrarBuscadorOverlay(event)">
+    <div class="service-search-box">
+      <div class="service-search-header">
+        <i class="fas fa-search" style="color:#555;flex-shrink:0;"></i>
+        <input type="text" id="service-search-input" placeholder="Buscar servicio..." oninput="filtrarServicios()" autocomplete="off">
+        <button onclick="cerrarBuscador()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="service-search-list" id="service-search-list"></div>
+      <div class="service-search-footer">
+        <span>Seleccionados: <strong id="search-count">0</strong> / 10</span>
+        <button class="btn-confirm-services" onclick="confirmarServicios()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ══ CONFIGURACIÓN ══════════════════════════════════════════
-    // 1. Apps Script → guarda en Google Sheets (pestaña "Datos")
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxb0O6xlOiNKAtS84tL6EORHeWHQWmIkBDYhdADlYiUyvutGPf6xZ_b7sO-qKhZdIzkmA/exec'; // ← reemplazar
-
-    // 2. EmailJS → envía el correo desde tu Outlook
-    const EMAILJS_PUBLIC_KEY  = 'OycohWyqCo97LPgia';   // ← reemplazar
-    const EMAILJS_SERVICE_ID  = 'service_9zlhqd8';   // ← reemplazar
-    const EMAILJS_TEMPLATE_ID = 'template_xeougpd';  // ← reemplazar
+    const APPS_SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbxb0O6xlOiNKAtS84tL6EORHeWHQWmIkBDYhdADlYiUyvutGPf6xZ_b7sO-qKhZdIzkmA/exec';
+    const EMAILJS_PUBLIC_KEY  = 'OycohWyqCo97LPgia';
+    const EMAILJS_SERVICE_ID  = 'service_9zlhqd8';
+    const EMAILJS_TEMPLATE_ID = 'template_xeougpd';
     // ═══════════════════════════════════════════════════════════
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    // ── Modal ──
+    // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
+    const CATALOGO = [
+      { cat: '📣 Community Manager', nombre: 'Community Manager – Administración en Redes Sociales', precio: 'Cotizable' },
+      { cat: '📣 Community Manager', nombre: 'Manejo de Publicidad (Meta Ads)', precio: 'Cotizable' },
+      { cat: '📣 Community Manager', nombre: 'Gestión de Anuncios en Meta (Campaña puntual)', precio: '$2,500/mes' },
+      { cat: '📣 Community Manager', nombre: 'Auditoría de Business Manager', precio: '$800' },
+      { cat: '📣 Community Manager', nombre: 'Consultoría Administrativa de Marketing', precio: '$1,500' },
+      { cat: '📣 Community Manager', nombre: 'Asesoría de Marketing (sesión 60–90 min)', precio: '$700' },
+      { cat: '📣 Community Manager', nombre: 'Plan de Mercadotecnia', precio: '$2,500' },
+      { cat: '📣 Community Manager', nombre: 'Plan de Social Media Marketing', precio: '$2,000' },
+      { cat: '📣 Community Manager', nombre: 'Investigación de Mercados / Encuestas', precio: 'Cotizable' },
+      { cat: '🚀 Paquetes Mensuales', nombre: '🚀 Despegue — Starter', precio: '$1,800/mes' },
+      { cat: '🚀 Paquetes Mensuales', nombre: '📡 Arranque Digital — Básico', precio: '$3,200/mes' },
+      { cat: '🚀 Paquetes Mensuales', nombre: '🔥 Señal Fuerte — Intermedio ⭐', precio: '$6,500/mes' },
+      { cat: '🚀 Paquetes Mensuales', nombre: '🏆 Dominio Total — Profesional', precio: '$11,000/mes' },
+      { cat: '🚀 Paquetes Mensuales', nombre: '👑 Imperio Digital — Enterprise', precio: 'A cotizar' },
+      { cat: '🎨 Logotipos', nombre: 'Creación de logotipo', precio: '$700' },
+      { cat: '🎨 Logotipos', nombre: 'Rediseño de logotipo', precio: '$500' },
+      { cat: '🎨 Logotipos', nombre: 'Vectorización de logotipo', precio: '$280' },
+      { cat: '🎨 Logotipos', nombre: 'Cambio de formato de logotipo', precio: '$150' },
+      { cat: '🎨 Logotipos', nombre: 'Manual de identidad corporativa', precio: 'Cotizable' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Tarjeta de presentación (1 o 2 caras)', precio: '$90' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Tarjeta de presentación doble', precio: '$150' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Etiquetas / Minietiquetas', precio: '$110' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Invitaciones', precio: '$150' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Marcapáginas / Separador', precio: '$80' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Pegatinas / Calcomanías', precio: '$120' },
+      { cat: '🖨️ Impresos Pequeños', nombre: 'Tickets / Notas', precio: '$110' },
+      { cat: '📰 Folletos y Flyers', nombre: 'Flyer para redes sociales', precio: '$180' },
+      { cat: '📰 Folletos y Flyers', nombre: 'Folleto', precio: '$220' },
+      { cat: '📰 Folletos y Flyers', nombre: 'Díptico', precio: '$280' },
+      { cat: '📰 Folletos y Flyers', nombre: 'Tríptico', precio: '$320' },
+      { cat: '📰 Folletos y Flyers', nombre: 'Cuadríptico', precio: '$380' },
+      { cat: '📰 Folletos y Flyers', nombre: 'Políptico (5+ partes)', precio: '$450' },
+      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner hasta 99 cm', precio: '$170' },
+      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 100–199 cm', precio: '$210' },
+      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 200–399 cm', precio: '$260' },
+      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 400–599 cm', precio: '$310' },
+      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 600+ cm', precio: '$370+' },
+      { cat: '📄 Papelería Corporativa', nombre: 'Carpeta corporativa', precio: '$150' },
+      { cat: '📄 Papelería Corporativa', nombre: 'Membrete tamaño Carta', precio: '$150' },
+      { cat: '📄 Papelería Corporativa', nombre: 'Membrete tamaño Oficio', precio: '$180' },
+      { cat: '📄 Papelería Corporativa', nombre: 'Talonarios (10 a 30 caras)', precio: '$160' },
+      { cat: '📄 Papelería Corporativa', nombre: 'Sellos', precio: '$150' },
+      { cat: '📄 Papelería Corporativa', nombre: 'Albaranes y facturas', precio: '$90' },
+      { cat: '📅 Calendarios', nombre: 'Calendario de bolsillo (1 o 2 caras)', precio: '$70' },
+      { cat: '📅 Calendarios', nombre: 'Calendario de bolsillo (4 caras)', precio: '$90' },
+      { cat: '📅 Calendarios', nombre: 'Calendario Sobremesa (1 o 2 caras)', precio: '$160' },
+      { cat: '📅 Calendarios', nombre: 'Calendario Sobremesa (12 o 13 caras)', precio: '$320' },
+      { cat: '📅 Calendarios', nombre: 'Calendario De Pared (1 cara)', precio: '$160' },
+      { cat: '📅 Calendarios', nombre: 'Calendario De Pared (12 a 13 caras)', precio: '$320' },
+      { cat: '💻 Presentaciones', nombre: 'Presentación: 1 Diapositiva', precio: '$50' },
+      { cat: '💻 Presentaciones', nombre: 'Presentación: 5 Diapositivas', precio: '$200' },
+      { cat: '💻 Presentaciones', nombre: 'Presentación: 10 Diapositivas', precio: '$300' },
+      { cat: '💻 Presentaciones', nombre: 'Presentación: 20 Diapositivas', precio: '$400' },
+      { cat: '💻 Presentaciones', nombre: 'Catálogo PDF', precio: 'Cotizable' },
+      { cat: '💻 Presentaciones', nombre: 'Revista o libro digital', precio: 'Cotizable' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Recorte a PNG (fondo transparente)', precio: '$120' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Reparación fotográfica', precio: '$250' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Edición fotográfica', precio: '$320' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Caricaturización de imagen', precio: '$120' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Producción de video', precio: '$350' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Edición de video – Formato corto (Reels/TikTok)', precio: '$250' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Edición de video – Formato largo (YouTube)', precio: '$500–$900' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Imágenes generadas por IA (lote)', precio: '$350–$600' },
+      { cat: '🎬 Producción Audiovisual', nombre: 'Canciones / Jingles por IA', precio: '$300–$500' },
+      { cat: '⚙️ Automatización y CRM', nombre: 'Implementación y configuración de Bitrix24', precio: '$3,500–$7,000' },
+      { cat: '⚙️ Automatización y CRM', nombre: 'Dashboard dinámico en Google Sheets', precio: '$2,000–$4,500' },
+      { cat: '⚙️ Automatización y CRM', nombre: 'Script de automatización (Python / Apps Script)', precio: '$1,200–$3,000' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Landing Page / Widget / Herramienta Web', precio: '$1,500–$4,000' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Creación y mantenimiento de página web', precio: 'Cotizable' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Creación de servidor de Discord', precio: '$280' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Asesoría para buscar / seleccionar software', precio: '$150' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Instalación de programa (presencial)', precio: '$250' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Asistencia remota en instalación de programa', precio: '$180' },
+      { cat: '🌐 Desarrollo Web', nombre: 'Asistencia técnica general', precio: '$150' },
+      { cat: '🎙️ Streaming y Setup', nombre: 'Configuración Pro en OBS Studio', precio: '$1,500–$2,500' },
+      { cat: '🎙️ Streaming y Setup', nombre: 'Pack de Overlays y Escenas (8+ escenas)', precio: '$1,200' },
+      { cat: '📚 Servicios Escolares', nombre: 'Resumen académico', precio: '$50/cuartilla' },
+      { cat: '📚 Servicios Escolares', nombre: 'Ensayo académico', precio: '$50/cuartilla' },
+      { cat: '📚 Servicios Escolares', nombre: 'Investigación académica', precio: '$100/cuartilla' },
+    ];
+
+    // ══ ESTADO ══════════════════════════════════════════════════
+    let serviciosSeleccionados = []; // array de strings
+
+    // ══ MODAL ═══════════════════════════════════════════════════
     function abrirModal(servicio) {
-      const overlay       = document.getElementById('modal-overlay');
-      const badgeWrap     = document.getElementById('servicio-badge-wrap');
-      const servicioInput = document.getElementById('f-servicio');
-      const servicioGroup = document.getElementById('servicio-group');
-
-      if (servicio) {
-        badgeWrap.innerHTML = `<div class="servicio-badge"><i class="fas fa-tag"></i>${servicio}</div>`;
-        servicioInput.value = servicio;
-        servicioGroup.style.display = 'none';
-      } else {
-        badgeWrap.innerHTML = '';
-        servicioInput.value = '';
-        servicioGroup.style.display = 'block';
-      }
-
+      serviciosSeleccionados = servicio ? [servicio] : [];
+      renderBadges();
       document.getElementById('form-msg').className = 'form-msg';
       document.getElementById('form-msg').textContent = '';
-      overlay.classList.add('visible');
+      document.getElementById('modal-overlay').classList.add('visible');
       document.body.style.overflow = 'hidden';
       setTimeout(() => document.getElementById('f-nombre').focus(), 100);
     }
@@ -774,15 +949,121 @@
       if (e.target === document.getElementById('modal-overlay')) cerrarModal();
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('service-search-panel').classList.contains('visible')) {
+          cerrarBuscador();
+        } else {
+          cerrarModal();
+        }
+      }
+    });
 
-    // ── Envío ──
+    // ── Renderiza los badges de servicios seleccionados ──
+    function renderBadges() {
+      const wrap = document.getElementById('servicio-badge-wrap');
+      const btn  = document.getElementById('btn-add-service');
+      const hint = document.getElementById('servicios-hint');
+
+      wrap.innerHTML = serviciosSeleccionados.map((s, i) => `
+        <div class="servicio-badge">
+          <i class="fas fa-tag"></i>
+          <span>${s}</span>
+          <button class="badge-remove" onclick="quitarServicio(${i})" title="Quitar">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `).join('');
+
+      const n = serviciosSeleccionados.length;
+      btn.innerHTML = `<i class="fas fa-plus"></i> ${n === 0 ? 'Seleccionar servicio' : 'Agregar otro servicio'}`;
+      btn.style.display = n >= 10 ? 'none' : 'inline-flex';
+      hint.textContent  = n >= 10 ? 'Máximo 10 servicios por solicitud.' : '';
+    }
+
+    function quitarServicio(i) {
+      serviciosSeleccionados.splice(i, 1);
+      renderBadges();
+    }
+
+    // ══ BUSCADOR DE SERVICIOS ════════════════════════════════════
+    function abrirBuscadorServicios() {
+      document.getElementById('service-search-input').value = '';
+      renderListaServicios('');
+      document.getElementById('service-search-panel').classList.add('visible');
+      setTimeout(() => document.getElementById('service-search-input').focus(), 100);
+    }
+
+    function cerrarBuscador() {
+      document.getElementById('service-search-panel').classList.remove('visible');
+    }
+
+    function cerrarBuscadorOverlay(e) {
+      if (e.target === document.getElementById('service-search-panel')) cerrarBuscador();
+    }
+
+    function filtrarServicios() {
+      const q = document.getElementById('service-search-input').value;
+      renderListaServicios(q);
+    }
+
+    function renderListaServicios(query) {
+      const list = document.getElementById('service-search-list');
+      const q = query.toLowerCase().trim();
+      const filtrados = q ? CATALOGO.filter(s => s.nombre.toLowerCase().includes(q) || s.cat.toLowerCase().includes(q)) : CATALOGO;
+
+      if (!filtrados.length) {
+        list.innerHTML = `<div class="service-search-empty"><i class="fas fa-search" style="margin-right:6px;"></i>Sin resultados para "${query}"</div>`;
+        return;
+      }
+
+      let html = '';
+      let lastCat = null;
+      filtrados.forEach(s => {
+        if (!q && s.cat !== lastCat) {
+          html += `<div class="service-search-cat">${s.cat}</div>`;
+          lastCat = s.cat;
+        }
+        const sel = serviciosSeleccionados.includes(s.nombre);
+        const disabled = !sel && serviciosSeleccionados.length >= 10;
+        html += `
+          <div class="service-search-item ${sel ? 'selected' : ''} ${disabled ? 'style="opacity:0.4;pointer-events:none;"' : ''}"
+               onclick="toggleServicio('${s.nombre.replace(/'/g, "\\'")}')">
+            <div class="ssi-check">${sel ? '<i class="fas fa-check"></i>' : ''}</div>
+            <span>${s.nombre}</span>
+            <span class="ssi-price">${s.precio}</span>
+          </div>`;
+      });
+      list.innerHTML = html;
+      actualizarContador();
+    }
+
+    function toggleServicio(nombre) {
+      const idx = serviciosSeleccionados.indexOf(nombre);
+      if (idx >= 0) {
+        serviciosSeleccionados.splice(idx, 1);
+      } else if (serviciosSeleccionados.length < 10) {
+        serviciosSeleccionados.push(nombre);
+      }
+      actualizarContador();
+      renderListaServicios(document.getElementById('service-search-input').value);
+    }
+
+    function actualizarContador() {
+      document.getElementById('search-count').textContent = serviciosSeleccionados.length;
+    }
+
+    function confirmarServicios() {
+      cerrarBuscador();
+      renderBadges();
+    }
+
+    // ══ ENVÍO ════════════════════════════════════════════════════
     async function enviarFormulario() {
       const nombre   = document.getElementById('f-nombre').value.trim();
       const apellido = document.getElementById('f-apellido').value.trim();
       const telefono = document.getElementById('f-telefono').value.trim();
       const correo   = document.getElementById('f-correo').value.trim();
-      const servicio = document.getElementById('f-servicio').value.trim();
       const mensaje  = document.getElementById('f-mensaje').value.trim();
       const msg = document.getElementById('form-msg');
       const btn = document.getElementById('btn-enviar');
@@ -797,19 +1078,112 @@
         msg.textContent = 'El correo no parece válido.';
         return;
       }
+      if (serviciosSeleccionados.length === 0) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'Selecciona al menos un servicio de interés.';
+        return;
+      }
 
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
       msg.className = 'form-msg';
 
+      const nombreCompleto = nombre + (apellido ? ' ' + apellido : '');
+      const servicioTexto  = serviciosSeleccionados.join('\n• ');
+      const servicioLista  = serviciosSeleccionados.map(s => `• ${s}`).join('\n');
+      const fecha = new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' });
+
       const datos = {
-        nombre:   nombre + (apellido ? ' ' + apellido : ''),
+        nombre:   nombreCompleto,
         telefono,
         correo,
-        servicio: servicio || 'No especificado',
-        mensaje:  mensaje  || '—',
-        fecha:    new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' })
+        servicio: serviciosSeleccionados.join(' | '),
+        mensaje:  mensaje || '—',
+        fecha
       };
+
+      // HTML bonito para el correo
+      const serviciosHTML = serviciosSeleccionados.map(s =>
+        `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;">
+          <i style="color:#70DDD8;">●</i> ${s}
+        </td></tr>`
+      ).join('');
+
+      const html_body = `
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;">
+  <tr><td align="center">
+    <table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
+
+      <!-- Header -->
+      <tr><td style="background:linear-gradient(135deg,#A64062,#EF5085);padding:28px 32px;">
+        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
+        <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Nueva Solicitud</div>
+        <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🔔 Cotización Recibida</div>
+      </td></tr>
+
+      <!-- Cliente -->
+      <tr><td style="padding:28px 32px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Datos del cliente</div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;">
+          <tr style="background:#111;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td>
+            <td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombreCompleto}</td>
+          </tr>
+          <tr style="background:#161616;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td>
+            <td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td>
+          </tr>
+          <tr style="background:#111;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td>
+            <td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td>
+          </tr>
+          <tr style="background:#161616;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td>
+            <td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <!-- Servicios -->
+      <tr><td style="padding:24px 32px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">
+          Servicio(s) solicitado(s) <span style="background:rgba(112,221,216,0.15);color:#70DDD8;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${serviciosSeleccionados.length}</span>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
+          ${serviciosHTML}
+        </table>
+      </td></tr>
+
+      <!-- Mensaje -->
+      ${mensaje ? `
+      <tr><td style="padding:24px 32px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:10px;">Mensaje</div>
+        <div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div>
+      </td></tr>` : ''}
+
+      <!-- CTA -->
+      <tr><td style="padding:28px 32px;">
+        <table cellpadding="0" cellspacing="0">
+          <tr><td style="background:#EF5085;border-radius:8px;">
+            <a href="mailto:${correo}" style="display:inline-block;padding:12px 24px;color:#fff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.4px;">
+              ✉️ Responder a ${nombre}
+            </a>
+          </td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#555;">Al responder este correo, tu mensaje irá directo a ${correo}</div>
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="background:#111;padding:16px 32px;border-top:1px solid #222;text-align:center;">
+        <div style="font-size:11px;color:#444;">AlexDom104 · alexis_enrique97@outlook.com · linktr.ee/alexdom104</div>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
 
       let sheetOk = false, emailOk = false;
 
@@ -824,16 +1198,17 @@
         sheetOk = true;
       } catch (e) { console.warn('Sheets error:', e); }
 
-      // 2 ── Enviar correo vía EmailJS (Outlook)
+      // 2 ── Enviar correo vía EmailJS
       try {
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          from_name:  datos.nombre,
+          from_name:  nombreCompleto,
           from_email: correo,
-          telefono:   telefono,
-          servicio:   datos.servicio,
-          mensaje:    datos.mensaje,
-          fecha:      datos.fecha,
-          reply_to:   correo
+          telefono,
+          servicio:   servicioLista,
+          mensaje:    mensaje || '—',
+          fecha,
+          reply_to:   correo,
+          html_body
         });
         emailOk = true;
       } catch (e) { console.warn('EmailJS error:', e); }
@@ -845,8 +1220,10 @@
         msg.className = 'form-msg ok';
         msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
         setTimeout(() => {
-          ['f-nombre','f-apellido','f-telefono','f-correo','f-servicio','f-mensaje']
-            .forEach(id => { document.getElementById(id).value = ''; });
+          ['f-nombre','f-apellido','f-telefono','f-correo','f-mensaje'].forEach(id => {
+            document.getElementById(id).value = '';
+          });
+          serviciosSeleccionados = [];
           cerrarModal();
         }, 3000);
       } else {
@@ -855,7 +1232,7 @@
       }
     }
 
-    // ── Carrusel ──
+    // ══ CARRUSEL ════════════════════════════════════════════════
     function toggleCat(block) { block.classList.toggle('open'); }
 
     const carousel = document.getElementById('paquetes-carousel');
