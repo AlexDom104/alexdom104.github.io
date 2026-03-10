@@ -1812,7 +1812,7 @@
           imgs.forEach((img, i) => {
             const thumb = document.createElement('div');
             thumb.className = 'ej-thumb';
-            thumb.onclick = () => abrirLightbox(imgs, i);
+            thumb.onclick = (e) => { e.stopPropagation(); abrirLightbox(imgs, i); };
             thumb.innerHTML = `
               <img src="${img.url}" alt="${img.cap || ''}" loading="lazy">
               <div class="ej-overlay"><i class="fas fa-expand-alt"></i></div>`;
