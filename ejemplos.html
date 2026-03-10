@@ -1,348 +1,492 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flyer UHA Médico</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Lato:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejemplos | AlexDom104</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <style>
+    /* ── Página de Ejemplos ── */
+    .page-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-title h1 {
+      font-size: 2.4rem;
+      color: var(--rosa-principal);
+      margin-bottom: 8px;
+    }
+    .page-title p {
+      color: var(--cian-brillo);
+      font-size: 1rem;
+    }
 
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #1a1a2e;
-    font-family: 'Lato', sans-serif;
-  }
+    /* ── Categorías (filtros) ── */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 35px;
+    }
+    .filter-btn {
+      padding: 7px 20px;
+      border-radius: 30px;
+      border: 2px solid var(--azul-boton);
+      background: var(--contraste-fondo);
+      color: #ccc;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.25s;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--rosa-principal);
+      color: var(--rosa-principal);
+    }
 
-  .flyer {
-    width: 540px;
-    height: 540px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #0a2342 0%, #1a4a7a 60%, #0d6b8c 100%);
-  }
+    /* ── Tarjeta colapsable ── */
+    .ejemplo-card {
+      background: var(--contraste-fondo);
+      border: 2px solid var(--azul-boton);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .ejemplo-card:hover { border-color: var(--rosa-oscuro); }
 
-  /* Fondo abstracto - formas geométricas sutiles */
-  .bg-circle {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.07;
-  }
-  .bg-circle-1 {
-    width: 400px; height: 400px;
-    background: white;
-    top: -100px; right: -100px;
-  }
-  .bg-circle-2 {
-    width: 250px; height: 250px;
-    background: #4fc3f7;
-    bottom: -80px; left: -60px;
-  }
+    .ejemplo-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .ejemplo-header .type-icon {
+      font-size: 1.6rem;
+      color: var(--rosa-principal);
+      min-width: 32px;
+      text-align: center;
+    }
+    .ejemplo-header .meta { flex: 1; }
+    .ejemplo-header .meta h3 {
+      font-size: 1.1rem;
+      color: var(--blanco);
+      margin-bottom: 3px;
+    }
+    .ejemplo-header .meta span {
+      font-size: 0.8rem;
+      color: #888;
+    }
+    .badge {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-imagen  { background: #1a3a55; color: var(--cian-brillo); border: 1px solid var(--cian-brillo); }
+    .badge-video   { background: #3a1530; color: var(--rosa-principal); border: 1px solid var(--rosa-principal); }
+    .badge-html    { background: #1a3a1a; color: #7ec87e; border: 1px solid #7ec87e; }
+    .badge-python  { background: #2a2a10; color: #f0d060; border: 1px solid #f0d060; }
+    .badge-drive   { background: #2a1a0a; color: #f0a060; border: 1px solid #f0a060; }
 
-  /* Franja diagonal decorativa */
-  .diagonal {
-    position: absolute;
-    width: 200%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #4fc3f7, transparent);
-    top: 42%;
-    left: -50%;
-    transform: rotate(-8deg);
-    opacity: 0.4;
-  }
+    .toggle-icon {
+      font-size: 0.9rem;
+      color: var(--cian-brillo);
+      transition: transform 0.35s;
+    }
+    .ejemplo-card.open .toggle-icon { transform: rotate(180deg); }
 
-  /* Zona de imagen placeholder */
-  .photo-zone {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 55%;
-    height: 100%;
-    background: linear-gradient(135deg, #1565c0 0%, #0288d1 50%, #26c6da 100%);
-    clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
+    /* ── Cuerpo colapsable ── */
+    .ejemplo-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.3s;
+      padding: 0 24px;
+    }
+    .ejemplo-card.open .ejemplo-body {
+      max-height: 1200px;
+      padding: 0 24px 24px;
+    }
 
-  .photo-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    opacity: 0.5;
-    margin-left: 30px;
-  }
+    /* ── Tipos de contenido ── */
 
-  .photo-placeholder svg {
-    width: 80px;
-    height: 80px;
-    fill: white;
-  }
+    /* Imagen */
+    .preview-img-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #444;
+    }
+    .preview-img-wrap img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s;
+    }
+    .preview-img-wrap:hover img { transform: scale(1.03); }
 
-  .photo-label {
-    color: white;
-    font-size: 11px;
-    text-align: center;
-    font-family: 'Lato', sans-serif;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+    /* Video */
+    .video-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #444;
+    }
+    .video-wrap iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
 
-  /* Contenido principal */
-  .content {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 58%;
-    height: 100%;
-    padding: 28px 20px 20px 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 2;
-  }
+    /* Código */
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1a1a2e;
+      padding: 8px 16px;
+      border-radius: 10px 10px 0 0;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+    .copy-btn {
+      background: none;
+      border: 1px solid #444;
+      color: #ccc;
+      padding: 3px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: 0.2s;
+    }
+    .copy-btn:hover { border-color: var(--cian-brillo); color: var(--cian-brillo); }
+    .code-wrap pre {
+      margin: 0;
+      border-radius: 0 0 10px 10px;
+      font-size: 0.85rem;
+      max-height: 500px;
+      overflow-y: auto;
+    }
 
-  .hashtag {
-    font-size: 11px;
-    color: #4fc3f7;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+    /* Google Drive embed */
+    .drive-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #444;
+    }
+    .drive-wrap iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+    }
 
-  .main-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-  }
+    /* GitHub raw embed */
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cian-brillo);
+      font-size: 0.85rem;
+      text-decoration: none;
+      margin-bottom: 12px;
+      border: 1px solid var(--cian-brillo);
+      padding: 5px 14px;
+      border-radius: 20px;
+      transition: 0.2s;
+    }
+    .github-link:hover { background: rgba(112,221,216,0.1); }
 
-  .hook {
-    font-size: 13px;
-    color: #b3e5fc;
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    line-height: 1.5;
-    font-style: italic;
-  }
+    /* Descripción */
+    .ejemplo-desc {
+      font-size: 0.9rem;
+      color: #bbb;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
 
-  .course-label {
-    font-size: 11px;
-    color: #4fc3f7;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  .title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .title-main {
-    font-size: 38px;
-    color: white;
-    display: block;
-  }
-
-  .title-accent {
-    font-size: 38px;
-    color: #4fc3f7;
-    display: block;
-  }
-
-  .subtitle {
-    font-size: 13px;
-    color: #e3f2fd;
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    letter-spacing: 1px;
-  }
-
-  .divider {
-    width: 40px;
-    height: 3px;
-    background: linear-gradient(90deg, #4fc3f7, #26c6da);
-    border-radius: 2px;
-    margin: 2px 0;
-  }
-
-  .benefits {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .benefit {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .benefit-dot {
-    width: 5px;
-    height: 5px;
-    background: #4fc3f7;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .benefit-text {
-    font-size: 10.5px;
-    color: #b3e5fc;
-    font-family: 'Lato', sans-serif;
-  }
-
-  .benefit-text strong {
-    color: white;
-  }
-
-  .bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .cta {
-    background: linear-gradient(90deg, #4fc3f7, #26c6da);
-    color: #0a2342;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 11px;
-    padding: 8px 14px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    display: inline-block;
-    width: fit-content;
-  }
-
-  .logo-area {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .logo-box {
-    background: white;
-    border-radius: 4px;
-    padding: 3px 7px;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-
-  .logo-uha {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 14px;
-    color: #0a2342;
-  }
-
-  .logo-sub {
-    font-size: 7px;
-    color: #0a2342;
-    font-family: 'Lato', sans-serif;
-    line-height: 1.2;
-  }
-
-  .social {
-    font-size: 9px;
-    color: #78909c;
-    font-family: 'Lato', sans-serif;
-  }
-
-  /* Nota de diseño */
-  .design-note {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,0.6);
-    color: #4fc3f7;
-    font-size: 10px;
-    text-align: center;
-    padding: 5px;
-    font-family: 'Lato', sans-serif;
-    z-index: 10;
-  }
-</style>
+    /* Sin resultados */
+    .no-results {
+      text-align: center;
+      color: #666;
+      padding: 40px 0;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-<div class="flyer">
-  <div class="bg-circle bg-circle-1"></div>
-  <div class="bg-circle bg-circle-2"></div>
-  <div class="diagonal"></div>
 
-  <!-- Zona de foto (reemplazar con foto real de persona en ambiente cotidiano, NO clínico artificial) -->
-  <div class="photo-zone">
-    <div class="photo-placeholder">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-      </svg>
-      <span class="photo-label">📸 Foto real aquí<br>persona en consultorio<br>o estudiando online</span>
-    </div>
-  </div>
+  <header>
+    <a href="sobremi.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver</a>
+    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
+  </header>
 
-  <!-- Contenido -->
-  <div class="content">
-    <div class="hashtag">#UHAOnline</div>
-
-    <div class="main-text">
-      <p class="hook">¿Siempre quisiste trabajar<br>en el área de la salud?</p>
-      <div class="course-label">Curso</div>
-      <div class="title">
-        <span class="title-main">Asistente</span>
-        <span class="title-accent">Médico</span>
-      </div>
-      <p class="subtitle">en español</p>
-      <div class="divider"></div>
-
-      <div class="benefits">
-        <div class="benefit">
-          <div class="benefit-dot"></div>
-          <span class="benefit-text"><strong>100% online</strong> · a tu ritmo</span>
-        </div>
-        <div class="benefit">
-          <div class="benefit-dot"></div>
-          <span class="benefit-text"><strong>Prácticas presenciales</strong></span>
-        </div>
-        <div class="benefit">
-          <div class="benefit-dot"></div>
-          <span class="benefit-text"><strong>Profesores hispanohablantes</strong></span>
-        </div>
-        <div class="benefit">
-          <div class="benefit-dot"></div>
-          <span class="benefit-text"><strong>Certificación ICOES & BBB</strong></span>
-        </div>
-      </div>
+  <main>
+    <div class="page-title">
+      <h1><i class="fas fa-folder-open" style="font-size:1.8rem; margin-right:10px;"></i>Ejemplos de Trabajo</h1>
+      <p>Portafolio interactivo · imágenes, videos, código y documentos</p>
     </div>
 
-    <div class="bottom">
-      <div class="cta">¡Regístrate sin compromiso!</div>
-      <div class="logo-area">
-        <div class="logo-box">
-          <span class="logo-uha">UHA</span>
-          <span class="logo-sub">Educación<br>Online</span>
-        </div>
-        <span class="social">@uhaonline · @uha.online</span>
-      </div>
+    <!-- Filtros -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="imagen">Imágenes</button>
+      <button class="filter-btn" data-filter="video">Videos</button>
+      <button class="filter-btn" data-filter="html">HTML</button>
+      <button class="filter-btn" data-filter="python">Python</button>
+      <button class="filter-btn" data-filter="drive">Drive / Docs</button>
     </div>
-  </div>
 
-  <div class="design-note">💡 Reemplazar zona derecha con foto real (persona natural, no IA)</div>
-</div>
+    <div id="ejemplos-list">
+
+      <!-- ═══════════════════════════════════════════
+           EJEMPLO 1 · IMAGEN
+           Cambia el src por tu URL real de Imgur / Drive
+      ═══════════════════════════════════════════ -->
+      <div class="ejemplo-card" data-type="imagen">
+        <div class="ejemplo-header" onclick="toggleCard(this)">
+          <i class="fas fa-image type-icon"></i>
+          <div class="meta">
+            <h3>Diseño de Banner para Redes Sociales</h3>
+            <span>Photoshop · Illustrator</span>
+          </div>
+          <span class="badge badge-imagen">Imagen</span>
+          <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="ejemplo-body">
+          <p class="ejemplo-desc">Banner creado para campaña en Meta Ads. Formato 1200×628 px optimizado para Facebook e Instagram.</p>
+          <div class="preview-img-wrap">
+            <!-- ↓ Reemplaza este src con tu imagen real -->
+            <img src="https://via.placeholder.com/1200x628/262626/EF5085?text=Banner+Ejemplo" alt="Banner ejemplo" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           EJEMPLO 2 · IMAGEN (Google Drive)
+           Para Drive: Archivo → Compartir → "Cualquiera con el enlace"
+           URL de previsualización: https://drive.google.com/uc?export=view&id=TU_ID
+      ═══════════════════════════════════════════ -->
+      <div class="ejemplo-card" data-type="imagen">
+        <div class="ejemplo-header" onclick="toggleCard(this)">
+          <i class="fas fa-palette type-icon"></i>
+          <div class="meta">
+            <h3>Identidad Visual – Logo Corporativo</h3>
+            <span>Illustrator · Corel Draw</span>
+          </div>
+          <span class="badge badge-imagen">Imagen</span>
+          <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="ejemplo-body">
+          <p class="ejemplo-desc">Propuesta de isotipo y logotipo para cliente del sector automotriz. Paleta monocromática con acento.</p>
+          <!-- Para Drive: reemplaza el src con https://drive.google.com/uc?export=view&id=XXXXXXX -->
+          <div class="preview-img-wrap">
+            <img src="https://via.placeholder.com/900x600/1a1a1a/70DDD8?text=Logo+Drive" alt="Logo ejemplo" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           EJEMPLO 3 · VIDEO (YouTube embed)
+      ═══════════════════════════════════════════ -->
+      <div class="ejemplo-card" data-type="video">
+        <div class="ejemplo-header" onclick="toggleCard(this)">
+          <i class="fas fa-video type-icon"></i>
+          <div class="meta">
+            <h3>Spot Publicitario – Edición Premiere Pro</h3>
+            <span>Premiere Pro · After Effects</span>
+          </div>
+          <span class="badge badge-video">Video</span>
+          <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="ejemplo-body">
+          <p class="ejemplo-desc">Producción audiovisual de 30 segundos para publicidad digital. Motion graphics integrados con After Effects.</p>
+          <!-- ↓ Reemplaza con tu ID de YouTube -->
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/ri2sHPVG-MQ" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           EJEMPLO 4 · HTML (código inline)
+           Pega tu código en el bloque <code>
+      ═══════════════════════════════════════════ -->
+      <div class="ejemplo-card" data-type="html">
+        <div class="ejemplo-header" onclick="toggleCard(this)">
+          <i class="fas fa-code type-icon"></i>
+          <div class="meta">
+            <h3>Landing Page – Sección Hero Animada</h3>
+            <span>HTML · CSS · JavaScript</span>
+          </div>
+          <span class="badge badge-html">HTML</span>
+          <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="ejemplo-body">
+          <p class="ejemplo-desc">Fragmento de sección hero con animación CSS y efecto typewriter en JavaScript puro.</p>
+          <a class="github-link" href="https://github.com/tuusuario/turepo/blob/main/hero.html" target="_blank">
+            <i class="fab fa-github"></i> Ver en GitHub
+          </a>
+          <div class="code-header">
+            <span>hero.html</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copiar</button>
+          </div>
+          <div class="code-wrap">
+            <pre><code class="language-html">&lt;!-- ↓ Reemplaza con tu código real ↓ -->
+&lt;section class="hero"&gt;
+  &lt;h1 id="typewriter"&gt;&lt;/h1&gt;
+  &lt;p&gt;Estrategia Digital &amp; Automatización&lt;/p&gt;
+  &lt;a href="contacto.html" class="btn"&gt;Contáctame&lt;/a&gt;
+&lt;/section&gt;
+
+&lt;script&gt;
+  const words = ["Marketing Digital", "Automatización CRM", "Desarrollo Web"];
+  let w = 0, c = 0, deleting = false;
+  function type() {
+    const el = document.getElementById("typewriter");
+    const word = words[w % words.length];
+    el.textContent = deleting ? word.slice(0, --c) : word.slice(0, ++c);
+    if (!deleting &amp;&amp; c === word.length) { deleting = true; setTimeout(type, 1200); return; }
+    if (deleting &amp;&amp; c === 0) { deleting = false; w++; }
+    setTimeout(type, deleting ? 60 : 100);
+  }
+  type();
+&lt;/script&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           EJEMPLO 5 · PYTHON (código inline)
+      ═══════════════════════════════════════════ -->
+      <div class="ejemplo-card" data-type="python">
+        <div class="ejemplo-header" onclick="toggleCard(this)">
+          <i class="fab fa-python type-icon"></i>
+          <div class="meta">
+            <h3>Automatización de Reportes con Python</h3>
+            <span>Python · openpyxl · smtplib</span>
+          </div>
+          <span class="badge badge-python">Python</span>
+          <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="ejemplo-body">
+          <p class="ejemplo-desc">Script que genera un reporte Excel automatizado y lo envía por correo cada lunes al equipo de marketing.</p>
+          <a class="github-link" href="https://github.com/tuusuario/turepo/blob/main/reporte.py" target="_blank">
+            <i class="fab fa-github"></i> Ver en GitHub
+          </a>
+          <div class="code-header">
+            <span>reporte.py</span>
+            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copiar</button>
+          </div>
+          <div class="code-wrap">
+            <pre><code class="language-python"># ↓ Reemplaza con tu código real ↓
+import openpyxl, smtplib, schedule, time
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
+def generar_reporte():
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Reporte Semanal"
+    ws.append(["Campaña", "Impresiones", "Clics", "CTR"])
+    # → Aquí conectas tu fuente de datos real
+    wb.save("reporte_semanal.xlsx")
+    print("Reporte generado.")
+
+def enviar_email():
+    msg = MIMEMultipart()
+    msg["Subject"] = "Reporte Semanal Marketing"
+    # → Configurar credenciales SMTP en variables de entorno
+    print("Email enviado.")
+
+schedule.every().monday.at("08:00").do(lambda: (generar_reporte(), enviar_email()))
+while True:
+    schedule.run_pending()
+    time.sleep(60)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           EJEMPLO 6 · GOOGLE DRIVE (documento / PDF)
+           URL embed: https://drive.google.com/file/d/TU_ID/preview
+      ═══════════════════════════════════════════ -->
+      <div class="ejemplo-card" data-type="drive">
+        <div class="ejemplo-header" onclick="toggleCard(this)">
+          <i class="fab fa-google-drive type-icon"></i>
+          <div class="meta">
+            <h3>Propuesta Comercial – Estrategia Digital</h3>
+            <span>Google Drive · PDF</span>
+          </div>
+          <span class="badge badge-drive">Drive</span>
+          <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+        <div class="ejemplo-body">
+          <p class="ejemplo-desc">Documento de propuesta completa para cliente del sector salud. Incluye análisis de mercado, KPIs y presupuesto estimado.</p>
+          <!-- ↓ Reemplaza TU_ID por el ID real del archivo en Drive (debe ser público) -->
+          <div class="drive-wrap">
+            <iframe src="https://drive.google.com/file/d/17CmmYiOBJi9BHYVzmZkaE5nNZp-152Vb/preview" allow="autoplay" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           AGREGAR MÁS EJEMPLOS: copia cualquier bloque
+           de arriba, cambia data-type y personaliza.
+           data-type válidos: imagen | video | html | python | drive
+      ═══════════════════════════════════════════ -->
+
+    </div><!-- /ejemplos-list -->
+
+    <p class="no-results" id="no-results">No hay ejemplos en esta categoría aún.</p>
+
+  </main>
+
+  <!-- Highlight.js para sintaxis de código -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    // Inicializar syntax highlighting
+    hljs.highlightAll();
+
+    // ── Colapsar / Expandir ──
+    function toggleCard(header) {
+      const card = header.closest('.ejemplo-card');
+      card.classList.toggle('open');
+    }
+
+    // ── Filtros ──
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        let visible = 0;
+        document.querySelectorAll('.ejemplo-card').forEach(card => {
+          const show = filter === 'all' || card.dataset.type === filter;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+      });
+    });
+
+    // ── Copiar código ──
+    function copyCode(btn) {
+      const code = btn.closest('.ejemplo-body').querySelector('code');
+      // Decode HTML entities para copiar texto limpio
+      const text = code.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+        setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copiar'; }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
