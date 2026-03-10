@@ -6,160 +6,102 @@
   <title>Servicios Freelance | Alexis Pérez</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
-    /* ══ GENERAL ══ */
-    .page-header { text-align: center; margin-bottom: 10px; }
-    .page-header h1 { font-size: 2.2rem; color: var(--cian-brillo); margin-bottom: 6px; }
-    .page-header p { color: #aaa; font-size: 0.95rem; max-width: 600px; margin: 0 auto 24px; }
 
-    .cta-contacto {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--rosa-principal); color: #fff; font-weight: bold;
-      text-decoration: none; padding: 11px 28px; border-radius: 30px;
-      font-size: 0.95rem; transition: 0.3s; margin-bottom: 40px;
-    }
-    .cta-contacto:hover { background: var(--rosa-oscuro); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(239,80,133,0.35); }
+    /* ══ GENERAL ══ */
+    .page-header { text-align: center; margin-bottom: 6px; }
+    .page-header h1 { font-size: 2.1rem; color: var(--cian-brillo); margin-bottom: 6px; }
+    .page-header p { color: #aaa; font-size: 0.93rem; max-width: 580px; margin: 0 auto 28px; }
 
     /* ══ SECCIÓN TÍTULO ══ */
     .section-title {
-      font-size: 1rem; font-weight: bold; text-transform: uppercase;
+      font-size: 0.85rem; font-weight: bold; text-transform: uppercase;
       letter-spacing: 2px; color: var(--rosa-principal);
       border-bottom: 2px solid var(--rosa-oscuro);
-      padding-bottom: 8px; margin: 40px 0 20px;
+      padding-bottom: 8px; margin: 44px 0 18px;
       display: flex; align-items: center; gap: 10px;
     }
-    .section-title i { font-size: 1.2rem; }
 
-    /* ══ PAQUETES CM – COLAPSABLE + CARRUSEL ══ */
+    /* ══ PAQUETES – CARRUSEL DIRECTO ══ */
+    .paquetes-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
+    }
+    .paquetes-section-header h2 {
+      font-size: 1.5rem; color: var(--blanco); margin: 0;
+    }
+    .paquetes-section-header p {
+      font-size: 0.82rem; color: #888; margin: 0;
+    }
     .paquetes-carousel-wrap {
       position: relative;
-      padding: 4px 8px 0;
+      padding: 0 6px;
     }
     .paquetes-grid {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 10px 2px 16px;
+      display: flex; gap: 14px;
+      overflow-x: auto; scroll-behavior: smooth;
+      padding: 8px 2px 14px;
       scrollbar-width: none;
     }
     .paquetes-grid::-webkit-scrollbar { display: none; }
 
-    /* ── Tarjeta individual ── */
+    /* ── Tarjeta ── */
     .paquete-card {
-      border-radius: 12px;
-      border: 1.5px solid #2a2a2a;
+      border-radius: 12px; border: 1.5px solid #2a2a2a;
       background: #1e1e1e;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      min-width: 270px;
-      max-width: 270px;
-      flex-shrink: 0;
-      overflow: hidden;
-      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex; flex-direction: column; position: relative;
+      min-width: 268px; max-width: 268px; flex-shrink: 0;
+      overflow: hidden; transition: transform 0.25s, box-shadow 0.25s;
     }
     .paquete-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.5); }
     .paquete-card.destacado { border-color: var(--rosa-principal); box-shadow: 0 0 22px rgba(239,80,133,0.2); }
     .paquete-card.enterprise { border-color: #7040b0; }
 
-    /* Banda de color superior */
-    .paquete-band {
-      height: 5px;
-      background: #333;
-    }
-    .paquete-card.destacado .paquete-band { background: linear-gradient(90deg, var(--rosa-oscuro), var(--rosa-principal)); }
-    .paquete-card.enterprise .paquete-band { background: linear-gradient(90deg, #4a1a7a, #9146ff); }
+    .paquete-band { height: 4px; background: #2a2a2a; }
+    .paquete-card.destacado .paquete-band { background: linear-gradient(90deg,var(--rosa-oscuro),var(--rosa-principal)); }
+    .paquete-card.enterprise .paquete-band { background: linear-gradient(90deg,#4a1a7a,#9146ff); }
 
-    /* Badge popular */
     .badge-popular {
-      position: absolute; top: 14px; right: 14px;
-      background: var(--rosa-principal); color: #fff; font-size: 0.62rem;
-      font-weight: bold; padding: 3px 10px; border-radius: 20px;
-      text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+      position: absolute; top: 12px; right: 12px;
+      background: var(--rosa-principal); color: #fff; font-size: 0.6rem;
+      font-weight: bold; padding: 2px 9px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
-
-    /* Cabecera */
-    .paquete-head {
-      padding: 20px 20px 16px;
-      border-bottom: 1px solid #2a2a2a;
-    }
-    .paquete-tier {
-      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
-      color: #666; margin-bottom: 6px;
-    }
+    .paquete-head { padding: 18px 18px 14px; border-bottom: 1px solid #282828; }
+    .paquete-tier { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 2px; color: #666; margin-bottom: 5px; }
     .paquete-card.destacado .paquete-tier { color: var(--rosa-principal); }
     .paquete-card.enterprise .paquete-tier { color: #9146ff; }
-    .paquete-nombre {
-      font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 12px;
-    }
-    .paquete-precio {
-      font-size: 2rem; font-weight: 800; color: var(--cian-brillo); line-height: 1;
-    }
-    .paquete-precio sub {
-      font-size: 0.9rem; font-weight: 400; color: #777;
-      vertical-align: baseline; margin-left: 3px;
-    }
-    .paquete-card.enterprise .paquete-precio { font-size: 1.6rem; color: #b080f0; }
-    .paquete-desc {
-      font-size: 0.78rem; color: #888; margin-top: 8px; line-height: 1.5;
-    }
+    .paquete-nombre { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .paquete-precio { font-size: 1.9rem; font-weight: 800; color: var(--cian-brillo); line-height: 1; }
+    .paquete-precio sub { font-size: 0.82rem; font-weight: 400; color: #777; vertical-align: baseline; margin-left: 2px; }
+    .paquete-card.enterprise .paquete-precio { font-size: 1.5rem; color: #b080f0; }
+    .paquete-desc { font-size: 0.76rem; color: #888; margin-top: 7px; line-height: 1.45; }
 
-    /* Features */
-    .paquete-features {
-      padding: 16px 20px;
-      flex: 1;
-    }
-    .feat-group-label {
-      font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.5px;
-      color: #555; margin: 14px 0 8px;
-    }
+    .paquete-features { padding: 14px 18px; flex: 1; }
+    .feat-group-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; color: #555; margin: 12px 0 7px; }
     .feat-group-label:first-child { margin-top: 0; }
-    .feat-row {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 5px 0;
-      border-bottom: 1px solid #282828;
-      font-size: 0.82rem;
-      line-height: 1.4;
-    }
+    .feat-row { display: flex; align-items: flex-start; gap: 9px; padding: 4px 0; border-bottom: 1px solid #242424; font-size: 0.8rem; line-height: 1.4; }
     .feat-row:last-child { border-bottom: none; }
-    .feat-row .fi { width: 14px; flex-shrink: 0; margin-top: 2px; font-size: 0.75rem; }
-    .fi-yes  { color: #50d890; }
-    .fi-no   { color: #444; }
+    .fi { width: 13px; flex-shrink: 0; margin-top: 2px; font-size: 0.72rem; }
+    .fi-yes { color: #50d890; }
+    .fi-no { color: #3a3a3a; }
     .fi-plus { color: var(--cian-brillo); }
-    .feat-yes  { color: #ccc; }
-    .feat-no   { color: #444; text-decoration: line-through; }
+    .feat-yes { color: #ccc; }
+    .feat-no { color: #3a3a3a; text-decoration: line-through; }
     .feat-plus { color: #fff; }
-    .feat-val  { color: var(--cian-brillo); font-weight: 600; }
-    .feat-new-badge {
-      font-size: 0.58rem; background: var(--cian-brillo); color: #000;
-      padding: 1px 5px; border-radius: 4px; font-weight: bold;
-      margin-left: 4px; vertical-align: middle; text-transform: uppercase;
-    }
+    .feat-val { color: var(--cian-brillo); font-weight: 600; }
+    .feat-new-badge { font-size: 0.56rem; background: rgba(112,221,216,0.15); color: var(--cian-brillo); padding: 1px 5px; border-radius: 4px; font-weight: bold; margin-left: 3px; vertical-align: middle; text-transform: uppercase; border: 1px solid rgba(112,221,216,0.3); }
 
-    /* CTA */
-    .paquete-cta {
-      padding: 16px 20px;
-      border-top: 1px solid #2a2a2a;
-    }
-    .btn-cotizar {
-      display: block; text-align: center;
-      background: #1a3a5c; color: #fff; text-decoration: none;
-      padding: 11px; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-      transition: 0.2s; border: 1px solid #1a5080; letter-spacing: 0.5px;
-    }
-    .btn-cotizar:hover { background: var(--rosa-principal); border-color: var(--rosa-principal); }
-    .paquete-card.destacado .btn-cotizar { background: var(--rosa-principal); border-color: var(--rosa-oscuro); }
-    .paquete-card.destacado .btn-cotizar:hover { background: var(--rosa-oscuro); }
-    .paquete-card.enterprise .btn-cotizar { background: #4a1a7a; border-color: #7040b0; }
-    .paquete-card.enterprise .btn-cotizar:hover { background: #6a2a9a; }
+    .paquete-cta { padding: 14px 18px; border-top: 1px solid #282828; }
 
-    /* Flechas */
+    /* Flechas carrusel */
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
-      width: 34px; height: 34px; border-radius: 50%;
+      width: 32px; height: 32px; border-radius: 50%;
       background: #1e1e1e; border: 1.5px solid #444;
-      color: #ccc; cursor: pointer; font-size: 0.8rem;
+      color: #ccc; cursor: pointer; font-size: 0.78rem;
       display: flex; align-items: center; justify-content: center;
       transition: 0.2s; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
@@ -169,47 +111,29 @@
     @media (max-width: 600px) { .carousel-btn { display: none; } }
 
     /* Puntos */
-    .dot-indicator {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #333; cursor: pointer; transition: 0.2s;
-      border: 1.5px solid #555; display: inline-block;
-    }
+    .dot-indicator { width: 7px; height: 7px; border-radius: 50%; background: #333; cursor: pointer; transition: 0.2s; border: 1.5px solid #555; display: inline-block; }
     .dot-indicator.active { background: var(--rosa-principal); border-color: var(--rosa-principal); }
 
     /* ══ BLOQUES COLAPSABLES ══ */
-    .cat-block {
-      background: var(--contraste-fondo); border: 2px solid var(--azul-boton);
-      border-radius: 14px; margin-bottom: 14px; overflow: hidden; transition: border-color 0.3s;
-    }
+    .cat-block { background: var(--contraste-fondo); border: 2px solid var(--azul-boton); border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.3s; }
     .cat-block.open { border-color: var(--rosa-oscuro); }
-    .cat-header {
-      display: flex; align-items: center; gap: 14px; padding: 15px 20px;
-      cursor: pointer; user-select: none; transition: background 0.2s;
-    }
+    .cat-header { display: flex; align-items: center; gap: 14px; padding: 14px 20px; cursor: pointer; user-select: none; transition: background 0.2s; }
     .cat-header:hover { background: rgba(255,255,255,0.03); }
-    .cat-icon { font-size: 1.5rem; min-width: 30px; text-align: center; }
+    .cat-icon { font-size: 1.4rem; min-width: 28px; text-align: center; }
     .cat-info { flex: 1; }
-    .cat-info h2 { font-size: 1.05rem; color: var(--blanco); margin-bottom: 2px; }
-    .cat-info span { font-size: 0.75rem; color: #888; }
-    .cat-count {
-      font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
-      background: #1a2a3a; color: var(--cian-brillo); border: 1px solid var(--cian-brillo); font-weight: bold;
-    }
-    .chevron { color: var(--cian-brillo); font-size: 0.85rem; transition: transform 0.35s; }
+    .cat-info h2 { font-size: 1rem; color: var(--blanco); margin-bottom: 2px; }
+    .cat-info span { font-size: 0.73rem; color: #888; }
+    .cat-count { font-size: 0.68rem; padding: 3px 10px; border-radius: 20px; background: #1a2a3a; color: var(--cian-brillo); border: 1px solid var(--cian-brillo); font-weight: bold; }
+    .chevron { color: var(--cian-brillo); font-size: 0.82rem; transition: transform 0.35s; }
     .cat-block.open .chevron { transform: rotate(180deg); }
     .cat-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .cat-block.open .cat-body { max-height: 3000px; }
 
     /* ══ TABLA ══ */
     .services-table-wrap { padding: 0 16px 18px; overflow-x: auto; }
-    .subtitulo-tabla {
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px;
-      color: var(--cian-brillo); background: #112233;
-      padding: 6px 14px; margin: 0 0 0;
-      border-top: 1px solid #1a3a55;
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
-    thead tr { background: #1a2d40; color: var(--cian-brillo); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.6px; }
+    .subtitulo-tabla { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--cian-brillo); background: #112233; padding: 6px 14px; border-top: 1px solid #1a3a55; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    thead tr { background: #1a2d40; color: var(--cian-brillo); text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.6px; }
     thead th { padding: 9px 14px; text-align: left; white-space: nowrap; }
     tbody tr { border-bottom: 1px solid #2a2a2a; transition: background 0.15s; }
     tbody tr:last-child { border-bottom: none; }
@@ -217,24 +141,122 @@
     tbody td { padding: 10px 14px; vertical-align: middle; line-height: 1.4; }
     .td-servicio { color: var(--blanco); min-width: 200px; }
     .td-precio { font-weight: bold; color: var(--cian-brillo); white-space: nowrap; text-align: right; }
-    .td-nota { font-size: 0.78rem; color: #888; font-style: italic; }
+    .td-nota { font-size: 0.76rem; color: #888; font-style: italic; }
     .precio-pres { color: #f0a060; font-weight: bold; }
-
-    /* ══ NOTA ESPECIAL ══ */
-    .nota-box {
-      margin: 8px 16px 16px; background: #1a1a1a;
-      border-left: 3px solid #f0a060; border-radius: 0 8px 8px 0;
-      padding: 10px 14px; font-size: 0.8rem; color: #bbb;
-    }
+    .nota-box { margin: 8px 16px 16px; background: #1a1a1a; border-left: 3px solid #f0a060; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.79rem; color: #bbb; }
     .nota-box strong { color: #f0a060; }
-
-    /* ══ LEYENDA ══ */
-    .leyenda {
-      margin-top: 32px; background: var(--contraste-fondo);
-      border-left: 4px solid var(--cian-brillo); border-radius: 0 10px 10px 0;
-      padding: 14px 18px; font-size: 0.83rem; color: #aaa;
-    }
+    .leyenda { margin-top: 32px; background: var(--contraste-fondo); border-left: 4px solid var(--cian-brillo); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 0.82rem; color: #aaa; }
     .leyenda strong { color: var(--cian-brillo); }
+
+    /* ══ BOTÓN FLOTANTE COTIZAR ══ */
+    .btn-flotante {
+      position: fixed; bottom: 24px; right: 24px; z-index: 900;
+      background: var(--rosa-principal); color: #fff;
+      border: none; border-radius: 50px;
+      padding: 13px 22px; font-size: 0.88rem; font-weight: bold;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(239,80,133,0.45);
+      display: flex; align-items: center; gap: 9px;
+      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .btn-flotante:hover { background: var(--rosa-oscuro); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(239,80,133,0.55); }
+    .btn-flotante i { font-size: 1rem; }
+    @media (max-width: 480px) {
+      .btn-flotante { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+    }
+
+    /* ══ BTN COTIZAR EN TABLA ══ */
+    .btn-cotizar-tabla {
+      background: none; border: 1px solid #2a4a6a; color: var(--cian-brillo);
+      padding: 5px 14px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;
+      transition: 0.2s; font-weight: bold;
+    }
+    .btn-cotizar-tabla:hover { background: rgba(112,221,216,0.1); border-color: var(--cian-brillo); }
+
+    /* ══ BTN COTIZAR EN TARJETA PAQUETE ══ */
+    .btn-cotizar-pkg {
+      display: block; width: 100%; text-align: center;
+      background: #1a3a5c; color: #fff;
+      border: 1px solid #1a5080; border-radius: 8px;
+      padding: 11px; font-size: 0.87rem; font-weight: 700;
+      cursor: pointer; transition: 0.2s; letter-spacing: 0.4px;
+    }
+    .btn-cotizar-pkg:hover { background: var(--rosa-principal); border-color: var(--rosa-principal); }
+    .paquete-card.destacado .btn-cotizar-pkg { background: var(--rosa-principal); border-color: var(--rosa-oscuro); }
+    .paquete-card.destacado .btn-cotizar-pkg:hover { background: var(--rosa-oscuro); }
+    .paquete-card.enterprise .btn-cotizar-pkg { background: #4a1a7a; border-color: #7040b0; }
+    .paquete-card.enterprise .btn-cotizar-pkg:hover { background: #6a2a9a; }
+
+    /* ══ MODAL ══ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.visible { display: flex; }
+
+    .modal-box {
+      background: #1c1c1c; border: 1.5px solid #333; border-radius: 16px;
+      width: 100%; max-width: 480px; overflow: hidden;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn { from { opacity:0; transform: scale(0.94) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
+
+    .modal-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+    .modal-header h3 { font-size: 1.15rem; color: var(--blanco); margin-bottom: 3px; }
+    .modal-header p { font-size: 0.78rem; color: #888; }
+    .modal-close {
+      background: none; border: none; color: #666;
+      font-size: 1.1rem; cursor: pointer; padding: 2px 6px;
+      transition: color 0.2s; flex-shrink: 0; margin-top: 2px;
+    }
+    .modal-close:hover { color: var(--rosa-principal); }
+
+    .modal-body { padding: 20px 24px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.76rem; color: #aaa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; background: #111; border: 1.5px solid #2a2a2a;
+      color: #fff; border-radius: 8px; padding: 10px 14px;
+      font-size: 0.88rem; transition: border-color 0.2s; outline: none;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--cian-brillo); }
+    .form-group select option { background: #1c1c1c; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 420px) { .form-row { grid-template-columns: 1fr; } }
+
+    .modal-footer { padding: 0 24px 20px; }
+    .btn-enviar {
+      width: 100%; background: var(--rosa-principal); color: #fff;
+      border: none; border-radius: 10px; padding: 13px;
+      font-size: 0.92rem; font-weight: bold; cursor: pointer;
+      transition: 0.25s; display: flex; align-items: center; justify-content: center; gap: 9px;
+    }
+    .btn-enviar:hover:not(:disabled) { background: var(--rosa-oscuro); }
+    .btn-enviar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .form-msg { font-size: 0.8rem; margin-top: 10px; text-align: center; padding: 8px; border-radius: 8px; display: none; }
+    .form-msg.ok { background: rgba(80,216,144,0.12); color: #50d890; border: 1px solid rgba(80,216,144,0.25); display: block; }
+    .form-msg.err { background: rgba(239,80,133,0.12); color: var(--rosa-principal); border: 1px solid rgba(239,80,133,0.25); display: block; }
+
+    .servicio-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(112,221,216,0.1); color: var(--cian-brillo);
+      border: 1px solid rgba(112,221,216,0.25); border-radius: 6px;
+      padding: 6px 12px; font-size: 0.8rem; margin-bottom: 16px;
+    }
   </style>
 </head>
 <body>
@@ -246,198 +268,184 @@
 
   <main>
     <div class="page-header">
-      <h1><i class="fas fa-rocket" style="margin-right:10px; font-size:1.7rem;"></i>Servicios Freelance</h1>
-      <p>Soluciones digitales a la medida. Selecciona un paquete o servicio individual y cotiza sin compromiso.</p>
-    </div>
-    <div style="text-align:center;">
-      <a href="https://linktr.ee/alexdom104" target="_blank" class="cta-contacto">
-        <i class="fas fa-paper-plane"></i> Cotizar Ahora
-      </a>
+      <h1><i class="fas fa-rocket" style="margin-right:8px; font-size:1.6rem;"></i>Servicios Freelance</h1>
+      <p>Soluciones digitales a la medida. Explora los paquetes o servicios individuales y cotiza sin compromiso.</p>
     </div>
 
     <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 1: PAQUETES COMMUNITY MANAGER
+         SECCIÓN 1: PAQUETES COMMUNITY MANAGER (SIEMPRE VISIBLES)
     ══════════════════════════════════════════════════════ -->
-    <div class="cat-block" id="bloque-paquetes" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-users cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info">
-          <h2>Paquetes de Community Manager</h2>
-          <span>Gestión mensual de redes, contenido, SEO y más · 5 niveles disponibles</span>
+    <div style="margin-bottom: 6px;">
+      <div class="paquetes-section-header">
+        <div>
+          <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:2px; color:var(--rosa-principal); margin-bottom:4px;"><i class="fas fa-users" style="margin-right:6px;"></i>Community Manager</div>
+          <h2 style="font-size:1.5rem; color:#fff; margin:0 0 4px;">Paquetes Mensuales</h2>
+          <p style="font-size:0.8rem; color:#888; margin:0;">Gestión de redes, contenido, SEO y comunidad · 5 niveles</p>
         </div>
-        <span class="cat-count">5 paquetes</span>
-        <i class="fas fa-chevron-down chevron"></i>
       </div>
 
-      <div class="cat-body" onclick="event.stopPropagation()">
-        <div style="padding: 6px 16px 0;">
-          <div class="paquetes-carousel-wrap">
-            <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-            <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
+      <div class="paquetes-carousel-wrap">
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
 
-            <div class="paquetes-grid" id="paquetes-carousel">
+        <div class="paquetes-grid" id="paquetes-carousel">
 
-              <!-- ══ 1. DESPEGUE ══ -->
-              <div class="paquete-card">
-                <div class="paquete-band"></div>
-                <div class="paquete-head">
-                  <div class="paquete-tier">Starter</div>
-                  <div class="paquete-nombre">🚀 Despegue</div>
-                  <div class="paquete-precio">$1,800<sub>/mes</sub></div>
-                  <div class="paquete-desc">Para emprendedores que arrancan. Presencia mínima, sin complicaciones.</div>
-                </div>
-                <div class="paquete-features">
-                  <div class="feat-group-label">Redes y publicaciones</div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 red social</span> (FB o IG)</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">8 publicaciones</span>/mes</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imagen + texto</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Stories / Reels / Shorts</span></div>
-                  <div class="feat-group-label">Web y gestión</div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Gestión de página web</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
-                  <div class="feat-group-label">Estrategia y reportes</div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-                </div>
-                <div class="paquete-cta">
-                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-                </div>
-              </div>
-
-              <!-- ══ 2. ARRANQUE DIGITAL ══ -->
-              <div class="paquete-card">
-                <div class="paquete-band"></div>
-                <div class="paquete-head">
-                  <div class="paquete-tier">Básico</div>
-                  <div class="paquete-nombre">📡 Arranque Digital</div>
-                  <div class="paquete-precio">$3,200<sub>/mes</sub></div>
-                  <div class="paquete-desc">3 plataformas activas con contenido publicado y una web gestionada.</div>
-                </div>
-                <div class="paquete-features">
-                  <div class="feat-group-label">Redes y publicaciones</div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">3 redes</span>: FB, IG + 1 a elección</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">12 publicaciones</span>/mes</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imágenes y stories</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reels / Shorts / Carruseles</span></div>
-                  <div class="feat-group-label">Web y gestión</div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 página web</span> gestionada</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
-                  <div class="feat-group-label">Estrategia y reportes</div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas / KPIs</span></div>
-                  <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-                </div>
-                <div class="paquete-cta">
-                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-                </div>
-              </div>
-
-              <!-- ══ 3. SEÑAL FUERTE ══ -->
-              <div class="paquete-card destacado">
-                <div class="paquete-band"></div>
-                <div class="badge-popular">⭐ Más Popular</div>
-                <div class="paquete-head">
-                  <div class="paquete-tier">Intermedio</div>
-                  <div class="paquete-nombre">🔥 Señal Fuerte</div>
-                  <div class="paquete-precio">$6,500<sub>/mes</sub></div>
-                  <div class="paquete-desc">Gestión completa de 5 plataformas: contenido exclusivo, SEO, comunidad activa y entrega de recursos.</div>
-                </div>
-                <div class="paquete-features">
-                  <div class="feat-group-label">Redes y publicaciones</div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">5 redes</span>: FB, IG, X, LinkedIn, TikTok</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">18 publicaciones/mes por red</span> = 90 piezas totales</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño exclusivo y rotativo por plataforma</span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reels, Shorts, Stories, Carruseles <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-group-label">Web y gestión</div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1–2 páginas web</span> gestionadas <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Respuesta a comentarios y DMs <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-group-label">Estrategia y reportes</div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">SEO orgánico: redes + Google <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Calendario editorial mensual <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reporte mensual + Analytics <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Recursos digitales entregados al cliente <span class="feat-new-badge">nuevo</span></span></div>
-                  <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-                </div>
-                <div class="paquete-cta">
-                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-                </div>
-              </div>
-
-              <!-- ══ 4. DOMINIO TOTAL ══ -->
-              <div class="paquete-card">
-                <div class="paquete-band" style="background: linear-gradient(90deg,#0a315b,#70DDD8);"></div>
-                <div class="paquete-head">
-                  <div class="paquete-tier">Profesional</div>
-                  <div class="paquete-nombre">🏆 Dominio Total</div>
-                  <div class="paquete-precio">$11,000<sub>/mes</sub></div>
-                  <div class="paquete-desc">Todo lo de Señal Fuerte, ampliado a múltiples marcas y con reportes semanales.</div>
-                </div>
-                <div class="paquete-features">
-                  <div class="feat-group-label" style="color:var(--rosa-principal);">Incluye todo de Señal Fuerte, más:</div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Hasta <span class="feat-val">15 redes sociales</span></span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus"><span class="feat-val">2 o 3 marcas</span> gestionadas simultáneamente</span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Contenido independiente por marca</span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Gestión <span class="feat-val">multisite</span> (webs por marca)</span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Producción audiovisual básica incluida</span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reporte ejecutivo <span class="feat-val">semanal</span> (en lugar de mensual)</span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reunión estratégica mensual (videollamada)</span></div>
-                  <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Entrega de recursos por cada marca</span></div>
-                </div>
-                <div class="paquete-cta">
-                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Contratar</a>
-                </div>
-              </div>
-
-              <!-- ══ 5. IMPERIO DIGITAL ══ -->
-              <div class="paquete-card enterprise">
-                <div class="paquete-band"></div>
-                <div class="paquete-head">
-                  <div class="paquete-tier">Enterprise</div>
-                  <div class="paquete-nombre" style="color:#c090ff;">👑 Imperio Digital</div>
-                  <div class="paquete-precio" style="color:#b080f0;">A cotizar</div>
-                  <div class="paquete-desc">Solución 360° con pauta, CRM y automatización para operaciones digitales de alto volumen.</div>
-                </div>
-                <div class="paquete-features">
-                  <div class="feat-group-label" style="color:#9146ff;">Incluye todo de Dominio Total, más:</div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Gestión de <span class="feat-val">Pauta Meta Ads</span></span></div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Automatización CRM (Bitrix24)</span></div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Email marketing segmentado</span></div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Dashboard de métricas en tiempo real</span></div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">SEO técnico + contenido para buscadores</span></div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Soporte prioritario <span class="feat-val">7 días</span></span></div>
-                  <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Consultoría ejecutiva mensual</span></div>
-                </div>
-                <div class="paquete-cta">
-                  <a href="https://linktr.ee/alexdom104" target="_blank" class="btn-cotizar">Solicitar Propuesta</a>
-                </div>
-              </div>
-
-            </div><!-- /paquetes-grid -->
-          </div><!-- /carousel-wrap -->
-
-          <!-- Puntos indicadores -->
-          <div style="display:flex; justify-content:center; gap:8px; margin: 4px 0 18px;">
-            <span class="dot-indicator active" onclick="goToSlide(0)"></span>
-            <span class="dot-indicator" onclick="goToSlide(1)"></span>
-            <span class="dot-indicator" onclick="goToSlide(2)"></span>
-            <span class="dot-indicator" onclick="goToSlide(3)"></span>
-            <span class="dot-indicator" onclick="goToSlide(4)"></span>
+          <!-- ══ 1. DESPEGUE ══ -->
+          <div class="paquete-card">
+            <div class="paquete-band"></div>
+            <div class="paquete-head">
+              <div class="paquete-tier">Starter</div>
+              <div class="paquete-nombre">🚀 Despegue</div>
+              <div class="paquete-precio">$1,800<sub>/mes</sub></div>
+              <div class="paquete-desc">Para emprendedores que arrancan. Presencia mínima, sin complicaciones.</div>
+            </div>
+            <div class="paquete-features">
+              <div class="feat-group-label">Redes y publicaciones</div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 red social</span> (FB o IG)</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">8 publicaciones</span>/mes</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imagen + texto</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Stories / Reels / Shorts</span></div>
+              <div class="feat-group-label">Web y gestión</div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Gestión de página web</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
+              <div class="feat-group-label">Estrategia y reportes</div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
+            </div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModal('🚀 Despegue — $1,800/mes')">Contratar</button>
+            </div>
           </div>
-        </div>
-      </div><!-- /cat-body -->
-    </div><!-- /cat-block paquetes -->
+
+          <!-- ══ 2. ARRANQUE DIGITAL ══ -->
+          <div class="paquete-card">
+            <div class="paquete-band"></div>
+            <div class="paquete-head">
+              <div class="paquete-tier">Básico</div>
+              <div class="paquete-nombre">📡 Arranque Digital</div>
+              <div class="paquete-precio">$3,200<sub>/mes</sub></div>
+              <div class="paquete-desc">3 plataformas activas con contenido publicado y una web gestionada.</div>
+            </div>
+            <div class="paquete-features">
+              <div class="feat-group-label">Redes y publicaciones</div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">3 redes</span>: FB, IG + 1 a elección</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">12 publicaciones</span>/mes</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imágenes y stories</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reels / Shorts / Carruseles</span></div>
+              <div class="feat-group-label">Web y gestión</div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 página web</span> gestionada</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
+              <div class="feat-group-label">Estrategia y reportes</div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas / KPIs</span></div>
+              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
+            </div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModal('📡 Arranque Digital — $3,200/mes')">Contratar</button>
+            </div>
+          </div>
+
+          <!-- ══ 3. SEÑAL FUERTE ══ -->
+          <div class="paquete-card destacado">
+            <div class="paquete-band"></div>
+            <div class="badge-popular">⭐ Más Popular</div>
+            <div class="paquete-head">
+              <div class="paquete-tier">Intermedio</div>
+              <div class="paquete-nombre">🔥 Señal Fuerte</div>
+              <div class="paquete-precio">$6,500<sub>/mes</sub></div>
+              <div class="paquete-desc">Gestión completa de 5 plataformas: contenido exclusivo, SEO, comunidad activa y entrega de recursos.</div>
+            </div>
+            <div class="paquete-features">
+              <div class="feat-group-label">Redes y publicaciones</div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">5 redes</span>: FB, IG, X, LinkedIn, TikTok</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">18 piezas/mes por red</span> = 90 totales</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño exclusivo y rotativo por plataforma</span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reels, Shorts, Stories, Carruseles <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-group-label">Web y gestión</div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1–2 páginas web</span> gestionadas <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Respuesta a comentarios y DMs <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-group-label">Estrategia y reportes</div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">SEO orgánico: redes + Google <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Calendario editorial mensual <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reporte mensual + Analytics <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Recursos digitales entregados al cliente <span class="feat-new-badge">nuevo</span></span></div>
+              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
+            </div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModal('🔥 Señal Fuerte — $6,500/mes')">Contratar</button>
+            </div>
+          </div>
+
+          <!-- ══ 4. DOMINIO TOTAL ══ -->
+          <div class="paquete-card">
+            <div class="paquete-band" style="background:linear-gradient(90deg,#0a315b,#70DDD8);"></div>
+            <div class="paquete-head">
+              <div class="paquete-tier">Profesional</div>
+              <div class="paquete-nombre">🏆 Dominio Total</div>
+              <div class="paquete-precio">$11,000<sub>/mes</sub></div>
+              <div class="paquete-desc">Todo lo de Señal Fuerte, ampliado a múltiples marcas con reportes semanales.</div>
+            </div>
+            <div class="paquete-features">
+              <div class="feat-group-label" style="color:var(--rosa-principal);">Todo de Señal Fuerte, más:</div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Hasta <span class="feat-val">15 redes sociales</span></span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus"><span class="feat-val">2 o 3 marcas</span> simultáneas</span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Contenido independiente por marca</span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Gestión <span class="feat-val">multisite</span> (webs por marca)</span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Producción audiovisual básica incluida</span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reporte ejecutivo <span class="feat-val">semanal</span></span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reunión estratégica mensual (videollamada)</span></div>
+              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Entrega de recursos por cada marca</span></div>
+            </div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModal('🏆 Dominio Total — $11,000/mes')">Contratar</button>
+            </div>
+          </div>
+
+          <!-- ══ 5. IMPERIO DIGITAL ══ -->
+          <div class="paquete-card enterprise">
+            <div class="paquete-band"></div>
+            <div class="paquete-head">
+              <div class="paquete-tier">Enterprise</div>
+              <div class="paquete-nombre" style="color:#c090ff;">👑 Imperio Digital</div>
+              <div class="paquete-precio">A cotizar</div>
+              <div class="paquete-desc">Solución 360° con pauta Meta, CRM y automatización para operaciones de alto volumen.</div>
+            </div>
+            <div class="paquete-features">
+              <div class="feat-group-label" style="color:#9146ff;">Todo de Dominio Total, más:</div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Gestión de <span class="feat-val">Pauta Meta Ads</span></span></div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Automatización CRM (Bitrix24)</span></div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Email marketing segmentado</span></div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Dashboard de métricas en tiempo real</span></div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">SEO técnico + contenido para buscadores</span></div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Soporte <span class="feat-val">prioritario 7 días</span></span></div>
+              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Consultoría ejecutiva mensual</span></div>
+            </div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModal('👑 Imperio Digital — A cotizar')">Solicitar Propuesta</button>
+            </div>
+          </div>
+
+        </div><!-- /paquetes-grid -->
+      </div><!-- /carousel-wrap -->
+
+      <div style="display:flex; justify-content:center; gap:8px; margin: 4px 0 0;">
+        <span class="dot-indicator active" onclick="goToSlide(0)"></span>
+        <span class="dot-indicator" onclick="goToSlide(1)"></span>
+        <span class="dot-indicator" onclick="goToSlide(2)"></span>
+        <span class="dot-indicator" onclick="goToSlide(3)"></span>
+        <span class="dot-indicator" onclick="goToSlide(4)"></span>
+      </div>
+    </div>
 
     <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 2: MARKETING DIGITAL (SERVICIOS SUELTOS)
+         SERVICIOS INDIVIDUALES
     ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-bullhorn"></i> Marketing Digital – Servicios Individuales</div>
-
-    <!-- Community y Redes -->
     <div class="cat-block" onclick="toggleCat(this)">
       <div class="cat-header">
         <i class="fas fa-share-alt cat-icon" style="color:#70DDD8;"></i>
@@ -447,351 +455,405 @@
       </div>
       <div class="cat-body"><div class="services-table-wrap">
         <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
+          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
           <tbody>
-            <tr><td class="td-servicio">Community Manager – Administración en Redes Sociales</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-            <tr><td class="td-servicio">Manejo de Publicidad (Meta Ads)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-            <tr><td class="td-servicio">Gestión de Anuncios en Meta (Campaña puntual)</td><td class="td-precio">$2,500/mes<br><small class="td-nota">+ inversión publicitaria</small></td></tr>
-            <tr><td class="td-servicio">Auditoría de Business Manager</td><td class="td-precio">$800</td></tr>
-            <tr><td class="td-servicio">Consultoría Administrativa de Marketing</td><td class="td-precio">$1,500</td></tr>
-            <tr><td class="td-servicio">Asesoría de Marketing (sesión 60–90 min)</td><td class="td-precio">$700</td></tr>
-            <tr><td class="td-servicio">Plan de Mercadotecnia</td><td class="td-precio">$2,500</td></tr>
-            <tr><td class="td-servicio">Plan de Social Media Marketing</td><td class="td-precio">$2,000</td></tr>
-            <tr><td class="td-servicio">Investigación de Mercados / Encuestas</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
+            <tr><td class="td-servicio">Community Manager – Administración en Redes Sociales</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Community Manager – Administración en Redes Sociales')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Manejo de Publicidad (Meta Ads)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manejo de Publicidad (Meta Ads)')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Gestión de Anuncios en Meta (Campaña puntual)</td><td class="td-precio">$2,500/mes<br><small class="td-nota">+ inversión publicitaria</small></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Gestión de Anuncios en Meta — $2,500/mes')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Auditoría de Business Manager</td><td class="td-precio">$800</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Auditoría de Business Manager — $800')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Consultoría Administrativa de Marketing</td><td class="td-precio">$1,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Consultoría Administrativa de Marketing — $1,500')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Asesoría de Marketing (sesión 60–90 min)</td><td class="td-precio">$700</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de Marketing (sesión) — $700')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Plan de Mercadotecnia</td><td class="td-precio">$2,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Mercadotecnia — $2,500')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Plan de Social Media Marketing</td><td class="td-precio">$2,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Social Media Marketing — $2,000')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Investigación de Mercados / Encuestas</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación de Mercados / Encuestas')">Cotizar</button></td></tr>
           </tbody>
         </table>
       </div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 3: DISEÑO GRÁFICO
-    ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-palette"></i> Diseño Gráfico</div>
 
-    <!-- Logotipos -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-star cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info"><h2>Logotipos e Isotipos</h2><span>Creación · Rediseño · Vectorización · Identidad</span></div>
-        <span class="cat-count">5 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Creación de logotipo</td><td class="td-precio">$700</td></tr>
-            <tr><td class="td-servicio">Rediseño de logotipo</td><td class="td-precio">$500</td></tr>
-            <tr><td class="td-servicio">Vectorización de logotipo</td><td class="td-precio">$280</td></tr>
-            <tr><td class="td-servicio">Cambio de formato de logotipo</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Manual de identidad corporativa</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-star cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Logotipos e Isotipos</h2><span>Creación · Rediseño · Vectorización · Identidad</span></div><span class="cat-count">5 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Creación de logotipo</td><td class="td-precio">$700</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación de logotipo — $700')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Rediseño de logotipo</td><td class="td-precio">$500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Rediseño de logotipo — $500')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Vectorización de logotipo</td><td class="td-precio">$280</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Vectorización de logotipo — $280')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Cambio de formato de logotipo</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cambio de formato de logotipo — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Manual de identidad corporativa</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manual de identidad corporativa')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Tipo Pequeños (tarjetas, etiquetas...) -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-id-card cat-icon" style="color:#70DDD8;"></i>
-        <div class="cat-info"><h2>Impresos Pequeños</h2><span>Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets</span></div>
-        <span class="cat-count">7 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Tarjeta de presentación / visita (1 o 2 caras)</td><td class="td-precio">$90</td></tr>
-            <tr><td class="td-servicio">Tarjeta de presentación doble (1 o 2 caras)</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Etiquetas / Minietiquetas (1 o 2 caras)</td><td class="td-precio">$110</td></tr>
-            <tr><td class="td-servicio">Invitaciones (1 cara)</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Marcapáginas / Separador (1 o 2 caras)</td><td class="td-precio">$80</td></tr>
-            <tr><td class="td-servicio">Pegatinas / Calcomanías</td><td class="td-precio">$120</td></tr>
-            <tr><td class="td-servicio">Tickets / Notas (1 o 2 caras)</td><td class="td-precio">$110</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-id-card cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Impresos Pequeños</h2><span>Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets</span></div><span class="cat-count">7 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Tarjeta de presentación / visita (1 o 2 caras)</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación — $90')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tarjeta de presentación doble (1 o 2 caras)</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación doble — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Etiquetas / Minietiquetas (1 o 2 caras)</td><td class="td-precio">$110</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Etiquetas / Minietiquetas — $110')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Invitaciones (1 cara)</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Invitaciones — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Marcapáginas / Separador (1 o 2 caras)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Marcapáginas / Separador — $80')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Pegatinas / Calcomanías</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pegatinas / Calcomanías — $120')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tickets / Notas (1 o 2 caras)</td><td class="td-precio">$110</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tickets / Notas — $110')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Folletos y Flyers -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-newspaper cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info"><h2>Folletos, Flyers y Dípticos</h2><span>Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos</span></div>
-        <span class="cat-count">7 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Flyer para redes sociales (10×10 cm / 591×591 px)</td><td class="td-precio">$180</td></tr>
-            <tr><td class="td-servicio">Flyer para redes sociales (tamaño personalizado)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-            <tr><td class="td-servicio">Folleto</td><td class="td-precio">$220</td></tr>
-            <tr><td class="td-servicio">Díptico (2 partes)</td><td class="td-precio">$280</td></tr>
-            <tr><td class="td-servicio">Tríptico (3 partes)</td><td class="td-precio">$320</td></tr>
-            <tr><td class="td-servicio">Cuadríptico (4 partes)</td><td class="td-precio">$380</td></tr>
-            <tr><td class="td-servicio">Políptico (5+ partes)</td><td class="td-precio">$450</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-newspaper cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Folletos, Flyers y Dípticos</h2><span>Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos</span></div><span class="cat-count">7 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Flyer para redes sociales (10×10 cm / 591×591 px)</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer para redes sociales — $180')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Flyer para redes sociales (tamaño personalizado)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer tamaño personalizado')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Folleto</td><td class="td-precio">$220</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Folleto — $220')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Díptico (2 partes)</td><td class="td-precio">$280</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Díptico — $280')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tríptico (3 partes)</td><td class="td-precio">$320</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tríptico — $320')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Cuadríptico (4 partes)</td><td class="td-precio">$380</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cuadríptico — $380')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Políptico (5+ partes)</td><td class="td-precio">$450</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Políptico — $450')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Lonas y Banners Grandes -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-expand-arrows-alt cat-icon" style="color:#70DDD8;"></i>
-        <div class="cat-info"><h2>Lonas y Banners de Gran Formato</h2><span>Precio por tamaño en centímetros</span></div>
-        <span class="cat-count">5 rangos</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Tamaño</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Hasta 99 cm</td><td class="td-precio">$170</td></tr>
-            <tr><td class="td-servicio">De 100 a 199 cm</td><td class="td-precio">$210</td></tr>
-            <tr><td class="td-servicio">De 200 a 399 cm</td><td class="td-precio">$260</td></tr>
-            <tr><td class="td-servicio">De 400 a 599 cm</td><td class="td-precio">$310</td></tr>
-            <tr><td class="td-servicio">De 600 cm en adelante</td><td class="td-precio">$370+</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-expand-arrows-alt cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Lonas y Banners de Gran Formato</h2><span>Precio por tamaño en centímetros</span></div><span class="cat-count">5 rangos</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Tamaño</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Hasta 99 cm</td><td class="td-precio">$170</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner hasta 99 cm — $170')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 100 a 199 cm</td><td class="td-precio">$210</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 100–199 cm — $210')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 200 a 399 cm</td><td class="td-precio">$260</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 200–399 cm — $260')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 400 a 599 cm</td><td class="td-precio">$310</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 400–599 cm — $310')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 600 cm en adelante</td><td class="td-precio">$370+</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 600+ cm — $370+')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Papelería Corporativa -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-file-alt cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info"><h2>Papelería Corporativa</h2><span>Carpetas · Membretes · Sellos · Talonarios · Facturas</span></div>
-        <span class="cat-count">6 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Carpeta con o sin solapa</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Membrete tamaño Carta</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Membrete tamaño Oficio</td><td class="td-precio">$180</td></tr>
-            <tr><td class="td-servicio">Talonarios (10 a 30 caras)</td><td class="td-precio">$160</td></tr>
-            <tr><td class="td-servicio">Sellos</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Albaranes y facturas</td><td class="td-precio">$90</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-file-alt cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Papelería Corporativa</h2><span>Carpetas · Membretes · Sellos · Talonarios · Facturas</span></div><span class="cat-count">6 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Carpeta con o sin solapa</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Carpeta corporativa — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Membrete tamaño Carta</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Carta — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Membrete tamaño Oficio</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Oficio — $180')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Talonarios (10 a 30 caras)</td><td class="td-precio">$160</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Talonarios — $160')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Sellos</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de sellos — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Albaranes y facturas</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Albaranes y facturas — $90')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Calendarios -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-calendar-alt cat-icon" style="color:#70DDD8;"></i>
-        <div class="cat-info"><h2>Calendarios</h2><span>Bolsillo · Sobremesa · Pared</span></div>
-        <span class="cat-count">6 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Tipo</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Calendario de bolsillo (1 o 2 caras)</td><td class="td-precio">$70</td></tr>
-            <tr><td class="td-servicio">Calendario de bolsillo (4 caras)</td><td class="td-precio">$90</td></tr>
-            <tr><td class="td-servicio">Calendario Sobremesa (1 o 2 caras)</td><td class="td-precio">$160</td></tr>
-            <tr><td class="td-servicio">Calendario Sobremesa (12 o 13 caras)</td><td class="td-precio">$320</td></tr>
-            <tr><td class="td-servicio">Calendario De Pared (1 cara)</td><td class="td-precio">$160</td></tr>
-            <tr><td class="td-servicio">Calendario De Pared (12 a 13 caras)</td><td class="td-precio">$320</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-calendar-alt cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Calendarios</h2><span>Bolsillo · Sobremesa · Pared</span></div><span class="cat-count">6 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Tipo</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Calendario de bolsillo (1 o 2 caras)</td><td class="td-precio">$70</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (1-2 caras) — $70')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario de bolsillo (4 caras)</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (4 caras) — $90')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario Sobremesa (1 o 2 caras)</td><td class="td-precio">$160</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (1-2 caras) — $160')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario Sobremesa (12 o 13 caras)</td><td class="td-precio">$320</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (12-13 caras) — $320')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario De Pared (1 cara)</td><td class="td-precio">$160</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (1 cara) — $160')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario De Pared (12 a 13 caras)</td><td class="td-precio">$320</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (12-13 caras) — $320')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Archivos Digitales y Presentaciones -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-desktop cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info"><h2>Archivos Digitales y Presentaciones</h2><span>Catálogos · Revistas · Portadas · PowerPoint</span></div>
-        <span class="cat-count">8 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
+      <div class="cat-header"><i class="fas fa-desktop cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Archivos Digitales y Presentaciones</h2><span>Catálogos · Revistas · Portadas · PowerPoint</span></div><span class="cat-count">8 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
       <div class="cat-body">
         <div class="subtitulo-tabla">📄 Archivos Digitales</div>
-        <div class="services-table-wrap">
-          <table>
-            <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-            <tbody>
-              <tr><td class="td-servicio">Catálogo PDF</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-              <tr><td class="td-servicio">Revista o libro digital</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-              <tr><td class="td-servicio">Diseño de portada y/o contraportada</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="services-table-wrap"><table>
+          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="td-servicio">Catálogo PDF</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Catálogo PDF')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Revista o libro digital</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Revista o libro digital')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Diseño de portada y/o contraportada</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de portada / contraportada')">Cotizar</button></td></tr>
+          </tbody>
+        </table></div>
         <div class="subtitulo-tabla">📊 Presentaciones Digitales</div>
-        <div class="services-table-wrap">
-          <table>
-            <thead><tr><th>Paquete</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-            <tbody>
-              <tr><td class="td-servicio">1 Diapositiva</td><td class="td-precio">$50</td></tr>
-              <tr><td class="td-servicio">5 Diapositivas</td><td class="td-precio">$200</td></tr>
-              <tr><td class="td-servicio">7 Diapositivas</td><td class="td-precio">$260</td></tr>
-              <tr><td class="td-servicio">10 Diapositivas</td><td class="td-precio">$300</td></tr>
-              <tr><td class="td-servicio">20 Diapositivas</td><td class="td-precio">$400</td></tr>
-            </tbody>
-          </table>
-          <div class="nota-box">
-            <strong>Nota:</strong> A partir de la diapositiva 11, precio unitario de <strong>$25</strong> c/u. Pasando las 20 diapositivas, el precio unitario baja a <strong>$20</strong> c/u. Precios en MXN, al tipo de cambio del día de contratación.
-          </div>
+        <div class="services-table-wrap"><table>
+          <thead><tr><th>Paquete</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="td-servicio">1 Diapositiva</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 1 Diapositiva — $50')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">5 Diapositivas</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 5 Diapositivas — $200')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">10 Diapositivas</td><td class="td-precio">$300</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 10 Diapositivas — $300')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">20 Diapositivas</td><td class="td-precio">$400</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 20 Diapositivas — $400')">Cotizar</button></td></tr>
+          </tbody>
+        </table>
+        <div class="nota-box"><strong>Nota:</strong> A partir de la diapositiva 11 → $25 c/u. Pasando 20 → $20 c/u. Precios MXN al tipo de cambio del día de contratación.</div>
         </div>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 4: PRODUCCIÓN AUDIOVISUAL
-    ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-film"></i> Producción Audiovisual</div>
-
-    <!-- Foto y Video -->
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-photo-video cat-icon" style="color:#70DDD8;"></i>
-        <div class="cat-info"><h2>Edición Fotográfica y de Video</h2><span>Recorte · Retoque · Caricaturización · Producción · Edición</span></div>
-        <span class="cat-count">9 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Recortar sujeto a PNG (fondo transparente)</td><td class="td-precio">$120</td></tr>
-            <tr><td class="td-servicio">Reparación fotográfica</td><td class="td-precio">$250</td></tr>
-            <tr><td class="td-servicio">Edición fotográfica</td><td class="td-precio">$320</td></tr>
-            <tr><td class="td-servicio">Caricaturización de imagen</td><td class="td-precio">$120</td></tr>
-            <tr><td class="td-servicio">Producción de video</td><td class="td-precio">$350</td></tr>
-            <tr><td class="td-servicio">Edición de video (formato corto – Reels/TikTok)</td><td class="td-precio">$250</td></tr>
-            <tr><td class="td-servicio">Edición de video (formato largo – YouTube)</td><td class="td-precio">$500 – $900</td></tr>
-            <tr><td class="td-servicio">Imágenes generadas por Inteligencia Artificial (lote)</td><td class="td-precio">$350 – $600</td></tr>
-            <tr><td class="td-servicio">Canciones / Jingles por Inteligencia Artificial</td><td class="td-precio">$300 – $500</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-photo-video cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Edición Fotográfica y de Video</h2><span>Recorte · Retoque · Caricaturización · Producción · IA</span></div><span class="cat-count">9 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Recortar sujeto a PNG (fondo transparente)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Recorte a PNG — $120')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Reparación fotográfica</td><td class="td-precio">$250</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Reparación fotográfica — $250')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Edición fotográfica</td><td class="td-precio">$320</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición fotográfica — $320')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Caricaturización de imagen</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Caricaturización de imagen — $120')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Producción de video</td><td class="td-precio">$350</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Producción de video — $350')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Edición de video – Formato corto (Reels/TikTok)</td><td class="td-precio">$250</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato corto — $250')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Edición de video – Formato largo (YouTube)</td><td class="td-precio">$500 – $900</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato largo — $500–$900')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Imágenes generadas por IA (lote)</td><td class="td-precio">$350 – $600</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Imágenes por IA — $350–$600')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Canciones / Jingles por IA</td><td class="td-precio">$300 – $500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Jingle / Canción por IA — $300–$500')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 5: AUTOMATIZACIÓN Y CRM
-    ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-gears"></i> Automatización y CRM</div>
-
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-robot cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info"><h2>Bitrix24, Google Sheets y Scripts</h2><span>CRM · Dashboards · Automatización · Python · Apps Script</span></div>
-        <span class="cat-count">3 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Implementación y configuración de Bitrix24</td><td class="td-precio">$3,500 – $7,000</td></tr>
-            <tr><td class="td-servicio">Dashboard dinámico en Google Sheets (Apps Script)</td><td class="td-precio">$2,000 – $4,500</td></tr>
-            <tr><td class="td-servicio">Script de automatización (Python / Apps Script)</td><td class="td-precio">$1,200 – $3,000</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-robot cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Bitrix24, Google Sheets y Scripts</h2><span>CRM · Dashboards · Python · Apps Script</span></div><span class="cat-count">3 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Implementación y configuración de Bitrix24</td><td class="td-precio">$3,500 – $7,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Implementación Bitrix24 — $3,500–$7,000')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Dashboard dinámico en Google Sheets (Apps Script)</td><td class="td-precio">$2,000 – $4,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Dashboard Google Sheets — $2,000–$4,500')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Script de automatización (Python / Apps Script)</td><td class="td-precio">$1,200 – $3,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Script de automatización — $1,200–$3,000')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 6: WEB Y SOPORTE TÉCNICO
-    ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-globe"></i> Desarrollo Web y Soporte Técnico</div>
-
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-code cat-icon" style="color:#70DDD8;"></i>
-        <div class="cat-info"><h2>Web, Soporte y Otros Servicios Digitales</h2><span>Landings · Discord · Asistencia · Instalaciones</span></div>
-        <span class="cat-count">7 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Desarrollo de Landing Page / Widget / Herramienta Web</td><td class="td-precio">$1,500 – $4,000</td></tr>
-            <tr><td class="td-servicio">Creación y mantenimiento de página web</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td></tr>
-            <tr><td class="td-servicio">Creación de servidor de Discord</td><td class="td-precio">$280</td></tr>
-            <tr><td class="td-servicio">Asesoría para buscar / seleccionar software</td><td class="td-precio">$150</td></tr>
-            <tr><td class="td-servicio">Instalación de programa (presencial)</td><td class="td-precio">$250</td></tr>
-            <tr><td class="td-servicio">Asistencia remota en instalación de programa</td><td class="td-precio">$180</td></tr>
-            <tr><td class="td-servicio">Asistencia técnica general</td><td class="td-precio">$150</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-code cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Web, Soporte y Otros Servicios Digitales</h2><span>Landings · Discord · Asistencia · Instalaciones</span></div><span class="cat-count">7 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Desarrollo de Landing Page / Widget / Herramienta Web</td><td class="td-precio">$1,500 – $4,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Landing Page / Widget Web — $1,500–$4,000')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Creación y mantenimiento de página web</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación y mantenimiento de página web')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Creación de servidor de Discord</td><td class="td-precio">$280</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Servidor de Discord — $280')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Asesoría para buscar / seleccionar software</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de software — $150')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Instalación de programa (presencial)</td><td class="td-precio">$250</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Instalación de programa — $250')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Asistencia remota en instalación de programa</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia remota — $180')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Asistencia técnica general</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia técnica general — $150')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 7: STREAMING
-    ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-broadcast-tower"></i> Streaming y Setup</div>
-
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-broadcast-tower cat-icon" style="color:#9146ff;"></i>
-        <div class="cat-info"><h2>OBS Studio, Overlays y Escenas</h2><span>Twitch · Kick · YouTube · Configuración Pro</span></div>
-        <span class="cat-count">2 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Configuración Pro en OBS Studio (multistream a 5 plataformas, doble lienzo y alertas)</td><td class="td-precio">$1,500 – $2,500</td></tr>
-            <tr><td class="td-servicio">Pack de Overlays y Escenas para Streaming (8+ escenas de marca)</td><td class="td-precio">$1,200</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-broadcast-tower cat-icon" style="color:#9146ff;"></i><div class="cat-info"><h2>OBS Studio, Overlays y Escenas</h2><span>Twitch · Kick · YouTube</span></div><span class="cat-count">2 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Configuración Pro en OBS Studio (multistream, doble lienzo, alertas)</td><td class="td-precio">$1,500 – $2,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('OBS Studio Pro — $1,500–$2,500')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Pack de Overlays y Escenas (8+ escenas de marca)</td><td class="td-precio">$1,200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pack Overlays y Escenas — $1,200')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 8: SERVICIOS ESCOLARES
-    ══════════════════════════════════════════════════════ -->
     <div class="section-title"><i class="fas fa-graduation-cap"></i> Servicios Escolares</div>
-
     <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-pen-alt cat-icon" style="color:#EF5085;"></i>
-        <div class="cat-info"><h2>Redacción Académica</h2><span>Resúmenes · Ensayos · Investigaciones</span></div>
-        <span class="cat-count">3 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
-      </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio por cuartilla (MXN)</th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Resumen</td><td class="td-precio">$50 / cuartilla</td></tr>
-            <tr><td class="td-servicio">Ensayo</td><td class="td-precio">$50 / cuartilla</td></tr>
-            <tr><td class="td-servicio">Investigación</td><td class="td-precio">$100 / cuartilla</td></tr>
-          </tbody>
-        </table>
-      </div></div>
+      <div class="cat-header"><i class="fas fa-pen-alt cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Redacción Académica</h2><span>Resúmenes · Ensayos · Investigaciones</span></div><span class="cat-count">3 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
+      <div class="cat-body"><div class="services-table-wrap"><table>
+        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio por cuartilla</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="td-servicio">Resumen</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Resumen académico — $50/cuartilla')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Ensayo</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Ensayo académico — $50/cuartilla')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Investigación</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación académica — $100/cuartilla')">Cotizar</button></td></tr>
+        </tbody>
+      </table></div></div>
     </div>
 
-    <!-- Leyenda -->
     <div class="leyenda">
-      <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según el alcance, urgencia y complejidad del proyecto. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada. <strong>Precios competitivos al tipo de cambio del día de contratación.</strong>
-    </div>
-
-    <div style="text-align:center; margin-top:28px;">
-      <a href="https://linktr.ee/alexdom104" target="_blank" class="cta-contacto">
-        <i class="fas fa-paper-plane"></i> Solicitar Cotización
-      </a>
+      <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
     </div>
   </main>
 
+  <!-- ══ BOTÓN FLOTANTE ══ -->
+  <button class="btn-flotante" onclick="abrirModal('')">
+    <i class="fas fa-paper-plane"></i> Cotizar
+  </button>
+
+  <!-- ══════════════════════════════════════════
+       MODAL DE COTIZACIÓN
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" onclick="cerrarModalOverlay(event)">
+    <div class="modal-box" id="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3>Solicitar Cotización</h3>
+          <p>Te contactaré en menos de 24 horas para confirmar los detalles.</p>
+        </div>
+        <button class="modal-close" onclick="cerrarModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <div id="servicio-badge-wrap"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" id="f-nombre" placeholder="Tu nombre" autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" id="f-apellido" placeholder="Tu apellido" autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>WhatsApp / Teléfono</label>
+          <input type="tel" id="f-telefono" placeholder="+52 993 000 0000" autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="f-correo" placeholder="tu@correo.com" autocomplete="email">
+        </div>
+
+        <div class="form-group" id="servicio-group">
+          <label>Servicio de interés</label>
+          <input type="text" id="f-servicio" placeholder="¿En qué puedo ayudarte?">
+        </div>
+
+        <div class="form-group">
+          <label>Mensaje <span style="color:#555; font-size:0.9em;">(opcional)</span></label>
+          <textarea id="f-mensaje" placeholder="Cuéntame brevemente sobre tu proyecto o cualquier detalle adicional..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-enviar" id="btn-enviar" onclick="enviarFormulario()">
+          <i class="fas fa-paper-plane"></i> Enviar Solicitud
+        </button>
+        <div class="form-msg" id="form-msg"></div>
+      </div>
+    </div>
+  </div>
 
   <script>
+    // ══ EMAILJS — reemplaza con tus credenciales ══
+    // PASO 1: Crea cuenta en emailjs.com y conecta tu Outlook
+    // PASO 2: Pega tu Public Key aquí:
+    const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';   // ← reemplazar
+    const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';   // ← reemplazar
+    const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';  // ← reemplazar
+
+    // ══ APPS SCRIPT — reemplaza con tu URL de webhook ══
+    // Ver instrucciones en configuracion.html
+    const APPS_SCRIPT_URL = 'TU_URL_DE_APPS_SCRIPT'; // ← reemplazar
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    // ── Modal ──
+    function abrirModal(servicio) {
+      const overlay = document.getElementById('modal-overlay');
+      const badgeWrap = document.getElementById('servicio-badge-wrap');
+      const servicioInput = document.getElementById('f-servicio');
+      const servicioGroup = document.getElementById('servicio-group');
+
+      if (servicio) {
+        badgeWrap.innerHTML = `<div class="servicio-badge"><i class="fas fa-tag"></i>${servicio}</div>`;
+        servicioInput.value = servicio;
+        servicioGroup.style.display = 'none';
+      } else {
+        badgeWrap.innerHTML = '';
+        servicioInput.value = '';
+        servicioGroup.style.display = 'block';
+      }
+
+      document.getElementById('form-msg').className = 'form-msg';
+      document.getElementById('form-msg').textContent = '';
+      overlay.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('f-nombre').focus(), 100);
+    }
+
+    function cerrarModal() {
+      document.getElementById('modal-overlay').classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    function cerrarModalOverlay(e) {
+      if (e.target === document.getElementById('modal-overlay')) cerrarModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+    // ── Envío ──
+    async function enviarFormulario() {
+      const nombre   = document.getElementById('f-nombre').value.trim();
+      const apellido = document.getElementById('f-apellido').value.trim();
+      const telefono = document.getElementById('f-telefono').value.trim();
+      const correo   = document.getElementById('f-correo').value.trim();
+      const servicio = document.getElementById('f-servicio').value.trim();
+      const mensaje  = document.getElementById('f-mensaje').value.trim();
+      const msg      = document.getElementById('form-msg');
+      const btn      = document.getElementById('btn-enviar');
+
+      if (!nombre || !telefono || !correo) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'Por favor completa nombre, teléfono y correo.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'El correo no parece válido.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+      msg.className = 'form-msg';
+
+      const datos = { nombre: nombre + ' ' + apellido, telefono, correo, servicio: servicio || 'No especificado', mensaje: mensaje || '—', fecha: new Date().toLocaleString('es-MX') };
+
+      let sheetOk = false, emailOk = false;
+
+      // 1. Guardar en Google Sheets
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos)
+        });
+        sheetOk = true;
+      } catch (e) { console.warn('Sheets error:', e); }
+
+      // 2. Enviar correo a Alexis via EmailJS
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_name:     'Alexis',
+          from_name:   datos.nombre,
+          from_email:  correo,
+          telefono:    telefono,
+          servicio:    datos.servicio,
+          mensaje:     datos.mensaje,
+          fecha:       datos.fecha,
+          reply_to:    correo
+        });
+        emailOk = true;
+      } catch (e) { console.warn('EmailJS error:', e); }
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
+
+      if (sheetOk || emailOk) {
+        msg.className = 'form-msg ok';
+        msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
+        // Limpiar form después de 3 segundos y cerrar
+        setTimeout(() => {
+          ['f-nombre','f-apellido','f-telefono','f-correo','f-servicio','f-mensaje'].forEach(id => { document.getElementById(id).value = ''; });
+          cerrarModal();
+        }, 3000);
+      } else {
+        msg.className = 'form-msg err';
+        msg.textContent = 'Ocurrió un error. Escríbeme directamente por WhatsApp o email.';
+      }
+    }
+
+    // ── Carrusel ──
     function toggleCat(block) { block.classList.toggle('open'); }
 
-    // ── Carrusel de paquetes ──
     const carousel = document.getElementById('paquetes-carousel');
     const dots = document.querySelectorAll('.dot-indicator');
     let currentSlide = 0;
@@ -799,28 +861,21 @@
 
     function getCardWidth() {
       const card = carousel.querySelector('.paquete-card');
-      return card ? card.offsetWidth + 18 : 248;
+      return card ? card.offsetWidth + 14 : 282;
     }
-
-    function updateDots(index) {
-      dots.forEach((d, i) => d.classList.toggle('active', i === index));
-    }
-
+    function updateDots(i) { dots.forEach((d, j) => d.classList.toggle('active', j === i)); }
     function scrollCarousel(dir) {
       currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + dir));
       carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' });
       updateDots(currentSlide);
     }
-
-    function goToSlide(index) {
-      currentSlide = index;
-      carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' });
-      updateDots(currentSlide);
+    function goToSlide(i) {
+      currentSlide = i;
+      carousel.scrollTo({ left: i * getCardWidth(), behavior: 'smooth' });
+      updateDots(i);
     }
-
     carousel.addEventListener('scroll', () => {
-      const w = getCardWidth();
-      currentSlide = Math.round(carousel.scrollLeft / w);
+      currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
       updateDots(currentSlide);
     });
   </script>
