@@ -142,6 +142,8 @@
     .td-precio { font-weight: bold; color: var(--cian-brillo); white-space: nowrap; text-align: right; }
     .td-nota { font-size: 0.76rem; color: #888; font-style: italic; }
     .precio-pres { color: #f0a060; font-weight: bold; }
+    .precio-skeleton { color: #444; font-style: italic; animation: skPulse 1.2s ease-in-out infinite; }
+    @keyframes skPulse { 0%,100%{ opacity:.3 } 50%{ opacity:.8 } }
     .nota-box { margin: 8px 16px 16px; background: #1a1a1a; border-left: 3px solid #f0a060; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.79rem; color: #bbb; }
     .nota-box strong { color: #f0a060; }
     .leyenda { margin-top: 32px; background: var(--contraste-fondo); border-left: 4px solid var(--cian-brillo); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 0.82rem; color: #aaa; }
@@ -423,6 +425,9 @@
       font-size: 0.6rem; color: #2a2a2a; text-align: center;
     }
 
+    /* ── Sync bar ── */
+    #sync-status { font-size: 0.78rem; color: #666; }
+
     /* ── Lightbox ── */
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 1200;
@@ -520,8 +525,8 @@
             <div class="paquete-head">
               <div class="paquete-tier">Starter</div>
               <div class="paquete-nombre">🚀 Despegue</div>
-              <div class="paquete-precio">$1,200<sub>/mes</sub></div>
-              <div class="paquete-desc">Para emprendedores que arrancan. Presencia mínima, sin complicaciones.</div>
+              <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
+              <div class="paquete-desc"></div>
             </div>
             <div class="paquete-features">
               <div class="feat-group-label">Redes y publicaciones</div>
@@ -550,8 +555,8 @@
             <div class="paquete-head">
               <div class="paquete-tier">Básico</div>
               <div class="paquete-nombre">📡 Arranque Digital</div>
-              <div class="paquete-precio">$2,500<sub>/mes</sub></div>
-              <div class="paquete-desc">3 plataformas activas con contenido publicado y una web gestionada.</div>
+              <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
+              <div class="paquete-desc"></div>
             </div>
             <div class="paquete-features">
               <div class="feat-group-label">Redes y publicaciones</div>
@@ -581,8 +586,8 @@
             <div class="paquete-head">
               <div class="paquete-tier">Intermedio</div>
               <div class="paquete-nombre">🔥 Señal Fuerte</div>
-              <div class="paquete-precio">$4,800<sub>/mes</sub></div>
-              <div class="paquete-desc">Gestión completa de 5 plataformas: contenido exclusivo, SEO, comunidad activa y entrega de recursos.</div>
+              <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
+              <div class="paquete-desc"></div>
             </div>
             <div class="paquete-features">
               <div class="feat-group-label">Redes y publicaciones</div>
@@ -611,8 +616,8 @@
             <div class="paquete-head">
               <div class="paquete-tier">Profesional</div>
               <div class="paquete-nombre">🏆 Dominio Total</div>
-              <div class="paquete-precio">$8,500<sub>/mes</sub></div>
-              <div class="paquete-desc">Todo lo de Señal Fuerte, ampliado a múltiples marcas con reportes semanales.</div>
+              <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
+              <div class="paquete-desc"></div>
             </div>
             <div class="paquete-features">
               <div class="feat-group-label" style="color:var(--rosa-principal);">Todo de Señal Fuerte, más:</div>
@@ -636,8 +641,8 @@
             <div class="paquete-head">
               <div class="paquete-tier">Enterprise</div>
               <div class="paquete-nombre" style="color:#c090ff;">👑 Imperio Digital</div>
-              <div class="paquete-precio">A cotizar</div>
-              <div class="paquete-desc">Solución 360° con pauta Meta, CRM y automatización para operaciones de alto volumen.</div>
+              <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
+              <div class="paquete-desc"></div>
             </div>
             <div class="paquete-features">
               <div class="feat-group-label" style="color:#9146ff;">Todo de Dominio Total, más:</div>
@@ -681,15 +686,15 @@
         <table>
           <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
           <tbody>
-            <tr><td class="td-servicio">Community Manager – Administración en Redes Sociales</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Community Manager – Administración en Redes Sociales')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Manejo de Publicidad (Meta Ads)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manejo de Publicidad (Meta Ads)')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Gestión de Anuncios en Meta (Campaña puntual)</td><td class="td-precio">$1,800/mes<br><small class="td-nota">+ inversión publicitaria</small></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Gestión de Anuncios en Meta — $1,800/mes'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Auditoría de Business Manager</td><td class="td-precio">$600</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Auditoría de Business Manager — $600'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Consultoría Administrativa de Marketing</td><td class="td-precio">$1,200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Consultoría Administrativa de Marketing — $1,200'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Asesoría de Marketing (sesión 60–90 min)</td><td class="td-precio">$500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de Marketing (sesión) — $500'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Plan de Mercadotecnia</td><td class="td-precio">$1,800</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Mercadotecnia — $1,800'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Plan de Social Media Marketing</td><td class="td-precio">$1,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Social Media Marketing — $1,500'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Investigación de Mercados / Encuestas</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación de Mercados / Encuestas')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Community Manager – Administración en Redes Sociales</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Community Manager – Administración en Redes Sociales')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Manejo de Publicidad (Meta Ads)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manejo de Publicidad (Meta Ads)')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Gestión de Anuncios en Meta (Campaña puntual)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Gestión de Anuncios en Meta — $1,800/mes'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Auditoría de Business Manager</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Auditoría de Business Manager — $600'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Consultoría Administrativa de Marketing</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Consultoría Administrativa de Marketing — $1,200'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Asesoría de Marketing (sesión 60–90 min)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de Marketing (sesión) — $500'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Plan de Mercadotecnia</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Mercadotecnia — $1,800'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Plan de Social Media Marketing</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Social Media Marketing — $1,500'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Investigación de Mercados / Encuestas</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación de Mercados / Encuestas')">Cotizar</button></td></tr>
           </tbody>
         </table>
       </div>
@@ -716,11 +721,11 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Creación de logotipo</td><td class="td-precio">$450</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación de logotipo — $450'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Rediseño de logotipo</td><td class="td-precio">$350</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Rediseño de logotipo — $350'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Vectorización de logotipo</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Vectorización de logotipo — $180'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Cambio de formato de logotipo</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cambio de formato de logotipo — $80'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Manual de identidad corporativa</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manual de identidad corporativa')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Creación de logotipo</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación de logotipo — $450'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Rediseño de logotipo</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Rediseño de logotipo — $350'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Vectorización de logotipo</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Vectorización de logotipo — $180'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Cambio de formato de logotipo</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cambio de formato de logotipo — $80'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Manual de identidad corporativa</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manual de identidad corporativa')">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="logos">
@@ -744,13 +749,13 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Tarjeta de presentación / visita (1 o 2 caras)</td><td class="td-precio">$70</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación — $70'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Tarjeta de presentación doble (1 o 2 caras)</td><td class="td-precio">$110</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación doble — $110'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Etiquetas / Minietiquetas (1 o 2 caras)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Etiquetas / Minietiquetas — $80'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Invitaciones (1 cara)</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Invitaciones — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Marcapáginas / Separador (1 o 2 caras)</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Marcapáginas / Separador — $50'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Pegatinas / Calcomanías</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pegatinas / Calcomanías — $90'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Tickets / Notas (1 o 2 caras)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tickets / Notas — $80'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tarjeta de presentación / visita (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación — $70'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tarjeta de presentación doble (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación doble — $110'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Etiquetas / Minietiquetas (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Etiquetas / Minietiquetas — $80'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Invitaciones (1 cara)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Invitaciones — $100'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Marcapáginas / Separador (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Marcapáginas / Separador — $50'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Pegatinas / Calcomanías</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pegatinas / Calcomanías — $90'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tickets / Notas (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tickets / Notas — $80'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="impresos">
@@ -774,13 +779,13 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Flyer para redes sociales (10×10 cm / 591×591 px)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer para redes sociales — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Flyer para redes sociales (tamaño personalizado)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer tamaño personalizado')">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Folleto</td><td class="td-precio">$160</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Folleto — $160'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Díptico (2 partes)</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Díptico — $200'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Tríptico (3 partes)</td><td class="td-precio">$250</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tríptico — $250'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Cuadríptico (4 partes)</td><td class="td-precio">$300</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cuadríptico — $300'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Políptico (5+ partes)</td><td class="td-precio">$350</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Políptico — $350'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Flyer para redes sociales (10×10 cm / 591×591 px)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer para redes sociales — $120'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Flyer para redes sociales (tamaño personalizado)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer tamaño personalizado')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Folleto</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Folleto — $160'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Díptico (2 partes)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Díptico — $200'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Tríptico (3 partes)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tríptico — $250'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Cuadríptico (4 partes)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cuadríptico — $300'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Políptico (5+ partes)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Políptico — $350'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="folletos">
@@ -804,11 +809,11 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Tamaño</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Hasta 99 cm</td><td class="td-precio">$130</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner hasta 99 cm — $130'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 100 a 199 cm</td><td class="td-precio">$170</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 100–199 cm — $170'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 200 a 399 cm</td><td class="td-precio">$210</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 200–399 cm — $210'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 400 a 599 cm</td><td class="td-precio">$260</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 400–599 cm — $260'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 600 cm en adelante</td><td class="td-precio">$310+</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 600+ cm — $310+'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Hasta 99 cm</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner hasta 99 cm — $130'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 100 a 199 cm</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 100–199 cm — $170'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 200 a 399 cm</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 200–399 cm — $210'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 400 a 599 cm</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 400–599 cm — $260'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">De 600 cm en adelante</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 600+ cm — $310+'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="lonas">
@@ -832,12 +837,12 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Carpeta con o sin solapa</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Carpeta corporativa — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Membrete tamaño Carta</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Carta — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Membrete tamaño Oficio</td><td class="td-precio">$130</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Oficio — $130'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Talonarios (10 a 30 caras)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Talonarios — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Sellos</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de sellos — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Albaranes y facturas</td><td class="td-precio">$60</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Albaranes y facturas — $60'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Carpeta con o sin solapa</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Carpeta corporativa — $100'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Membrete tamaño Carta</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Carta — $100'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Membrete tamaño Oficio</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Oficio — $130'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Talonarios (10 a 30 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Talonarios — $120'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Sellos</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de sellos — $100'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Albaranes y facturas</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Albaranes y facturas — $60'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="papeleria">
@@ -861,12 +866,12 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Tipo</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Calendario de bolsillo (1 o 2 caras)</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (1-2 caras) — $50'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario de bolsillo (4 caras)</td><td class="td-precio">$70</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (4 caras) — $70'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario Sobremesa (1 o 2 caras)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (1-2 caras) — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario Sobremesa (12 o 13 caras)</td><td class="td-precio">$240</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (12-13 caras) — $240'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario De Pared (1 cara)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (1 cara) — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario De Pared (12 a 13 caras)</td><td class="td-precio">$240</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (12-13 caras) — $240'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario de bolsillo (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (1-2 caras) — $50'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario de bolsillo (4 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (4 caras) — $70'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario Sobremesa (1 o 2 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (1-2 caras) — $120'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario Sobremesa (12 o 13 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (12-13 caras) — $240'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario De Pared (1 cara)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (1 cara) — $120'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Calendario De Pared (12 a 13 caras)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (12-13 caras) — $240'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="calendarios">
@@ -892,19 +897,19 @@
         <div class="services-table-wrap"><table>
           <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
           <tbody>
-            <tr><td class="td-servicio">Catálogo PDF</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Catálogo PDF')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Revista o libro digital</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Revista o libro digital')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Diseño de portada y/o contraportada</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de portada / contraportada')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Catálogo PDF</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Catálogo PDF')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Revista o libro digital</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Revista o libro digital')">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">Diseño de portada y/o contraportada</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de portada / contraportada')">Cotizar</button></td></tr>
           </tbody>
         </table></div>
         <div class="subtitulo-tabla">📊 Presentaciones Digitales</div>
         <div class="services-table-wrap"><table>
           <thead><tr><th>Paquete</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
           <tbody>
-            <tr><td class="td-servicio">1 Diapositiva</td><td class="td-precio">$40</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 1 Diapositiva — $40'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">5 Diapositivas</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 5 Diapositivas — $150'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">10 Diapositivas</td><td class="td-precio">$220</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 10 Diapositivas — $220'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">20 Diapositivas</td><td class="td-precio">$320</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 20 Diapositivas — $320'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">1 Diapositiva</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 1 Diapositiva — $40'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">5 Diapositivas</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 5 Diapositivas — $150'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">10 Diapositivas</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 10 Diapositivas — $220'">Cotizar</button></td></tr>
+            <tr><td class="td-servicio">20 Diapositivas</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 20 Diapositivas — $320'">Cotizar</button></td></tr>
           </tbody>
         </table>
         <div class="nota-box"><strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u. Precios MXN al tipo de cambio del día de contratación.</div>
@@ -931,15 +936,15 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Recortar sujeto a PNG (fondo transparente)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Recorte a PNG — $80'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Reparación fotográfica</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Reparación fotográfica — $180'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Edición fotográfica</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición fotográfica — $200'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Caricaturización de imagen</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Caricaturización de imagen — $90'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Producción de video</td><td class="td-precio">$280</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Producción de video — $280'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Edición de video – Formato corto (Reels/TikTok)</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato corto — $180'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Edición de video – Formato largo (YouTube)</td><td class="td-precio">$400 – $700</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato largo — $400–$700'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Imágenes generadas por IA (lote)</td><td class="td-precio">$280 – $450</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Imágenes por IA — $280–$450'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Canciones / Jingles por IA</td><td class="td-precio">$250 – $400</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Jingle / Canción por IA — $250–$400'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Recortar sujeto a PNG (fondo transparente)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Recorte a PNG — $80'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Reparación fotográfica</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Reparación fotográfica — $180'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Edición fotográfica</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición fotográfica — $200'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Caricaturización de imagen</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Caricaturización de imagen — $90'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Producción de video</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Producción de video — $280'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Edición de video – Formato corto (Reels/TikTok)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato corto — $180'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Edición de video – Formato largo (YouTube)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato largo — $400–$700'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Imágenes generadas por IA (lote)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Imágenes por IA — $280–$450'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Canciones / Jingles por IA</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Jingle / Canción por IA — $250–$400'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="audiovisual">
@@ -964,9 +969,9 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Implementación y configuración de Bitrix24</td><td class="td-precio">$3,000 – $6,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Implementación Bitrix24 — $3,000–$6,000'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Dashboard dinámico en Google Sheets (Apps Script)</td><td class="td-precio">$1,500 – $3,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Dashboard Google Sheets — $1,500–$3,500'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Script de automatización (Python / Apps Script)</td><td class="td-precio">$900 – $2,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Script de automatización — $900–$2,500'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Implementación y configuración de Bitrix24</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Implementación Bitrix24 — $3,000–$6,000'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Dashboard dinámico en Google Sheets (Apps Script)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Dashboard Google Sheets — $1,500–$3,500'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Script de automatización (Python / Apps Script)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Script de automatización — $900–$2,500'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="crm">
@@ -991,13 +996,13 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Desarrollo de Landing Page / Widget / Herramienta Web</td><td class="td-precio">$1,200 – $3,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Landing Page / Widget Web — $1,200–$3,500'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Creación y mantenimiento de página web</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación y mantenimiento de página web')">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Creación de servidor de Discord</td><td class="td-precio">$220</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Servidor de Discord — $220'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Asesoría para buscar / seleccionar software</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de software — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Instalación de programa (presencial)</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Instalación de programa — $200'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Asistencia remota en instalación de programa</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia remota — $150'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Asistencia técnica general</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia técnica general — $100'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Desarrollo de Landing Page / Widget / Herramienta Web</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Landing Page / Widget Web — $1,200–$3,500'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Creación y mantenimiento de página web</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación y mantenimiento de página web')">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Creación de servidor de Discord</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Servidor de Discord — $220'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Asesoría para buscar / seleccionar software</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de software — $100'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Instalación de programa (presencial)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Instalación de programa — $200'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Asistencia remota en instalación de programa</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia remota — $150'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Asistencia técnica general</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia técnica general — $100'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="web">
@@ -1022,8 +1027,8 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Configuración Pro en OBS Studio (multistream, doble lienzo, alertas)</td><td class="td-precio">$1,200 – $2,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('OBS Studio Pro — $1,200–$2,000'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Pack de Overlays y Escenas (8+ escenas de marca)</td><td class="td-precio">$900</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pack Overlays y Escenas — $900'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Configuración Pro en OBS Studio (multistream, doble lienzo, alertas)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('OBS Studio Pro — $1,200–$2,000'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Pack de Overlays y Escenas (8+ escenas de marca)</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pack Overlays y Escenas — $900'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="streaming">
@@ -1048,9 +1053,9 @@
       <div class="cat-body"><div class="services-table-wrap"><table>
         <thead><tr><th>Servicio</th><th style="text-align:right;">Precio por cuartilla</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="td-servicio">Resumen</td><td class="td-precio">$40</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Resumen académico — $40/cuartilla'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Ensayo</td><td class="td-precio">$40</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Ensayo académico — $40/cuartilla'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Investigación</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación académica — $80/cuartilla'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Resumen</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Resumen académico — $40/cuartilla'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Ensayo</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Ensayo académico — $40/cuartilla'">Cotizar</button></td></tr>
+          <tr><td class="td-servicio">Investigación</td><td class="td-precio"><span class="precio-skeleton">···</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación académica — $80/cuartilla'">Cotizar</button></td></tr>
         </tbody>
       </table></div>
         <div class="galeria-slot" data-galeria="escolares">
@@ -1174,84 +1179,71 @@
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    // ══ SINCRONIZACIÓN EN VIVO DESDE GOOGLE SHEETS ══════════════
-    // Mismo mecanismo que sorteos.html:
-    //   servicios.html carga → fetch(APPS_SCRIPT_URL + '?action=servicios')
-    //   → doGet del Apps Script → lee hoja "Servicios" → devuelve JSON
-    //   → aplica nombres, precios, visibilidad al DOM
-    // Si el fetch falla, el HTML muestra los datos hardcodeados sin errores.
+    // ══ CARGA DESDE GOOGLE SHEETS (única fuente de verdad) ═══════
+    // Los precios NO están hardcodeados en el HTML.
+    // Se muestran "···" hasta que el Sheet responda.
     // ═══════════════════════════════════════════════════════════
-
-    async function cargarDesdeSheet() {
+    window.addEventListener('load', async () => {
       try {
         const resp = await fetch(APPS_SCRIPT_URL + '?action=servicios');
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
         if (!data.ok || !data.servicios) throw new Error(data.error || 'Sin datos');
-        aplicarDatosAlDOM(data.servicios);
-      } catch(err) {
-        console.warn('[Servicios] Sincronización fallida:', err.message);
-      }
-    }
 
-    function aplicarDatosAlDOM(servicios) {
-      servicios.forEach(item => {
-        if (item.esPaquete) {
-          // ── Tarjetas del carrusel ─────────────────────────────
-          document.querySelectorAll('.paquete-card').forEach(card => {
-            const nombreEl = card.querySelector('.paquete-nombre');
-            if (!nombreEl || nombreEl.textContent.trim() !== item.nombre) return;
+        data.servicios.forEach(item => {
+          if (item.esPaquete) {
+            // ── Tarjetas del carrusel ───────────────────────────
+            document.querySelectorAll('.paquete-card').forEach(card => {
+              const nombreEl = card.querySelector('.paquete-nombre');
+              if (!nombreEl || nombreEl.textContent.trim() !== item.nombre) return;
 
-            if (!item.visible) { card.style.display = 'none'; return; }
-            card.style.display = '';
+              if (!item.visible) { card.style.display = 'none'; return; }
+              card.style.display = '';
 
-            const precioEl = card.querySelector('.paquete-precio');
-            const descEl   = card.querySelector('.paquete-desc');
+              const precioEl = card.querySelector('.paquete-precio');
+              const descEl   = card.querySelector('.paquete-desc');
 
-            if (precioEl && item.precio) {
-              const p = item.precio.trim();
-              if (/cotiz|a cotizar/i.test(p)) {
-                precioEl.innerHTML = 'A cotizar';
-              } else {
-                // Conservar el <sub>/mes</sub> si ya existe en el HTML
-                const sub = precioEl.querySelector('sub');
-                precioEl.innerHTML = p.replace('/mes', '') + (sub ? '<sub>/mes</sub>' : '');
+              if (precioEl && item.precio) {
+                const p = item.precio.trim();
+                if (/cotiz|a cotizar/i.test(p)) {
+                  precioEl.innerHTML = 'A cotizar';
+                } else {
+                  precioEl.innerHTML = p.replace('/mes', '') + '<sub>/mes</sub>';
+                }
               }
-            }
-            if (descEl && item.desc) descEl.textContent = item.desc;
-          });
+              if (descEl && item.desc) descEl.textContent = item.desc;
+            });
 
-        } else {
-          // ── Filas de tabla ────────────────────────────────────
-          document.querySelectorAll('tbody tr').forEach(tr => {
-            const tdNombre = tr.querySelector('.td-servicio');
-            const tdPrecio = tr.querySelector('.td-precio');
-            if (!tdNombre || !tdPrecio) return;
-            if (tdNombre.textContent.trim() !== item.nombre) return;
+          } else {
+            // ── Filas de tabla ──────────────────────────────────
+            document.querySelectorAll('tbody tr').forEach(tr => {
+              const tdNombre = tr.querySelector('.td-servicio');
+              const tdPrecio = tr.querySelector('.td-precio');
+              if (!tdNombre || !tdPrecio) return;
+              if (tdNombre.textContent.trim() !== item.nombre) return;
 
-            if (!item.visible) { tr.style.display = 'none'; return; }
-            tr.style.display = '';
+              if (!item.visible) { tr.style.display = 'none'; return; }
+              tr.style.display = '';
 
-            if (item.nombre) tdNombre.textContent = item.nombre;
-            if (item.precio) {
-              tdPrecio.innerHTML = /cotiz|a cotizar/i.test(item.precio)
-                ? '<span class="precio-pres">Cotizable</span>'
-                : item.precio;
-            }
-          });
+              if (item.precio) {
+                tdPrecio.innerHTML = /cotiz|a cotizar/i.test(item.precio)
+                  ? '<span class="precio-pres">Cotizable</span>'
+                  : item.precio;
+              }
+            });
 
-          // ── Catálogo del buscador modal ───────────────────────
-          const cat = CATALOGO.find(c => c.nombre === item.nombre);
-          if (cat) {
-            if (item.nombre) cat.nombre = item.nombre;
-            if (item.precio) cat.precio = item.precio;
+            // ── Catálogo del buscador modal ─────────────────────
+            const cat = CATALOGO.find(c => c.nombre === item.nombre);
+            if (cat && item.precio) cat.precio = item.precio;
           }
-        }
-      });
-    }
+        });
 
-    // Ejecutar UNA sola vez al cargar la página
-    window.addEventListener('load', cargarDesdeSheet);
+      } catch(err) {
+        // Si falla, mostrar "—" en vez de "···"
+        document.querySelectorAll('.precio-skeleton').forEach(el => el.textContent = '—');
+        console.warn('[Servicios] No se pudo cargar desde el Sheet:', err.message);
+      }
+    });
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
     const CATALOGO = [
