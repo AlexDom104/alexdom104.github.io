@@ -507,15 +507,15 @@
     }
     .btn-personaliza {
       display: inline-flex; align-items: center; gap: 10px;
-      background: linear-gradient(135deg, #1a1a2e, #2a1a3e);
-      border: 1.5px solid #7040b0;
-      color: #c090ff; font-size: 0.9rem; font-weight: 600;
+      background: linear-gradient(135deg, #0a1a2e, #0A315B);
+      border: 1.5px solid var(--cian-brillo);
+      color: var(--cian-brillo); font-size: 0.9rem; font-weight: 600;
       padding: 13px 28px; border-radius: 12px; cursor: pointer;
       transition: 0.25s; font-family: inherit;
     }
     .btn-personaliza:hover {
-      border-color: #9146ff; color: #d8b0ff;
-      box-shadow: 0 0 18px rgba(145,70,255,0.25);
+      border-color: var(--rosa-principal); color: var(--rosa-principal);
+      box-shadow: 0 0 18px rgba(239,80,133,0.25);
       transform: translateY(-2px);
     }
     .btn-personaliza i { font-size: 1rem; }
@@ -537,7 +537,7 @@
       padding: 22px 28px 18px;
       border-bottom: 1px solid #2a2a2a;
       display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-      background: linear-gradient(135deg,#1a1a2e,#2a1a3a);
+      background: linear-gradient(135deg,#0a1a2e,#0A315B);
     }
     #cfg-header h3 { font-size: 1.2rem; color: #fff; margin-bottom: 4px; }
     #cfg-header p  { font-size: 0.78rem; color: #888; }
@@ -569,7 +569,7 @@
       user-select: none;
     }
     .cfg-section-header input[type=checkbox] {
-      width: 17px; height: 17px; accent-color: #9146ff;
+      width: 17px; height: 17px; accent-color: var(--cian-brillo);
       cursor: pointer; flex-shrink: 0; margin: 0;
     }
     .cfg-section-header label {
@@ -595,7 +595,7 @@
       font-size: 0.88rem; outline: none; font-family: inherit;
       transition: border-color 0.2s;
     }
-    .cfg-input:focus { border-color: #9146ff; }
+    .cfg-input:focus { border-color: var(--cian-brillo); }
     .cfg-input-row { display: flex; gap: 8px; align-items: center; }
     .cfg-input-row .cfg-input { flex: 1; }
     .cfg-unit { font-size: 0.78rem; color: #666; white-space: nowrap; }
@@ -609,7 +609,7 @@
     }
     .cfg-check-pill input { display: none; }
     .cfg-check-pill.checked {
-      border-color: #9146ff; color: #c090ff; background: rgba(145,70,255,0.12);
+      border-color: var(--cian-brillo); color: var(--cian-brillo); background: rgba(112,221,216,0.10);
     }
     .cfg-check-pill i { font-size: 0.7rem; }
 
@@ -619,7 +619,7 @@
       font-size: 0.88rem; outline: none; font-family: inherit;
       transition: border-color 0.2s; cursor: pointer;
     }
-    .cfg-select:focus { border-color: #9146ff; }
+    .cfg-select:focus { border-color: var(--cian-brillo); }
     .cfg-select option { background: #1c1c1c; }
 
     /* Columna derecha — resumen */
@@ -665,13 +665,13 @@
       display: flex; gap: 10px; align-items: center;
     }
     .btn-cfg-enviar {
-      flex: 1; background: #9146ff; color: #fff;
+      flex: 1; background: var(--rosa-principal); color: #fff;
       border: none; border-radius: 10px; padding: 13px;
       font-size: 0.92rem; font-weight: bold; cursor: pointer;
       transition: 0.25s; display: flex; align-items: center;
       justify-content: center; gap: 8px; font-family: inherit;
     }
-    .btn-cfg-enviar:hover { background: #7a35d0; }
+    .btn-cfg-enviar:hover { background: var(--rosa-oscuro); }
     .btn-cfg-enviar:disabled { opacity: 0.6; cursor: default; }
     .btn-cfg-cancel {
       background: none; border: 1.5px solid #333; color: #666;
@@ -961,10 +961,23 @@
                 <span class="cfg-price-hint" id="hint-diseno"></span>
               </div>
               <div class="cfg-section-body" id="body-diseno">
-                <div class="cfg-label">Piezas de contenido al mes <span style="color:#555;font-size:0.68rem;">(1 pieza = se publica en todas tus redes)</span></div>
-                <div class="cfg-input-row">
-                  <input type="number" class="cfg-input" id="num-diseno" min="1" max="200" value="8" oninput="cfgCalc()">
+                <div class="cfg-label">Total de piezas al mes <span style="color:#555;font-size:0.68rem;">(1 pieza = se publica en todas tus redes)</span></div>
+                <div class="cfg-input-row" style="margin-bottom:10px;">
+                  <input type="number" class="cfg-input" id="num-diseno-total" min="1" max="200" value="8" oninput="cfgValidarDiseno()">
                   <span class="cfg-unit">pieza(s)/mes</span>
+                </div>
+                <div class="cfg-label">🖼️ ¿Cuántas son imágenes? <span id="precio-img-hint" style="color:#555;font-size:0.68rem;"></span></div>
+                <div class="cfg-input-row" style="margin-bottom:10px;">
+                  <input type="number" class="cfg-input" id="num-diseno-img" min="0" max="200" value="8" oninput="cfgValidarDiseno()">
+                  <span class="cfg-unit">imagen(es)/mes</span>
+                </div>
+                <div class="cfg-label">🎬 ¿Cuántos son videos? <span style="color:#555;font-size:0.68rem;">(base 2 min resultado final · videos más largos pueden variar el precio)</span></div>
+                <div class="cfg-input-row">
+                  <input type="number" class="cfg-input" id="num-diseno-vid" min="0" max="200" value="0" oninput="cfgValidarDiseno()">
+                  <span class="cfg-unit">video(s)/mes</span>
+                </div>
+                <div id="diseno-aviso" style="display:none;margin-top:8px;font-size:0.74rem;color:#ff6b6b;">
+                  <i class="fas fa-exclamation-triangle"></i> Imágenes + videos debe ser igual al total de piezas.
                 </div>
               </div>
             </div>
@@ -1485,14 +1498,6 @@
         </div>
       </div>
     </div>
-
-    <div class="sync-bar">
-      <button id="btn-sync-sheets" onclick="sincronizarDesdeSheets()">
-        <i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets
-      </button>
-      <span id="sync-status"></span>
-    </div>
-
     <div class="leyenda">
       <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
     </div>
@@ -1600,7 +1605,6 @@
     // 1. Abre tu Google Sheet → Archivo → Compartir → "Cualquier persona con el enlace" (Viewer)
     // 2. Copia el ID de la URL: docs.google.com/spreadsheets/d/[ESTE_ES_EL_ID]/edit
     // 3. Pégalo aquí abajo:
-    const GOOGLE_SHEET_ID = 'TU_SHEET_ID_AQUI';  // ← reemplazar
     // ═══════════════════════════════════════════════════════════
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -1612,7 +1616,6 @@
     // Cómo activar:
     //   1. Abre tu Google Sheet → Compartir → "Cualquier persona con el enlace" (Visor)
     //   2. Copia el ID de la URL:  docs.google.com/spreadsheets/d/[ESTE_ID]/edit
-    //   3. Pégalo en GOOGLE_SHEET_ID arriba (línea ~1203)
     //
     // Columnas que lee (fila 2 de la hoja "Servicios"):
     //   cat_id | Categoría | Nombre del Servicio | Descripción | Precio | Precio Mín | Precio Máx | Visible
@@ -1625,172 +1628,91 @@
     //   · Catálogo interno del buscador modal
     // ═══════════════════════════════════════════════════════════
 
-    function parsearCSV(text) {
-      return text.trim().split('\n').map(row => {
-        const cols = [];
-        let inQuote = false, cur = '';
-        for (let i = 0; i < row.length; i++) {
-          const c = row[i];
-          if (c === '"') { inQuote = !inQuote; }
-          else if (c === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
-          else { cur += c; }
-        }
-        cols.push(cur.trim());
-        return cols;
-      });
-    }
 
-    function renderPrecio(precio) {
-      if (!precio) return '';
-      const p = precio.toLowerCase().trim();
-      if (p === 'cotizable' || p === 'a cotizar') return '<span class="precio-pres">Cotizable</span>';
-      return precio;
-    }
 
-    async function sincronizarDesdeSheets() {
-      const btn    = document.getElementById('btn-sync-sheets');
-      const status = document.getElementById('sync-status');
-
-      if (!GOOGLE_SHEET_ID || GOOGLE_SHEET_ID === 'TU_SHEET_ID_AQUI') {
-        status.textContent = '⚠️ Agrega tu GOOGLE_SHEET_ID en el script para activar la sincronización.';
-        status.style.color = '#f0a060';
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
-      status.textContent = '';
-
-      // URL pública CSV — funciona sin API key mientras el Sheet sea "Viewer público"
-      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Servicios`;
-
-      try {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error('No se pudo leer el Google Sheet. ¿Está compartido como público?');
-        const text = await resp.text();
-        const rows = parsearCSV(text);
-
-        // Detectar índices de columna por nombre (fila 2 = headers reales)
-        // Fila 1 es el título decorativo, fila 2 son los headers
-        const headerRow = rows.find(r => r[0] && r[0].toLowerCase().includes('cat_id'));
-        if (!headerRow) throw new Error('No encontré la fila de encabezados en la hoja "Servicios".');
-
-        const h = headerRow.map(c => c.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'_'));
-        const ci = {
-          cat:     h.findIndex(c => c.includes('cat_id')),
-          nombre:  h.findIndex(c => c.includes('nombre')),
-          desc:    h.findIndex(c => c.includes('descrip')),
-          precio:  h.findIndex(c => c === 'precio'),
-          visible: h.findIndex(c => c.includes('visible')),
-        };
-
-        if (ci.nombre === -1 || ci.precio === -1) {
-          throw new Error('No encontré columnas "Nombre del Servicio" / "Precio" en la hoja.');
-        }
-
-        // ── Construir mapa: nombre_normalizado → { precio, desc, visible } ──
-        const headerIdx = rows.indexOf(headerRow);
-        const mapa = {}; // clave: nombre en minúsculas sin acentos
-        rows.slice(headerIdx + 1).forEach(r => {
-          const nombre = r[ci.nombre]?.trim();
-          if (!nombre) return;
-          const visible = ci.visible >= 0 ? r[ci.visible]?.toLowerCase().trim() : 'sí';
-          const key = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-          mapa[key] = {
-            nombre,
-            precio:  r[ci.precio]?.trim() || '',
-            desc:    ci.desc >= 0 ? r[ci.desc]?.trim() : '',
-            visible: visible !== 'no',
-            original: nombre,
-          };
-        });
-
-        function buscarEnMapa(textoHTML) {
-          const texto = textoHTML.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-          // 1. Coincidencia exacta
-          if (mapa[texto]) return mapa[texto];
-          // 2. El nombre del Sheet empieza igual (primeros 20 chars)
-          const found = Object.values(mapa).find(v => {
-            const k = v.original.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-            return k === texto || texto.startsWith(k.substring(0, 20)) || k.startsWith(texto.substring(0, 20));
-          });
-          return found || null;
-        }
-
-        // ── Actualizar filas de tabla ──────────────────────────
-        let actualizados = 0;
-        document.querySelectorAll('tbody tr').forEach(tr => {
-          const tdNombre = tr.querySelector('.td-servicio');
-          const tdPrecio = tr.querySelector('.td-precio');
-          if (!tdNombre || !tdPrecio) return;
-
-          const data = buscarEnMapa(tdNombre.textContent);
-          if (!data) return;
-
-          // Visibilidad
-          tr.style.display = data.visible ? '' : 'none';
-          if (!data.visible) return;
-
-          // Nombre
-          if (data.nombre) tdNombre.textContent = data.nombre;
-
-          // Precio
-          if (data.precio) tdPrecio.innerHTML = renderPrecio(data.precio);
-
-          actualizados++;
-        });
-
-        // ── Actualizar tarjetas de paquetes ────────────────────
-        document.querySelectorAll('.paquete-card').forEach(card => {
-          const nombreEl = card.querySelector('.paquete-nombre');
-          const precioEl = card.querySelector('.paquete-precio');
-          const descEl   = card.querySelector('.paquete-desc');
-          if (!nombreEl) return;
-
-          const data = buscarEnMapa(nombreEl.textContent);
-          if (!data) return;
-
-          if (!data.visible) { card.style.display = 'none'; return; }
-          card.style.display = '';
-
-          if (precioEl && data.precio) {
-            const p = data.precio.replace('/mes','').trim();
-            const esCotizable = p.toLowerCase() === 'cotizable' || p.toLowerCase() === 'a cotizar';
-            precioEl.innerHTML = esCotizable
-              ? 'A cotizar'
-              : `${p}<sub>/mes</sub>`;
-          }
-          if (descEl && data.desc) descEl.textContent = data.desc;
-        });
-
-        // ── Actualizar CATÁLOGO interno (buscador modal) ───────
-        CATALOGO.forEach(item => {
-          const data = buscarEnMapa(item.nombre);
-          if (data) {
-            item.precio = data.precio || item.precio;
-            item.nombre = data.nombre || item.nombre;
-          }
-        });
-
-        const ts = new Date().toLocaleTimeString('es-MX');
-        status.textContent = `✅ ${actualizados} servicios sincronizados · ${ts}`;
-        status.style.color = '#70DDD8';
-
-      } catch(err) {
-        console.error('Sync error:', err);
-        status.textContent = `❌ ${err.message}`;
-        status.style.color = '#EF5085';
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets';
-      }
-    }
 
     // Auto-sincronizar al cargar la página si el SHEET_ID ya está configurado
     window.addEventListener('load', () => {
-      if (GOOGLE_SHEET_ID && GOOGLE_SHEET_ID !== 'TU_SHEET_ID_AQUI') {
-        sincronizarDesdeSheets();
-      }
+      Promise.all([
+        fetch(APPS_SCRIPT_URL + '?action=servicios').then(r => r.json()).catch(() => null),
+        fetch(APPS_SCRIPT_URL + '?action=paquetes').then(r => r.json()).catch(() => null),
+      ]).then(([dataServicios, dataPaquetes]) => {
+
+        // ── Servicios individuales + precios del configurador ───
+        if (dataServicios && dataServicios.ok) {
+          // Inicializar configurador con los precios del Sheet
+          cfgInit(dataServicios.servicios);
+
+          dataServicios.servicios.forEach(item => {
+            if (item.esPaquete) {
+              // Precio en tarjeta del carrusel
+              const pid = {
+                '🚀 Despegue':'despegue','📡 Arranque Digital':'arranque',
+                '🔥 Señal Fuerte':'senal','🏆 Dominio Total':'dominio','👑 Imperio Digital':'imperio'
+              }[item.nombre];
+              if (!pid) return;
+              const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+              if (!card) return;
+              const precioEl = card.querySelector('.paquete-precio');
+              const descEl   = card.querySelector('.paquete-desc');
+              if (precioEl && item.precio) {
+                const p = item.precio.trim();
+                precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
+                  ? 'A cotizar'
+                  : p.replace('/mes','') + '<sub>/mes</sub>';
+              }
+              if (descEl && item.desc) descEl.textContent = item.desc;
+            } else {
+              // Filas de tabla
+              document.querySelectorAll('tbody tr').forEach(tr => {
+                const tdN = tr.querySelector('.td-servicio');
+                const tdP = tr.querySelector('.td-precio');
+                if (!tdN || !tdP || tdN.textContent.trim() !== item.nombre) return;
+                tr.style.display = item.visible ? '' : 'none';
+                if (!item.visible) return;
+                tdP.innerHTML = /cotiz|a cotizar/i.test(item.precio)
+                  ? '<span class="precio-pres">Cotizable</span>'
+                  : item.precio;
+              });
+              // Actualizar CATALOGO del buscador
+              const cat = CATALOGO.find(c => c.nombre === item.nombre);
+              if (cat && item.precio) cat.precio = item.precio;
+            }
+          });
+        } else {
+          document.querySelectorAll('.precio-skeleton').forEach(el => el.textContent = '—');
+        }
+
+        // ── Características de tarjetas de paquetes ─────────────
+        if (dataPaquetes && dataPaquetes.ok) {
+          Object.entries(dataPaquetes.paquetes).forEach(([pid, filas]) => {
+            const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+            if (!card) return;
+            const featDiv = card.querySelector('.paquete-features');
+            if (!featDiv) return;
+            let html = '';
+            filas.forEach(f => {
+              if (f.tipo === 'grupo') {
+                const color = pid === 'imperio' ? 'color:#9146ff;' : (pid === 'dominio' ? 'color:var(--rosa-principal);' : '');
+                html += `<div class="feat-group-label" style="${color}">${f.texto}</div>`;
+                return;
+              }
+              let textoHTML = f.texto;
+              if (f.negrita) textoHTML = f.texto.replace(f.negrita, `<span class="feat-val">${f.negrita}</span>`);
+              if (f.nuevo)   textoHTML += ' <span class="feat-new-badge">nuevo</span>';
+              const cfgs = { yes: ['fi fi-yes fas fa-check','feat-yes'], no: ['fi fi-no fas fa-times','feat-no'], plus: ['fi fi-plus fas fa-plus','feat-plus'] };
+              const cfg = cfgs[f.tipo]; if (!cfg) return;
+              const iconStyle = pid === 'imperio' && f.tipo === 'plus' ? ' style="color:#9146ff;"' : '';
+              html += `<div class="feat-row"><i class="${cfg[0]}"${iconStyle}></i><span class="${cfg[1]}">${textoHTML}</span></div>`;
+            });
+            featDiv.innerHTML = html;
+          });
+        }
+
+      }).catch(err => {
+        document.querySelectorAll('.precio-skeleton').forEach(el => el.textContent = '—');
+        console.warn('[Servicios] Error al cargar desde el Sheet:', err.message);
+      });
     });
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
@@ -2344,41 +2266,90 @@
 
     // ══════════════════════════════════════════════════════════════
     //  CONFIGURADOR DE PAQUETE PERSONALIZADO
-    //  Precios: se toman del Sheet (CATALOGO ya actualizado por fetch)
-    //  o de PRECIOS_CFG como fallback si el Sheet no respondió.
+    //  Todos los precios vienen del Sheet (hoja Servicios, cat_id=cfg)
+    //  Nombres exactos: "CFG: Gestión por marca", "CFG: Red social", etc.
+    //  El objeto P se llena en cfgInit() al cargar los datos del Sheet.
     // ══════════════════════════════════════════════════════════════
 
-    // Precios base de referencia (fallback si el Sheet no carga)
-    // Se actualizan en cfgInit() desde el CATALOGO
-    const PRECIOS_CFG = {
-      marcas:    1200,   // por marca adicional
-      web:        800,   // por página web
-      redes:      600,   // por red social
-      diseno:      80,   // por pieza de contenido
-      crm:       1500,   // CRM solo
-      crmAuto:   2800,   // CRM + automatizaciones
-      meta:       900,   // Meta Ads base
-      metaExtra:  150,   // por anuncio adicional (>3)
-      google:    1000,   // Google Ads base
-      googleExtra:150,   // por anuncio adicional (>3)
+    // Precios del configurador — se llenan desde el Sheet en cfgInit()
+    // Si el Sheet no responde, el configurador muestra "Cotizable" en vez de $0
+    const P = {
+      marcas:      null,
+      web:         null,
+      redes:       null,
+      imgMes:      null,   // CFG: Pieza de contenido (imagen)
+      vidMes:      null,   // CFG: Pieza de contenido (video)
+      imgExtra:    null,   // CFG: Imagen extra
+      vidExtra:    null,   // CFG: Video extra
+      crm:         null,
+      crmAuto:     null,
+      metaBase:    null,
+      metaExtra:   null,
+      googleBase:  null,
+      googleExtra: null,
     };
 
-    // Servicios extra añadidos desde el buscador (strings)
+    // Mapa: clave de P → nombre exacto en el Sheet
+    const CFG_NOMBRES = {
+      marcas:      'CFG: Gestión por marca',
+      web:         'CFG: Gestión de página web',
+      redes:       'CFG: Red social',
+      imgMes:      'CFG: Pieza de contenido (imagen)',
+      vidMes:      'CFG: Pieza de contenido (video)',
+      imgExtra:    'CFG: Imagen extra',
+      vidExtra:    'CFG: Video extra',
+      crm:         'CFG: Gestión de CRM',
+      crmAuto:     'CFG: CRM + Automatizaciones',
+      metaBase:    'CFG: Meta Ads base',
+      metaExtra:   'CFG: Meta Ads extra',
+      googleBase:  'CFG: Google Ads base',
+      googleExtra: 'CFG: Google Ads extra',
+    };
+
+    // Llamada desde el window load — recibe el array servicios del Sheet
+    function cfgInit(servicios) {
+      Object.keys(CFG_NOMBRES).forEach(key => {
+        const nombre = CFG_NOMBRES[key];
+        const item   = servicios.find(s => s.nombre === nombre);
+        if (!item || !item.precio) return;
+        const m = item.precio.replace(/[$,]/g, '').match(/\d+(\.\d+)?/);
+        if (m) P[key] = parseFloat(m[0]);
+      });
+      // Actualizar hints de precio en las secciones
+      const hints = [
+        ['hint-marcas',  P.marcas,     '/marca'],
+        ['hint-web',     P.web,        '/página'],
+        ['hint-redes',   P.redes,      '/red'],
+        ['hint-crm',     P.crm,        ''],
+        ['hint-meta',    P.metaBase,   ' base'],
+        ['hint-google',  P.googleBase, ' base'],
+      ];
+      hints.forEach(([id, val, suf]) => {
+        const el = document.getElementById(id);
+        if (el && val) el.textContent = fmt(val) + suf;
+      });
+      // Hint de imagen y video
+      const imgHint = document.getElementById('precio-img-hint');
+      if (imgHint) {
+        const i = P.imgMes ? fmt(P.imgMes) : '?';
+        const v = P.vidMes ? fmt(P.vidMes) : '?';
+        imgHint.textContent = `(${i}/img · ${v}/video)`;
+      }
+    }
+
+    // Extras desde buscador
     let cfgExtras = [];
-    let cfgDesdeConfigurador = false;  // flag para saber si el buscador fue abierto desde aquí
+    let cfgDesdeConfigurador = false;
 
     function abrirConfigurador() {
       cfgExtras = [];
       cfgRenderExtras();
-      // Limpiar campos
       ['cfg-nombre','cfg-telefono','cfg-correo','cfg-mensaje'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
       document.getElementById('cfg-msg').textContent = '';
       document.getElementById('cfg-msg').className = 'cfg-msg';
-      // Sincronizar precios desde CATALOGO si ya cargó
-      cfgSyncPrecios();
       cfgCalc();
       document.getElementById('cfg-overlay').classList.add('visible');
       document.body.style.overflow = 'hidden';
@@ -2393,63 +2364,38 @@
       if (e.target === document.getElementById('cfg-overlay')) cerrarConfigurador();
     }
 
-    // Sincronizar precios desde el CATALOGO (si ya se cargó desde el Sheet)
-    function cfgSyncPrecios() {
-      const buscar = (nombre) => {
-        const item = CATALOGO.find(c => c.nombre.toLowerCase().includes(nombre.toLowerCase()));
-        if (!item || !item.precio) return null;
-        const m = item.precio.replace(/[$,]/g,'').match(/\d+/);
-        return m ? parseInt(m[0]) : null;
-      };
-      PRECIOS_CFG.marcas    = buscar('Community Manager') || PRECIOS_CFG.marcas;
-      PRECIOS_CFG.web       = buscar('página web') || buscar('web') || PRECIOS_CFG.web;
-      PRECIOS_CFG.crm       = buscar('CRM') || PRECIOS_CFG.crm;
-      PRECIOS_CFG.meta      = buscar('Meta Ads') || buscar('Meta') || PRECIOS_CFG.meta;
-      PRECIOS_CFG.google    = buscar('Google Ads') || buscar('Google') || PRECIOS_CFG.google;
-    }
-
-    // Abrir/cerrar sección al marcar checkbox
     function cfgToggle(seccion) {
       const chk  = document.getElementById(`chk-${seccion}`);
       const body = document.getElementById(`body-${seccion}`);
-      if (chk.checked) {
-        body.classList.add('open');
-      } else {
-        body.classList.remove('open');
-      }
+      body.classList.toggle('open', chk.checked);
       cfgCalc();
     }
 
-    // Sincroniza el número de redes con los pills marcados
     function cfgSyncRedes() {
       const n = parseInt(document.getElementById('num-redes').value) || 1;
       const pills = document.querySelectorAll('#checks-redes .cfg-check-pill input');
       let marcados = 0;
       pills.forEach(p => { if (p.checked) marcados++; });
-      // Si hay más marcados que el número, desmarcar los últimos
       if (marcados > n) {
-        let desmarcados = 0;
-        for (let i = pills.length - 1; i >= 0 && desmarcados < (marcados - n); i--) {
-          if (pills[i].checked) { pills[i].checked = false; pills[i].closest('.cfg-check-pill').classList.remove('checked'); desmarcados++; }
+        let d = 0;
+        for (let i = pills.length - 1; i >= 0 && d < (marcados - n); i--) {
+          if (pills[i].checked) { pills[i].checked = false; pills[i].closest('.cfg-check-pill').classList.remove('checked'); d++; }
         }
       }
       cfgCalc();
     }
 
     function cfgPillChange() {
-      // Actualizar clases visuales
       document.querySelectorAll('.cfg-check-pill').forEach(pill => {
         const inp = pill.querySelector('input[type=checkbox]');
         if (inp) pill.classList.toggle('checked', inp.checked);
       });
-      // Actualizar número de redes marcadas
       const marcados = document.querySelectorAll('#checks-redes .cfg-check-pill input:checked').length;
       if (marcados > 0) document.getElementById('num-redes').value = marcados;
       cfgCalc();
     }
 
     function cfgToggleCrmAuto(el) {
-      // Radio-like: solo uno activo a la vez
       const solo = document.getElementById('chk-crm-solo');
       const auto = document.getElementById('chk-crm-auto');
       if (el === solo && solo.checked) auto.checked = false;
@@ -2459,30 +2405,50 @@
       cfgCalc();
     }
 
+    // Validar que imágenes + videos = total piezas
+    function cfgValidarDiseno() {
+      const total = parseInt(document.getElementById('num-diseno-total').value) || 0;
+      const img   = parseInt(document.getElementById('num-diseno-img').value)   || 0;
+      const vid   = parseInt(document.getElementById('num-diseno-vid').value)   || 0;
+      const aviso = document.getElementById('diseno-aviso');
+      aviso.style.display = (img + vid !== total && (img + vid > 0)) ? 'block' : 'none';
+      cfgCalc();
+    }
+
     function fmt(n) {
       return '$' + Math.round(n).toLocaleString('es-MX');
+    }
+
+    function precioO(val, mult) {
+      // Si el precio no cargó del Sheet, devuelve null (se mostrará "Cotizable")
+      if (val === null) return null;
+      return val * (mult || 1);
     }
 
     function cfgCalc() {
       const items = [];
       let total = 0;
+      let hayNull = false; // si algún precio no cargó
+
+      function addItem(nombre, precio) {
+        if (precio === null) { items.push({ nombre, precio: null }); hayNull = true; }
+        else { items.push({ nombre, precio }); total += precio; }
+      }
 
       // 1. Marcas
       if (document.getElementById('chk-marcas').checked) {
         const n = parseInt(document.getElementById('num-marcas').value) || 1;
-        const p = PRECIOS_CFG.marcas * n;
-        items.push({ nombre: `Gestión de ${n} marca${n>1?'s':''}`, precio: p });
-        total += p;
-        document.getElementById('hint-marcas').textContent = fmt(p);
+        const p = precioO(P.marcas, n);
+        addItem(`Gestión de ${n} marca${n>1?'s':''}`, p);
+        document.getElementById('hint-marcas').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-marcas').textContent = ''; }
 
       // 2. Web
       if (document.getElementById('chk-web').checked) {
         const n = parseInt(document.getElementById('num-web').value) || 1;
-        const p = PRECIOS_CFG.web * n;
-        items.push({ nombre: `Gestión de ${n} página${n>1?'s':''} web`, precio: p });
-        total += p;
-        document.getElementById('hint-web').textContent = fmt(p);
+        const p = precioO(P.web, n);
+        addItem(`Gestión de ${n} página${n>1?'s':''} web`, p);
+        document.getElementById('hint-web').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-web').textContent = ''; }
 
       // 3. Redes
@@ -2490,99 +2456,104 @@
         const n = parseInt(document.getElementById('num-redes').value) || 1;
         const plataformas = [];
         document.querySelectorAll('#checks-redes .cfg-check-pill input:checked').forEach(i => plataformas.push(i.value));
-        const p = PRECIOS_CFG.redes * n;
+        const p = precioO(P.redes, n);
         const nombre = plataformas.length > 0
           ? `Redes sociales (${plataformas.join(', ')})`
           : `Redes sociales (${n} red${n>1?'es':''})`;
-        items.push({ nombre, precio: p });
-        total += p;
-        document.getElementById('hint-redes').textContent = fmt(p);
+        addItem(nombre, p);
+        document.getElementById('hint-redes').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-redes').textContent = ''; }
 
-      // 4. Diseño
+      // 4. Diseño — imágenes y videos por separado
       if (document.getElementById('chk-diseno').checked) {
-        const n = parseInt(document.getElementById('num-diseno').value) || 8;
-        const p = PRECIOS_CFG.diseno * n;
-        items.push({ nombre: `Diseño y contenido (${n} piezas/mes)`, precio: p });
-        total += p;
-        document.getElementById('hint-diseno').textContent = fmt(p);
+        const img = parseInt(document.getElementById('num-diseno-img').value) || 0;
+        const vid = parseInt(document.getElementById('num-diseno-vid').value) || 0;
+        if (img > 0) {
+          const p = precioO(P.imgMes, img);
+          addItem(`Imágenes: ${img} pieza${img>1?'s':''}/mes`, p);
+        }
+        if (vid > 0) {
+          const p = precioO(P.vidMes, vid);
+          addItem(`Videos: ${vid} video${vid>1?'s':''}/mes (base 2 min)`, p);
+        }
+        // Precio total diseño para el hint
+        const pImg = precioO(P.imgMes, img) || 0;
+        const pVid = precioO(P.vidMes, vid) || 0;
+        const pTotal = (P.imgMes !== null && P.vidMes !== null) ? pImg + pVid : null;
+        document.getElementById('hint-diseno').textContent = pTotal !== null ? fmt(pTotal) : 'Cotizable';
       } else { document.getElementById('hint-diseno').textContent = ''; }
 
       // 5. CRM
       if (document.getElementById('chk-crm').checked) {
         const conAuto = document.getElementById('chk-crm-auto').checked;
-        const p = conAuto ? PRECIOS_CFG.crmAuto : PRECIOS_CFG.crm;
-        items.push({ nombre: conAuto ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM', precio: p });
-        total += p;
-        document.getElementById('hint-crm').textContent = fmt(p);
+        const p = conAuto ? precioO(P.crmAuto) : precioO(P.crm);
+        addItem(conAuto ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM', p);
+        document.getElementById('hint-crm').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-crm').textContent = ''; }
 
       // 6. Meta Ads
       if (document.getElementById('chk-meta').checked) {
         const n = parseInt(document.getElementById('num-meta').value) || 3;
-        const p = PRECIOS_CFG.meta + Math.max(0, n - 3) * PRECIOS_CFG.metaExtra;
-        items.push({ nombre: `Meta Ads (${n} anuncio${n>1?'s':''}/mes)`, precio: p });
-        total += p;
-        document.getElementById('hint-meta').textContent = fmt(p);
+        let p = null;
+        if (P.metaBase !== null && P.metaExtra !== null) {
+          p = P.metaBase + Math.max(0, n - 3) * P.metaExtra;
+        }
+        addItem(`Meta Ads (${n} anuncio${n>1?'s':''}/mes)`, p);
+        document.getElementById('hint-meta').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-meta').textContent = ''; }
 
       // 7. Google Ads
       if (document.getElementById('chk-google').checked) {
         const n = parseInt(document.getElementById('num-google').value) || 3;
-        const p = PRECIOS_CFG.google + Math.max(0, n - 3) * PRECIOS_CFG.googleExtra;
-        items.push({ nombre: `Google Ads (${n} anuncio${n>1?'s':''}/mes)`, precio: p });
-        total += p;
-        document.getElementById('hint-google').textContent = fmt(p);
+        let p = null;
+        if (P.googleBase !== null && P.googleExtra !== null) {
+          p = P.googleBase + Math.max(0, n - 3) * P.googleExtra;
+        }
+        addItem(`Google Ads (${n} anuncio${n>1?'s':''}/mes)`, p);
+        document.getElementById('hint-google').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-google').textContent = ''; }
 
-      // 8. Duración (solo informativo, no suma al precio)
+      // 8. Duración (informativo)
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
-        const txt = sel.options[sel.selectedIndex].text;
-        document.getElementById('hint-duracion').textContent = txt;
+        document.getElementById('hint-duracion').textContent = sel.options[sel.selectedIndex].text;
       } else { document.getElementById('hint-duracion').textContent = ''; }
 
-      // 9. Extras del buscador (precio del CATALOGO si existe)
+      // 9. Extras del buscador
       cfgExtras.forEach(nombre => {
         const cat = CATALOGO.find(c => c.nombre === nombre);
-        let p = 0;
+        let p = null;
         if (cat && cat.precio) {
           const m = cat.precio.replace(/[$,]/g,'').match(/\d+/);
           if (m) p = parseInt(m[0]);
         }
-        items.push({ nombre, precio: p });
-        total += p;
+        addItem(nombre, p);
       });
 
-      // ── Actualizar resumen ───────────────────────────────────
-      const emptyEl = document.getElementById('cfg-res-empty');
+      // ── Actualizar resumen ─────────────────────────────────────
       const itemsEl = document.getElementById('cfg-res-items');
-
       if (items.length === 0) {
-        emptyEl.style.display = 'block';
-        itemsEl.innerHTML = '<div class="cfg-res-empty" id="cfg-res-empty">Selecciona al menos un servicio para ver el resumen.</div>';
+        itemsEl.innerHTML = '<div class="cfg-res-empty">Selecciona al menos un servicio para ver el resumen.</div>';
       } else {
         itemsEl.innerHTML = items.map(it =>
           `<div class="cfg-res-item">
             <span class="cfg-res-item-name">${it.nombre}</span>
-            <span class="cfg-res-item-price">${it.precio > 0 ? fmt(it.precio) : 'Cotizable'}</span>
+            <span class="cfg-res-item-price">${it.precio !== null ? fmt(it.precio) : '<span style="color:#888;font-style:italic;">Cotizable</span>'}</span>
           </div>`
         ).join('');
       }
 
       const totalBase = total;
-      const totalPkg  = Math.round(total * 0.8);  // 20% descuento implícito
+      const totalPkg  = Math.round(total * 0.8);
 
-      document.getElementById('cfg-precio-base').textContent  = totalBase > 0 ? fmt(totalBase) : '$0';
-      document.getElementById('cfg-precio-total').innerHTML   = totalPkg > 0
+      document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
+      document.getElementById('cfg-precio-total').innerHTML  = totalPkg > 0
         ? `${fmt(totalPkg)} <sub>/mes</sub>`
-        : '$0 <sub>/mes</sub>';
+        : (hayNull ? '<span style="color:#888;font-size:1rem;">A cotizar</span>' : '$0 <sub>/mes</sub>');
     }
 
-    // Extras desde buscador
     function abrirBuscadorDesdeConfigurador() {
       cfgDesdeConfigurador = true;
-      // Sincronizar serviciosSeleccionados con cfgExtras para que el buscador los marque
       serviciosSeleccionados = [...cfgExtras];
       renderBadges();
       abrirBuscadorServicios();
@@ -2606,13 +2577,9 @@
       cfgRenderExtras();
     }
 
-    // Sobrescribir confirmarServicios para detectar si viene del configurador
-    const _confirmarServiciosOriginal = confirmarServicios;
-    // no redefinir, mejor interceptar en el botón del buscador:
     document.addEventListener('DOMContentLoaded', () => {
       const btnConfirmar = document.getElementById('btn-confirmar-search');
       if (btnConfirmar) {
-        const originalClick = btnConfirmar.onclick;
         btnConfirmar.onclick = function() {
           if (cfgDesdeConfigurador) {
             cfgExtras = [...serviciosSeleccionados];
@@ -2626,7 +2593,7 @@
       }
     });
 
-    // ══ ENVÍO DEL CONFIGURADOR ═══════════════════════════════════
+    // ══ ENVÍO DEL CONFIGURADOR ════════════════════════════════════
     async function enviarConfigurador() {
       const nombre   = document.getElementById('cfg-nombre').value.trim();
       const telefono = document.getElementById('cfg-telefono').value.trim();
@@ -2646,38 +2613,26 @@
         return;
       }
 
-      // Construir lista de servicios del configurador
       const configItems = [];
-      if (document.getElementById('chk-marcas').checked) {
-        const n = document.getElementById('num-marcas').value;
-        configItems.push(`Gestión de ${n} marca(s)`);
-      }
-      if (document.getElementById('chk-web').checked) {
-        const n = document.getElementById('num-web').value;
-        configItems.push(`Gestión de ${n} página(s) web`);
-      }
+      if (document.getElementById('chk-marcas').checked) configItems.push(`Gestión de ${document.getElementById('num-marcas').value} marca(s)`);
+      if (document.getElementById('chk-web').checked)    configItems.push(`Gestión de ${document.getElementById('num-web').value} página(s) web`);
       if (document.getElementById('chk-redes').checked) {
-        const n = document.getElementById('num-redes').value;
         const plats = [];
         document.querySelectorAll('#checks-redes .cfg-check-pill input:checked').forEach(i => plats.push(i.value));
+        const n = document.getElementById('num-redes').value;
         configItems.push(`Redes sociales: ${plats.length > 0 ? plats.join(', ') : n + ' red(es)'}`);
       }
       if (document.getElementById('chk-diseno').checked) {
-        const n = document.getElementById('num-diseno').value;
-        configItems.push(`Diseño y contenido: ${n} piezas/mes`);
+        const img = document.getElementById('num-diseno-img').value;
+        const vid = document.getElementById('num-diseno-vid').value;
+        if (parseInt(img) > 0) configItems.push(`Imágenes: ${img} pieza(s)/mes`);
+        if (parseInt(vid) > 0) configItems.push(`Videos: ${vid} video(s)/mes (base 2 min resultado final)`);
       }
       if (document.getElementById('chk-crm').checked) {
-        const conAuto = document.getElementById('chk-crm-auto').checked;
-        configItems.push(conAuto ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM');
+        configItems.push(document.getElementById('chk-crm-auto').checked ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM');
       }
-      if (document.getElementById('chk-meta').checked) {
-        const n = document.getElementById('num-meta').value;
-        configItems.push(`Meta Ads: ${n} anuncio(s)/mes`);
-      }
-      if (document.getElementById('chk-google').checked) {
-        const n = document.getElementById('num-google').value;
-        configItems.push(`Google Ads: ${n} anuncio(s)/mes`);
-      }
+      if (document.getElementById('chk-meta').checked)   configItems.push(`Meta Ads: ${document.getElementById('num-meta').value} anuncio(s)/mes`);
+      if (document.getElementById('chk-google').checked) configItems.push(`Google Ads: ${document.getElementById('num-google').value} anuncio(s)/mes`);
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
         configItems.push(`Duración: ${sel.options[sel.selectedIndex].text}`);
@@ -2690,9 +2645,10 @@
         return;
       }
 
-      // Calcular precios para el correo
-      const precioBase  = parseInt(document.getElementById('cfg-precio-base').textContent.replace(/[$,]/g,'')) || 0;
-      const precioTotal = parseInt(document.getElementById('cfg-precio-total').textContent.replace(/[$,]/g,'')) || 0;
+      const precioBaseEl  = document.getElementById('cfg-precio-base').textContent;
+      const precioTotalEl = document.getElementById('cfg-precio-total').textContent;
+      const precioBase    = precioBaseEl.replace(/[$,a-zA-Z\s]/g,'') || 'A cotizar';
+      const precioTotal   = precioTotalEl.replace(/[$,a-zA-Z\s]/g,'') || 'A cotizar';
 
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
@@ -2701,80 +2657,68 @@
       const fecha = new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' });
 
       const serviciosHTML = configItems.map(s =>
-        `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;">
-          <i style="color:#9146ff;">●</i> ${s}
-        </td></tr>`
+        `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;"><i style="color:#70DDD8;">●</i> ${s}</td></tr>`
       ).join('');
 
-      const html_body = `
-<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+      const precioBaseNum  = parseInt(precioBase.replace(/\D/g,'')) || 0;
+      const precioTotalNum = parseInt(precioTotal.replace(/\D/g,'')) || 0;
+      const mostrarPrecios = precioTotalNum > 0;
+
+      const html_body = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;">
-  <tr><td align="center">
-    <table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
-      <tr><td style="background:linear-gradient(135deg,#1a1a2e,#7040b0);padding:28px 32px;">
-        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
-        <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Paquete Personalizado</div>
-        <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🛠️ Configuración Recibida</div>
-      </td></tr>
-      <tr><td style="padding:28px 32px 0;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9146ff;margin-bottom:14px;">Datos del cliente</div>
-        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;">
-          <tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td><td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombre}</td></tr>
-          <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td><td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td></tr>
-          <tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td><td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#9146ff;text-decoration:none;">${correo}</a></td></tr>
-          <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td><td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td></tr>
-        </table>
-      </td></tr>
-      <tr><td style="padding:24px 32px 0;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9146ff;margin-bottom:14px;">
-          Servicios configurados <span style="background:rgba(145,70,255,0.15);color:#9146ff;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${configItems.length}</span>
-        </div>
-        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
-          ${serviciosHTML}
-        </table>
-      </td></tr>
-      <tr><td style="padding:20px 32px 0;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
-          <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Precio individual estimado</td><td style="padding:10px 14px;color:#888;font-size:14px;text-decoration:line-through;">\$${precioBase.toLocaleString('es-MX')}/mes</td></tr>
-          <tr style="background:#111;"><td style="padding:12px 14px;color:#c090ff;font-size:13px;font-weight:600;">Precio de paquete</td><td style="padding:12px 14px;color:#9146ff;font-size:18px;font-weight:800;">\$${precioTotal.toLocaleString('es-MX')}/mes</td></tr>
-        </table>
-      </td></tr>
-      ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9146ff;margin-bottom:10px;">Comentarios</div><div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div></td></tr>` : ''}
-      <tr><td style="padding:28px 32px;">
-        <a href="mailto:${correo}" style="display:inline-block;background:#9146ff;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;">Responder al cliente</a>
-      </td></tr>
-    </table>
-  </td></tr>
-</table>
-</body></html>`;
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
+<tr><td style="background:linear-gradient(135deg,#0A315B,#A64062);padding:28px 32px;">
+  <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
+  <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Paquete Personalizado</div>
+  <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🛠️ Configuración Recibida</div>
+</td></tr>
+<tr><td style="padding:28px 32px 0;">
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Datos del cliente</div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;">
+    <tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td><td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombre}</td></tr>
+    <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td><td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td></tr>
+    <tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td><td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td></tr>
+    <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td><td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td></tr>
+  </table>
+</td></tr>
+<tr><td style="padding:24px 32px 0;">
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Servicios configurados <span style="background:rgba(112,221,216,0.15);color:#70DDD8;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${configItems.length}</span></div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">${serviciosHTML}</table>
+</td></tr>
+${mostrarPrecios ? `<tr><td style="padding:20px 32px 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
+    <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Precio individual estimado</td><td style="padding:10px 14px;color:#888;font-size:14px;text-decoration:line-through;">$${precioBaseNum.toLocaleString('es-MX')}/mes</td></tr>
+    <tr style="background:#111;"><td style="padding:12px 14px;color:#70DDD8;font-size:13px;font-weight:600;">Precio de paquete</td><td style="padding:12px 14px;color:#EF5085;font-size:18px;font-weight:800;">$${precioTotalNum.toLocaleString('es-MX')}/mes</td></tr>
+  </table>
+</td></tr>` : ''}
+${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:10px;">Comentarios</div><div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div></td></tr>` : ''}
+<tr><td style="padding:28px 32px;"><a href="mailto:${correo}" style="display:inline-block;background:#EF5085;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;">Responder al cliente</a></td></tr>
+</table></td></tr></table></body></html>`;
 
       try {
-        // EmailJS
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           from_name:  nombre,
           from_email: correo,
           phone:      telefono,
           subject:    `🛠️ Paquete personalizado — ${nombre}`,
-          message:    configItems.join('\n• '),
+          message:    configItems.join('
+• '),
           html_body,
         });
-
-        // Apps Script (Google Sheets)
         fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({
             fecha, nombre, telefono, correo,
             servicio: '[PAQUETE PERSONALIZADO] ' + configItems.join(' | '),
-            mensaje: mensaje || '—',
+            mensaje:  mensaje || '—',
           }),
         }).catch(() => {});
-
         msg.className = 'cfg-msg ok';
         msg.innerHTML = '<i class="fas fa-check-circle"></i> ¡Cotización enviada! Te responderemos pronto.';
         btn.innerHTML = '<i class="fas fa-check"></i> Enviado';
         setTimeout(() => cerrarConfigurador(), 2800);
-
       } catch(err) {
         msg.className = 'cfg-msg err';
         msg.textContent = 'Error al enviar. Intenta de nuevo o escríbenos directo.';
