@@ -423,25 +423,6 @@
       font-size: 0.6rem; color: #2a2a2a; text-align: center;
     }
 
-    /* ── Sync bar ── */
-    .sync-bar {
-      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-      background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.15);
-      border-radius: 10px; padding: 10px 18px; margin-bottom: 12px;
-    }
-    #btn-sync-sheets {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(112,221,216,0.1); border: 1.5px solid rgba(112,221,216,0.3);
-      color: var(--cian-brillo); border-radius: 8px; padding: 8px 16px;
-      font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      transition: 0.2s; font-family: inherit;
-    }
-    #btn-sync-sheets:hover:not(:disabled) {
-      background: rgba(112,221,216,0.2); border-color: var(--cian-brillo);
-    }
-    #btn-sync-sheets:disabled { opacity: 0.6; cursor: default; }
-    #sync-status { font-size: 0.78rem; color: #666; }
-
     /* ── Lightbox ── */
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 1200;
@@ -1087,14 +1068,6 @@
         </div>
       </div>
     </div>
-
-    <div class="sync-bar">
-      <button id="btn-sync-sheets" onclick="sincronizarDesdeSheets()">
-        <i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets
-      </button>
-      <span id="sync-status"></span>
-    </div>
-
     <div class="leyenda">
       <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
     </div>
@@ -1202,73 +1175,73 @@
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
     // ══ SINCRONIZACIÓN EN VIVO DESDE GOOGLE SHEETS ══════════════
-    // Igual que sorteos.html: fetch → doGet del Apps Script → JSON
-    // El Apps Script lee la hoja "Servicios" y la devuelve como JSON.
-    // Sin API key. Solo necesita el doGet en el mismo Apps Script.
+    // Mismo mecanismo que sorteos.html:
+    //   servicios.html carga → fetch(APPS_SCRIPT_URL + '?action=servicios')
+    //   → doGet del Apps Script → lee hoja "Servicios" → devuelve JSON
+    //   → aplica nombres, precios, visibilidad al DOM
+    // Si el fetch falla, el HTML muestra los datos hardcodeados sin errores.
     // ═══════════════════════════════════════════════════════════
 
     async function cargarDesdeSheet() {
       try {
         const resp = await fetch(APPS_SCRIPT_URL + '?action=servicios');
-        if (!resp.ok) throw new Error('No se pudo conectar al Apps Script');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
-        if (!data.servicios) throw new Error('Respuesta inesperada del servidor');
+        if (!data.ok || !data.servicios) throw new Error(data.error || 'Sin datos');
         aplicarDatosAlDOM(data.servicios);
       } catch(err) {
-        console.warn('[Servicios] No se pudo sincronizar desde el Sheet:', err.message);
-        // Si falla, el HTML muestra los datos hardcodeados — sin problema
+        console.warn('[Servicios] Sincronización fallida:', err.message);
       }
     }
 
     function aplicarDatosAlDOM(servicios) {
-      // servicios = array de { id, nombre, desc, precio, visible, esPaquete }
-
       servicios.forEach(item => {
         if (item.esPaquete) {
-          // ── Tarjetas de paquetes ─────────────────────────────
-          const cards = document.querySelectorAll('.paquete-card');
-          cards.forEach(card => {
+          // ── Tarjetas del carrusel ─────────────────────────────
+          document.querySelectorAll('.paquete-card').forEach(card => {
             const nombreEl = card.querySelector('.paquete-nombre');
-            if (!nombreEl) return;
-            if (!coincidenNombres(nombreEl.textContent, item.nombre)) return;
-
-            const precioEl = card.querySelector('.paquete-precio');
-            const descEl   = card.querySelector('.paquete-desc');
+            if (!nombreEl || nombreEl.textContent.trim() !== item.nombre) return;
 
             if (!item.visible) { card.style.display = 'none'; return; }
             card.style.display = '';
 
+            const precioEl = card.querySelector('.paquete-precio');
+            const descEl   = card.querySelector('.paquete-desc');
+
             if (precioEl && item.precio) {
-              const p = item.precio.replace('/mes','').trim();
-              const esCotizable = /cotiz|a cotizar/i.test(p);
-              precioEl.innerHTML = esCotizable ? 'A cotizar' : `${p}<sub>/mes</sub>`;
+              const p = item.precio.trim();
+              if (/cotiz|a cotizar/i.test(p)) {
+                precioEl.innerHTML = 'A cotizar';
+              } else {
+                // Conservar el <sub>/mes</sub> si ya existe en el HTML
+                const sub = precioEl.querySelector('sub');
+                precioEl.innerHTML = p.replace('/mes', '') + (sub ? '<sub>/mes</sub>' : '');
+              }
             }
-            if (descEl   && item.desc)   descEl.textContent   = item.desc;
-            if (nombreEl && item.nombre) nombreEl.textContent = item.nombre;
+            if (descEl && item.desc) descEl.textContent = item.desc;
           });
 
         } else {
-          // ── Filas de tabla ───────────────────────────────────
+          // ── Filas de tabla ────────────────────────────────────
           document.querySelectorAll('tbody tr').forEach(tr => {
             const tdNombre = tr.querySelector('.td-servicio');
             const tdPrecio = tr.querySelector('.td-precio');
             if (!tdNombre || !tdPrecio) return;
-            if (!coincidenNombres(tdNombre.textContent, item.nombre)) return;
+            if (tdNombre.textContent.trim() !== item.nombre) return;
 
             if (!item.visible) { tr.style.display = 'none'; return; }
             tr.style.display = '';
 
             if (item.nombre) tdNombre.textContent = item.nombre;
             if (item.precio) {
-              const p = item.precio.trim();
-              tdPrecio.innerHTML = /cotiz|a cotizar/i.test(p)
+              tdPrecio.innerHTML = /cotiz|a cotizar/i.test(item.precio)
                 ? '<span class="precio-pres">Cotizable</span>'
-                : p;
+                : item.precio;
             }
           });
 
-          // ── Catálogo del buscador modal ──────────────────────
-          const cat = CATALOGO.find(c => coincidenNombres(c.nombre, item.nombre));
+          // ── Catálogo del buscador modal ───────────────────────
+          const cat = CATALOGO.find(c => c.nombre === item.nombre);
           if (cat) {
             if (item.nombre) cat.nombre = item.nombre;
             if (item.precio) cat.precio = item.precio;
@@ -1277,18 +1250,7 @@
       });
     }
 
-    function coincidenNombres(a, b) {
-      const norm = s => String(s).toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-        .replace(/[^a-z0-9\s]/g,'').trim();
-      const na = norm(a), nb = norm(b);
-      if (na === nb) return true;
-      const min = Math.min(na.length, nb.length);
-      if (min >= 15 && (na.startsWith(nb.substring(0,15)) || nb.startsWith(na.substring(0,15)))) return true;
-      return false;
-    }
-
-    // Cargar al arrancar la página
+    // Ejecutar UNA sola vez al cargar la página
     window.addEventListener('load', cargarDesdeSheet);
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
