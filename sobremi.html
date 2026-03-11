@@ -7,33 +7,69 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Estilos específicos del perfil corporativo */
+    /* ══ PERFIL ══ */
     .profile-header { text-align: center; margin-bottom: 40px; }
-    /* Ajustamos el object-fit para que la foto se vea perfecta en el círculo */
-    .profile-header img { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 4px solid var(--rosa-principal); margin-bottom: 20px; box-shadow: 0 0 15px var(--rosa-oscuro); }
+
+    /* Contenedor de la foto — ocupa espacio fijo para que el layout no salte */
+    .profile-img-wrap {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    /* La foto propiamente dicha */
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid var(--rosa-principal);
+      box-shadow: 0 0 15px var(--rosa-oscuro);
+      /* Transición suave de tamaño y posición */
+      transition: width 0.35s ease, height 0.35s ease,
+                  border-width 0.35s ease, box-shadow 0.35s ease,
+                  top 0.35s ease, left 0.35s ease,
+                  transform 0.35s ease;
+      position: absolute;
+      top: 0; left: 0;
+    }
+
+    /* Estado "fija y pequeña" — se activa con JS al hacer scroll */
+    .profile-img.sticky-small {
+      position: fixed;
+      top: 14px;
+      left: 18px;
+      width: 46px;
+      height: 46px;
+      border-width: 2px;
+      box-shadow: 0 2px 10px rgba(239,80,133,0.5);
+      z-index: 999;
+      cursor: pointer;
+    }
+
     .profile-header h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 10px; }
-    
-    .bio-section { 
-      background: var(--contraste-fondo); padding: 30px; border-radius: 15px; 
-      border-left: 5px solid var(--azul-boton); box-shadow: 5px 5px 0px var(--rosa-oscuro); margin-bottom: 40px; 
+
+    .bio-section {
+      background: var(--contraste-fondo); padding: 30px; border-radius: 15px;
+      border-left: 5px solid var(--azul-boton); box-shadow: 5px 5px 0px var(--rosa-oscuro); margin-bottom: 40px;
     }
 
     h3 { color: var(--cian-brillo); margin: 25px 0 12px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; }
     .skills-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
-    
-    /* Transformamos los tags en botones clickeables */
-    .skill-tag { 
-      background: var(--azul-boton); color: #fff; padding: 6px 14px; border-radius: 8px; 
-      font-size: 0.85rem; border: 1px solid #1a4a7a; display: inline-flex; align-items: center; gap: 8px; 
-      transition: 0.3s; text-decoration: none; 
+
+    .skill-tag {
+      background: var(--azul-boton); color: #fff; padding: 6px 14px; border-radius: 8px;
+      font-size: 0.85rem; border: 1px solid #1a4a7a; display: inline-flex; align-items: center; gap: 8px;
+      transition: 0.3s; text-decoration: none;
     }
     .skill-tag:hover { border-color: var(--cian-brillo); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(112,221,216,0.2); }
-    
+
     .tag-ia { border-color: var(--rosa-principal); }
     .tag-ia i { color: var(--rosa-principal); }
     .tag-ia:hover { box-shadow: 0 4px 10px rgba(239, 80, 133, 0.3); }
 
-    /* Estilos de Experiencia */
     .experience-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #444; }
     .experience-item:last-child { border-bottom: none; }
     .exp-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 10px; }
@@ -47,9 +83,20 @@
 <body>
   <div class="container">
     <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
-    
+
     <div class="profile-header">
-      <img src="https://i.imgur.com/kcHX24F.jpg" alt="Alexis Pérez">
+
+      <!-- Contenedor ocupa el espacio fijo; la img vuela encima con position:absolute -->
+      <div class="profile-img-wrap" id="img-wrap">
+        <img
+          src="https://i.imgur.com/kcHX24F.jpg"
+          alt="Alexis Pérez"
+          class="profile-img"
+          id="profile-img"
+          title="Volver al inicio"
+        >
+      </div>
+
       <h1>Alexis Pérez</h1>
       <p>Lic. en Mercadotecnia | Perfil Tecnológico | Especialista en Automatización</p>
 
@@ -63,16 +110,10 @@
           <h3>Portafolio</h3>
         </a>
         <a href="servicios.html" class="nav-card" style="
-          grid-column: 1 / -1;
-          padding: 18px 20px;
+          grid-column: 1 / -1; padding: 18px 20px;
           border-color: var(--cian-brillo);
           background: linear-gradient(135deg, var(--contraste-fondo), #0d3a5c);
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          gap: 16px;
-        ">
+          display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px;">
           <i class="fas fa-rocket" style="font-size:2rem; color: var(--cian-brillo); margin-bottom:0;"></i>
           <div style="text-align:left;">
             <h3 style="color: var(--cian-brillo); font-size:1.3rem;">Servicios Freelance</h3>
@@ -83,10 +124,10 @@
     </div>
 
     <div class="bio-section">
-      <p>Me llamo <strong>Alexis Pérez</strong>, Licenciado en <strong>Mercadotecnia</strong> especializado en la convergencia de estrategia digital, automatización CRM y programación.</p> 
+      <p>Me llamo <strong>Alexis Pérez</strong>, Licenciado en <strong>Mercadotecnia</strong> especializado en la convergencia de estrategia digital, automatización CRM y programación.</p>
       <p>Mi enfoque no es la venta directa, sino el diseño de ecosistemas tecnológicos y flujos de trabajo optimizados mediante IA para potenciar resultados institucionales.</p>
       <p>Experto en gestión de comunidades internacionales, liderazgo editorial y desarrollo de activos multimedia con un perfil métrico, meticuloso y autodidacta.</p>
-      
+
       <h3>Ecosistema Adobe</h3>
       <div class="skills-group">
         <a href="https://www.adobe.com/products/photoshop.html" target="_blank" class="skill-tag"><i class="fas fa-bezier-curve"></i> Photoshop</a>
@@ -129,14 +170,14 @@
       <div class="skills-group">
         <a href="https://chat.openai.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-robot"></i> ChatGPT</a>
         <a href="https://gemini.google.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-brain"></i> Gemini</a>
-        <a href="https://copilot.microsoft.com/" target="_blank" class="skill-tag tag-ia"><i class="fab fa-microsoft"></i> Copilot</a>
+        <a href="https://copilot.microsoft.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-microsoft"></i> Copilot</a>
         <a href="https://stability.ai/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-images"></i> Stable Diffusion</a>
         <a href="https://suno.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-music"></i> Suno IA</a>
         <a href="https://www.deepseek.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-search"></i> DeepSeek</a>
         <a href="https://kimi.moonshot.cn/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-comment-dots"></i> Kimi</a>
         <a href="https://qwen.ai/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-network-wired"></i> Qwen3</a>
       </div>
-      
+
       <h3>Ofimática y Nube</h3>
       <div class="skills-group">
         <a href="https://www.microsoft.com/es-mx/microsoft-365" target="_blank" class="skill-tag"><i class="fas fa-file-word"></i> Paquetería Office</a>
@@ -144,7 +185,7 @@
         <a href="https://onedrive.live.com/" target="_blank" class="skill-tag"><i class="fas fa-cloud"></i> OneDrive</a>
         <a href="https://www.ionos.mx/" target="_blank" class="skill-tag"><i class="fas fa-server"></i> IONOS</a>
       </div>
-      
+
       <h3 style="margin-top: 40px;">Experiencia Profesional</h3>
 
       <div class="experience-item">
@@ -214,5 +255,32 @@
 
     </div>
   </div>
+
+  <script>
+    const img     = document.getElementById('profile-img');
+    const wrap    = document.getElementById('img-wrap');
+
+    // Calculamos el umbral: cuando el wrap ya no sea visible en pantalla
+    function handleScroll() {
+      const wrapBottom = wrap.getBoundingClientRect().bottom;
+
+      if (wrapBottom < 0) {
+        // El contenedor original ya salió por arriba → foto pequeña y fija
+        img.classList.add('sticky-small');
+      } else {
+        // El contenedor original aún es visible → foto grande en su lugar
+        img.classList.remove('sticky-small');
+      }
+    }
+
+    // Al hacer clic en la foto pequeña, vuelve al inicio de la página
+    img.addEventListener('click', () => {
+      if (img.classList.contains('sticky-small')) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  </script>
 </body>
 </html>
