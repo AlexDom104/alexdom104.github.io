@@ -9,7 +9,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
 
-    /* ══ GENERAL ══ */
+:root {
+      --fondo: #333333;
+      --contraste-fondo: #262626;
+      --rosa-principal: #EF5085;
+      --rosa-oscuro: #A64062;
+      --cian-brillo: #70DDD8;
+      --azul-boton: #0A315B;
+      --blanco: #ffffff;
+    }
+        /* ══ GENERAL ══ */
     .page-header { text-align: center; margin-bottom: 6px; }
     .page-header h1 { font-size: 2.1rem; color: var(--cian-brillo); margin-bottom: 6px; }
     .page-header p { color: #aaa; font-size: 0.93rem; max-width: 580px; margin: 0 auto 28px; }
@@ -1459,6 +1468,8 @@
         </div>
           </div>
         </div>
+    <div id="sync-status" style="font-size:0.75rem; text-align:center; margin: 12px 0 4px; min-height:18px;"></div>
+
     <div class="leyenda">
       <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
     </div>
@@ -1592,27 +1603,76 @@
 
 
 
-    // Auto-sincronizar al cargar la página si el SHEET_ID ya está configurado
-    window.addEventListener('load', () => {
+    // ══════════════════════════════════════════════════════════════
+    // PRECIOS ESTÁTICOS — se muestran de inmediato; Sheets los reemplaza si responde
+    // ══════════════════════════════════════════════════════════════
+    const PRECIOS_PAQUETE = {
+      despegue: { precio: '$1,200<sub>/mes</sub>' },
+      arranque: { precio: '$2,500<sub>/mes</sub>' },
+      senal:    { precio: '$4,800<sub>/mes</sub>' },
+      dominio:  { precio: '$8,500<sub>/mes</sub>' },
+      imperio:  { precio: 'A cotizar' },
+    };
+
+    // Mostrar precios estáticos inmediatamente (antes de Sheets)
+    function mostrarPreciosEstaticos() {
+      Object.entries(PRECIOS_PAQUETE).forEach(([pid, data]) => {
+        const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+        if (!card) return;
+        const el = card.querySelector('.paquete-precio');
+        if (el) {
+          el.innerHTML = data.precio;
+          el.classList.remove('precio-skeleton');
+        }
+      });
+    }
+    mostrarPreciosEstaticos();
+
+    // ── Mapeo robusto: detecta el pid de un paquete desde el Sheet ─
+    // Funciona aunque el nombre tenga "— Starter", emojis extras, etc.
+    function detectarPid(nombre) {
+      const n = nombre.toLowerCase();
+      if (n.includes('despegue'))  return 'despegue';
+      if (n.includes('arranque'))  return 'arranque';
+      if (n.includes('señal') || n.includes('senal') || n.includes('fuerte')) return 'senal';
+      if (n.includes('dominio'))   return 'dominio';
+      if (n.includes('imperio'))   return 'imperio';
+      return null;
+    }
+
+    // ── Sincronización con Google Sheets (en background) ───────────
+    function sincronizarDesdeSheets() {
+      const statusEl = document.getElementById('sync-status');
+      if (statusEl) {
+        statusEl.textContent = '⏳ Sincronizando precios con Google Sheets...';
+        statusEl.style.color = '#888';
+      }
+
       const timeout = ms => new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms));
-      const fetchJson = url => Promise.race([fetch(url).then(r => r.json()), timeout(8000)]).catch(() => null);
+      const fetchJson = url => Promise.race([
+        fetch(url, { redirect: 'follow' }).then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        }),
+        timeout(12000)
+      ]).catch(() => null);
+
       Promise.all([
         fetchJson(APPS_SCRIPT_URL + '?action=servicios'),
         fetchJson(APPS_SCRIPT_URL + '?action=paquetes'),
       ]).then(([dataServicios, dataPaquetes]) => {
 
-        // ── Servicios individuales + precios del configurador ───
-        if (dataServicios && dataServicios.ok) {
-          // Inicializar configurador con los precios del Sheet
+        let sheetsOk = false;
+
+        // ── Actualizar precios de paquetes y servicios desde Sheets ─
+        if (dataServicios && dataServicios.ok && dataServicios.servicios) {
+          sheetsOk = true;
           cfgInit(dataServicios.servicios);
 
           dataServicios.servicios.forEach(item => {
             if (item.esPaquete) {
-              // Precio en tarjeta del carrusel
-              const pid = {
-                '🚀 Despegue':'despegue','📡 Arranque Digital':'arranque',
-                '🔥 Señal Fuerte':'senal','🏆 Dominio Total':'dominio','👑 Imperio Digital':'imperio'
-              }[item.nombre];
+              // Precio en tarjeta del carrusel — matching robusto por nombre parcial
+              const pid = detectarPid(item.nombre);
               if (!pid) return;
               const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
               if (!card) return;
@@ -1622,16 +1682,18 @@
                 const p = item.precio.trim();
                 precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
                   ? 'A cotizar'
-                  : p.replace('/mes','') + '<sub>/mes</sub>';
+                  : p.replace(/\/mes/i, '') + '<sub>/mes</sub>';
                 precioEl.classList.remove('precio-skeleton');
               }
               if (descEl && item.desc) descEl.textContent = item.desc;
             } else {
-              // Filas de tabla
+              // Filas de tabla de servicios individuales
               document.querySelectorAll('tbody tr').forEach(tr => {
                 const tdN = tr.querySelector('.td-servicio');
                 const tdP = tr.querySelector('.td-precio');
-                if (!tdN || !tdP || tdN.textContent.trim() !== item.nombre) return;
+                if (!tdN || !tdP) return;
+                // Comparar normalizando espacios y mayúsculas
+                if (tdN.textContent.trim().toLowerCase() !== item.nombre.toLowerCase()) return;
                 tr.style.display = item.visible ? '' : 'none';
                 if (!item.visible) return;
                 tdP.innerHTML = /cotiz|a cotizar/i.test(item.precio)
@@ -1639,22 +1701,21 @@
                   : item.precio;
               });
               // Actualizar CATALOGO del buscador
-              const cat = CATALOGO.find(c => c.nombre === item.nombre);
+              const cat = CATALOGO.find(c => c.nombre.toLowerCase() === item.nombre.toLowerCase());
               if (cat && item.precio) cat.precio = item.precio;
             }
           });
-        } else {
-          document.querySelectorAll('.precio-skeleton').forEach(el => el.textContent = '—');
         }
 
-        // ── Características de tarjetas de paquetes ─────────────
-        if (dataPaquetes && dataPaquetes.ok) {
+        // ── Características de tarjetas de paquetes desde Sheets ───
+        if (dataPaquetes && dataPaquetes.ok && dataPaquetes.paquetes) {
+          sheetsOk = true;
           Object.entries(dataPaquetes.paquetes).forEach(([pid, filas]) => {
             const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
             if (!card) return;
             const featDiv = card.querySelector('.paquete-features');
             if (!featDiv) return;
-            featDiv.innerHTML = ''; // limpiar skeleton
+            featDiv.innerHTML = '';
             let html = '';
             filas.forEach(f => {
               if (f.tipo === 'grupo') {
@@ -1674,11 +1735,26 @@
           });
         }
 
+        if (statusEl) {
+          if (sheetsOk) {
+            statusEl.textContent = '✅ Precios sincronizados desde Google Sheets';
+            statusEl.style.color = '#50d890';
+          } else {
+            statusEl.textContent = '⚠️ Precios estáticos — Sheets no respondió';
+            statusEl.style.color = '#f0a060';
+          }
+        }
+
       }).catch(err => {
-        document.querySelectorAll('.precio-skeleton').forEach(el => el.classList.remove('precio-skeleton'));
+        if (statusEl) {
+          statusEl.textContent = '⚠️ Precios estáticos (sin conexión con Sheets)';
+          statusEl.style.color = '#f0a060';
+        }
         console.warn('[Servicios] Error al cargar desde el Sheet:', err.message);
       });
-    });
+    }
+
+    window.addEventListener('load', sincronizarDesdeSheets);
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
     const CATALOGO = [
