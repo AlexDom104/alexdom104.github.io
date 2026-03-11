@@ -1603,31 +1603,6 @@
 
 
 
-    // ══════════════════════════════════════════════════════════════
-    // PRECIOS ESTÁTICOS — se muestran de inmediato; Sheets los reemplaza si responde
-    // ══════════════════════════════════════════════════════════════
-    const PRECIOS_PAQUETE = {
-      despegue: { precio: '$1,200<sub>/mes</sub>' },
-      arranque: { precio: '$2,500<sub>/mes</sub>' },
-      senal:    { precio: '$4,800<sub>/mes</sub>' },
-      dominio:  { precio: '$8,500<sub>/mes</sub>' },
-      imperio:  { precio: 'A cotizar' },
-    };
-
-    // Mostrar precios estáticos inmediatamente (antes de Sheets)
-    function mostrarPreciosEstaticos() {
-      Object.entries(PRECIOS_PAQUETE).forEach(([pid, data]) => {
-        const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
-        if (!card) return;
-        const el = card.querySelector('.paquete-precio');
-        if (el) {
-          el.innerHTML = data.precio;
-          el.classList.remove('precio-skeleton');
-        }
-      });
-    }
-    mostrarPreciosEstaticos();
-
     // ── Mapeo robusto: detecta el pid de un paquete desde el Sheet ─
     // Funciona aunque el nombre tenga "— Starter", emojis extras, etc.
     function detectarPid(nombre) {
