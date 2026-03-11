@@ -426,6 +426,22 @@
     }
 
     /* ── Sync bar ── */
+    .sync-bar {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.15);
+      border-radius: 10px; padding: 10px 18px; margin-bottom: 12px;
+    }
+    #btn-sync-sheets {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(112,221,216,0.1); border: 1.5px solid rgba(112,221,216,0.3);
+      color: var(--cian-brillo); border-radius: 8px; padding: 8px 16px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: 0.2s; font-family: inherit;
+    }
+    #btn-sync-sheets:hover:not(:disabled) {
+      background: rgba(112,221,216,0.2); border-color: var(--cian-brillo);
+    }
+    #btn-sync-sheets:disabled { opacity: 0.6; cursor: default; }
     #sync-status { font-size: 0.78rem; color: #666; }
 
     /* ── Lightbox ── */
@@ -517,10 +533,10 @@
         <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
         <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
 
-        <div class="paquetes-grid" id="paquetes-carousel">
+                <div class="paquetes-grid" id="paquetes-carousel">
 
-          <!-- ══ 1. DESPEGUE ══ -->
-          <div class="paquete-card">
+          <!-- Las tarjetas se generan desde Google Sheets (hoja Paquetes) -->
+          <div class="paquete-card" data-pid="despegue">
             <div class="paquete-band"></div>
             <div class="paquete-head">
               <div class="paquete-tier">Starter</div>
@@ -528,29 +544,11 @@
               <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
               <div class="paquete-desc"></div>
             </div>
-            <div class="paquete-features">
-              <div class="feat-group-label">Redes y publicaciones</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 red social</span> (FB o IG)</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">8 publicaciones</span>/mes</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imagen + texto</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Stories / Reels / Shorts</span></div>
-              <div class="feat-group-label">Web y gestión</div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Gestión de página web</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
-              <div class="feat-group-label">Estrategia y reportes</div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('🚀 Despegue — $1,200/mes')">Contratar</button>
-            </div>
+            <div class="paquete-features"></div>
+            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModal('🚀 Despegue')">Contratar</button></div>
           </div>
 
-          <!-- ══ 2. ARRANQUE DIGITAL ══ -->
-          <div class="paquete-card">
+          <div class="paquete-card" data-pid="arranque">
             <div class="paquete-band"></div>
             <div class="paquete-head">
               <div class="paquete-tier">Básico</div>
@@ -558,29 +556,11 @@
               <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
               <div class="paquete-desc"></div>
             </div>
-            <div class="paquete-features">
-              <div class="feat-group-label">Redes y publicaciones</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">3 redes</span>: FB, IG + 1 a elección</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">12 publicaciones</span>/mes</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imágenes y stories</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reels / Shorts / Carruseles</span></div>
-              <div class="feat-group-label">Web y gestión</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 página web</span> gestionada</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
-              <div class="feat-group-label">Estrategia y reportes</div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas / KPIs</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('📡 Arranque Digital — $2,500/mes')">Contratar</button>
-            </div>
+            <div class="paquete-features"></div>
+            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModal('📡 Arranque Digital')">Contratar</button></div>
           </div>
 
-          <!-- ══ 3. SEÑAL FUERTE ══ -->
-          <div class="paquete-card destacado">
+          <div class="paquete-card destacado" data-pid="senal">
             <div class="paquete-band"></div>
             <div class="badge-popular">⭐ Más Popular</div>
             <div class="paquete-head">
@@ -589,29 +569,11 @@
               <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
               <div class="paquete-desc"></div>
             </div>
-            <div class="paquete-features">
-              <div class="feat-group-label">Redes y publicaciones</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">5 redes</span>: FB, IG, X, LinkedIn, TikTok</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">18 piezas/mes por red</span> = 90 totales</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño exclusivo y rotativo por plataforma</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reels, Shorts, Stories, Carruseles <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-group-label">Web y gestión</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1–2 páginas web</span> gestionadas <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Respuesta a comentarios y DMs <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-group-label">Estrategia y reportes</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">SEO orgánico: redes + Google <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Calendario editorial mensual <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reporte mensual + Analytics <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Recursos digitales entregados al cliente <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('🔥 Señal Fuerte — $4,800/mes')">Contratar</button>
-            </div>
+            <div class="paquete-features"></div>
+            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModal('🔥 Señal Fuerte')">Contratar</button></div>
           </div>
 
-          <!-- ══ 4. DOMINIO TOTAL ══ -->
-          <div class="paquete-card">
+          <div class="paquete-card" data-pid="dominio" style="--band-bg:linear-gradient(90deg,#0a315b,#70DDD8);">
             <div class="paquete-band" style="background:linear-gradient(90deg,#0a315b,#70DDD8);"></div>
             <div class="paquete-head">
               <div class="paquete-tier">Profesional</div>
@@ -619,24 +581,11 @@
               <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
               <div class="paquete-desc"></div>
             </div>
-            <div class="paquete-features">
-              <div class="feat-group-label" style="color:var(--rosa-principal);">Todo de Señal Fuerte, más:</div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Hasta <span class="feat-val">15 redes sociales</span></span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus"><span class="feat-val">2 o 3 marcas</span> simultáneas</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Contenido independiente por marca</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Gestión <span class="feat-val">multisite</span> (webs por marca)</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Producción audiovisual básica incluida</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reporte ejecutivo <span class="feat-val">semanal</span></span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reunión estratégica mensual (videollamada)</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Entrega de recursos por cada marca</span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('🏆 Dominio Total — $8,500/mes')">Contratar</button>
-            </div>
+            <div class="paquete-features"></div>
+            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModal('🏆 Dominio Total')">Contratar</button></div>
           </div>
 
-          <!-- ══ 5. IMPERIO DIGITAL ══ -->
-          <div class="paquete-card enterprise">
+          <div class="paquete-card enterprise" data-pid="imperio">
             <div class="paquete-band"></div>
             <div class="paquete-head">
               <div class="paquete-tier">Enterprise</div>
@@ -644,19 +593,8 @@
               <div class="paquete-precio"><span class="precio-skeleton">···</span></div>
               <div class="paquete-desc"></div>
             </div>
-            <div class="paquete-features">
-              <div class="feat-group-label" style="color:#9146ff;">Todo de Dominio Total, más:</div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Gestión de <span class="feat-val">Pauta Meta Ads</span></span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Automatización CRM (Bitrix24)</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Email marketing segmentado</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Dashboard de métricas en tiempo real</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">SEO técnico + contenido para buscadores</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Soporte <span class="feat-val">prioritario 7 días</span></span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Consultoría ejecutiva mensual</span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('👑 Imperio Digital — A cotizar')">Solicitar Propuesta</button>
-            </div>
+            <div class="paquete-features"></div>
+            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModal('👑 Imperio Digital')">Solicitar Propuesta</button></div>
           </div>
 
         </div><!-- /paquetes-grid -->
@@ -1179,70 +1117,119 @@
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    // ══ CARGA DESDE GOOGLE SHEETS (única fuente de verdad) ═══════
-    // Los precios NO están hardcodeados en el HTML.
-    // Se muestran "···" hasta que el Sheet responda.
+    // ══ CARGA DESDE GOOGLE SHEETS ════════════════════════════════
+    // Dos fetches en paralelo al cargar la página (una sola vez):
+    //   1. ?action=servicios → precios de tablas individuales
+    //   2. ?action=paquetes  → características de tarjetas de paquetes
+    // Si alguno falla, se muestra "—" en vez de "···"
     // ═══════════════════════════════════════════════════════════
-    window.addEventListener('load', async () => {
-      try {
-        const resp = await fetch(APPS_SCRIPT_URL + '?action=servicios');
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        const data = await resp.json();
-        if (!data.ok || !data.servicios) throw new Error(data.error || 'Sin datos');
 
-        data.servicios.forEach(item => {
-          if (item.esPaquete) {
-            // ── Tarjetas del carrusel ───────────────────────────
-            document.querySelectorAll('.paquete-card').forEach(card => {
-              const nombreEl = card.querySelector('.paquete-nombre');
-              if (!nombreEl || nombreEl.textContent.trim() !== item.nombre) return;
+    window.addEventListener('load', () => {
+      Promise.all([
+        fetch(APPS_SCRIPT_URL + '?action=servicios').then(r => r.json()).catch(() => null),
+        fetch(APPS_SCRIPT_URL + '?action=paquetes').then(r => r.json()).catch(() => null),
+      ]).then(([dataServicios, dataPaquetes]) => {
 
-              if (!item.visible) { card.style.display = 'none'; return; }
-              card.style.display = '';
-
-              const precioEl = card.querySelector('.paquete-precio');
-              const descEl   = card.querySelector('.paquete-desc');
-
-              if (precioEl && item.precio) {
-                const p = item.precio.trim();
-                if (/cotiz|a cotizar/i.test(p)) {
-                  precioEl.innerHTML = 'A cotizar';
-                } else {
-                  precioEl.innerHTML = p.replace('/mes', '') + '<sub>/mes</sub>';
-                }
-              }
-              if (descEl && item.desc) descEl.textContent = item.desc;
-            });
-
-          } else {
-            // ── Filas de tabla ──────────────────────────────────
-            document.querySelectorAll('tbody tr').forEach(tr => {
-              const tdNombre = tr.querySelector('.td-servicio');
-              const tdPrecio = tr.querySelector('.td-precio');
-              if (!tdNombre || !tdPrecio) return;
-              if (tdNombre.textContent.trim() !== item.nombre) return;
-
-              if (!item.visible) { tr.style.display = 'none'; return; }
-              tr.style.display = '';
-
-              if (item.precio) {
-                tdPrecio.innerHTML = /cotiz|a cotizar/i.test(item.precio)
+        // ── 1. Servicios individuales (tablas) ──────────────────
+        if (dataServicios && dataServicios.ok) {
+          dataServicios.servicios.forEach(item => {
+            if (item.esPaquete) {
+              // precio en tarjeta (head)
+              const card = document.querySelector(`.paquete-card[data-pid]`);
+              // se maneja abajo con dataPaquetes
+            } else {
+              document.querySelectorAll('tbody tr').forEach(tr => {
+                const tdN = tr.querySelector('.td-servicio');
+                const tdP = tr.querySelector('.td-precio');
+                if (!tdN || !tdP || tdN.textContent.trim() !== item.nombre) return;
+                tr.style.display = item.visible ? '' : 'none';
+                if (!item.visible) return;
+                tdP.innerHTML = /cotiz|a cotizar/i.test(item.precio)
                   ? '<span class="precio-pres">Cotizable</span>'
                   : item.precio;
+              });
+              const cat = CATALOGO.find(c => c.nombre === item.nombre);
+              if (cat && item.precio) cat.precio = item.precio;
+            }
+
+            // precio en tarjeta de paquete (desde hoja Servicios)
+            if (item.esPaquete) {
+              const pid = {
+                '🚀 Despegue':'despegue','📡 Arranque Digital':'arranque',
+                '🔥 Señal Fuerte':'senal','🏆 Dominio Total':'dominio','👑 Imperio Digital':'imperio'
+              }[item.nombre];
+              if (!pid) return;
+              const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+              if (!card) return;
+              const precioEl = card.querySelector('.paquete-precio');
+              const descEl   = card.querySelector('.paquete-desc');
+              if (precioEl && item.precio) {
+                const p = item.precio.trim();
+                precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
+                  ? 'A cotizar'
+                  : p.replace('/mes','') + '<sub>/mes</sub>';
               }
+              if (descEl && item.desc) descEl.textContent = item.desc;
+            }
+          });
+        } else {
+          document.querySelectorAll('td .precio-skeleton, .paquete-precio .precio-skeleton')
+            .forEach(el => el.textContent = '—');
+        }
+
+        // ── 2. Características de paquetes ──────────────────────
+        if (dataPaquetes && dataPaquetes.ok) {
+          Object.entries(dataPaquetes.paquetes).forEach(([pid, filas]) => {
+            const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+            if (!card) return;
+            const featDiv = card.querySelector('.paquete-features');
+            if (!featDiv) return;
+
+            let html = '';
+            filas.forEach(f => {
+              if (f.tipo === 'grupo') {
+                // Encabezado de sección — respetar color especial de Dominio/Imperio
+                const esPlus = pid === 'dominio' || pid === 'imperio';
+                const color  = pid === 'imperio' ? 'color:#9146ff;' : esPlus ? 'color:var(--rosa-principal);' : '';
+                html += `<div class="feat-group-label" style="${color}">${f.texto}</div>`;
+                return;
+              }
+
+              // Construir el texto con negrita (feat-val) si aplica
+              let textoHTML = f.texto;
+              if (f.negrita) {
+                textoHTML = f.texto.replace(f.negrita, `<span class="feat-val">${f.negrita}</span>`);
+              }
+              if (f.nuevo) {
+                textoHTML += ' <span class="feat-new-badge">nuevo</span>';
+              }
+
+              // Tipo de icono y clases
+              const configs = {
+                yes:  { iconClass: 'fi fi-yes fas fa-check',  spanClass: 'feat-yes' },
+                no:   { iconClass: 'fi fi-no fas fa-times',   spanClass: 'feat-no'  },
+                plus: { iconClass: 'fi fi-plus fas fa-plus',  spanClass: 'feat-plus' },
+              };
+              const cfg = configs[f.tipo];
+              if (!cfg) return;
+
+              // Color especial del icono + para Imperio
+              const iconStyle = pid === 'imperio' && f.tipo === 'plus' ? ' style="color:#9146ff;"' : '';
+
+              html += `<div class="feat-row">` +
+                      `<i class="${cfg.iconClass}"${iconStyle}></i>` +
+                      `<span class="${cfg.spanClass}">${textoHTML}</span>` +
+                      `</div>`;
             });
 
-            // ── Catálogo del buscador modal ─────────────────────
-            const cat = CATALOGO.find(c => c.nombre === item.nombre);
-            if (cat && item.precio) cat.precio = item.precio;
-          }
-        });
+            featDiv.innerHTML = html;
+          });
+        }
 
-      } catch(err) {
-        // Si falla, mostrar "—" en vez de "···"
+      }).catch(err => {
         document.querySelectorAll('.precio-skeleton').forEach(el => el.textContent = '—');
-        console.warn('[Servicios] No se pudo cargar desde el Sheet:', err.message);
-      }
+        console.warn('[Servicios] Error al cargar desde el Sheet:', err.message);
+      });
     });
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
