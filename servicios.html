@@ -2761,8 +2761,7 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
           from_email: correo,
           phone:      telefono,
           subject:    `🛠️ Paquete personalizado — ${nombre}`,
-          message:    configItems.join('
-• '),
+          message:    configItems.join('\n• '),
           html_body,
         });
         fetch(APPS_SCRIPT_URL, {
