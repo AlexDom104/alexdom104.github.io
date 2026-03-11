@@ -385,10 +385,13 @@
       border-radius: 8px; overflow: hidden; cursor: pointer;
       background: #111; border: 1.5px solid #2a2a2a;
       transition: transform 0.2s, border-color 0.2s;
+      display: flex; align-items: center; justify-content: center;
     }
     .ej-thumb:hover { transform: scale(1.05); border-color: #70DDD8; }
     .ej-thumb img {
-      width: 100%; height: 100%; object-fit: cover;
+      max-width: 100%; max-height: 100%;
+      width: auto; height: auto;
+      object-fit: contain;
       display: block;
     }
     .ej-thumb .ej-overlay {
@@ -449,24 +452,23 @@
     .lightbox.visible { display: flex; }
     .lightbox-inner {
       position: relative;
-      width: 500px; max-width: calc(100vw - 40px);
+      max-width: 500px; width: calc(100vw - 40px);
       animation: modalIn 0.2s ease;
     }
     .lightbox-inner img {
-      width: 500px; height: 500px;
-      max-width: calc(100vw - 40px);
-      max-height: calc(100vw - 40px);
-      object-fit: cover;
+      width: 100%; height: auto;
+      max-width: 500px;
+      max-height: 80vh;
+      object-fit: contain;
       border-radius: 12px; display: block; background: #111;
     }
     @media (max-width: 768px) {
       .lightbox-inner {
-        width: 350px; max-width: calc(100vw - 32px);
+        max-width: 350px; width: calc(100vw - 32px);
       }
       .lightbox-inner img {
-        width: 350px; height: 350px;
-        max-width: calc(100vw - 32px);
-        max-height: calc(100vw - 32px);
+        max-width: 350px;
+        max-height: 70vh;
       }
     }
     .lightbox-caption {
@@ -1805,16 +1807,12 @@
       ],
 
       impresos: [
-        { url: 'https://imgur.com/4ANs5KX.jpg', cap: 'Tarjeta de presentación doble cara' },
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Tarjeta de presentación doble cara' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Etiquetas producto cosmético' },
+        { url: 'https://i.imgur.com/4ANs5KX.jpg', cap: 'Tarjeta de presentación doble cara' },
       ],
 
       folletos: [
-        { url: 'https://imgur.com/RKgVW0n.png', cap: 'Flyer UHA Educación Online' },
-        { url: 'https://imgur.com/xWXogoN.png', cap: 'Flyer UHA Educación Online' }
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Tríptico restaurante' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Flyer evento cultural' },
+        { url: 'https://i.imgur.com/RKgVW0n.png', cap: 'Flyer UHA Educación Online' },
+        { url: 'https://i.imgur.com/xWXogoN.png', cap: 'Flyer UHA Educación Online' },
       ],
 
       lonas: [
