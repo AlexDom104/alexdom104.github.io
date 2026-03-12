@@ -1130,13 +1130,21 @@
               </div>
               <div class="cfg-section-body" id="body-duracion">
                 <div class="cfg-label">¿Cuánto tiempo necesitas el servicio?</div>
-                <select class="cfg-select" id="sel-duracion" onchange="cfgCalc()">
+                <select class="cfg-select" id="sel-duracion" onchange="cfgDuracionChange()">
+                  <option value="" selected disabled>Seleccionar</option>
+                  <option value="0">Indefinido / sin fecha límite</option>
                   <option value="1">1 mes (prueba)</option>
                   <option value="3">3 meses</option>
-                  <option value="6" selected>6 meses</option>
+                  <option value="6">6 meses</option>
                   <option value="12">12 meses (1 año)</option>
-                  <option value="0">Indefinido / sin fecha límite</option>
+                  <option value="rango">Rango personalizado de meses</option>
                 </select>
+                <div id="duracion-rango-msg" style="display:none;margin-top:8px;padding:8px 12px;
+                  background:rgba(112,221,216,0.07);border:1px solid rgba(112,221,216,0.2);
+                  border-radius:8px;font-size:0.76rem;color:#70DDD8;line-height:1.5;">
+                  <i class="fas fa-info-circle" style="margin-right:6px;opacity:0.8;"></i>
+                  En la respuesta por correo se indicarán los detalles de las fechas de inicio y término.
+                </div>
               </div>
             </div>
 
@@ -1333,7 +1341,7 @@
       let activeEl = null;
 
       function showTip(el) {
-        const text = el.dataset.tip;
+        const text = el.dataset.tip || el.dataset.lockTip;
         if (!text) return;
         float.innerHTML = text;
         float.style.display = 'block';
@@ -1366,23 +1374,34 @@
         activeEl = null;
       }
 
-      // Desktop: hover
+      // Desktop: hover — aplica a .cfg-tooltip y a elementos con data-lock-tip
       document.addEventListener('mouseover', e => {
-        const el = e.target.closest('.cfg-tooltip');
-        if (el) showTip(el);
+        const tt = e.target.closest('.cfg-tooltip');
+        if (tt) { showTip(tt); return; }
+        const lt = e.target.closest('[data-lock-tip]');
+        if (lt) showTip(lt);
       });
       document.addEventListener('mouseout', e => {
-        const el = e.target.closest('.cfg-tooltip');
-        if (el) hideTip(el);
+        const tt = e.target.closest('.cfg-tooltip');
+        if (tt) { hideTip(tt); return; }
+        const lt = e.target.closest('[data-lock-tip]');
+        if (lt) hideTip(lt);
       });
 
-      // Mobile/tablet: tap toggle
+      // Mobile/tablet: tap toggle — aplica también a data-lock-tip
       document.addEventListener('click', e => {
-        const el = e.target.closest('.cfg-tooltip');
-        if (el) {
+        const tt = e.target.closest('.cfg-tooltip');
+        if (tt) {
           e.stopPropagation();
-          if (activeEl === el) { hideTip(el); }
-          else { if (activeEl) hideTip(activeEl); showTip(el); }
+          if (activeEl === tt) { hideTip(tt); }
+          else { if (activeEl) hideTip(activeEl); showTip(tt); }
+          return;
+        }
+        const lt = e.target.closest('[data-lock-tip]');
+        if (lt) {
+          e.stopPropagation();
+          if (activeEl === lt) { hideTip(lt); }
+          else { if (activeEl) hideTip(activeEl); showTip(lt); }
           return;
         }
         // Tap fuera cierra el tooltip
@@ -2357,6 +2376,10 @@
       metaExtra:   null,   // costo por campaña 4ª+ Meta (viene del Sheet)
       googleBase:  null,   // precio por 1 campaña Google (viene del Sheet)
       googleExtra: null,   // costo por campaña 4ª+ Google (viene del Sheet)
+      // Descuentos por número de módulos (vienen del Sheet)
+      desc2:  null,   // CFG: Descuento 2 módulos  (p.ej. 10 → 10%)
+      desc3:  null,   // CFG: Descuento 3 módulos
+      desc4:  null,   // CFG: Descuento 4+ módulos
     };
 
     // Mapa: clave de P → nombre exacto en el Sheet
@@ -2376,7 +2399,10 @@
       metaExtra:   'CFG: Meta Ads extra',
       googleBase:  'CFG: Google Ads base',
       googleExtra: 'CFG: Google Ads extra',
-      // metaExtra y googleExtra ahora también vienen del Sheet
+      // Descuentos de paquete — editables desde el Sheet
+      desc2:       'CFG: Descuento 2 módulos',
+      desc3:       'CFG: Descuento 3 módulos',
+      desc4:       'CFG: Descuento 4+ módulos',
     };
 
     // Llamada desde el window load — recibe el array servicios del Sheet
@@ -2617,18 +2643,28 @@
 
     // Bloquear visualmente Redes si Marcas no está activo
     function cfgActualizarRedesLock() {
-      const marcasOk = document.getElementById('chk-marcas').checked;
+      const marcasOk    = document.getElementById('chk-marcas').checked;
+      const redesChk    = document.getElementById('chk-redes');
+      const redesLabel  = document.querySelector('label[for="chk-redes"]');
+      const redesHint   = document.getElementById('hint-redes');
+      const redesBody   = document.getElementById('body-redes');
       const redesSection = document.getElementById('cs-redes');
-      const redesChk = document.getElementById('chk-redes');
       if (!redesSection) return;
+
       if (!marcasOk) {
-        redesSection.style.opacity = '0.45';
-        redesSection.style.pointerEvents = 'none';
-        redesSection.title = 'Activa "Gestión de marcas" primero';
+        // Deshabilitar el checkbox visualmente
+        redesChk.disabled = true;
+        redesChk.style.cursor = 'not-allowed';
+        if (redesLabel) redesLabel.style.opacity = '0.45';
+        // Mostrar tooltip de bloqueo al hacer hover/click en el checkbox o label
+        redesSection.querySelectorAll('input[id="chk-redes"], label[for="chk-redes"]').forEach(el => {
+          el.setAttribute('data-lock-tip', '¡Tienes que indicar cuántas marcas quieres que gestione primero!');
+        });
       } else {
-        redesSection.style.opacity = '';
-        redesSection.style.pointerEvents = '';
-        redesSection.title = '';
+        redesChk.disabled = false;
+        redesChk.style.cursor = '';
+        if (redesLabel) redesLabel.style.opacity = '';
+        redesSection.querySelectorAll('[data-lock-tip]').forEach(el => el.removeAttribute('data-lock-tip'));
       }
     }
 
@@ -2844,7 +2880,9 @@
       // 8. Duración (informativo)
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
-        document.getElementById('hint-duracion').textContent = sel.options[sel.selectedIndex].text;
+        const val = sel.value;
+        document.getElementById('hint-duracion').textContent =
+          val === '' ? '' : val === 'rango' ? 'Rango personalizado' : sel.options[sel.selectedIndex].text;
       } else { document.getElementById('hint-duracion').textContent = ''; }
 
       // 9. Extras del buscador
@@ -2881,11 +2919,11 @@
         document.getElementById('chk-google').checked,
       ].filter(Boolean).length + cfgExtras.length;
 
-      // Descuento escalonado: 1=0%, 2=10%, 3=15%, 4+=20%
+      // Descuento escalonado — valores vienen del Sheet; fallback si no cargaron
       const pctDescuento = modulosActivos <= 1 ? 0
-                         : modulosActivos === 2 ? 10
-                         : modulosActivos === 3 ? 15
-                         : 20;
+                         : modulosActivos === 2 ? (P.desc2 !== null ? P.desc2 : 10)
+                         : modulosActivos === 3 ? (P.desc3 !== null ? P.desc3 : 15)
+                         : (P.desc4 !== null ? P.desc4 : 20);
 
       const totalBase = total + totalSinDesc;   // precio individual completo (sin descuento aplicado)
       const totalPkg  = Math.round(total * (1 - pctDescuento / 100)) + totalSinDesc;  // descuento solo sobre la base
@@ -3021,7 +3059,10 @@
       if (document.getElementById('chk-google').checked) configItems.push(`Google Ads: ${document.getElementById('num-google').value} campaña(s)/mes`);
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
-        configItems.push(`Duración: ${sel.options[sel.selectedIndex].text}`);
+        const durText = sel.value === 'rango'
+          ? 'Rango personalizado (fechas por confirmar en correo)'
+          : (sel.value === '' ? 'No especificada' : sel.options[sel.selectedIndex].text);
+        configItems.push(`Duración: ${durText}`);
       }
       cfgExtras.forEach(s => configItems.push(s));
 
@@ -3124,6 +3165,13 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
     }
 
     // ══ CARRUSEL ════════════════════════════════════════════════
+    function cfgDuracionChange() {
+      const sel = document.getElementById('sel-duracion');
+      const msg = document.getElementById('duracion-rango-msg');
+      if (msg) msg.style.display = sel.value === 'rango' ? 'block' : 'none';
+      cfgCalc();
+    }
+
     function toggleCat(el) { (el.classList.contains('cat-header') ? el.closest('.cat-block') : el).classList.toggle('open'); }
 
     const carousel = document.getElementById('paquetes-carousel');
