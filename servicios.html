@@ -702,6 +702,66 @@
     }
     .feat-skel-line.short { width: 60%; }
     .feat-error { color: #555; font-size: 0.78rem; font-style: italic; padding: 12px 0; }
+
+    /* ── Tooltips de ayuda ── */
+    .cfg-tooltip {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: #2a2a2a; border: 1px solid #444; color: #666;
+      font-size: 0.6rem; cursor: default; margin-left: 5px;
+      position: relative; flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cfg-tooltip:hover { background: #333; color: var(--cian-brillo); border-color: var(--cian-brillo); }
+    .cfg-tooltip .tip-text {
+      display: none; position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+      background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
+      padding: 7px 11px; font-size: 0.72rem; color: #ccc; white-space: nowrap;
+      z-index: 200; box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      pointer-events: none; line-height: 1.5;
+    }
+    .cfg-tooltip:hover .tip-text { display: block; }
+    @media (max-width: 520px) {
+      .cfg-tooltip .tip-text { left: auto; right: 0; top: 22px; transform: none; white-space: normal; max-width: 220px; }
+    }
+
+    /* ── Grid de cuentas por red (cuando marcas > 1) ── */
+    .redes-por-marca { display: none; margin-top: 12px; }
+    .redes-por-marca.visible { display: block; }
+    .redes-por-marca-label {
+      font-size: 0.68rem; color: #888; text-transform: uppercase;
+      letter-spacing: 0.8px; margin-bottom: 8px;
+    }
+    .red-cuenta-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px; font-size: 0.82rem; color: #ccc;
+    }
+    .red-cuenta-row i { width: 16px; text-align: center; flex-shrink: 0; }
+    .red-cuenta-row input {
+      width: 64px; background: #111; border: 1.5px solid #2a2a2a;
+      color: #fff; border-radius: 6px; padding: 5px 8px;
+      font-size: 0.82rem; outline: none; font-family: inherit;
+      transition: border-color 0.2s; text-align: center;
+    }
+    .red-cuenta-row input:focus { border-color: var(--cian-brillo); }
+    .red-cuenta-row span { color: #666; font-size: 0.72rem; }
+
+    /* ── Toast de confirmación ── */
+    #cfg-toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: linear-gradient(135deg,#0a315b,#1a5a8a);
+      border: 1.5px solid var(--cian-brillo); border-radius: 14px;
+      padding: 18px 28px; color: #fff; font-size: 0.95rem; font-weight: 600;
+      text-align: center; z-index: 2000; opacity: 0; pointer-events: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      max-width: 340px; width: calc(100vw - 40px);
+    }
+    #cfg-toast.show {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+    #cfg-toast i { color: var(--cian-brillo); margin-right: 8px; }
+    #cfg-toast p { font-size: 0.78rem; color: #aaa; margin-top: 4px; font-weight: 400; }
     /* ═══════════════════════════════════════════════════════════ */
   </style>
 </head>
@@ -897,6 +957,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-marcas" onchange="cfgToggle('marcas')">
                 <label for="chk-marcas">🏷️ Gestión de marcas</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Número de marcas o empresas distintas<br>que necesitas gestionar en redes y medios.</span></span>
                 <span class="cfg-price-hint" id="hint-marcas"></span>
               </div>
               <div class="cfg-section-body" id="body-marcas">
@@ -913,6 +974,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-web" onchange="cfgToggle('web')">
                 <label for="chk-web">🌐 Gestión de páginas web</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Mantenimiento de sitios web existentes:<br>actualizaciones, contenido y soporte técnico.</span></span>
                 <span class="cfg-price-hint" id="hint-web"></span>
               </div>
               <div class="cfg-section-body" id="body-web">
@@ -929,15 +991,11 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-redes" onchange="cfgToggle('redes')">
                 <label for="chk-redes">📱 Redes sociales</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Todas las redes sociales a manejar por marca.<br>Selecciona las plataformas activas.</span></span>
                 <span class="cfg-price-hint" id="hint-redes"></span>
               </div>
               <div class="cfg-section-body" id="body-redes">
-                <div class="cfg-label">¿Cuántas redes sociales? (de cada marca)</div>
-                <div class="cfg-input-row">
-                  <input type="number" class="cfg-input" id="num-redes" min="1" max="6" value="1" oninput="cfgSyncRedes()">
-                  <span class="cfg-unit">red(es)</span>
-                </div>
-                <div class="cfg-label" style="margin-top:10px;">¿Cuáles plataformas?</div>
+                <div class="cfg-label">¿Cuáles plataformas? <span style="color:#555;font-size:0.68rem;">(máx. 6 — una cuenta por red, por marca)</span></div>
                 <div class="cfg-checks" id="checks-redes">
                   <label class="cfg-check-pill" id="pill-fb"><input type="checkbox" value="Facebook" onchange="cfgPillChange()"><i class="fab fa-facebook"></i> Facebook</label>
                   <label class="cfg-check-pill" id="pill-ig"><input type="checkbox" value="Instagram" onchange="cfgPillChange()"><i class="fab fa-instagram"></i> Instagram</label>
@@ -945,6 +1003,12 @@
                   <label class="cfg-check-pill" id="pill-li"><input type="checkbox" value="LinkedIn" onchange="cfgPillChange()"><i class="fab fa-linkedin"></i> LinkedIn</label>
                   <label class="cfg-check-pill" id="pill-tt"><input type="checkbox" value="TikTok" onchange="cfgPillChange()"><i class="fab fa-tiktok"></i> TikTok</label>
                   <label class="cfg-check-pill" id="pill-yt"><input type="checkbox" value="YouTube" onchange="cfgPillChange()"><i class="fab fa-youtube"></i> YouTube</label>
+                </div>
+
+                <!-- Cuadros por red — solo visible cuando marcas > 1 -->
+                <div class="redes-por-marca" id="redes-por-marca-wrap">
+                  <div class="redes-por-marca-label">¿Cuántas cuentas de cada red? (por marca)</div>
+                  <div id="redes-cuentas-grid"></div>
                 </div>
               </div>
             </div>
@@ -954,6 +1018,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-diseno" onchange="cfgToggle('diseno')">
                 <label for="chk-diseno">🎨 Diseño gráfico y creación de contenido</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Piezas de contenido visual por mes.<br>1 pieza = imagen o video que se publica<br>en todas tus redes activas.</span></span>
                 <span class="cfg-price-hint" id="hint-diseno"></span>
               </div>
               <div class="cfg-section-body" id="body-diseno">
@@ -983,6 +1048,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-crm" onchange="cfgToggle('crm')">
                 <label for="chk-crm">⚙️ Gestión de CRM</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Configuración y mantenimiento de Bitrix24<br>u otro CRM. Con o sin automatizaciones vía APIs.</span></span>
                 <span class="cfg-price-hint" id="hint-crm"></span>
               </div>
               <div class="cfg-section-body" id="body-crm">
@@ -998,14 +1064,15 @@
             <div class="cfg-section" id="cs-meta">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-meta" onchange="cfgToggle('meta')">
-                <label for="chk-meta">📣 Gestión de anuncios en Meta Ads</label>
+                <label for="chk-meta">📣 Gestión de campañas en Meta Ads</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Creación, segmentación y optimización<br>de campañas en Facebook / Instagram Ads.<br>Base incluye 3 campañas/mes.</span></span>
                 <span class="cfg-price-hint" id="hint-meta"></span>
               </div>
               <div class="cfg-section-body" id="body-meta">
-                <div class="cfg-label">¿Cuántos anuncios al mes necesitas gestionar?</div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(base 3 — campaña extra tiene costo adicional)</span></div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-meta" min="1" max="100" value="3" oninput="cfgCalc()">
-                  <span class="cfg-unit">anuncio(s)/mes</span>
+                  <span class="cfg-unit">campaña(s)/mes</span>
                 </div>
               </div>
             </div>
@@ -1014,14 +1081,15 @@
             <div class="cfg-section" id="cs-google">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-google" onchange="cfgToggle('google')">
-                <label for="chk-google">🔍 Gestión de anuncios en Google Ads</label>
+                <label for="chk-google">🔍 Gestión de campañas en Google Ads</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Creación y optimización de campañas<br>en Google Search / Display Ads.<br>Base incluye 3 campañas/mes.</span></span>
                 <span class="cfg-price-hint" id="hint-google"></span>
               </div>
               <div class="cfg-section-body" id="body-google">
                 <div class="cfg-label">¿Cuántos anuncios al mes necesitas gestionar?</div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-google" min="1" max="100" value="3" oninput="cfgCalc()">
-                  <span class="cfg-unit">anuncio(s)/mes</span>
+                  <span class="cfg-unit">campaña(s)/mes</span>
                 </div>
               </div>
             </div>
@@ -1031,6 +1099,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-duracion" onchange="cfgToggle('duracion')">
                 <label for="chk-duracion">📅 Duración del servicio</label>
+                <span class="cfg-tooltip">?<span class="tip-text">Tiempo estimado del contrato.<br>Informativo — no afecta el precio mensual.</span></span>
                 <span class="cfg-price-hint" id="hint-duracion"></span>
               </div>
               <div class="cfg-section-body" id="body-duracion">
@@ -1566,6 +1635,12 @@
     </div>
   </div>
 
+
+  <!-- Toast de confirmación -->
+  <div id="cfg-toast">
+    <div><i class="fas fa-check-circle"></i>¡Cotización enviada!</div>
+    <p>Alexis te responderá lo más pronto posible 🚀</p>
+  </div>
   <script>
     // ══ CONFIGURACIÓN ══════════════════════════════════════════
     const APPS_SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbxb0O6xlOiNKAtS84tL6EORHeWHQWmIkBDYhdADlYiUyvutGPf6xZ_b7sO-qKhZdIzkmA/exec';
@@ -2404,28 +2479,54 @@
       cfgCalc();
     }
 
-    function cfgSyncRedes() {
-      const n = parseInt(document.getElementById('num-redes').value) || 1;
-      const pills = document.querySelectorAll('#checks-redes .cfg-check-pill input');
-      let marcados = 0;
-      pills.forEach(p => { if (p.checked) marcados++; });
-      if (marcados > n) {
-        let d = 0;
-        for (let i = pills.length - 1; i >= 0 && d < (marcados - n); i--) {
-          if (pills[i].checked) { pills[i].checked = false; pills[i].closest('.cfg-check-pill').classList.remove('checked'); d++; }
-        }
-      }
-      cfgCalc();
-    }
+    function cfgSyncRedes() { cfgCalc(); }  // legacy — cfgPillChange maneja todo
 
     function cfgPillChange() {
       document.querySelectorAll('.cfg-check-pill').forEach(pill => {
         const inp = pill.querySelector('input[type=checkbox]');
         if (inp) pill.classList.toggle('checked', inp.checked);
       });
-      const marcados = document.querySelectorAll('#checks-redes .cfg-check-pill input:checked').length;
-      if (marcados > 0) document.getElementById('num-redes').value = marcados;
+      cfgActualizarRedesPorMarca();
       cfgCalc();
+    }
+
+    // Renderiza los inputs "¿cuántas cuentas?" por red cuando marcas > 1
+    const REDES_META = [
+      { value:'Facebook',  icon:'fab fa-facebook',  color:'#1877f2' },
+      { value:'Instagram', icon:'fab fa-instagram',  color:'#e1306c' },
+      { value:'X/Twitter', icon:'fab fa-x-twitter',  color:'#ccc' },
+      { value:'LinkedIn',  icon:'fab fa-linkedin',   color:'#0a66c2' },
+      { value:'TikTok',    icon:'fab fa-tiktok',     color:'#ccc' },
+      { value:'YouTube',   icon:'fab fa-youtube',    color:'#ff0000' },
+    ];
+
+    function cfgActualizarRedesPorMarca() {
+      const marcas  = parseInt(document.getElementById('num-marcas')?.value) || 1;
+      const wrap    = document.getElementById('redes-por-marca-wrap');
+      const grid    = document.getElementById('redes-cuentas-grid');
+      const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')]
+                        .map(i => i.value);
+
+      if (!wrap || !grid) return;
+
+      if (marcas > 1 && checked.length > 0) {
+        wrap.classList.add('visible');
+        grid.innerHTML = checked.map(val => {
+          const meta = REDES_META.find(r => r.value === val) || { icon:'fab fa-globe', color:'#888' };
+          return `
+            <div class="red-cuenta-row">
+              <i class="${meta.icon}" style="color:${meta.color};"></i>
+              <span style="flex:1;">${val}</span>
+              <input type="number" id="cuentas-${val.replace(/[^a-z]/gi,'').toLowerCase()}"
+                     min="1" max="20" value="${marcas}" oninput="cfgCalc()"
+                     title="Cuentas de ${val} a manejar">
+              <span>cuenta(s) en total</span>
+            </div>`;
+        }).join('');
+      } else {
+        wrap.classList.remove('visible');
+        grid.innerHTML = '';
+      }
     }
 
     function cfgToggleCrmAuto(el) {
@@ -2459,6 +2560,9 @@
     }
 
     function cfgCalc() {
+      // Si cambió el número de marcas, actualizar inputs por red
+      cfgActualizarRedesPorMarca();
+
       const items = [];
       let total = 0;
       let hayNull = false; // si algún precio no cargó
@@ -2486,14 +2590,29 @@
 
       // 3. Redes
       if (document.getElementById('chk-redes').checked) {
-        const n = parseInt(document.getElementById('num-redes').value) || 1;
-        const plataformas = [];
-        document.querySelectorAll('#checks-redes .cfg-check-pill input:checked').forEach(i => plataformas.push(i.value));
-        const p = precioO(P.redes, n);
-        const nombre = plataformas.length > 0
-          ? `Redes sociales (${plataformas.join(', ')})`
-          : `Redes sociales (${n} red${n>1?'es':''})`;
-        addItem(nombre, p);
+        const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
+        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
+        let totalCuentas = 0;
+        let detalle = [];
+
+        if (marcas > 1 && checked.length > 0) {
+          // Modo multi-marca: suma cuentas de cada red según sus inputs
+          checked.forEach(val => {
+            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
+            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
+            totalCuentas += n;
+            detalle.push(`${val} ×${n}`);
+          });
+        } else {
+          totalCuentas = checked.length || 1;
+          detalle = checked.length > 0 ? checked : ['1 red'];
+        }
+
+        const p = precioO(P.redes, totalCuentas);
+        const nombreItem = marcas > 1 && detalle.length > 0
+          ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuentas`
+          : `Redes sociales (${detalle.join(', ')})`;
+        addItem(nombreItem, p);
         document.getElementById('hint-redes').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-redes').textContent = ''; }
 
@@ -2531,7 +2650,7 @@
         if (P.metaBase !== null && P.metaExtra !== null) {
           p = P.metaBase + Math.max(0, n - 3) * P.metaExtra;
         }
-        addItem(`Meta Ads (${n} anuncio${n>1?'s':''}/mes)`, p);
+        addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, p);
         document.getElementById('hint-meta').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-meta').textContent = ''; }
 
@@ -2542,7 +2661,7 @@
         if (P.googleBase !== null && P.googleExtra !== null) {
           p = P.googleBase + Math.max(0, n - 3) * P.googleExtra;
         }
-        addItem(`Google Ads (${n} anuncio${n>1?'s':''}/mes)`, p);
+        addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, p);
         document.getElementById('hint-google').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-google').textContent = ''; }
 
@@ -2577,7 +2696,7 @@
       }
 
       const totalBase = total;
-      const totalPkg  = Math.round(total * 0.90);
+      const totalPkg  = Math.round(total * 0.8);
 
       document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
       document.getElementById('cfg-precio-total').innerHTML  = totalPkg > 0
@@ -2650,10 +2769,18 @@
       if (document.getElementById('chk-marcas').checked) configItems.push(`Gestión de ${document.getElementById('num-marcas').value} marca(s)`);
       if (document.getElementById('chk-web').checked)    configItems.push(`Gestión de ${document.getElementById('num-web').value} página(s) web`);
       if (document.getElementById('chk-redes').checked) {
-        const plats = [];
-        document.querySelectorAll('#checks-redes .cfg-check-pill input:checked').forEach(i => plats.push(i.value));
-        const n = document.getElementById('num-redes').value;
-        configItems.push(`Redes sociales: ${plats.length > 0 ? plats.join(', ') : n + ' red(es)'}`);
+        const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
+        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
+        if (marcas > 1 && checked.length > 0) {
+          const detalle = checked.map(val => {
+            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
+            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
+            return `${val} ×${n}`;
+          });
+          configItems.push(`Redes sociales: ${detalle.join(' | ')} (${marcas} marcas)`);
+        } else {
+          configItems.push(`Redes sociales: ${checked.length > 0 ? checked.join(', ') : 'sin especificar'}`);
+        }
       }
       if (document.getElementById('chk-diseno').checked) {
         const img = document.getElementById('num-diseno-img').value;
@@ -2664,8 +2791,8 @@
       if (document.getElementById('chk-crm').checked) {
         configItems.push(document.getElementById('chk-crm-auto').checked ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM');
       }
-      if (document.getElementById('chk-meta').checked)   configItems.push(`Meta Ads: ${document.getElementById('num-meta').value} anuncio(s)/mes`);
-      if (document.getElementById('chk-google').checked) configItems.push(`Google Ads: ${document.getElementById('num-google').value} anuncio(s)/mes`);
+      if (document.getElementById('chk-meta').checked)   configItems.push(`Meta Ads: ${document.getElementById('num-meta').value} campaña(s)/mes`);
+      if (document.getElementById('chk-google').checked) configItems.push(`Google Ads: ${document.getElementById('num-google').value} campaña(s)/mes`);
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
         configItems.push(`Duración: ${sel.options[sel.selectedIndex].text}`);
@@ -2748,8 +2875,9 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
           }),
         }).catch(() => {});
         msg.className = 'cfg-msg ok';
-        msg.innerHTML = '<i class="fas fa-check-circle"></i> ¡Cotización enviada! Te responderemos pronto.';
+        msg.innerHTML = '<i class="fas fa-check-circle"></i> Enviado.';
         btn.innerHTML = '<i class="fas fa-check"></i> Enviado';
+        mostrarToast();
         setTimeout(() => cerrarConfigurador(), 2800);
       } catch(err) {
         msg.className = 'cfg-msg err';
@@ -2757,6 +2885,14 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar cotización';
       }
+    }
+
+    // ══ TOAST ═══════════════════════════════════════════════════════
+    function mostrarToast() {
+      const t = document.getElementById('cfg-toast');
+      if (!t) return;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 5000);
     }
 
     // ══ CARRUSEL ════════════════════════════════════════════════
