@@ -816,134 +816,16 @@
         <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
         <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
 
+        <!-- Las tarjetas de paquetes se generan dinámicamente desde el Sheet -->
         <div class="paquetes-grid" id="paquetes-carousel">
-
-          <!-- ══ 1. DESPEGUE ══ -->
-          <div class="paquete-card" data-pid="despegue">
-            <div class="paquete-band"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Starter</div>
-              <div class="paquete-nombre">🚀 Despegue</div>
-              <div class="paquete-precio precio-skeleton">···</div>
-              <div class="paquete-desc">Para emprendedores que arrancan. Presencia mínima, sin complicaciones.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-skeleton">
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-              </div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 2. ARRANQUE DIGITAL ══ -->
-          <div class="paquete-card" data-pid="arranque">
-            <div class="paquete-band"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Básico</div>
-              <div class="paquete-nombre">📡 Arranque Digital</div>
-              <div class="paquete-precio precio-skeleton">···</div>
-              <div class="paquete-desc">3 plataformas activas con contenido publicado y una web gestionada.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-skeleton">
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-              </div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 3. SEÑAL FUERTE ══ -->
-          <div class="paquete-card destacado" data-pid="senal">
-            <div class="paquete-band"></div>
-            <div class="badge-popular">⭐ Más Popular</div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Intermedio</div>
-              <div class="paquete-nombre">🔥 Señal Fuerte</div>
-              <div class="paquete-precio precio-skeleton">···</div>
-              <div class="paquete-desc">Gestión completa de 5 plataformas: contenido exclusivo, SEO, comunidad activa y entrega de recursos.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-skeleton">
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-              </div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 4. DOMINIO TOTAL ══ -->
-          <div class="paquete-card" data-pid="dominio">
-            <div class="paquete-band" style="background:linear-gradient(90deg,#0a315b,#70DDD8);"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Profesional</div>
-              <div class="paquete-nombre">🏆 Dominio Total</div>
-              <div class="paquete-precio precio-skeleton">···</div>
-              <div class="paquete-desc">Todo lo de Señal Fuerte, ampliado a múltiples marcas con reportes semanales.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-skeleton">
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-              </div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 5. IMPERIO DIGITAL ══ -->
-          <div class="paquete-card enterprise" data-pid="imperio">
-            <div class="paquete-band"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Enterprise</div>
-              <div class="paquete-nombre" style="color:#c090ff;">👑 Imperio Digital</div>
-              <div class="paquete-precio precio-skeleton">···</div>
-              <div class="paquete-desc">Solución 360° con pauta Meta, CRM y automatización para operaciones de alto volumen.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-skeleton">
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-                <div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div>
-              </div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Solicitar Propuesta</button>
-            </div>
-          </div>
-
+          <!-- Skeletons iniciales de carga -->
+          <div class="paquete-card" id="pkg-sk1"><div class="paquete-band"></div><div class="paquete-head"><div class="paquete-tier" style="background:#222;color:transparent;width:55px;border-radius:3px;">&nbsp;</div><div class="paquete-nombre" style="background:#2a2a2a;color:transparent;width:140px;border-radius:4px;margin-bottom:10px;">&nbsp;</div><div class="paquete-precio precio-skeleton">···</div></div><div class="paquete-features"><div class="feat-skeleton"><div class="feat-skel-line"></div><div class="feat-skel-line short"></div><div class="feat-skel-line"></div><div class="feat-skel-line short"></div></div></div><div class="paquete-cta"><button class="btn-cotizar-pkg" disabled style="opacity:.3;">···</button></div></div>
+          <div class="paquete-card destacado" id="pkg-sk2"><div class="paquete-band"></div><div class="paquete-head"><div class="paquete-tier" style="background:#2a1020;color:transparent;width:55px;border-radius:3px;">&nbsp;</div><div class="paquete-nombre" style="background:#3a1020;color:transparent;width:140px;border-radius:4px;margin-bottom:10px;">&nbsp;</div><div class="paquete-precio precio-skeleton">···</div></div><div class="paquete-features"><div class="feat-skeleton"><div class="feat-skel-line"></div><div class="feat-skel-line short"></div><div class="feat-skel-line"></div><div class="feat-skel-line short"></div></div></div><div class="paquete-cta"><button class="btn-cotizar-pkg" disabled style="opacity:.3;">···</button></div></div>
+          <div class="paquete-card" id="pkg-sk3"><div class="paquete-band"></div><div class="paquete-head"><div class="paquete-tier" style="background:#222;color:transparent;width:55px;border-radius:3px;">&nbsp;</div><div class="paquete-nombre" style="background:#2a2a2a;color:transparent;width:140px;border-radius:4px;margin-bottom:10px;">&nbsp;</div><div class="paquete-precio precio-skeleton">···</div></div><div class="paquete-features"><div class="feat-skeleton"><div class="feat-skel-line"></div><div class="feat-skel-line short"></div><div class="feat-skel-line"></div><div class="feat-skel-line short"></div></div></div><div class="paquete-cta"><button class="btn-cotizar-pkg" disabled style="opacity:.3;">···</button></div></div>
         </div><!-- /paquetes-grid -->
       </div><!-- /carousel-wrap -->
 
-      <div style="display:flex; justify-content:center; gap:8px; margin: 4px 0 0;">
-        <span class="dot-indicator active" onclick="goToSlide(0)"></span>
-        <span class="dot-indicator" onclick="goToSlide(1)"></span>
-        <span class="dot-indicator" onclick="goToSlide(2)"></span>
-        <span class="dot-indicator" onclick="goToSlide(3)"></span>
-        <span class="dot-indicator" onclick="goToSlide(4)"></span>
-      </div>
+      <div id="dots-wrap" style="display:flex; justify-content:center; gap:8px; margin: 4px 0 0;"></div>
 
       <!-- ── Botón Personaliza tu paquete ─────────────────── -->
       <div class="personaliza-wrap">
@@ -1025,7 +907,11 @@
                   <label class="cfg-check-pill" id="pill-li"><input type="checkbox" value="LinkedIn" onchange="cfgPillChange()"><i class="fab fa-linkedin"></i> LinkedIn</label>
                   <label class="cfg-check-pill" id="pill-tt"><input type="checkbox" value="TikTok" onchange="cfgPillChange()"><i class="fab fa-tiktok"></i> TikTok</label>
                   <label class="cfg-check-pill" id="pill-yt"><input type="checkbox" value="YouTube" onchange="cfgPillChange()"><i class="fab fa-youtube"></i> YouTube</label>
+                  <label class="cfg-check-pill" id="pill-otra" style="border-style:dashed;cursor:pointer;" onclick="cfgAgregarOtraRed(event)">
+                    <i class="fas fa-plus" style="font-size:0.65rem;"></i> Otra red
+                  </label>
                 </div>
+                <div id="otras-redes-wrap" style="display:none;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
 
                 <!-- Cuadros por red — solo visible cuando marcas > 1 -->
                 <div class="redes-por-marca" id="redes-por-marca-wrap">
@@ -1561,94 +1447,42 @@
     // ── Sincronización con Google Sheets (en background) ───────────
     // ══════════════════════════════════════════════════════════════
     // METADATOS DE CATEGORÍAS
-    const CAT_META = {
-      marketing: {
-        seccion: 'Marketing Digital – Servicios Individuales', seccionIcono: 'fas fa-bullhorn',
-        icono: 'fas fa-share-alt', color: '#70DDD8',
-        titulo: 'Community Management y Redes Sociales',
-        subtitulo: 'Gestión · Publicidad · Estrategia', thServicio: 'Servicio',
-      },
-      logos: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-star', color: '#EF5085',
-        titulo: 'Logotipos e Isotipos',
-        subtitulo: 'Creación · Rediseño · Vectorización · Identidad', thServicio: 'Servicio',
-      },
-      impresos: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-id-card', color: '#70DDD8',
-        titulo: 'Impresos Pequeños',
-        subtitulo: 'Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets', thServicio: 'Servicio',
-      },
-      folletos: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-newspaper', color: '#EF5085',
-        titulo: 'Folletos, Flyers y Dípticos',
-        subtitulo: 'Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos', thServicio: 'Servicio',
-      },
-      lonas: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-expand-arrows-alt', color: '#70DDD8',
-        titulo: 'Lonas y Banners de Gran Formato',
-        subtitulo: 'Precio por tamaño en centímetros', thServicio: 'Tamaño',
-      },
-      papeleria: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-file-alt', color: '#EF5085',
-        titulo: 'Papelería Corporativa',
-        subtitulo: 'Carpetas · Membretes · Sellos · Talonarios · Facturas', thServicio: 'Servicio',
-      },
-      calendarios: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-calendar-alt', color: '#70DDD8',
-        titulo: 'Calendarios', subtitulo: 'Bolsillo · Sobremesa · Pared', thServicio: 'Tipo',
-      },
-      presentaciones: {
-        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
-        icono: 'fas fa-desktop', color: '#EF5085',
-        titulo: 'Archivos Digitales y Presentaciones',
-        subtitulo: 'Catálogos · Revistas · Portadas · PowerPoint', thServicio: 'Servicio',
-        notaBox: '<strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u.',
-      },
-      audiovisual: {
-        seccion: 'Producción Audiovisual', seccionIcono: 'fas fa-film',
-        icono: 'fas fa-photo-video', color: '#70DDD8',
-        titulo: 'Edición Fotográfica, de Video y Animación',
-        subtitulo: 'Recorte · Retoque · Chroma Key · Blender · GIF · Stickers · IA', thServicio: 'Servicio',
-      },
-      crm: {
-        seccion: 'Automatización y CRM', seccionIcono: 'fas fa-gears',
-        icono: 'fas fa-robot', color: '#EF5085',
-        titulo: 'Bitrix24, Google Sheets y Scripts',
-        subtitulo: 'CRM · Dashboards · Python · Apps Script', thServicio: 'Servicio',
-      },
-      web: {
-        seccion: 'Desarrollo Web y Soporte Técnico', seccionIcono: 'fas fa-globe',
-        icono: 'fas fa-code', color: '#70DDD8',
-        titulo: 'Web, Soporte y Otros Servicios Digitales',
-        subtitulo: 'Landings · Discord · Asistencia · Instalaciones', thServicio: 'Servicio',
-      },
-      streaming: {
-        seccion: 'Streaming y Setup', seccionIcono: 'fas fa-broadcast-tower',
-        icono: 'fas fa-broadcast-tower', color: '#9146ff',
-        titulo: 'OBS Studio, Overlays, Emotes y Escenas',
-        subtitulo: 'Twitch · Kick · YouTube', thServicio: 'Servicio',
-      },
-      escolares: {
-        seccion: 'Servicios Escolares', seccionIcono: 'fas fa-graduation-cap',
-        icono: 'fas fa-pen-alt', color: '#EF5085',
-        titulo: 'Redacción Académica',
-        subtitulo: 'Resúmenes · Ensayos · Investigaciones', thServicio: 'Servicio',
-        thPrecio: 'Precio por cuartilla',
-      },
-      _default: {
-        seccion: 'Otros Servicios', seccionIcono: 'fas fa-cogs',
-        icono: 'fas fa-tag', color: '#888',
-        titulo: null, subtitulo: '', thServicio: 'Servicio',
-      },
-    };
+    // ══════════════════════════════════════════════════════════════
+    // METADATOS DE CATEGORÍAS — se construyen dinámicamente desde
+    // los datos que devuelve el Apps Script (hoja Servicios cols J-R).
+    // Ya no hay nada hardcodeado aquí. Para cambiar íconos, colores,
+    // títulos o secciones: edita la hoja Servicios en Google Sheets.
+    // ══════════════════════════════════════════════════════════════
+    let CAT_META = {};   // se llena en buildCatMetaDesdeSheet()
 
-    function buildSecciones(catIdsPresentes) {
+    function buildCatMetaDesdeSheet(servicios) {
+      CAT_META = {};
+      servicios.forEach(s => {
+        const cat = (s.catId || '').trim();
+        if (!cat || s.esPaquete || cat === 'cfg') return;
+        if (CAT_META[cat]) return; // primera fila del cat_id define el meta
+        if (!s.icono && !s.seccion) return; // fila sin metadatos (no aporta)
+        CAT_META[cat] = {
+          seccion:      s.seccion      || 'Otros Servicios',
+          seccionIcono: s.seccionIcono || 'fas fa-cogs',
+          icono:        s.icono        || 'fas fa-tag',
+          color:        s.color        || '#888888',
+          titulo:       s.tituloVisual || null,
+          subtitulo:    s.subtitulo    || '',
+          thServicio:   s.thServicio   || 'Servicio',
+          thPrecio:     s.thPrecio     || null,
+          notaBox:      s.notaBox      || null,
+        };
+      });
+      // Fallback _default para categorías sin metadatos en el Sheet
+      CAT_META._default = {
+        seccion:'Otros Servicios', seccionIcono:'fas fa-cogs',
+        icono:'fas fa-tag', color:'#888', titulo:null,
+        subtitulo:'', thServicio:'Servicio',
+      };
+    }
+
+        function buildSecciones(catIdsPresentes) {
       const metaOrder = Object.keys(CAT_META).filter(k => k !== '_default');
       const ordenados = [
         ...metaOrder.filter(id => catIdsPresentes.includes(id)),
@@ -1764,7 +1598,110 @@
       renderGalerias();
     }
 
-    function sincronizarDesdeSheets() {
+    // ══════════════════════════════════════════════════════════════
+    // RENDER CARRUSEL — 100% dinámico desde el Sheet
+    // El Sheet controla: nombre, precio, descripción, tier, estilo,
+    // badge, texto botón y orden. El HTML solo tiene estilos CSS.
+    // ══════════════════════════════════════════════════════════════
+    function renderCarrusel(servicios) {
+      const grid     = document.getElementById('paquetes-carousel');
+      const dotsWrap = document.getElementById('dots-wrap');
+      if (!grid) return;
+
+      const paquetes = servicios
+        .filter(s => s.esPaquete && s.visible !== false)
+        .sort((a,b) => (parseInt(a.orden)||99) - (parseInt(b.orden)||99));
+
+      if (!paquetes.length) {
+        grid.innerHTML = '<div style="color:#555;padding:20px;font-size:.82rem;">Sin paquetes disponibles.</div>';
+        return;
+      }
+
+      // Mapeo de estilo → clase CSS y overrides (definidos en el CSS ya existente)
+      const STYLE_MAP = {
+        destacado:  { cls:'destacado',  nombreStyle:'',          band:'' },
+        dominio:    { cls:'',           nombreStyle:'',          band:'background:linear-gradient(90deg,#0a315b,#70DDD8);' },
+        enterprise: { cls:'enterprise', nombreStyle:'color:#c090ff;', band:'' },
+      };
+
+      let html = '';
+      paquetes.forEach(pkg => {
+        const sm  = STYLE_MAP[(pkg.estilo||'').toLowerCase()] || {cls:'',nombreStyle:'',band:''};
+        const pid = detectarPid(pkg.nombre) || pkg.nombre.replace(/[^a-z0-9]/gi,'').toLowerCase();
+        const p   = (pkg.precio||'').trim();
+        const precioHTML = /cotiz|a cotizar/i.test(p) ? 'A cotizar' : p.replace(/\/mes/i,'')+'<sub>/mes</sub>';
+        const badgeHTML  = pkg.badge ? `<div class="badge-popular">${pkg.badge}</div>` : '';
+        const btn  = pkg.textoBoton || 'Contratar';
+        const band = sm.band ? ` style="${sm.band}"` : '';
+        html += `
+          <div class="paquete-card ${sm.cls}" data-pid="${pid}" data-estilo="${(pkg.estilo||'normal').toLowerCase()}">
+            <div class="paquete-band"${band}></div>
+            ${badgeHTML}
+            <div class="paquete-head">
+              <div class="paquete-tier">${pkg.tier||''}</div>
+              <div class="paquete-nombre"${sm.nombreStyle?` style="${sm.nombreStyle}"`:''}>${pkg.nombre}</div>
+              <div class="paquete-precio">${precioHTML}</div>
+              <div class="paquete-desc">${pkg.desc||''}</div>
+            </div>
+            <div class="paquete-features">
+              <div class="feat-skeleton">
+                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+              </div>
+            </div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">${btn}</button>
+            </div>
+          </div>`;
+      });
+      grid.innerHTML = html;
+      totalSlides = paquetes.length;
+      currentSlide = 0;
+      if (dotsWrap) {
+        dotsWrap.innerHTML = paquetes.map((_,i) =>
+          `<span class="dot-indicator${i===0?' active':''}" onclick="goToSlide(${i})"></span>`
+        ).join('');
+      }
+    }
+
+    // ── "Otra red" en el configurador ──────────────────────────
+    let _otraRedN = 0;
+    function cfgAgregarOtraRed(e) {
+      e && e.preventDefault && e.preventDefault();
+      e && e.stopPropagation && e.stopPropagation();
+      if (_otraRedN >= 4) return;   // máx 4 redes personalizadas
+      _otraRedN++;
+      const wrap = document.getElementById('otras-redes-wrap');
+      if (!wrap) return;
+      wrap.style.display = 'flex';
+      const uid = 'or' + Date.now();
+      const div = document.createElement('div');
+      div.id = 'w_' + uid;
+      div.style.cssText = 'display:inline-flex;align-items:center;gap:5px;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:20px;padding:4px 10px;';
+      div.innerHTML =
+        '<i class="fas fa-globe" style="color:#888;font-size:.72rem;flex-shrink:0;"></i>' +
+        `<input type="text" class="otra-red-input" id="${uid}" maxlength="24" placeholder="Nombre de la red"` +
+        ' style="background:none;border:none;outline:none;color:#ccc;font-size:.78rem;width:118px;font-family:inherit;"' +
+        ' oninput="cfgActualizarRedesPorMarca();cfgCalc()">' +
+        `<button onclick="cfgQuitarOtraRed('${uid}')" type="button"` +
+        ' style="background:none;border:none;color:#555;cursor:pointer;padding:0;font-size:.75rem;line-height:1;"' +
+        ' onmouseover="this.style.color='#EF5085'" onmouseout="this.style.color='#555'">' +
+        '<i class="fas fa-times"></i></button>';
+      wrap.appendChild(div);
+      document.getElementById(uid).focus();
+      cfgActualizarRedesPorMarca();
+    }
+    function cfgQuitarOtraRed(uid) {
+      const d = document.getElementById('w_' + uid);
+      if (d) d.remove();
+      _otraRedN = document.querySelectorAll('.otra-red-input').length;
+      const wrap = document.getElementById('otras-redes-wrap');
+      if (wrap && !_otraRedN) wrap.style.display = 'none';
+      cfgActualizarRedesPorMarca();
+      cfgCalc();
+    }
+
+        function sincronizarDesdeSheets() {
       const statusEl = document.getElementById('sync-status');
       if (statusEl) { statusEl.textContent = '⏳ Sincronizando precios...'; statusEl.style.color = '#888'; }
 
@@ -1788,22 +1725,7 @@
           cfgInit(dataServicios.servicios);
           renderCatalogoDinamico(dataServicios.servicios);
 
-          dataServicios.servicios.forEach(item => {
-            if (!item.esPaquete) return;
-            const pid = detectarPid(item.nombre);
-            if (!pid) return;
-            const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
-            if (!card) return;
-            const precioEl = card.querySelector('.paquete-precio');
-            const descEl   = card.querySelector('.paquete-desc');
-            if (precioEl && item.precio) {
-              const p = item.precio.trim();
-              precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
-                ? 'A cotizar' : p.replace(/\/mes/i, '') + '<sub>/mes</sub>';
-              precioEl.classList.remove('precio-skeleton');
-            }
-            if (descEl && item.desc) descEl.textContent = item.desc;
-          });
+          renderCarrusel(dataServicios.servicios);   // genera tarjetas desde el Sheet
         } else {
           mostrarAvisoError();
           const sk = document.getElementById('catalogo-skeleton');
@@ -1820,7 +1742,8 @@
             let html = '';
             filas.forEach(f => {
               if (f.tipo === 'grupo') {
-                const color = pid === 'imperio' ? 'color:#9146ff;' : (pid === 'dominio' ? 'color:var(--rosa-principal);' : '');
+                const estilo = card.dataset.estilo || '';
+                const color = estilo === 'enterprise' ? 'color:#9146ff;' : estilo === 'dominio' ? 'color:var(--rosa-principal);' : '';
                 html += `<div class="feat-group-label" style="${color}">${f.texto}</div>`;
                 return;
               }
@@ -1829,7 +1752,8 @@
               if (f.nuevo)   textoHTML += ' <span class="feat-new-badge">nuevo</span>';
               const cfgs = { yes: ['fi fi-yes fas fa-check','feat-yes'], no: ['fi fi-no fas fa-times','feat-no'], plus: ['fi fi-plus fas fa-plus','feat-plus'] };
               const cfg = cfgs[f.tipo]; if (!cfg) return;
-              const iconStyle = pid === 'imperio' && f.tipo === 'plus' ? ' style="color:#9146ff;"' : '';
+              const estilo2 = card.dataset.estilo || '';
+              const iconStyle = estilo2 === 'enterprise' && f.tipo === 'plus' ? ' style="color:#9146ff;"' : '';
               html += `<div class="feat-row"><i class="${cfg[0]}"${iconStyle}></i><span class="${cfg[1]}">${textoHTML}</span></div>`;
             });
             featDiv.innerHTML = html;
@@ -2426,6 +2350,7 @@
 
     // Llamada desde el window load — recibe el array servicios del Sheet
     function cfgInit(servicios) {
+      buildCatMetaDesdeSheet(servicios);   // puebla CAT_META desde el Sheet
       Object.keys(CFG_NOMBRES).forEach(key => {
         const nombre = CFG_NOMBRES[key];
         const item   = servicios.find(s => s.nombre === nombre);
