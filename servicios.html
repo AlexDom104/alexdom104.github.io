@@ -1624,7 +1624,7 @@
       container.innerHTML = html;
 
       // Re-inicializar galerías sobre los nuevos slots
-      if (typeof initGalerias === 'function') initGalerias();
+      renderGalerias();
     }
 
     // ── Muestra el error de carga dentro del contenedor del catálogo ─
@@ -1657,7 +1657,7 @@
     function sincronizarDesdeSheets() {
       const statusEl = document.getElementById('sync-status');
       if (statusEl) {
-        statusEl.textContent = '⏳ Sincronizando precios...';
+        statusEl.textContent = '⏳ Sincronizando precios con Google Sheets...';
         statusEl.style.color = '#888';
       }
 
@@ -1738,10 +1738,10 @@
 
         if (statusEl) {
           if (sheetsOk) {
-            statusEl.textContent = '✅ Precios sincronizados';
+            statusEl.textContent = '✅ Precios sincronizados desde Google Sheets';
             statusEl.style.color = '#50d890';
           } else {
-            statusEl.textContent = '⚠️ No se pudo sincronizar los precios';
+            statusEl.textContent = '⚠️ No se pudo conectar con Google Sheets';
             statusEl.style.color = '#f0a060';
           }
         }
@@ -2214,7 +2214,7 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', renderGalerias);
+    // renderGalerias() se llama desde renderCatalogoDinamico() tras generar los slots
 
     // ══ GALERÍA DE EJEMPLOS ══════════════════════════════════════
     function toggleEjemplos(toggleEl, e) {
