@@ -1013,7 +1013,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-redes" onchange="cfgToggle('redes')">
                 <label for="chk-redes">📱 Redes sociales</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Todas las redes sociales a manejar por marca.<br>Selecciona las plataformas activas.</span></span>
+                <span class="cfg-tooltip">?<span class="tip-text">Redes sociales a gestionar por marca.<br>1–2 redes: precio unitario c/u.<br>3 redes: precio de paquete fijo.<br>4ª red en adelante: +precio individual (sin descuento).</span></span>
                 <span class="cfg-price-hint" id="hint-redes"></span>
               </div>
               <div class="cfg-section-body" id="body-redes">
@@ -2276,6 +2276,8 @@
       marcas:      null,
       web:         null,
       redes:       null,
+      redesPaq:    null,   // CFG: Red social paquete (3) — precio fijo 3 redes
+      redesExtra:  null,   // CFG: Red social extra — red 4ª en adelante
       imgMes:      null,   // CFG: Pieza de contenido (imagen)
       vidMes:      null,   // CFG: Pieza de contenido (video)
       imgExtra:    null,   // CFG: Imagen extra
@@ -2293,6 +2295,8 @@
       marcas:      'CFG: Gestión por marca',
       web:         'CFG: Gestión de página web',
       redes:       'CFG: Red social',
+      redesPaq:    'CFG: Red social paquete (3)',
+      redesExtra:  'CFG: Red social extra',
       imgMes:      'CFG: Pieza de contenido (imagen)',
       vidMes:      'CFG: Pieza de contenido (video)',
       imgExtra:    'CFG: Imagen extra',
@@ -2319,7 +2323,7 @@
       const hints = [
         ['hint-marcas',  P.marcas,     '/marca'],
         ['hint-web',     P.web,        '/página'],
-        ['hint-redes',   P.redes,      '/red'],
+        ['hint-redes',   P.redes,      '/red'],  // hint muestra precio unitario
         ['hint-crm',     P.crm,        ''],
         ['hint-meta',    P.metaBase,   '/campaña'],
         ['hint-google',  P.googleBase, '/campaña'],
@@ -2572,7 +2576,7 @@
         let detalle = [];
 
         if (marcas > 1 && redes.length > 0) {
-          // Modo multi-marca: suma la matriz marca×red (vacío o 0 = esa marca no tiene esa red)
+          // Modo multi-marca: suma la matriz marca×red
           redes.forEach(val => {
             let cuentasRed = 0;
             const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
@@ -2591,12 +2595,50 @@
           detalle = redes.length > 0 ? redes : ['1 red'];
         }
 
-        const p = precioO(P.redes, totalCuentas);
-        const nombreItem = marcas > 1 && detalle.length > 0
-          ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuentas`
-          : `Redes sociales (${detalle.join(', ')})`;
-        addItem(nombreItem, p);
-        document.getElementById('hint-redes').textContent = p !== null ? fmt(p) : 'Cotizable';
+        // Lógica de precios por volumen (igual que Meta/Google Ads):
+        // 1–2 redes → precio unitario × n
+        // 3 redes   → precio paquete fijo
+        // 4+ redes  → paquete + extras individuales (sin descuento de módulo)
+        let desgloseText = '';
+        if (P.redes !== null) {
+          if (totalCuentas <= 2) {
+            const p = P.redes * totalCuentas;
+            const label = marcas > 1 && detalle.length > 0
+              ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuenta${totalCuentas>1?'s':''}`
+              : `Redes sociales (${detalle.join(', ')})`;
+            addItem(label, p);
+            desgloseText = `${totalCuentas} red${totalCuentas>1?'es':''} × ${fmt(P.redes)} = ${fmt(p)}`;
+            document.getElementById('hint-redes').textContent = fmt(p);
+          } else if (totalCuentas === 3) {
+            const p = P.redesPaq !== null ? P.redesPaq : P.redes * 3;
+            const label = marcas > 1 && detalle.length > 0
+              ? `Redes (${detalle.join(', ')}) — paquete 3 cuentas`
+              : `Redes sociales — paquete 3 redes (${detalle.join(', ')})`;
+            addItem(label, p);
+            desgloseText = `Paquete 3 redes = ${fmt(p)}`;
+            document.getElementById('hint-redes').textContent = fmt(p);
+          } else {
+            // 4+ redes: paquete base + extras sin descuento de módulo
+            const pPaq   = P.redesPaq   !== null ? P.redesPaq   : P.redes * 3;
+            const pExtra = P.redesExtra !== null ? P.redesExtra : P.redes;
+            const extras = totalCuentas - 3;
+            const pExtTotal = extras * pExtra;
+            const labelBase = marcas > 1 && detalle.length > 0
+              ? `Redes — paquete 3 cuentas base`
+              : `Redes sociales — paquete 3 redes base`;
+            addItem(labelBase, pPaq);
+            addItem(`Redes sociales — ${extras} red${extras>1?'es':''} extra${extras>1?'s':''} (sin descuento)`, pExtTotal, true);
+            desgloseText = `Paquete 3: ${fmt(pPaq)} + ${extras} extra${extras>1?'s':''} × ${fmt(pExtra)} = ${fmt(pPaq + pExtTotal)}`;
+            document.getElementById('hint-redes').textContent = fmt(pPaq + pExtTotal);
+          }
+        } else {
+          // Precio no disponible del Sheet
+          const label = marcas > 1 && detalle.length > 0
+            ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuenta${totalCuentas>1?'s':''}`
+            : `Redes sociales (${detalle.join(', ')})`;
+          addItem(label, null);
+          document.getElementById('hint-redes').textContent = 'Cotizable';
+        }
       } else { document.getElementById('hint-redes').textContent = ''; }
 
       // 4. Diseño — imágenes y videos por separado
@@ -2753,7 +2795,7 @@
       const etiquetaDescuento = document.getElementById('cfg-res-total-label');
       if (etiquetaDescuento) {
         etiquetaDescuento.innerHTML = pctDescuento > 0
-          ? `Precio estimado con descuento${descBadge}`
+          ? `Precio estimado con descuento<br>${descBadge}`
           : 'Precio estimado (precio individual)';
       }
 
