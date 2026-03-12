@@ -963,7 +963,7 @@
               <div class="cfg-section-body" id="body-marcas">
                 <div class="cfg-label">¿Cuántas marcas necesitas gestionar?</div>
                 <div class="cfg-input-row">
-                  <input type="number" class="cfg-input" id="num-marcas" min="1" max="20" value="1" oninput="cfgCalc()">
+                  <input type="number" class="cfg-input" id="num-marcas" min="1" max="20" value="1" oninput="cfgActualizarRedesPorMarca();cfgCalc()">
                   <span class="cfg-unit">marca(s)</span>
                 </div>
               </div>
@@ -1138,7 +1138,7 @@
               <span>Precio individual:</span>
               <span id="cfg-precio-base">$0</span>
             </div>
-            <div class="cfg-res-total-label">Precio estimado del paquete</div>
+            <div class="cfg-res-total-label" id="cfg-res-total-label">Precio estimado del paquete</div>
             <div class="cfg-res-total" id="cfg-precio-total">$0 <sub>/mes</sub></div>
             <div class="cfg-res-note">* Ahorro incluido por contratar paquete. Precio final sujeto a propuesta.</div>
 
@@ -2542,15 +2542,18 @@
         redes.forEach(val => {
           const meta = REDES_META.find(r => r.value === val) || { icon:'fas fa-globe', color:'#888' };
           const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
+          const isFacebook = val === 'Facebook';
           html += '<tr style="border-top:1px solid #1a1a1a;">';
           html += `<td style="padding:7px 8px;color:#ccc;white-space:nowrap;"><i class="${meta.icon}" style="color:${meta.color};width:14px;text-align:center;margin-right:5px;"></i>${val}</td>`;
           for (let m = 1; m <= marcas; m++) {
             const key = `${safeKey}_m${m}`;
-            const prevVal = (prev[key] !== undefined) ? prev[key] : '1';
+            // Si hay valor previo guardado, usarlo; si no: Facebook=1, resto=vacío
+            const prevVal = (prev[key] !== undefined) ? prev[key] : (isFacebook ? '1' : '');
+            const placeholder = isFacebook ? '1' : '0';
             html += `<td style="padding:4px 6px;text-align:center;">
                        <input type="number" class="red-marca-input"
                               data-key="${key}" data-red="${val}" data-marca="${m}"
-                              min="0" max="20" value="${prevVal}"
+                              min="0" max="20" value="${prevVal}" placeholder="${placeholder}"
                               style="width:50px;background:#111;border:1.5px solid #2a2a2a;color:#fff;border-radius:6px;padding:4px 2px;font-size:0.82rem;text-align:center;outline:none;font-family:inherit;"
                               oninput="cfgCalc()"
                               onfocus="this.style.borderColor='#70DDD8'"
@@ -2562,7 +2565,7 @@
         });
 
         html += '</tbody></table></div>';
-        html += '<div style="font-size:0.67rem;color:#555;margin-top:6px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Pon <strong style="color:#666;">0</strong> si esa marca no tiene esa red.</div>';
+        html += '<div style="font-size:0.67rem;color:#555;margin-top:6px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Deja en <strong style="color:#666;">0</strong> o vacío si esa marca no tiene esa red.</div>';
         grid.innerHTML = html;
       } else {
         wrap.classList.remove('visible');
@@ -2675,16 +2678,19 @@
         let detalle = [];
 
         if (marcas > 1 && redes.length > 0) {
-          // Modo multi-marca: suma la matriz marca×red
+          // Modo multi-marca: suma la matriz marca×red (vacío o 0 = esa marca no tiene esa red)
           redes.forEach(val => {
             let cuentasRed = 0;
             const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
             for (let m = 1; m <= marcas; m++) {
               const inp = document.querySelector(`.red-marca-input[data-key="${safeKey}_m${m}"]`);
-              cuentasRed += Math.max(0, parseInt(inp?.value) || 1);
+              const v = inp?.value?.trim();
+              cuentasRed += (v === '' || v === undefined) ? 0 : Math.max(0, parseInt(v) || 0);
             }
-            totalCuentas += cuentasRed;
-            detalle.push(`${val} ×${cuentasRed}`);
+            if (cuentasRed > 0) {
+              totalCuentas += cuentasRed;
+              detalle.push(`${val} ×${cuentasRed}`);
+            }
           });
         } else {
           totalCuentas = redes.length || 1;
@@ -2778,10 +2784,53 @@
         ).join('');
       }
 
+      const modulosActivos = [
+        document.getElementById('chk-marcas').checked,
+        document.getElementById('chk-web').checked,
+        document.getElementById('chk-redes').checked,
+        document.getElementById('chk-diseno').checked,
+        document.getElementById('chk-crm').checked,
+        document.getElementById('chk-meta').checked,
+        document.getElementById('chk-google').checked,
+      ].filter(Boolean).length + cfgExtras.length;
+
+      // Descuento escalonado: 1=0%, 2=10%, 3=15%, 4+=20%
+      const pctDescuento = modulosActivos <= 1 ? 0
+                         : modulosActivos === 2 ? 10
+                         : modulosActivos === 3 ? 15
+                         : 20;
+
       const totalBase = total;
-      const totalPkg  = Math.round(total * 0.8);
+      const totalPkg  = Math.round(total * (1 - pctDescuento / 100));
+      const ahorro    = totalBase - totalPkg;
 
       document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
+
+      // Mostrar badge de descuento si aplica
+      let descBadge = '';
+      if (pctDescuento > 0 && totalBase > 0) {
+        descBadge = ` <span style="font-size:0.65rem;background:rgba(80,216,144,0.15);color:#50d890;border:1px solid rgba(80,216,144,0.3);padding:2px 7px;border-radius:10px;font-weight:600;vertical-align:middle;">−${pctDescuento}% paquete</span>`;
+      }
+
+      const etiquetaDescuento = document.getElementById('cfg-res-total-label');
+      if (etiquetaDescuento) {
+        etiquetaDescuento.innerHTML = pctDescuento > 0
+          ? `Precio estimado con descuento${descBadge}`
+          : 'Precio estimado (precio individual)';
+      }
+
+      // Nota de ahorro
+      const notaEl = document.querySelector('.cfg-res-note');
+      if (notaEl) {
+        if (pctDescuento > 0 && ahorro > 0) {
+          notaEl.innerHTML = `<span style="color:#50d890;">✓ Ahorras ${fmt(ahorro)}/mes</span> por contratar en paquete · Precio final sujeto a propuesta.`;
+        } else if (modulosActivos === 1) {
+          notaEl.textContent = 'Agrega más servicios para obtener descuento de paquete.';
+        } else {
+          notaEl.textContent = '* Precio final sujeto a propuesta.';
+        }
+      }
+
       document.getElementById('cfg-precio-total').innerHTML  = totalPkg > 0
         ? `${fmt(totalPkg)} <sub>/mes</sub>`
         : (hayNull ? '<span style="color:#888;font-size:1rem;">A cotizar</span>' : '$0 <sub>/mes</sub>');
@@ -2861,7 +2910,8 @@
             const lista = redes.map(val => {
               const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
               const inp = document.querySelector(`.red-marca-input[data-key="${safeKey}_m${m}"]`);
-              const n = Math.max(0, parseInt(inp?.value) || 1);
+              const v = inp?.value?.trim();
+              const n = (v === '' || v === undefined) ? 0 : Math.max(0, parseInt(v) || 0);
               return n > 0 ? `${val}(${n})` : null;
             }).filter(Boolean);
             if (lista.length) porMarca.push(`Marca ${m}: ${lista.join(', ')}`);
