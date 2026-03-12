@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://i.imgur.com">
+  <link rel="dns-prefetch" href="https://script.google.com">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Servicios Freelance | Alexis Pérez</title>
   <link rel="stylesheet" href="styles.css" />
@@ -50,6 +53,7 @@
     .paquetes-grid {
       display: flex; gap: 14px;
       overflow-x: auto; scroll-behavior: smooth;
+      will-change: transform; -webkit-overflow-scrolling: touch;
       padding: 8px 2px 14px;
       scrollbar-width: none;
     }
@@ -134,6 +138,7 @@
     .cat-count { font-size: 0.68rem; padding: 3px 10px; border-radius: 20px; background: #1a2a3a; color: var(--cian-brillo); border: 1px solid var(--cian-brillo); font-weight: bold; }
     .chevron { color: var(--cian-brillo); font-size: 0.82rem; transition: transform 0.35s; }
     .cat-block.open .chevron { transform: rotate(180deg); }
+    .cat-block { contain: layout style; }
     .cat-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .cat-block.open .cat-body { max-height: 3000px; }
 
@@ -786,7 +791,7 @@
 
   <header>
     <a href="sobremi.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver</a>
-    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
+    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" fetchpriority="high"></div>
   </header>
 
   <main>
@@ -1186,7 +1191,7 @@
     <!-- ══════════════════════════════════════════════════════
          SERVICIOS INDIVIDUALES — generados dinámicamente desde el Sheet
     ══════════════════════════════════════════════════════ -->
-    <div id="catalogo-dinamico">
+    <div id="catalogo-dinamico" style="content-visibility:auto;">
       <!-- Skeleton de carga -->
       <div id="catalogo-skeleton">
         <div class="section-title" style="opacity:.35;"><i class="fas fa-circle-notch fa-spin"></i> Cargando servicios…</div>
@@ -1661,14 +1666,15 @@
         statusEl.style.color = '#888';
       }
 
-      const timeout = ms => new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms));
-      const fetchJson = url => Promise.race([
-        fetch(url, { redirect: 'follow' }).then(r => {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        }),
-        timeout(12000)
-      ]).catch(() => null);
+      // AbortController libera la conexión si se supera el tiempo límite
+      const fetchJson = url => {
+        const ctrl = new AbortController();
+        const tid  = setTimeout(() => ctrl.abort(), 9000);
+        return fetch(url, { redirect: 'follow', signal: ctrl.signal })
+          .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .catch(() => null)
+          .finally(() => clearTimeout(tid));
+      };
 
       Promise.all([
         fetchJson(APPS_SCRIPT_URL + '?action=servicios'),
@@ -1758,7 +1764,7 @@
       });
     }
 
-    window.addEventListener('load', sincronizarDesdeSheets);
+    window.addEventListener('load', sincronizarDesdeSheets, { passive: true });
 
     // ══ AVISO PRECIOS — desaparece a los 10 seg ══════════════════
     window.addEventListener('load', () => {
@@ -1983,7 +1989,7 @@
 
       <!-- Header -->
       <tr><td style="background:linear-gradient(135deg,#A64062,#EF5085);padding:28px 32px;">
-        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
+        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" loading="lazy" style="display:block;margin-bottom:10px;">
         <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Nueva Solicitud</div>
         <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🔔 Cotización Recibida</div>
       </td></tr>
@@ -2901,7 +2907,7 @@
 <tr><td align="center">
 <table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
 <tr><td style="background:linear-gradient(135deg,#0A315B,#A64062);padding:28px 32px;">
-  <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
+  <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" loading="lazy" style="display:block;margin-bottom:10px;">
   <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Paquete Personalizado</div>
   <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🛠️ Configuración Recibida</div>
 </td></tr>
@@ -2932,9 +2938,11 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           from_name:  nombre,
           from_email: correo,
-          phone:      telefono,
-          subject:    `🛠️ Paquete personalizado — ${nombre}`,
-          message:    configItems.join('\n• '),
+          telefono,
+          servicio:   'f6e0️ Paquete personalizado\n• ' + configItems.join('\n• '),
+          mensaje:    mensaje || '—',
+          fecha,
+          reply_to:   correo,
           html_body,
         });
         fetch(APPS_SCRIPT_URL, {
@@ -2989,10 +2997,16 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
       carousel.scrollTo({ left: i * getCardWidth(), behavior: 'smooth' });
       updateDots(i);
     }
+    // Throttled scroll listener — evita repaints en cada pixel
+    let _scrollTimer = null;
     carousel.addEventListener('scroll', () => {
-      currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
-      updateDots(currentSlide);
-    });
+      if (_scrollTimer) return;
+      _scrollTimer = setTimeout(() => {
+        currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
+        updateDots(currentSlide);
+        _scrollTimer = null;
+      }, 80);
+    }, { passive: true });
   </script>
 </body>
 </html>
