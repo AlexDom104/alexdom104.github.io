@@ -451,6 +451,23 @@
     #btn-sync-sheets:disabled { opacity: 0.6; cursor: default; }
     #sync-status { font-size: 0.78rem; color: #666; }
 
+    /* ══ AVISO PRECIOS ══ */
+    #aviso-precios {
+      position: fixed; bottom: 80px; right: 24px; z-index: 899;
+      background: #1e1e1e; border: 1px solid #333;
+      color: #aaa; font-size: 0.78rem;
+      padding: 10px 14px; border-radius: 10px;
+      max-width: 220px; line-height: 1.4;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      animation: fadeInAviso 0.4s ease;
+      transition: opacity 0.6s ease;
+    }
+    #aviso-precios.oculto { opacity: 0; pointer-events: none; }
+    @keyframes fadeInAviso { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+    @media (max-width: 480px) {
+      #aviso-precios { bottom: 72px; right: 16px; max-width: 180px; }
+    }
+
     /* ── Lightbox ── */
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 1200;
@@ -1184,27 +1201,16 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-email" onchange="cfgToggle('email')">
                 <label for="chk-email">✉️ Email marketing</label>
-                <span class="cfg-tooltip" data-tip="Diseño y envío de newsletters o campañas de correo.<br>Hasta 1,000 destinatarios por envío, diseño incluido.<br><b>Unitario:</b> 1 envío/mes precio fijo.<br><b>Paquete:</b> base 5 envíos + extras a partir del 6.°">?</span>
+                <span class="cfg-tooltip" data-tip="Diseño y envío de newsletters o campañas de correo.<br>Hasta 1,000 destinatarios por envío, diseño incluido.<br>1–4 envíos: precio unitario c/u.<br>5 envíos: precio de paquete fijo.<br>6.° en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-email"></span>
               </div>
               <div class="cfg-section-body" id="body-email">
-                <div class="cfg-label">¿Qué plan necesitas?</div>
-                <div class="cfg-checks" style="margin-top:6px;">
-                  <label class="cfg-check-pill" id="pill-email-unit">
-                    <input type="checkbox" id="chk-email-unit" onchange="cfgToggleEmail(this)"> ✉️ Envío unitario (1/mes)
-                  </label>
-                  <label class="cfg-check-pill" id="pill-email-paq">
-                    <input type="checkbox" id="chk-email-paq" onchange="cfgToggleEmail(this)"> 📦 Paquete (5+ envíos/mes)
-                  </label>
+                <div class="cfg-label">¿Cuántos envíos al mes? <span style="color:#555;font-size:0.68rem;">(1–4 precio unitario · 5 precio paquete · 6.° en adelante extra c/u)</span></div>
+                <div class="cfg-input-row">
+                  <input type="number" class="cfg-input" id="num-email" min="1" max="30" value="1" oninput="cfgCalc()">
+                  <span class="cfg-unit">envío(s)/mes</span>
                 </div>
-                <div id="email-paq-wrap" style="display:none;margin-top:10px;">
-                  <div class="cfg-label">¿Cuántos envíos al mes? <span style="color:#555;font-size:0.68rem;">(base 5 · 6.° en adelante costo extra c/u)</span></div>
-                  <div class="cfg-input-row">
-                    <input type="number" class="cfg-input" id="num-email" min="1" max="30" value="5" oninput="cfgCalc()">
-                    <span class="cfg-unit">envío(s)/mes</span>
-                  </div>
-                  <div id="email-desglose" style="margin-top:8px;font-size:0.74rem;color:#888;"></div>
-                </div>
+                <div id="email-desglose" style="margin-top:8px;font-size:0.74rem;color:#888;"></div>
                 <div style="font-size:0.74rem;color:#888;margin-top:8px;">
                   <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:5px;opacity:0.8;"></i>
                   Hasta 1,000 destinatarios por envío · Diseño de plantilla incluido · Reporte de apertura y clics.
@@ -1289,6 +1295,10 @@
             <input class="cfg-input" id="cfg-telefono" placeholder="WhatsApp *" style="margin-bottom:8px;">
             <input class="cfg-input" id="cfg-correo" placeholder="Correo electrónico *" style="margin-bottom:8px;" type="email">
             <textarea class="cfg-input" id="cfg-mensaje" placeholder="Comentarios adicionales (opcional)" rows="2" style="resize:none; margin-bottom:6px;"></textarea>
+            <div style="font-size:0.68rem;color:#555;line-height:1.5;margin-top:2px;margin-bottom:4px;">
+              <i class="fas fa-info-circle" style="color:#555;margin-right:4px;"></i>
+              Esta es una cotización rápida. El precio final puede variar de acuerdo al tipo de necesidades y presupuesto que tenga a su disposición.
+            </div>
           </div><!-- /cfg-resumen -->
 
         </div><!-- /cfg-body -->
@@ -1321,6 +1331,12 @@
       <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
     </div>
   </main>
+
+  <!-- ══ AVISO PRECIOS ══ -->
+  <div id="aviso-precios">
+    <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:6px;"></i>
+    Algunos precios pueden variar debido a la complejidad de la solicitud.
+  </div>
 
   <!-- ══ BOTÓN FLOTANTE ══ -->
   <button class="btn-flotante" onclick="abrirModal('')">
@@ -1750,7 +1766,7 @@
 
     function sincronizarDesdeSheets() {
       const statusEl = document.getElementById('sync-status');
-      if (statusEl) { statusEl.textContent = '⏳ Sincronizando precios con Google Sheets...'; statusEl.style.color = '#888'; }
+      if (statusEl) { statusEl.textContent = '⏳ Sincronizando precios...'; statusEl.style.color = '#888'; }
 
       const fetchJson = url => {
         const ctrl = new AbortController();
@@ -1822,10 +1838,10 @@
 
         if (statusEl) {
           if (sheetsOk) {
-            statusEl.textContent = '✅ Precios sincronizados desde Google Sheets';
+            statusEl.textContent = '✅ Precios sincronizados';
             statusEl.style.color = '#50d890';
           } else {
-            statusEl.textContent = '⚠️ No se pudo conectar con Google Sheets';
+            statusEl.textContent = '⚠️ No se pudo sincronizar los precios';
             statusEl.style.color = '#f0a060';
           }
         }
@@ -1833,12 +1849,22 @@
         mostrarAvisoError();
         const sk = document.getElementById('catalogo-skeleton');
         if (sk) sk.remove();
-        if (statusEl) { statusEl.textContent = '⚠️ Sin conexión con Google Sheets'; statusEl.style.color = '#f0a060'; }
+        if (statusEl) { statusEl.textContent = '⚠️ Sin conexión — precios no sincronizados'; statusEl.style.color = '#f0a060'; }
         console.warn('[Servicios] Error:', err.message);
       });
     }
 
     window.addEventListener('load', sincronizarDesdeSheets, { passive: true });
+
+    // ══ AVISO PRECIOS — desaparece a los 10 seg ══════════════════
+    window.addEventListener('load', () => {
+      const aviso = document.getElementById('aviso-precios');
+      if (!aviso) return;
+      setTimeout(() => {
+        aviso.classList.add('oculto');
+        setTimeout(() => aviso.remove(), 600);
+      }, 10000);
+    });
 
     // ══ CATÁLOGO — se construye dinámicamente desde el Sheet ════
     let CATALOGO = [];
@@ -2357,9 +2383,9 @@
       seoWeb:      null,   // CFG: SEO orgánico web
       reporte:     null,   // CFG: Reporte mensual + Analytics
       recursos:    null,   // CFG: Recursos digitales
-      emailUnitario: null,  // CFG: Email marketing unitario (1 envío fijo)
-      emailBase:     null,  // CFG: Email marketing base (5 envíos)
-      emailExtra:    null,  // CFG: Email marketing extra (6.° en adelante c/u)
+      emailUnitario: null,  // CFG: Email marketing unitario (precio c/u para 1–4 envíos)
+      emailBase:     null,  // CFG: Email marketing base (precio fijo para 5 envíos)
+      emailExtra:    null,  // CFG: Email marketing extra (por envío adicional, 6.° en adelante)
       dashboard:   null,   // CFG: Dashboard métricas
       // Descuentos por número de módulos
       desc2:  null,
@@ -2419,7 +2445,7 @@
         ['hint-seo',         null,          ''],  // calculado dinámicamente
         ['hint-reporte',     P.reporte,     ''],
         ['hint-recursos',    P.recursos,    ''],
-        ['hint-email',       P.emailUnitario, '/envío unitario'],
+        ['hint-email',       P.emailUnitario, '/envío (1–4)'],
         ['hint-dashboard',   P.dashboard,   ''],
       ];
       hints.forEach(([id, val, suf]) => {
@@ -2465,6 +2491,16 @@
     function cfgToggle(seccion) {
       const chk  = document.getElementById(`chk-${seccion}`);
       const body = document.getElementById(`body-${seccion}`);
+
+      // Redes requiere que Marcas esté activo
+      if (seccion === 'redes' && chk.checked) {
+        const marcasChk = document.getElementById('chk-marcas');
+        if (!marcasChk.checked) {
+          marcasChk.checked = true;
+          document.getElementById('body-marcas').classList.add('open');
+        }
+      }
+
       body.classList.toggle('open', chk.checked);
       cfgCalc();
     }
@@ -2490,32 +2526,94 @@
       { value:'YouTube',   icon:'fab fa-youtube',    color:'#ff0000' },
     ];
 
+    // Helper: devuelve todas las redes activas (predefinidas checkeadas + personalizadas)
+    function cfgGetRedesActivas() {
+      const predefinidas = [...document.querySelectorAll('#checks-redes .cfg-check-pill input[type=checkbox]:checked')]
+                            .map(i => i.value);
+      const otras = [...document.querySelectorAll('.otra-red-input')]
+                      .map(i => i.value.trim()).filter(Boolean);
+      return [...predefinidas, ...otras];
+    }
+
     function cfgActualizarRedesPorMarca() {
-      const marcas  = parseInt(document.getElementById('num-marcas')?.value) || 1;
-      const wrap    = document.getElementById('redes-por-marca-wrap');
-      const grid    = document.getElementById('redes-cuentas-grid');
-      const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')]
-                        .map(i => i.value);
+      const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
+      const wrap   = document.getElementById('redes-por-marca-wrap');
+      const grid   = document.getElementById('redes-cuentas-grid');
+      const redes  = cfgGetRedesActivas();
 
       if (!wrap || !grid) return;
 
-      if (marcas > 1 && checked.length > 0) {
+      if (marcas > 1 && redes.length > 0) {
         wrap.classList.add('visible');
-        grid.innerHTML = checked.map(val => {
-          const meta = REDES_META.find(r => r.value === val) || { icon:'fab fa-globe', color:'#888' };
-          return `
-            <div class="red-cuenta-row">
-              <i class="${meta.icon}" style="color:${meta.color};"></i>
-              <span style="flex:1;">${val}</span>
-              <input type="number" id="cuentas-${val.replace(/[^a-z]/gi,'').toLowerCase()}"
-                     min="1" max="20" value="${marcas}" oninput="cfgCalc()"
-                     title="Cuentas de ${val} a manejar">
-              <span>cuenta(s) en total</span>
-            </div>`;
-        }).join('');
+
+        // Preservar valores existentes antes de re-renderizar
+        const prev = {};
+        document.querySelectorAll('.red-marca-input').forEach(inp => {
+          prev[inp.dataset.key] = inp.value;
+        });
+
+        let html = '<div style="overflow-x:auto;margin-top:4px;">';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:0.78rem;">';
+        html += '<thead><tr>';
+        html += '<th style="padding:5px 8px 8px;color:#555;text-align:left;font-weight:normal;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #222;">Red \\ Marca</th>';
+        for (let m = 1; m <= marcas; m++) {
+          html += `<th style="padding:5px 8px 8px;color:#70DDD8;text-align:center;font-size:0.72rem;border-bottom:1px solid #222;min-width:62px;">Marca ${m}</th>`;
+        }
+        html += '</tr></thead><tbody>';
+
+        redes.forEach(val => {
+          const meta = REDES_META.find(r => r.value === val) || { icon:'fas fa-globe', color:'#888' };
+          const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
+          const isFacebook = val === 'Facebook';
+          html += '<tr style="border-top:1px solid #1a1a1a;">';
+          html += `<td style="padding:7px 8px;color:#ccc;white-space:nowrap;"><i class="${meta.icon}" style="color:${meta.color};width:14px;text-align:center;margin-right:5px;"></i>${val}</td>`;
+          for (let m = 1; m <= marcas; m++) {
+            const key = `${safeKey}_m${m}`;
+            const prevVal = (prev[key] !== undefined) ? prev[key] : (isFacebook ? '1' : '');
+            const placeholder = isFacebook ? '1' : '0';
+            html += `<td style="padding:4px 6px;text-align:center;">
+                       <input type="number" class="red-marca-input"
+                              data-key="${key}" data-red="${val}" data-marca="${m}"
+                              min="0" max="20" value="${prevVal}" placeholder="${placeholder}"
+                              style="width:50px;background:#111;border:1.5px solid #2a2a2a;color:#fff;border-radius:6px;padding:4px 2px;font-size:0.82rem;text-align:center;outline:none;font-family:inherit;"
+                              oninput="cfgCalc()"
+                              onfocus="this.style.borderColor='#70DDD8'"
+                              onblur="this.style.borderColor='#2a2a2a'"
+                              title="${val} — Marca ${m}">
+                     </td>`;
+          }
+          html += '</tr>';
+        });
+
+        html += '</tbody></table></div>';
+        html += '<div style="font-size:0.67rem;color:#555;margin-top:6px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Deja en <strong style="color:#666;">0</strong> o vacío si esa marca no tiene esa red.</div>';
+        grid.innerHTML = html;
       } else {
         wrap.classList.remove('visible');
         grid.innerHTML = '';
+      }
+    }
+
+    // Bloquear visualmente Redes si Marcas no está activo
+    function cfgActualizarRedesLock() {
+      const marcasOk    = document.getElementById('chk-marcas').checked;
+      const redesChk    = document.getElementById('chk-redes');
+      const redesLabel  = document.querySelector('label[for="chk-redes"]');
+      const redesSection = document.getElementById('cs-redes');
+      if (!redesSection) return;
+
+      if (!marcasOk) {
+        redesChk.disabled = true;
+        redesChk.style.cursor = 'not-allowed';
+        if (redesLabel) redesLabel.style.opacity = '0.45';
+        redesSection.querySelectorAll('input[id="chk-redes"], label[for="chk-redes"]').forEach(el => {
+          el.setAttribute('data-lock-tip', '¡Tienes que indicar cuántas marcas quieres que gestione primero!');
+        });
+      } else {
+        redesChk.disabled = false;
+        redesChk.style.cursor = '';
+        if (redesLabel) redesLabel.style.opacity = '';
+        redesSection.querySelectorAll('[data-lock-tip]').forEach(el => el.removeAttribute('data-lock-tip'));
       }
     }
 
@@ -2526,17 +2624,6 @@
       if (el === auto && auto.checked) solo.checked = false;
       document.getElementById('pill-crm-solo').classList.toggle('checked', solo.checked);
       document.getElementById('pill-crm-auto').classList.toggle('checked', auto.checked);
-      cfgCalc();
-    }
-
-    function cfgToggleEmail(el) {
-      const unit = document.getElementById('chk-email-unit');
-      const paq  = document.getElementById('chk-email-paq');
-      if (el === unit && unit.checked) paq.checked = false;
-      if (el === paq  && paq.checked)  unit.checked = false;
-      document.getElementById('pill-email-unit').classList.toggle('checked', unit.checked);
-      document.getElementById('pill-email-paq').classList.toggle('checked', paq.checked);
-      document.getElementById('email-paq-wrap').style.display = paq.checked ? 'block' : 'none';
       cfgCalc();
     }
 
@@ -2561,8 +2648,9 @@
     }
 
     function cfgCalc() {
-      // Si cambió el número de marcas, actualizar inputs por red
+      // Si cambió el número de marcas, actualizar inputs por red y bloqueo
       cfgActualizarRedesPorMarca();
+      cfgActualizarRedesLock();
 
       const items = [];
       let total = 0;
@@ -2749,37 +2837,42 @@
 
       // 12. Email marketing
       if (document.getElementById('chk-email').checked) {
-        const esUnit = document.getElementById('chk-email-unit').checked;
-        const esPaq  = document.getElementById('chk-email-paq').checked;
+        const n = parseInt(document.getElementById('num-email').value) || 1;
         const desgloseEl = document.getElementById('email-desglose');
-        let desgloseText = '';
-        if (esUnit) {
-          // Envío unitario: precio fijo $150
-          const p = P.emailUnitario !== null ? P.emailUnitario : null;
-          addItem('Email marketing — 1 envío/mes (diseño incluido)', p);
-          document.getElementById('hint-email').textContent = p !== null ? fmt(p) : 'Cotizable';
-        } else if (esPaq) {
-          const n = parseInt(document.getElementById('num-email').value) || 5;
-          let p = null;
+        let p = null, desgloseText = '';
+        if (n <= 4) {
+          // 1–4 envíos: precio unitario × n
+          if (P.emailUnitario !== null) {
+            p = P.emailUnitario * n;
+            addItem(`Email marketing (${n} envío${n>1?'s':''}/mes, diseño incluido)`, p);
+            desgloseText = `${n} envío${n>1?'s':''} × ${fmt(P.emailUnitario)} = ${fmt(p)}`;
+          } else {
+            addItem(`Email marketing (${n} envío${n>1?'s':''}/mes)`, null);
+          }
+        } else if (n === 5) {
+          // 5 envíos: precio de paquete fijo
           if (P.emailBase !== null) {
-            if (n <= 5) {
-              p = P.emailBase;
-              addItem(`Email marketing — ${n} envío${n>1?'s':''}/mes (diseño incluido)`, p);
-              desgloseText = `Base 5 envíos: ${fmt(P.emailBase)}`;
-            } else if (P.emailExtra !== null) {
-              const pExtra = (n - 5) * P.emailExtra;
-              addItem(`Email marketing — 5 envíos base (diseño incluido)`, P.emailBase);
-              addItem(`Email marketing — ${n-5} envío${n-5>1?'s':''} extra${n-5>1?'s':''} (sin descuento)`, pExtra, true);
-              p = P.emailBase + pExtra;
-              desgloseText = `5 base × ${fmt(P.emailBase)} + ${n-5} extra${n-5>1?'s':''} × ${fmt(P.emailExtra)} = ${fmt(p)}`;
-            } else {
-              addItem(`Email marketing (${n} envíos/mes)`, null);
-            }
-          } else { addItem(`Email marketing (${n} envíos/mes, diseño incluido)`, null); }
-          document.getElementById('hint-email').textContent = p !== null ? fmt(p) : 'Cotizable';
+            p = P.emailBase;
+            addItem('Email marketing — paquete 5 envíos/mes (diseño incluido)', p);
+            desgloseText = `Paquete 5 envíos: ${fmt(P.emailBase)}`;
+          } else {
+            addItem('Email marketing — paquete 5 envíos/mes', null);
+          }
         } else {
-          document.getElementById('hint-email').textContent = 'Selecciona plan';
+          // 6+: paquete + extras sin descuento
+          if (P.emailBase !== null && P.emailExtra !== null) {
+            const pExtra = (n - 5) * P.emailExtra;
+            addItem('Email marketing — 5 envíos base (diseño incluido)', P.emailBase);
+            addItem(`Email marketing — ${n-5} envío${n-5>1?'s':''} extra${n-5>1?'s':''} (sin descuento)`, pExtra, true);
+            p = P.emailBase + pExtra;
+            desgloseText = `Paquete 5: ${fmt(P.emailBase)} + ${n-5} extra${n-5>1?'s':''} × ${fmt(P.emailExtra)} = ${fmt(p)}`;
+          } else if (P.emailBase !== null) {
+            addItem(`Email marketing (${n} envíos/mes)`, null);
+          } else {
+            addItem(`Email marketing (${n} envíos/mes)`, null);
+          }
         }
+        document.getElementById('hint-email').textContent = p !== null ? fmt(p) : 'Cotizable';
         if (desgloseEl) desgloseEl.textContent = desgloseText;
       } else {
         document.getElementById('hint-email').textContent = '';
@@ -2995,12 +3088,9 @@
       if (document.getElementById('chk-reporte').checked)   configItems.push('Reporte mensual + Analytics');
       if (document.getElementById('chk-recursos').checked)  configItems.push('Recursos digitales entregados al cliente');
       if (document.getElementById('chk-email').checked) {
-        const esUnit = document.getElementById('chk-email-unit').checked;
-        const esPaq  = document.getElementById('chk-email-paq').checked;
-        const n = parseInt(document.getElementById('num-email').value) || 5;
-        if (esUnit)       configItems.push('Email marketing: 1 envío unitario/mes');
-        else if (esPaq)   configItems.push(`Email marketing: ${n} envío(s)/mes (paquete)`);
-        else              configItems.push('Email marketing: plan no seleccionado');
+        const n = parseInt(document.getElementById('num-email').value) || 1;
+        const tipo = n <= 4 ? 'unitario c/u' : n === 5 ? 'paquete' : `paquete + ${n-5} extra${n-5>1?'s':''}`;
+        configItems.push(`Email marketing: ${n} envío${n>1?'s':''}/mes (${tipo}, diseño incluido)`);
       }
       if (document.getElementById('chk-dashboard').checked) configItems.push('Dashboard de métricas en tiempo real');
       if (document.getElementById('chk-duracion').checked) {
