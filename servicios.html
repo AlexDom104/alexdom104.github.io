@@ -2,9 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://i.imgur.com">
-  <link rel="dns-prefetch" href="https://script.google.com">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Servicios Freelance | Alexis Pérez</title>
   <link rel="stylesheet" href="styles.css" />
@@ -53,7 +50,6 @@
     .paquetes-grid {
       display: flex; gap: 14px;
       overflow-x: auto; scroll-behavior: smooth;
-      will-change: transform; -webkit-overflow-scrolling: touch;
       padding: 8px 2px 14px;
       scrollbar-width: none;
     }
@@ -138,7 +134,6 @@
     .cat-count { font-size: 0.68rem; padding: 3px 10px; border-radius: 20px; background: #1a2a3a; color: var(--cian-brillo); border: 1px solid var(--cian-brillo); font-weight: bold; }
     .chevron { color: var(--cian-brillo); font-size: 0.82rem; transition: transform 0.35s; }
     .cat-block.open .chevron { transform: rotate(180deg); }
-    .cat-block { contain: layout style; }
     .cat-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .cat-block.open .cat-body { max-height: 3000px; }
 
@@ -160,23 +155,6 @@
     .nota-box strong { color: #f0a060; }
     .leyenda { margin-top: 32px; background: var(--contraste-fondo); border-left: 4px solid var(--cian-brillo); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 0.82rem; color: #aaa; }
     .leyenda strong { color: var(--cian-brillo); }
-
-    /* ══ AVISO PRECIOS ══ */
-    #aviso-precios {
-      position: fixed; bottom: 80px; right: 24px; z-index: 899;
-      background: #1e1e1e; border: 1px solid #333;
-      color: #aaa; font-size: 0.78rem;
-      padding: 10px 14px; border-radius: 10px;
-      max-width: 220px; line-height: 1.4;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-      animation: fadeInAviso 0.4s ease;
-      transition: opacity 0.6s ease;
-    }
-    #aviso-precios.oculto { opacity: 0; pointer-events: none; }
-    @keyframes fadeInAviso { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
-    @media (max-width: 480px) {
-      #aviso-precios { bottom: 72px; right: 16px; max-width: 180px; }
-    }
 
     /* ══ BOTÓN FLOTANTE COTIZAR ══ */
     .btn-flotante {
@@ -592,12 +570,16 @@
     }
     .cfg-section {
       background: #161616; border: 1px solid #262626;
-      border-radius: 10px; margin-bottom: 12px; overflow: hidden;
+      border-radius: 10px; margin-bottom: 12px;
+      overflow: visible; /* FIX: era "hidden" — cortaba los tooltips */
+      position: relative;
     }
     .cfg-section-header {
       display: flex; align-items: center; gap: 10px;
       padding: 13px 16px; cursor: pointer;
       user-select: none;
+      border-radius: 10px; /* mantiene las esquinas redondeadas al quitar overflow:hidden del padre */
+      background: #161616;
     }
     .cfg-section-header input[type=checkbox] {
       width: 17px; height: 17px; accent-color: var(--cian-brillo);
@@ -613,6 +595,8 @@
     .cfg-section-body {
       display: none; padding: 12px 16px 16px; border-top: 1px solid #222;
       background: #131313;
+      border-radius: 0 0 10px 10px;
+      overflow: hidden;
     }
     .cfg-section-body.open { display: block; }
 
@@ -790,7 +774,7 @@
 
   <header>
     <a href="sobremi.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver</a>
-    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" fetchpriority="high"></div>
+    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
   </header>
 
   <main>
@@ -984,7 +968,7 @@
               <div class="cfg-section-body" id="body-marcas">
                 <div class="cfg-label">¿Cuántas marcas necesitas gestionar?</div>
                 <div class="cfg-input-row">
-                  <input type="number" class="cfg-input" id="num-marcas" min="1" max="20" value="1" oninput="cfgActualizarRedesPorMarca();cfgCalc()">
+                  <input type="number" class="cfg-input" id="num-marcas" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">marca(s)</span>
                 </div>
               </div>
@@ -1024,10 +1008,7 @@
                   <label class="cfg-check-pill" id="pill-li"><input type="checkbox" value="LinkedIn" onchange="cfgPillChange()"><i class="fab fa-linkedin"></i> LinkedIn</label>
                   <label class="cfg-check-pill" id="pill-tt"><input type="checkbox" value="TikTok" onchange="cfgPillChange()"><i class="fab fa-tiktok"></i> TikTok</label>
                   <label class="cfg-check-pill" id="pill-yt"><input type="checkbox" value="YouTube" onchange="cfgPillChange()"><i class="fab fa-youtube"></i> YouTube</label>
-                  <label class="cfg-check-pill" id="pill-otra" style="border-style:dashed;" onclick="cfgAgregarOtraRed(event)"><i class="fas fa-plus" style="font-size:0.68rem;"></i> Otra red</label>
                 </div>
-                <!-- Redes personalizadas añadidas con "Otra red" -->
-                <div id="otras-redes-wrap" style="display:none; margin-top:8px; display:flex; flex-wrap:wrap; gap:8px;"></div>
 
                 <!-- Cuadros por red — solo visible cuando marcas > 1 -->
                 <div class="redes-por-marca" id="redes-por-marca-wrap">
@@ -1089,11 +1070,11 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-meta" onchange="cfgToggle('meta')">
                 <label for="chk-meta">📣 Gestión de campañas en Meta Ads</label>
-                <span class="cfg-tooltip" data-tip="Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$300 c/u (sin descuento).">?</span>
+                <span class="cfg-tooltip" data-tip="Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-meta"></span>
               </div>
               <div class="cfg-section-body" id="body-meta">
-                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio unitario · 4ª+ $300 extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio por unidad · 4ª+ con costo extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-meta" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">campaña(s)/mes</span>
@@ -1107,11 +1088,11 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-google" onchange="cfgToggle('google')">
                 <label for="chk-google">🔍 Gestión de campañas en Google Ads</label>
-                <span class="cfg-tooltip" data-tip="Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$350 c/u (sin descuento).">?</span>
+                <span class="cfg-tooltip" data-tip="Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-google"></span>
               </div>
               <div class="cfg-section-body" id="body-google">
-                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio unitario · 4ª+ $350 extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio por unidad · 4ª+ con costo extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-google" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">campaña(s)/mes</span>
@@ -1120,7 +1101,135 @@
               </div>
             </div>
 
-            <!-- 8. Duración -->
+            <!-- 8. Comentarios y DMs -->
+            <div class="cfg-section" id="cs-comentarios">
+              <div class="cfg-section-header">
+                <input type="checkbox" id="chk-comentarios" onchange="cfgToggle('comentarios')">
+                <label for="chk-comentarios">💬 Respuesta a comentarios y DMs</label>
+                <span class="cfg-tooltip" data-tip="Gestión activa de comentarios en publicaciones<br>y mensajes directos en tus redes sociales.<br>Respuestas en nombre de tu marca con tu tono y voz.">?</span>
+                <span class="cfg-price-hint" id="hint-comentarios"></span>
+              </div>
+              <div class="cfg-section-body" id="body-comentarios">
+                <div class="cfg-label">¿En cuántas plataformas necesitas la atención?</div>
+                <div class="cfg-input-row">
+                  <input type="number" class="cfg-input" id="num-comentarios" min="1" max="10" value="1" oninput="cfgCalc()">
+                  <span class="cfg-unit">plataforma(s)</span>
+                </div>
+                <div style="font-size:0.74rem;color:#888;margin-top:8px;line-height:1.5;">
+                  <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:5px;opacity:0.8;"></i>
+                  Se coordinan respuestas con tus guidelines. Disponibilidad en horario laboral.
+                </div>
+              </div>
+            </div>
+
+            <!-- 9. SEO orgánico -->
+            <div class="cfg-section" id="cs-seo">
+              <div class="cfg-section-header">
+                <input type="checkbox" id="chk-seo" onchange="cfgToggle('seo')">
+                <label for="chk-seo">🔎 SEO orgánico</label>
+                <span class="cfg-tooltip" data-tip="Optimización orgánica para mejorar tu posicionamiento.<br><b>Redes:</b> bio, hashtags, palabras clave en publicaciones.<br><b>Web:</b> metaetiquetas, velocidad, estructura y contenido.">?</span>
+                <span class="cfg-price-hint" id="hint-seo"></span>
+              </div>
+              <div class="cfg-section-body" id="body-seo">
+                <div class="cfg-label">¿Qué tipo de SEO necesitas?</div>
+                <div class="cfg-checks" style="margin-top:6px;">
+                  <label class="cfg-check-pill" id="pill-seo-redes">
+                    <input type="checkbox" id="chk-seo-redes" onchange="cfgToggleSeo()">
+                    <i class="fab fa-instagram"></i> SEO en Redes Sociales
+                  </label>
+                  <label class="cfg-check-pill" id="pill-seo-web">
+                    <input type="checkbox" id="chk-seo-web" onchange="cfgToggleSeo()">
+                    <i class="fas fa-globe"></i> SEO en Página Web
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 10. Reporte mensual -->
+            <div class="cfg-section" id="cs-reporte">
+              <div class="cfg-section-header">
+                <input type="checkbox" id="chk-reporte" onchange="cfgToggle('reporte')">
+                <label for="chk-reporte">📊 Reporte mensual + Analytics</label>
+                <span class="cfg-tooltip" data-tip="Informe detallado de tus métricas cada mes:<br>alcance, interacciones, seguidores nuevos,<br>top contenidos y comparativa contra el mes anterior.">?</span>
+                <span class="cfg-price-hint" id="hint-reporte"></span>
+              </div>
+              <div class="cfg-section-body" id="body-reporte">
+                <div style="font-size:0.78rem;color:#888;line-height:1.6;">
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Resumen ejecutivo mensual con gráficas de evolución</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Top publicaciones con mayor alcance e interacción</div>
+                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Recomendaciones estratégicas para el siguiente mes</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 11. Recursos digitales -->
+            <div class="cfg-section" id="cs-recursos">
+              <div class="cfg-section-header">
+                <input type="checkbox" id="chk-recursos" onchange="cfgToggle('recursos')">
+                <label for="chk-recursos">🗂️ Recursos digitales entregados al cliente</label>
+                <span class="cfg-tooltip" data-tip="Entrega mensual de archivos originales:<br>diseños editables (PSD / AI / Canva), videos sin<br>marca de agua y exportaciones en múltiples formatos.">?</span>
+                <span class="cfg-price-hint" id="hint-recursos"></span>
+              </div>
+              <div class="cfg-section-body" id="body-recursos">
+                <div style="font-size:0.78rem;color:#888;line-height:1.6;">
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Archivos fuente editables de todos los diseños del mes</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Videos en resolución original sin marca de agua</div>
+                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Entregados vía Google Drive al cierre de mes</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 12. Email marketing -->
+            <div class="cfg-section" id="cs-email">
+              <div class="cfg-section-header">
+                <input type="checkbox" id="chk-email" onchange="cfgToggle('email')">
+                <label for="chk-email">✉️ Email marketing</label>
+                <span class="cfg-tooltip" data-tip="Diseño y envío de newsletters o campañas de correo.<br>Hasta 1,000 destinatarios por envío, diseño incluido.<br><b>Unitario:</b> 1 envío/mes precio fijo.<br><b>Paquete:</b> base 5 envíos + extras a partir del 6.°">?</span>
+                <span class="cfg-price-hint" id="hint-email"></span>
+              </div>
+              <div class="cfg-section-body" id="body-email">
+                <div class="cfg-label">¿Qué plan necesitas?</div>
+                <div class="cfg-checks" style="margin-top:6px;">
+                  <label class="cfg-check-pill" id="pill-email-unit">
+                    <input type="checkbox" id="chk-email-unit" onchange="cfgToggleEmail(this)"> ✉️ Envío unitario (1/mes)
+                  </label>
+                  <label class="cfg-check-pill" id="pill-email-paq">
+                    <input type="checkbox" id="chk-email-paq" onchange="cfgToggleEmail(this)"> 📦 Paquete (5+ envíos/mes)
+                  </label>
+                </div>
+                <div id="email-paq-wrap" style="display:none;margin-top:10px;">
+                  <div class="cfg-label">¿Cuántos envíos al mes? <span style="color:#555;font-size:0.68rem;">(base 5 · 6.° en adelante costo extra c/u)</span></div>
+                  <div class="cfg-input-row">
+                    <input type="number" class="cfg-input" id="num-email" min="1" max="30" value="5" oninput="cfgCalc()">
+                    <span class="cfg-unit">envío(s)/mes</span>
+                  </div>
+                  <div id="email-desglose" style="margin-top:8px;font-size:0.74rem;color:#888;"></div>
+                </div>
+                <div style="font-size:0.74rem;color:#888;margin-top:8px;">
+                  <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:5px;opacity:0.8;"></i>
+                  Hasta 1,000 destinatarios por envío · Diseño de plantilla incluido · Reporte de apertura y clics.
+                </div>
+              </div>
+            </div>
+
+            <!-- 13. Dashboard de métricas -->
+            <div class="cfg-section" id="cs-dashboard">
+              <div class="cfg-section-header">
+                <input type="checkbox" id="chk-dashboard" onchange="cfgToggle('dashboard')">
+                <label for="chk-dashboard">📈 Dashboard de métricas en tiempo real</label>
+                <span class="cfg-tooltip" data-tip="Panel interactivo con tus KPIs actualizado diariamente.<br>Acceso 24/7 desde cualquier dispositivo.<br>Construido en Looker Studio o plataforma similar.">?</span>
+                <span class="cfg-price-hint" id="hint-dashboard"></span>
+              </div>
+              <div class="cfg-section-body" id="body-dashboard">
+                <div style="font-size:0.78rem;color:#888;line-height:1.6;">
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Panel con acceso compartido para ti y tu equipo</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Visualización de KPIs y seguimiento de objetivos</div>
+                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Datos actualizados en tiempo real o diariamente</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 14. Duración -->
             <div class="cfg-section" id="cs-duracion">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-duracion" onchange="cfgToggle('duracion')">
@@ -1212,12 +1321,6 @@
       <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
     </div>
   </main>
-
-  <!-- ══ AVISO PRECIOS ══ -->
-  <div id="aviso-precios">
-    <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:6px;"></i>
-    Algunos precios pueden variar debido a la complejidad de la solicitud.
-  </div>
 
   <!-- ══ BOTÓN FLOTANTE ══ -->
   <button class="btn-flotante" onclick="abrirModal('')">
@@ -1311,14 +1414,15 @@
   </div>
 
 
-  <!-- Tooltip flotante — se posiciona via JS -->
-  <div id="cfg-tip-float"></div>
-
   <!-- Toast de confirmación -->
   <div id="cfg-toast">
     <div><i class="fas fa-check-circle"></i>¡Cotización enviada!</div>
     <p>Alexis te responderá lo más pronto posible 🚀</p>
   </div>
+
+  <!-- Tooltip flotante — se posiciona vía JS para evitar clipping del modal -->
+  <div id="cfg-tip-float"></div>
+
   <script>
     // ══ CONFIGURACIÓN ══════════════════════════════════════════
     const APPS_SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbxb0O6xlOiNKAtS84tL6EORHeWHQWmIkBDYhdADlYiUyvutGPf6xZ_b7sO-qKhZdIzkmA/exec';
@@ -1356,11 +1460,9 @@
         const fh = float.offsetHeight;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        // Preferir a la izquierda del ?; si no cabe, a la derecha
         let left = rect.left - fw - 8;
         if (left < 8) left = rect.right + 8;
         if (left + fw > vw - 8) left = vw - fw - 8;
-        // Centrar verticalmente respecto al ?
         let top = rect.top + rect.height / 2 - fh / 2;
         if (top < 8) top = 8;
         if (top + fh > vh - 8) top = vh - fh - 8;
@@ -1374,7 +1476,6 @@
         activeEl = null;
       }
 
-      // Desktop: hover — aplica a .cfg-tooltip y a elementos con data-lock-tip
       document.addEventListener('mouseover', e => {
         const tt = e.target.closest('.cfg-tooltip');
         if (tt) { showTip(tt); return; }
@@ -1387,8 +1488,6 @@
         const lt = e.target.closest('[data-lock-tip]');
         if (lt) hideTip(lt);
       });
-
-      // Mobile/tablet: tap toggle — aplica también a data-lock-tip
       document.addEventListener('click', e => {
         const tt = e.target.closest('.cfg-tooltip');
         if (tt) {
@@ -1404,11 +1503,8 @@
           else { if (activeEl) hideTip(activeEl); showTip(lt); }
           return;
         }
-        // Tap fuera cierra el tooltip
         if (activeEl) hideTip(activeEl);
       });
-
-      // Reposicionar al hacer scroll
       window.addEventListener('scroll', () => { if (activeEl) positionTip(activeEl); }, { passive: true });
     })();
 
@@ -1446,243 +1542,179 @@
       return null;
     }
 
+    // ── Sincronización con Google Sheets (en background) ───────────
     // ══════════════════════════════════════════════════════════════
     // METADATOS DE CATEGORÍAS
-    // Agrega aquí un cat_id nuevo cada vez que lo pongas en el Sheet.
-    // El orden de este objeto determina el orden de aparición en la web.
-    // Si llega un cat_id del Sheet que no está aquí, se muestra igual
-    // con valores genéricos (ícono gris, sin nota especial).
-    // ══════════════════════════════════════════════════════════════
     const CAT_META = {
-      // ── Marketing ─────────────────────────────────────────────
       marketing: {
-        seccion: 'Marketing Digital – Servicios Individuales',
-        seccionIcono: 'fas fa-bullhorn',
+        seccion: 'Marketing Digital – Servicios Individuales', seccionIcono: 'fas fa-bullhorn',
         icono: 'fas fa-share-alt', color: '#70DDD8',
         titulo: 'Community Management y Redes Sociales',
-        subtitulo: 'Gestión · Publicidad · Estrategia',
-        thServicio: 'Servicio',
+        subtitulo: 'Gestión · Publicidad · Estrategia', thServicio: 'Servicio',
       },
-      // ── Diseño Gráfico ─────────────────────────────────────────
       logos: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-star', color: '#EF5085',
         titulo: 'Logotipos e Isotipos',
-        subtitulo: 'Creación · Rediseño · Vectorización · Identidad',
-        thServicio: 'Servicio',
+        subtitulo: 'Creación · Rediseño · Vectorización · Identidad', thServicio: 'Servicio',
       },
       impresos: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-id-card', color: '#70DDD8',
         titulo: 'Impresos Pequeños',
-        subtitulo: 'Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets',
-        thServicio: 'Servicio',
+        subtitulo: 'Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets', thServicio: 'Servicio',
       },
       folletos: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-newspaper', color: '#EF5085',
         titulo: 'Folletos, Flyers y Dípticos',
-        subtitulo: 'Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos',
-        thServicio: 'Servicio',
+        subtitulo: 'Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos', thServicio: 'Servicio',
       },
       lonas: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-expand-arrows-alt', color: '#70DDD8',
         titulo: 'Lonas y Banners de Gran Formato',
-        subtitulo: 'Precio por tamaño en centímetros',
-        thServicio: 'Tamaño',
+        subtitulo: 'Precio por tamaño en centímetros', thServicio: 'Tamaño',
       },
       papeleria: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-file-alt', color: '#EF5085',
         titulo: 'Papelería Corporativa',
-        subtitulo: 'Carpetas · Membretes · Sellos · Talonarios · Facturas',
-        thServicio: 'Servicio',
+        subtitulo: 'Carpetas · Membretes · Sellos · Talonarios · Facturas', thServicio: 'Servicio',
       },
       calendarios: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-calendar-alt', color: '#70DDD8',
-        titulo: 'Calendarios',
-        subtitulo: 'Bolsillo · Sobremesa · Pared',
-        thServicio: 'Tipo',
+        titulo: 'Calendarios', subtitulo: 'Bolsillo · Sobremesa · Pared', thServicio: 'Tipo',
       },
       presentaciones: {
-        seccion: 'Diseño Gráfico',
-        seccionIcono: 'fas fa-palette',
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
         icono: 'fas fa-desktop', color: '#EF5085',
         titulo: 'Archivos Digitales y Presentaciones',
-        subtitulo: 'Catálogos · Revistas · Portadas · PowerPoint',
-        thServicio: 'Servicio',
-        notaBox: '<strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u. Precios MXN al tipo de cambio del día de contratación.',
+        subtitulo: 'Catálogos · Revistas · Portadas · PowerPoint', thServicio: 'Servicio',
+        notaBox: '<strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u.',
       },
-      // ── Audiovisual ────────────────────────────────────────────
       audiovisual: {
-        seccion: 'Producción Audiovisual',
-        seccionIcono: 'fas fa-film',
+        seccion: 'Producción Audiovisual', seccionIcono: 'fas fa-film',
         icono: 'fas fa-photo-video', color: '#70DDD8',
         titulo: 'Edición Fotográfica, de Video y Animación',
-        subtitulo: 'Recorte · Retoque · Chroma Key · Blender · GIF · Stickers · IA',
-        thServicio: 'Servicio',
+        subtitulo: 'Recorte · Retoque · Chroma Key · Blender · GIF · Stickers · IA', thServicio: 'Servicio',
       },
-      // ── CRM ────────────────────────────────────────────────────
       crm: {
-        seccion: 'Automatización y CRM',
-        seccionIcono: 'fas fa-gears',
+        seccion: 'Automatización y CRM', seccionIcono: 'fas fa-gears',
         icono: 'fas fa-robot', color: '#EF5085',
         titulo: 'Bitrix24, Google Sheets y Scripts',
-        subtitulo: 'CRM · Dashboards · Python · Apps Script',
-        thServicio: 'Servicio',
+        subtitulo: 'CRM · Dashboards · Python · Apps Script', thServicio: 'Servicio',
       },
-      // ── Web ────────────────────────────────────────────────────
       web: {
-        seccion: 'Desarrollo Web y Soporte Técnico',
-        seccionIcono: 'fas fa-globe',
+        seccion: 'Desarrollo Web y Soporte Técnico', seccionIcono: 'fas fa-globe',
         icono: 'fas fa-code', color: '#70DDD8',
         titulo: 'Web, Soporte y Otros Servicios Digitales',
-        subtitulo: 'Landings · Discord · Asistencia · Instalaciones',
-        thServicio: 'Servicio',
+        subtitulo: 'Landings · Discord · Asistencia · Instalaciones', thServicio: 'Servicio',
       },
-      // ── Streaming ──────────────────────────────────────────────
       streaming: {
-        seccion: 'Streaming y Setup',
-        seccionIcono: 'fas fa-broadcast-tower',
+        seccion: 'Streaming y Setup', seccionIcono: 'fas fa-broadcast-tower',
         icono: 'fas fa-broadcast-tower', color: '#9146ff',
         titulo: 'OBS Studio, Overlays, Emotes y Escenas',
-        subtitulo: 'Twitch · Kick · YouTube',
-        thServicio: 'Servicio',
+        subtitulo: 'Twitch · Kick · YouTube', thServicio: 'Servicio',
       },
-      // ── Escolares ──────────────────────────────────────────────
       escolares: {
-        seccion: 'Servicios Escolares',
-        seccionIcono: 'fas fa-graduation-cap',
+        seccion: 'Servicios Escolares', seccionIcono: 'fas fa-graduation-cap',
         icono: 'fas fa-pen-alt', color: '#EF5085',
         titulo: 'Redacción Académica',
-        subtitulo: 'Resúmenes · Ensayos · Investigaciones',
-        thServicio: 'Servicio',
+        subtitulo: 'Resúmenes · Ensayos · Investigaciones', thServicio: 'Servicio',
         thPrecio: 'Precio por cuartilla',
       },
-      // ── Fallback genérico para cat_ids no registrados ──────────
       _default: {
-        seccion: 'Otros Servicios',
-        seccionIcono: 'fas fa-cogs',
+        seccion: 'Otros Servicios', seccionIcono: 'fas fa-cogs',
         icono: 'fas fa-tag', color: '#888',
-        titulo: null, // se usa el cat_id capitalizado
-        subtitulo: '',
-        thServicio: 'Servicio',
+        titulo: null, subtitulo: '', thServicio: 'Servicio',
       },
     };
 
-    // Construye SECCIONES dinámicamente a partir de los cat_ids presentes en el Sheet.
-    // Preserva el orden de aparición de CAT_META; los desconocidos van al final.
     function buildSecciones(catIdsPresentes) {
       const metaOrder = Object.keys(CAT_META).filter(k => k !== '_default');
       const ordenados = [
         ...metaOrder.filter(id => catIdsPresentes.includes(id)),
         ...catIdsPresentes.filter(id => !metaOrder.includes(id) && id !== '_default'),
       ];
-
       const seccionesMap = {};
       const seccionesOrder = [];
-
       ordenados.forEach(catId => {
         const meta = CAT_META[catId] || CAT_META._default;
         const secNombre = meta.seccion;
         if (!seccionesMap[secNombre]) {
-          seccionesMap[secNombre] = {
-            titulo: secNombre,
-            icono: meta.seccionIcono,
-            grupos: [],
-          };
+          seccionesMap[secNombre] = { titulo: secNombre, icono: meta.seccionIcono, grupos: [] };
           seccionesOrder.push(secNombre);
         }
         seccionesMap[secNombre].grupos.push({
-          cat_ids: [catId],
-          icono: meta.icono,
-          color: meta.color,
+          cat_ids: [catId], icono: meta.icono, color: meta.color,
           titulo: meta.titulo || (catId.charAt(0).toUpperCase() + catId.slice(1)),
-          subtitulo: meta.subtitulo || '',
-          galeria: catId,
+          subtitulo: meta.subtitulo || '', galeria: catId,
           thServicio: meta.thServicio || 'Servicio',
-          thPrecio: meta.thPrecio || null,
-          notaBox: meta.notaBox || null,
+          thPrecio: meta.thPrecio || null, notaBox: meta.notaBox || null,
         });
       });
-
       return seccionesOrder.map(n => seccionesMap[n]);
     }
 
-    // ── Renderiza todas las tablas dinámicamente ─────────────────
+    function mostrarAvisoError() {
+      const container = document.getElementById('catalogo-dinamico');
+      if (container) {
+        container.innerHTML = `
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;
+            padding:40px 24px;text-align:center;border:1px dashed #333;border-radius:12px;
+            margin:24px 0;color:#888;font-size:0.88rem;line-height:1.5;">
+            <i class="fas fa-plug" style="font-size:1.8rem;color:#444;"></i>
+            <span style="color:#ccc;font-size:0.95rem;font-weight:600;">No se pudieron cargar los servicios</span>
+            <span>Intenta recargar la página o contáctame directamente.</span>
+            <button onclick="location.reload()" style="margin-top:6px;padding:8px 20px;background:transparent;
+              border:1px solid #444;border-radius:8px;color:#70DDD8;cursor:pointer;font-size:0.82rem;">
+              <i class="fas fa-rotate-right" style="margin-right:6px;"></i>Reintentar
+            </button>
+          </div>`;
+      }
+    }
+
     function renderCatalogoDinamico(servicios) {
       const container = document.getElementById('catalogo-dinamico');
       if (!container) return;
-
-      // Agrupar servicios por cat_id (excluyendo paquetes y cfg)
       const porCat = {};
       servicios.forEach(item => {
+        // FIX: filtrar filas de encabezado o cat_ids no válidos
         if (item.esPaquete || item.catId === 'cfg') return;
         if (!item.visible) return;
-        const c = item.catId || '';
-        if (!porCat[c]) porCat[c] = [];
-        porCat[c].push(item);
+        const c = (item.catId || '').trim().toLowerCase();
+        if (!c || c === 'cat_id' || c === 'cat id' || !item.nombre || item.nombre.toLowerCase().includes('nombre del servicio')) return;
+        const rawCat = (item.catId || '').trim();
+        if (!porCat[rawCat]) porCat[rawCat] = [];
+        porCat[rawCat].push(item);
       });
-
-      // Construir SECCIONES dinámicamente desde los cat_ids presentes en el Sheet
       const catIdsPresentes = Object.keys(porCat).filter(id => porCat[id].length > 0);
       const SECCIONES = buildSecciones(catIdsPresentes);
-
-      // Construir CATALOGO para el buscador
       CATALOGO = [];
-
       let html = '';
-
       SECCIONES.forEach(seccion => {
-        // Sólo renderizar si al menos un grupo tiene datos
-        const tieneGrupos = seccion.grupos.some(g =>
-          g.cat_ids.some(id => (porCat[id] || []).length > 0)
-        );
+        const tieneGrupos = seccion.grupos.some(g => g.cat_ids.some(id => (porCat[id] || []).length > 0));
         if (!tieneGrupos) return;
-
         html += `<div class="section-title"><i class="${seccion.icono}"></i> ${seccion.titulo}</div>`;
-
         seccion.grupos.forEach(grupo => {
           const items = grupo.cat_ids.flatMap(id => porCat[id] || []);
           if (!items.length) return;
-
-          // Añadir al CATALOGO del buscador
-          items.forEach(item => {
-            CATALOGO.push({ cat: grupo.titulo, nombre: item.nombre, precio: item.precio || '' });
-          });
-
+          items.forEach(item => { CATALOGO.push({ cat: grupo.titulo, nombre: item.nombre, precio: item.precio || '' }); });
           const thPrecio = grupo.thPrecio || 'Precio (MXN)';
-          const thServicio = grupo.thServicio || 'Servicio';
           const count = items.length;
-          const countLabel = count + ' ' + (count === 1 ? 'servicio' : 'servicios');
-
           let filas = items.map(item => {
             const esCotiz = /cotiz|a cotizar/i.test(item.precio || '');
-            const precioHtml = esCotiz
-              ? '<span class="precio-pres">Cotizable</span>'
-              : (item.precio || '');
-            const modalLabel = esCotiz
-              ? item.nombre
-              : `${item.nombre} — ${item.precio}`;
+            const precioHtml = esCotiz ? '<span class="precio-pres">Cotizable</span>' : (item.precio || '');
+            const modalLabel = esCotiz ? item.nombre : `${item.nombre} — ${item.precio}`;
             return `<tr>
               <td class="td-servicio">${item.nombre}</td>
               <td class="td-precio">${precioHtml}</td>
               <td><button class="btn-cotizar-tabla" onclick="abrirModal(${JSON.stringify(modalLabel)})">Cotizar</button></td>
             </tr>`;
           }).join('');
-
-          const notaHtml = grupo.notaBox
-            ? `<div class="nota-box">${grupo.notaBox}</div>`
-            : '';
-
+          const notaHtml = grupo.notaBox ? `<div class="nota-box">${grupo.notaBox}</div>` : '';
           const galeriaHtml = `
             <div class="galeria-slot" data-galeria="${grupo.galeria}">
               <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
@@ -1693,18 +1725,17 @@
               </div>
               <div class="ejemplos-body"><div class="ejemplos-grid"></div></div>
             </div>`;
-
           html += `
           <div class="cat-block">
             <div class="cat-header" onclick="toggleCat(this)">
               <i class="${grupo.icono} cat-icon" style="color:${grupo.color};"></i>
               <div class="cat-info"><h2>${grupo.titulo}</h2><span>${grupo.subtitulo}</span></div>
-              <span class="cat-count">${countLabel}</span>
+              <span class="cat-count">${count} ${count===1?'servicio':'servicios'}</span>
               <i class="fas fa-chevron-down chevron"></i>
             </div>
             <div class="cat-body">
               <div class="services-table-wrap"><table>
-                <thead><tr><th>${thServicio}</th><th style="text-align:right;">${thPrecio}</th><th></th></tr></thead>
+                <thead><tr><th>${grupo.thServicio}</th><th style="text-align:right;">${thPrecio}</th><th></th></tr></thead>
                 <tbody>${filas}</tbody>
               </table></div>
               ${notaHtml}
@@ -1713,48 +1744,14 @@
           </div>`;
         });
       });
-
       container.innerHTML = html;
-
-      // Re-inicializar galerías sobre los nuevos slots
       renderGalerias();
     }
 
-    // ── Muestra el error de carga dentro del contenedor del catálogo ─
-    function mostrarAvisoError() {
-      const container = document.getElementById('catalogo-dinamico');
-      if (container) {
-        container.innerHTML = `
-          <div style="
-            display:flex; flex-direction:column; align-items:center; gap:10px;
-            padding:40px 24px; text-align:center;
-            border:1px dashed #333; border-radius:12px; margin:24px 0;
-            color:#888; font-size:0.88rem; line-height:1.5;
-          ">
-            <i class="fas fa-plug" style="font-size:1.8rem;color:#444;"></i>
-            <span style="color:#ccc;font-size:0.95rem;font-weight:600;">No se pudieron cargar los servicios</span>
-            <span>Algunos precios pueden variar debido a la complejidad de la solicitud.<br>
-            Intenta recargar la página o contáctame directamente para una cotización.</span>
-            <button onclick="location.reload()" style="
-              margin-top:6px; padding:8px 20px; background:transparent;
-              border:1px solid #444; border-radius:8px; color:#70DDD8;
-              cursor:pointer; font-size:0.82rem;
-            ">
-              <i class="fas fa-rotate-right" style="margin-right:6px;"></i>Reintentar
-            </button>
-          </div>`;
-      }
-    }
-
-    // ── Sincronización con Google Sheets ────────────────────────
     function sincronizarDesdeSheets() {
       const statusEl = document.getElementById('sync-status');
-      if (statusEl) {
-        statusEl.textContent = '⏳ Sincronizando precios con Google Sheets...';
-        statusEl.style.color = '#888';
-      }
+      if (statusEl) { statusEl.textContent = '⏳ Sincronizando precios con Google Sheets...'; statusEl.style.color = '#888'; }
 
-      // AbortController libera la conexión si se supera el tiempo límite
       const fetchJson = url => {
         const ctrl = new AbortController();
         const tid  = setTimeout(() => ctrl.abort(), 9000);
@@ -1768,16 +1765,13 @@
         fetchJson(APPS_SCRIPT_URL + '?action=servicios'),
         fetchJson(APPS_SCRIPT_URL + '?action=paquetes'),
       ]).then(([dataServicios, dataPaquetes]) => {
-
         let sheetsOk = false;
 
-        // ── Renderizar tablas y CATALOGO desde Sheet ─────────────
         if (dataServicios && dataServicios.ok && dataServicios.servicios) {
           sheetsOk = true;
           cfgInit(dataServicios.servicios);
           renderCatalogoDinamico(dataServicios.servicios);
 
-          // Actualizar paquetes del carrusel
           dataServicios.servicios.forEach(item => {
             if (!item.esPaquete) return;
             const pid = detectarPid(item.nombre);
@@ -1789,21 +1783,17 @@
             if (precioEl && item.precio) {
               const p = item.precio.trim();
               precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
-                ? 'A cotizar'
-                : p.replace(/\/mes/i, '') + '<sub>/mes</sub>';
+                ? 'A cotizar' : p.replace(/\/mes/i, '') + '<sub>/mes</sub>';
               precioEl.classList.remove('precio-skeleton');
             }
             if (descEl && item.desc) descEl.textContent = item.desc;
           });
         } else {
-          // Sheet no devolvió servicios: mostrar aviso de error
           mostrarAvisoError();
-          // Eliminar skeleton
           const sk = document.getElementById('catalogo-skeleton');
           if (sk) sk.remove();
         }
 
-        // ── Características de tarjetas de paquetes ───────────────
         if (dataPaquetes && dataPaquetes.ok && dataPaquetes.paquetes) {
           sheetsOk = true;
           Object.entries(dataPaquetes.paquetes).forEach(([pid, filas]) => {
@@ -1839,33 +1829,18 @@
             statusEl.style.color = '#f0a060';
           }
         }
-
       }).catch(err => {
         mostrarAvisoError();
         const sk = document.getElementById('catalogo-skeleton');
         if (sk) sk.remove();
-        if (statusEl) {
-          statusEl.textContent = '⚠️ Sin conexión con Google Sheets';
-          statusEl.style.color = '#f0a060';
-        }
-        console.warn('[Servicios] Error al cargar desde el Sheet:', err.message);
+        if (statusEl) { statusEl.textContent = '⚠️ Sin conexión con Google Sheets'; statusEl.style.color = '#f0a060'; }
+        console.warn('[Servicios] Error:', err.message);
       });
     }
 
     window.addEventListener('load', sincronizarDesdeSheets, { passive: true });
 
-    // ══ AVISO PRECIOS — desaparece a los 10 seg ══════════════════
-    window.addEventListener('load', () => {
-      const aviso = document.getElementById('aviso-precios');
-      if (!aviso) return;
-      setTimeout(() => {
-        aviso.classList.add('oculto');
-        setTimeout(() => aviso.remove(), 600);
-      }, 10000);
-    });
-
     // ══ CATÁLOGO — se construye dinámicamente desde el Sheet ════
-    // Se rellena en renderCatalogoDinamico(); empieza vacío.
     let CATALOGO = [];
 
     // ══ ESTADO ══════════════════════════════════════════════════
@@ -2077,7 +2052,7 @@
 
       <!-- Header -->
       <tr><td style="background:linear-gradient(135deg,#A64062,#EF5085);padding:28px 32px;">
-        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" loading="lazy" style="display:block;margin-bottom:10px;">
+        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
         <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Nueva Solicitud</div>
         <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🔔 Cotización Recibida</div>
       </td></tr>
@@ -2308,7 +2283,7 @@
       });
     }
 
-    // renderGalerias() se llama desde renderCatalogoDinamico() tras generar los slots
+    document.addEventListener('DOMContentLoaded', renderGalerias);
 
     // ══ GALERÍA DE EJEMPLOS ══════════════════════════════════════
     function toggleEjemplos(toggleEl, e) {
@@ -2364,22 +2339,32 @@
       marcas:      null,
       web:         null,
       redes:       null,
-      redesPaq:    null,   // CFG: Red social paquete (3) — precio fijo 3 redes
-      redesExtra:  null,   // CFG: Red social extra — red 4ª en adelante
+      redesPaq:    null,   // CFG: Red social paquete (3)
+      redesExtra:  null,   // CFG: Red social extra
       imgMes:      null,   // CFG: Pieza de contenido (imagen)
       vidMes:      null,   // CFG: Pieza de contenido (video)
-      imgExtra:    null,   // CFG: Imagen extra
-      vidExtra:    null,   // CFG: Video extra
+      imgExtra:    null,
+      vidExtra:    null,
       crm:         null,
       crmAuto:     null,
-      metaBase:    null,   // precio por 1 campaña Meta (viene del Sheet)
-      metaExtra:   null,   // costo por campaña 4ª+ Meta (viene del Sheet)
-      googleBase:  null,   // precio por 1 campaña Google (viene del Sheet)
-      googleExtra: null,   // costo por campaña 4ª+ Google (viene del Sheet)
-      // Descuentos por número de módulos (vienen del Sheet)
-      desc2:  null,   // CFG: Descuento 2 módulos  (p.ej. 10 → 10%)
-      desc3:  null,   // CFG: Descuento 3 módulos
-      desc4:  null,   // CFG: Descuento 4+ módulos
+      metaBase:    null,
+      metaExtra:   null,
+      googleBase:  null,
+      googleExtra: null,
+      // Nuevos servicios
+      comentarios: null,   // CFG: Respuesta comentarios y DMs (por plataforma)
+      seoRedes:    null,   // CFG: SEO orgánico redes
+      seoWeb:      null,   // CFG: SEO orgánico web
+      reporte:     null,   // CFG: Reporte mensual + Analytics
+      recursos:    null,   // CFG: Recursos digitales
+      emailUnitario: null,  // CFG: Email marketing unitario (1 envío fijo)
+      emailBase:     null,  // CFG: Email marketing base (5 envíos)
+      emailExtra:    null,  // CFG: Email marketing extra (6.° en adelante c/u)
+      dashboard:   null,   // CFG: Dashboard métricas
+      // Descuentos por número de módulos
+      desc2:  null,
+      desc3:  null,
+      desc4:  null,
     };
 
     // Mapa: clave de P → nombre exacto en el Sheet
@@ -2399,7 +2384,15 @@
       metaExtra:   'CFG: Meta Ads extra',
       googleBase:  'CFG: Google Ads base',
       googleExtra: 'CFG: Google Ads extra',
-      // Descuentos de paquete — editables desde el Sheet
+      comentarios: 'CFG: Respuesta comentarios y DMs',
+      seoRedes:    'CFG: SEO orgánico redes',
+      seoWeb:      'CFG: SEO orgánico web',
+      reporte:     'CFG: Reporte mensual + Analytics',
+      recursos:    'CFG: Recursos digitales',
+      emailUnitario: 'CFG: Email marketing unitario',
+      emailBase:     'CFG: Email marketing base',
+      emailExtra:    'CFG: Email marketing extra',
+      dashboard:   'CFG: Dashboard métricas',
       desc2:       'CFG: Descuento 2 módulos',
       desc3:       'CFG: Descuento 3 módulos',
       desc4:       'CFG: Descuento 4+ módulos',
@@ -2416,12 +2409,18 @@
       });
       // Actualizar hints de precio en las secciones
       const hints = [
-        ['hint-marcas',  P.marcas,     '/marca'],
-        ['hint-web',     P.web,        '/página'],
-        ['hint-redes',   P.redes,      '/red'],  // hint muestra precio unitario
-        ['hint-crm',     P.crm,        ''],
-        ['hint-meta',    P.metaBase,   '/campaña'],
-        ['hint-google',  P.googleBase, '/campaña'],
+        ['hint-marcas',      P.marcas,      '/marca'],
+        ['hint-web',         P.web,         '/página'],
+        ['hint-redes',       P.redes,       '/red'],
+        ['hint-crm',         P.crm,         ''],
+        ['hint-meta',        P.metaBase,    '/campaña'],
+        ['hint-google',      P.googleBase,  '/campaña'],
+        ['hint-comentarios', P.comentarios, '/plataforma'],
+        ['hint-seo',         null,          ''],  // calculado dinámicamente
+        ['hint-reporte',     P.reporte,     ''],
+        ['hint-recursos',    P.recursos,    ''],
+        ['hint-email',       P.emailUnitario, '/envío unitario'],
+        ['hint-dashboard',   P.dashboard,   ''],
       ];
       hints.forEach(([id, val, suf]) => {
         const el = document.getElementById(id);
@@ -2449,7 +2448,6 @@
       });
       document.getElementById('cfg-msg').textContent = '';
       document.getElementById('cfg-msg').className = 'cfg-msg';
-      cfgActualizarRedesLock();
       cfgCalc();
       document.getElementById('cfg-overlay').classList.add('visible');
       document.body.style.overflow = 'hidden';
@@ -2467,17 +2465,6 @@
     function cfgToggle(seccion) {
       const chk  = document.getElementById(`chk-${seccion}`);
       const body = document.getElementById(`body-${seccion}`);
-
-      // Redes requiere que Marcas esté activo
-      if (seccion === 'redes' && chk.checked) {
-        const marcasChk = document.getElementById('chk-marcas');
-        if (!marcasChk.checked) {
-          // Activar Marcas automáticamente y abrir su sección
-          marcasChk.checked = true;
-          document.getElementById('body-marcas').classList.add('open');
-        }
-      }
-
       body.classList.toggle('open', chk.checked);
       cfgCalc();
     }
@@ -2503,112 +2490,33 @@
       { value:'YouTube',   icon:'fab fa-youtube',    color:'#ff0000' },
     ];
 
-    // Helper: devuelve todas las redes activas (predefinidas checkeadas + personalizadas)
-    function cfgGetRedesActivas() {
-      const predefinidas = [...document.querySelectorAll('#checks-redes .cfg-check-pill input[type=checkbox]:checked')]
-                            .map(i => i.value);
-      const otras = [...document.querySelectorAll('.otra-red-input')]
-                      .map(i => i.value.trim()).filter(Boolean);
-      return [...predefinidas, ...otras];
-    }
-
     function cfgActualizarRedesPorMarca() {
-      const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-      const wrap   = document.getElementById('redes-por-marca-wrap');
-      const grid   = document.getElementById('redes-cuentas-grid');
-      const redes  = cfgGetRedesActivas();
+      const marcas  = parseInt(document.getElementById('num-marcas')?.value) || 1;
+      const wrap    = document.getElementById('redes-por-marca-wrap');
+      const grid    = document.getElementById('redes-cuentas-grid');
+      const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')]
+                        .map(i => i.value);
 
       if (!wrap || !grid) return;
 
-      if (marcas > 1 && redes.length > 0) {
+      if (marcas > 1 && checked.length > 0) {
         wrap.classList.add('visible');
-
-        // Preservar valores existentes antes de re-renderizar
-        const prev = {};
-        document.querySelectorAll('.red-marca-input').forEach(inp => {
-          prev[inp.dataset.key] = inp.value;
-        });
-
-        // Tabla: filas = redes, columnas = marcas (cada celda = nº de cuentas)
-        let html = '<div style="overflow-x:auto;margin-top:4px;">';
-        html += '<table style="width:100%;border-collapse:collapse;font-size:0.78rem;">';
-        html += '<thead><tr>';
-        html += '<th style="padding:5px 8px 8px;color:#555;text-align:left;font-weight:normal;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #222;">Red \\ Marca</th>';
-        for (let m = 1; m <= marcas; m++) {
-          html += `<th style="padding:5px 8px 8px;color:#70DDD8;text-align:center;font-size:0.72rem;border-bottom:1px solid #222;min-width:62px;">Marca ${m}</th>`;
-        }
-        html += '</tr></thead><tbody>';
-
-        redes.forEach(val => {
-          const meta = REDES_META.find(r => r.value === val) || { icon:'fas fa-globe', color:'#888' };
-          const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
-          const isFacebook = val === 'Facebook';
-          html += '<tr style="border-top:1px solid #1a1a1a;">';
-          html += `<td style="padding:7px 8px;color:#ccc;white-space:nowrap;"><i class="${meta.icon}" style="color:${meta.color};width:14px;text-align:center;margin-right:5px;"></i>${val}</td>`;
-          for (let m = 1; m <= marcas; m++) {
-            const key = `${safeKey}_m${m}`;
-            // Si hay valor previo guardado, usarlo; si no: Facebook=1, resto=vacío
-            const prevVal = (prev[key] !== undefined) ? prev[key] : (isFacebook ? '1' : '');
-            const placeholder = isFacebook ? '1' : '0';
-            html += `<td style="padding:4px 6px;text-align:center;">
-                       <input type="number" class="red-marca-input"
-                              data-key="${key}" data-red="${val}" data-marca="${m}"
-                              min="0" max="20" value="${prevVal}" placeholder="${placeholder}"
-                              style="width:50px;background:#111;border:1.5px solid #2a2a2a;color:#fff;border-radius:6px;padding:4px 2px;font-size:0.82rem;text-align:center;outline:none;font-family:inherit;"
-                              oninput="cfgCalc()"
-                              onfocus="this.style.borderColor='#70DDD8'"
-                              onblur="this.style.borderColor='#2a2a2a'"
-                              title="${val} — Marca ${m}">
-                     </td>`;
-          }
-          html += '</tr>';
-        });
-
-        html += '</tbody></table></div>';
-        html += '<div style="font-size:0.67rem;color:#555;margin-top:6px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Deja en <strong style="color:#666;">0</strong> o vacío si esa marca no tiene esa red.</div>';
-        grid.innerHTML = html;
+        grid.innerHTML = checked.map(val => {
+          const meta = REDES_META.find(r => r.value === val) || { icon:'fab fa-globe', color:'#888' };
+          return `
+            <div class="red-cuenta-row">
+              <i class="${meta.icon}" style="color:${meta.color};"></i>
+              <span style="flex:1;">${val}</span>
+              <input type="number" id="cuentas-${val.replace(/[^a-z]/gi,'').toLowerCase()}"
+                     min="1" max="20" value="${marcas}" oninput="cfgCalc()"
+                     title="Cuentas de ${val} a manejar">
+              <span>cuenta(s) en total</span>
+            </div>`;
+        }).join('');
       } else {
         wrap.classList.remove('visible');
         grid.innerHTML = '';
       }
-    }
-
-    // ── Redes sociales personalizadas ("Otra red") ──────────────
-    let otrasRedesCount = 0;
-    function cfgAgregarOtraRed(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (otrasRedesCount >= 4) return; // máx 4 redes custom
-      otrasRedesCount++;
-      const wrap = document.getElementById('otras-redes-wrap');
-      if (!wrap) return;
-      wrap.style.display = 'flex';
-      const id = 'otra-red-' + Date.now();
-      const div = document.createElement('div');
-      div.id = 'wrap-' + id;
-      div.style.cssText = 'display:inline-flex;align-items:center;gap:5px;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:20px;padding:4px 10px;';
-      div.innerHTML =
-        '<i class="fas fa-globe" style="color:#888;font-size:0.72rem;flex-shrink:0;"></i>' +
-        '<input type="text" class="otra-red-input" id="' + id + '" maxlength="24" placeholder="Nombre de la red"' +
-        ' style="background:none;border:none;outline:none;color:#ccc;font-size:0.78rem;width:118px;font-family:inherit;"' +
-        ' oninput="cfgActualizarRedesPorMarca();cfgCalc()">' +
-        '<button onclick="cfgQuitarOtraRed(\'' + id + '\')"' +
-        ' style="background:none;border:none;color:#555;cursor:pointer;padding:0;font-size:0.75rem;line-height:1;"' +
-        ' onmouseover="this.style.color=\'#EF5085\'" onmouseout="this.style.color=\'#555\'">' +
-        '<i class="fas fa-times"></i></button>';
-      wrap.appendChild(div);
-      document.getElementById(id).focus();
-      cfgActualizarRedesPorMarca();
-    }
-
-    function cfgQuitarOtraRed(id) {
-      const div = document.getElementById('wrap-' + id);
-      if (div) div.remove();
-      otrasRedesCount = document.querySelectorAll('.otra-red-input').length;
-      const wrap = document.getElementById('otras-redes-wrap');
-      if (wrap && !otrasRedesCount) wrap.style.display = 'none';
-      cfgActualizarRedesPorMarca();
-      cfgCalc();
     }
 
     function cfgToggleCrmAuto(el) {
@@ -2618,6 +2526,17 @@
       if (el === auto && auto.checked) solo.checked = false;
       document.getElementById('pill-crm-solo').classList.toggle('checked', solo.checked);
       document.getElementById('pill-crm-auto').classList.toggle('checked', auto.checked);
+      cfgCalc();
+    }
+
+    function cfgToggleEmail(el) {
+      const unit = document.getElementById('chk-email-unit');
+      const paq  = document.getElementById('chk-email-paq');
+      if (el === unit && unit.checked) paq.checked = false;
+      if (el === paq  && paq.checked)  unit.checked = false;
+      document.getElementById('pill-email-unit').classList.toggle('checked', unit.checked);
+      document.getElementById('pill-email-paq').classList.toggle('checked', paq.checked);
+      document.getElementById('email-paq-wrap').style.display = paq.checked ? 'block' : 'none';
       cfgCalc();
     }
 
@@ -2641,41 +2560,13 @@
       return val * (mult || 1);
     }
 
-    // Bloquear visualmente Redes si Marcas no está activo
-    function cfgActualizarRedesLock() {
-      const marcasOk    = document.getElementById('chk-marcas').checked;
-      const redesChk    = document.getElementById('chk-redes');
-      const redesLabel  = document.querySelector('label[for="chk-redes"]');
-      const redesHint   = document.getElementById('hint-redes');
-      const redesBody   = document.getElementById('body-redes');
-      const redesSection = document.getElementById('cs-redes');
-      if (!redesSection) return;
-
-      if (!marcasOk) {
-        // Deshabilitar el checkbox visualmente
-        redesChk.disabled = true;
-        redesChk.style.cursor = 'not-allowed';
-        if (redesLabel) redesLabel.style.opacity = '0.45';
-        // Mostrar tooltip de bloqueo al hacer hover/click en el checkbox o label
-        redesSection.querySelectorAll('input[id="chk-redes"], label[for="chk-redes"]').forEach(el => {
-          el.setAttribute('data-lock-tip', '¡Tienes que indicar cuántas marcas quieres que gestione primero!');
-        });
-      } else {
-        redesChk.disabled = false;
-        redesChk.style.cursor = '';
-        if (redesLabel) redesLabel.style.opacity = '';
-        redesSection.querySelectorAll('[data-lock-tip]').forEach(el => el.removeAttribute('data-lock-tip'));
-      }
-    }
-
     function cfgCalc() {
       // Si cambió el número de marcas, actualizar inputs por red
       cfgActualizarRedesPorMarca();
-      cfgActualizarRedesLock();
 
       const items = [];
-      let total = 0;          // subtotal con descuento aplicable
-      let totalSinDesc = 0;   // subtotal SIN descuento (extras de ads campañas 4+)
+      let total = 0;
+      let totalSinDesc = 0;   // extras sin descuento de paquete (ej: campañas 4+)
       let hayNull = false; // si algún precio no cargó
 
       function addItem(nombre, precio, sinDescuento) {
@@ -2693,15 +2584,7 @@
         const p = precioO(P.marcas, n);
         addItem(`Gestión de ${n} marca${n>1?'s':''}`, p);
         document.getElementById('hint-marcas').textContent = p !== null ? fmt(p) : 'Cotizable';
-      } else {
-        // Si se desmarca Marcas, desmarcar Redes también
-        const redesChk = document.getElementById('chk-redes');
-        if (redesChk && redesChk.checked) {
-          redesChk.checked = false;
-          document.getElementById('body-redes').classList.remove('open');
-        }
-        document.getElementById('hint-marcas').textContent = '';
-      }
+      } else { document.getElementById('hint-marcas').textContent = ''; }
 
       // 2. Web
       if (document.getElementById('chk-web').checked) {
@@ -2714,74 +2597,29 @@
       // 3. Redes
       if (document.getElementById('chk-redes').checked) {
         const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-        const redes  = cfgGetRedesActivas();
+        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
         let totalCuentas = 0;
         let detalle = [];
 
-        if (marcas > 1 && redes.length > 0) {
-          // Modo multi-marca: suma la matriz marca×red
-          redes.forEach(val => {
-            let cuentasRed = 0;
-            const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
-            for (let m = 1; m <= marcas; m++) {
-              const inp = document.querySelector(`.red-marca-input[data-key="${safeKey}_m${m}"]`);
-              const v = inp?.value?.trim();
-              cuentasRed += (v === '' || v === undefined) ? 0 : Math.max(0, parseInt(v) || 0);
-            }
-            if (cuentasRed > 0) {
-              totalCuentas += cuentasRed;
-              detalle.push(`${val} ×${cuentasRed}`);
-            }
+        if (marcas > 1 && checked.length > 0) {
+          // Modo multi-marca: suma cuentas de cada red según sus inputs
+          checked.forEach(val => {
+            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
+            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
+            totalCuentas += n;
+            detalle.push(`${val} ×${n}`);
           });
         } else {
-          totalCuentas = redes.length || 1;
-          detalle = redes.length > 0 ? redes : ['1 red'];
+          totalCuentas = checked.length || 1;
+          detalle = checked.length > 0 ? checked : ['1 red'];
         }
 
-        // Lógica de precios por volumen (igual que Meta/Google Ads):
-        // 1–2 redes → precio unitario × n
-        // 3 redes   → precio paquete fijo
-        // 4+ redes  → paquete + extras individuales (sin descuento de módulo)
-        let desgloseText = '';
-        if (P.redes !== null) {
-          if (totalCuentas <= 2) {
-            const p = P.redes * totalCuentas;
-            const label = marcas > 1 && detalle.length > 0
-              ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuenta${totalCuentas>1?'s':''}`
-              : `Redes sociales (${detalle.join(', ')})`;
-            addItem(label, p);
-            desgloseText = `${totalCuentas} red${totalCuentas>1?'es':''} × ${fmt(P.redes)} = ${fmt(p)}`;
-            document.getElementById('hint-redes').textContent = fmt(p);
-          } else if (totalCuentas === 3) {
-            const p = P.redesPaq !== null ? P.redesPaq : P.redes * 3;
-            const label = marcas > 1 && detalle.length > 0
-              ? `Redes (${detalle.join(', ')}) — paquete 3 cuentas`
-              : `Redes sociales — paquete 3 redes (${detalle.join(', ')})`;
-            addItem(label, p);
-            desgloseText = `Paquete 3 redes = ${fmt(p)}`;
-            document.getElementById('hint-redes').textContent = fmt(p);
-          } else {
-            // 4+ redes: paquete base + extras sin descuento de módulo
-            const pPaq   = P.redesPaq   !== null ? P.redesPaq   : P.redes * 3;
-            const pExtra = P.redesExtra !== null ? P.redesExtra : P.redes;
-            const extras = totalCuentas - 3;
-            const pExtTotal = extras * pExtra;
-            const labelBase = marcas > 1 && detalle.length > 0
-              ? `Redes — paquete 3 cuentas base`
-              : `Redes sociales — paquete 3 redes base`;
-            addItem(labelBase, pPaq);
-            addItem(`Redes sociales — ${extras} red${extras>1?'es':''} extra${extras>1?'s':''} (sin descuento)`, pExtTotal, true);
-            desgloseText = `Paquete 3: ${fmt(pPaq)} + ${extras} extra${extras>1?'s':''} × ${fmt(pExtra)} = ${fmt(pPaq + pExtTotal)}`;
-            document.getElementById('hint-redes').textContent = fmt(pPaq + pExtTotal);
-          }
-        } else {
-          // Precio no disponible del Sheet
-          const label = marcas > 1 && detalle.length > 0
-            ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuenta${totalCuentas>1?'s':''}`
-            : `Redes sociales (${detalle.join(', ')})`;
-          addItem(label, null);
-          document.getElementById('hint-redes').textContent = 'Cotizable';
-        }
+        const p = precioO(P.redes, totalCuentas);
+        const nombreItem = marcas > 1 && detalle.length > 0
+          ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuentas`
+          : `Redes sociales (${detalle.join(', ')})`;
+        addItem(nombreItem, p);
+        document.getElementById('hint-redes').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-redes').textContent = ''; }
 
       // 4. Diseño — imágenes y videos por separado
@@ -2814,8 +2652,7 @@
       // 6. Meta Ads
       if (document.getElementById('chk-meta').checked) {
         const n = parseInt(document.getElementById('num-meta').value) || 1;
-        let p = null;
-        let desgloseText = '';
+        let p = null, desgloseText = '';
         if (P.metaBase !== null) {
           if (n <= 3) {
             p = P.metaBase * n;
@@ -2830,25 +2667,20 @@
             desgloseText = `3 × ${fmt(P.metaBase)} + ${n-3} extra${n-3>1?'s':''} × ${fmt(P.metaExtra)} = ${fmt(p)}`;
           } else {
             addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, null);
-            desgloseText = 'Precio de campaña extra no disponible';
           }
-        } else {
-          addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null);
-        }
+        } else { addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null); }
         document.getElementById('hint-meta').textContent = p !== null ? fmt(p) : 'Cotizable';
         const desgloseEl = document.getElementById('meta-desglose');
         if (desgloseEl) desgloseEl.textContent = desgloseText;
       } else {
         document.getElementById('hint-meta').textContent = '';
-        const desgloseEl = document.getElementById('meta-desglose');
-        if (desgloseEl) desgloseEl.textContent = '';
+        const de = document.getElementById('meta-desglose'); if (de) de.textContent = '';
       }
 
       // 7. Google Ads
       if (document.getElementById('chk-google').checked) {
         const n = parseInt(document.getElementById('num-google').value) || 1;
-        let p = null;
-        let desgloseText = '';
+        let p = null, desgloseText = '';
         if (P.googleBase !== null) {
           if (n <= 3) {
             p = P.googleBase * n;
@@ -2863,21 +2695,105 @@
             desgloseText = `3 × ${fmt(P.googleBase)} + ${n-3} extra${n-3>1?'s':''} × ${fmt(P.googleExtra)} = ${fmt(p)}`;
           } else {
             addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, null);
-            desgloseText = 'Precio de campaña extra no disponible';
           }
-        } else {
-          addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null);
-        }
+        } else { addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null); }
         document.getElementById('hint-google').textContent = p !== null ? fmt(p) : 'Cotizable';
         const desgloseEl = document.getElementById('google-desglose');
         if (desgloseEl) desgloseEl.textContent = desgloseText;
       } else {
         document.getElementById('hint-google').textContent = '';
-        const desgloseEl = document.getElementById('google-desglose');
-        if (desgloseEl) desgloseEl.textContent = '';
+        const de = document.getElementById('google-desglose'); if (de) de.textContent = '';
       }
 
-      // 8. Duración (informativo)
+      // 8. Comentarios y DMs
+      if (document.getElementById('chk-comentarios').checked) {
+        const n = parseInt(document.getElementById('num-comentarios').value) || 1;
+        const p = precioO(P.comentarios, n);
+        addItem(`Respuesta a comentarios y DMs (${n} plataforma${n>1?'s':''})`, p);
+        document.getElementById('hint-comentarios').textContent = p !== null ? fmt(p) : 'Cotizable';
+      } else { document.getElementById('hint-comentarios').textContent = ''; }
+
+      // 9. SEO orgánico
+      if (document.getElementById('chk-seo').checked) {
+        const seoR = document.getElementById('chk-seo-redes').checked;
+        const seoW = document.getElementById('chk-seo-web').checked;
+        let pTotal = 0; let hayNullSeo = false;
+        if (seoR) {
+          const p = precioO(P.seoRedes);
+          if (p !== null) pTotal += p; else hayNullSeo = true;
+          addItem('SEO orgánico en Redes Sociales', p);
+        }
+        if (seoW) {
+          const p = precioO(P.seoWeb);
+          if (p !== null) pTotal += p; else hayNullSeo = true;
+          addItem('SEO orgánico en Página Web', p);
+        }
+        if (!seoR && !seoW) addItem('SEO orgánico (sin tipo especificado)', null);
+        const hintSeo = document.getElementById('hint-seo');
+        if (hintSeo) hintSeo.textContent = (!seoR && !seoW) ? 'Selecciona tipo' : (hayNullSeo ? 'Cotizable' : fmt(pTotal));
+      } else { const hs = document.getElementById('hint-seo'); if (hs) hs.textContent = ''; }
+
+      // 10. Reporte mensual
+      if (document.getElementById('chk-reporte').checked) {
+        const p = precioO(P.reporte);
+        addItem('Reporte mensual + Analytics', p);
+        document.getElementById('hint-reporte').textContent = p !== null ? fmt(p) : 'Cotizable';
+      } else { document.getElementById('hint-reporte').textContent = ''; }
+
+      // 11. Recursos digitales
+      if (document.getElementById('chk-recursos').checked) {
+        const p = precioO(P.recursos);
+        addItem('Recursos digitales entregados al cliente', p);
+        document.getElementById('hint-recursos').textContent = p !== null ? fmt(p) : 'Cotizable';
+      } else { document.getElementById('hint-recursos').textContent = ''; }
+
+      // 12. Email marketing
+      if (document.getElementById('chk-email').checked) {
+        const esUnit = document.getElementById('chk-email-unit').checked;
+        const esPaq  = document.getElementById('chk-email-paq').checked;
+        const desgloseEl = document.getElementById('email-desglose');
+        let desgloseText = '';
+        if (esUnit) {
+          // Envío unitario: precio fijo $150
+          const p = P.emailUnitario !== null ? P.emailUnitario : null;
+          addItem('Email marketing — 1 envío/mes (diseño incluido)', p);
+          document.getElementById('hint-email').textContent = p !== null ? fmt(p) : 'Cotizable';
+        } else if (esPaq) {
+          const n = parseInt(document.getElementById('num-email').value) || 5;
+          let p = null;
+          if (P.emailBase !== null) {
+            if (n <= 5) {
+              p = P.emailBase;
+              addItem(`Email marketing — ${n} envío${n>1?'s':''}/mes (diseño incluido)`, p);
+              desgloseText = `Base 5 envíos: ${fmt(P.emailBase)}`;
+            } else if (P.emailExtra !== null) {
+              const pExtra = (n - 5) * P.emailExtra;
+              addItem(`Email marketing — 5 envíos base (diseño incluido)`, P.emailBase);
+              addItem(`Email marketing — ${n-5} envío${n-5>1?'s':''} extra${n-5>1?'s':''} (sin descuento)`, pExtra, true);
+              p = P.emailBase + pExtra;
+              desgloseText = `5 base × ${fmt(P.emailBase)} + ${n-5} extra${n-5>1?'s':''} × ${fmt(P.emailExtra)} = ${fmt(p)}`;
+            } else {
+              addItem(`Email marketing (${n} envíos/mes)`, null);
+            }
+          } else { addItem(`Email marketing (${n} envíos/mes, diseño incluido)`, null); }
+          document.getElementById('hint-email').textContent = p !== null ? fmt(p) : 'Cotizable';
+        } else {
+          document.getElementById('hint-email').textContent = 'Selecciona plan';
+        }
+        if (desgloseEl) desgloseEl.textContent = desgloseText;
+      } else {
+        document.getElementById('hint-email').textContent = '';
+        const de = document.getElementById('email-desglose'); if (de) de.textContent = '';
+      }
+
+      // 13. Dashboard de métricas
+      if (document.getElementById('chk-dashboard').checked) {
+        const p = precioO(P.dashboard);
+        addItem('Dashboard de métricas en tiempo real', p);
+        document.getElementById('hint-dashboard').textContent = p !== null ? fmt(p) : 'Cotizable';
+      } else { document.getElementById('hint-dashboard').textContent = ''; }
+
+      // 14. Duración (informativo)
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
         const val = sel.value;
@@ -2885,7 +2801,7 @@
           val === '' ? '' : val === 'rango' ? 'Rango personalizado' : sel.options[sel.selectedIndex].text;
       } else { document.getElementById('hint-duracion').textContent = ''; }
 
-      // 9. Extras del buscador
+      // 15. Extras del buscador
       cfgExtras.forEach(nombre => {
         const cat = CATALOGO.find(c => c.nombre === nombre);
         let p = null;
@@ -2909,6 +2825,7 @@
         ).join('');
       }
 
+      // Contar módulos activos
       const modulosActivos = [
         document.getElementById('chk-marcas').checked,
         document.getElementById('chk-web').checked,
@@ -2917,34 +2834,36 @@
         document.getElementById('chk-crm').checked,
         document.getElementById('chk-meta').checked,
         document.getElementById('chk-google').checked,
+        document.getElementById('chk-comentarios').checked,
+        document.getElementById('chk-seo').checked,
+        document.getElementById('chk-reporte').checked,
+        document.getElementById('chk-recursos').checked,
+        document.getElementById('chk-email').checked,
+        document.getElementById('chk-dashboard').checked,
       ].filter(Boolean).length + cfgExtras.length;
 
-      // Descuento escalonado — valores vienen del Sheet; fallback si no cargaron
+      // Descuento escalonado — valores desde Sheet; fallback si no cargaron
       const pctDescuento = modulosActivos <= 1 ? 0
                          : modulosActivos === 2 ? (P.desc2 !== null ? P.desc2 : 10)
                          : modulosActivos === 3 ? (P.desc3 !== null ? P.desc3 : 15)
                          : (P.desc4 !== null ? P.desc4 : 20);
 
-      const totalBase = total + totalSinDesc;   // precio individual completo (sin descuento aplicado)
-      const totalPkg  = Math.round(total * (1 - pctDescuento / 100)) + totalSinDesc;  // descuento solo sobre la base
+      const totalBase = total + totalSinDesc;
+      const totalPkg  = Math.round(total * (1 - pctDescuento / 100)) + totalSinDesc;
       const ahorro    = totalBase - totalPkg;
 
       document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
 
-      // Mostrar badge de descuento si aplica
       let descBadge = '';
       if (pctDescuento > 0 && totalBase > 0) {
         descBadge = ` <span style="font-size:0.65rem;background:rgba(80,216,144,0.15);color:#50d890;border:1px solid rgba(80,216,144,0.3);padding:2px 7px;border-radius:10px;font-weight:600;vertical-align:middle;">−${pctDescuento}% paquete</span>`;
       }
-
       const etiquetaDescuento = document.getElementById('cfg-res-total-label');
       if (etiquetaDescuento) {
         etiquetaDescuento.innerHTML = pctDescuento > 0
           ? `Precio estimado con descuento<br>${descBadge}`
           : 'Precio estimado (precio individual)';
       }
-
-      // Nota de ahorro
       const notaEl = document.querySelector('.cfg-res-note');
       if (notaEl) {
         if (pctDescuento > 0 && ahorro > 0) {
@@ -2956,9 +2875,25 @@
         }
       }
 
-      document.getElementById('cfg-precio-total').innerHTML  = totalPkg > 0
+      document.getElementById('cfg-precio-total').innerHTML = totalPkg > 0
         ? `${fmt(totalPkg)} <sub>/mes</sub>`
         : (hayNull ? '<span style="color:#888;font-size:1rem;">A cotizar</span>' : '$0 <sub>/mes</sub>');
+    }
+
+    function cfgToggleSeo() {
+      ['seo-redes','seo-web'].forEach(id => {
+        const chk  = document.getElementById(`chk-${id}`);
+        const pill = document.getElementById(`pill-${id}`);
+        if (chk && pill) pill.classList.toggle('checked', chk.checked);
+      });
+      cfgCalc();
+    }
+
+    function cfgDuracionChange() {
+      const sel = document.getElementById('sel-duracion');
+      const msg = document.getElementById('duracion-rango-msg');
+      if (msg) msg.style.display = sel.value === 'rango' ? 'block' : 'none';
+      cfgCalc();
     }
 
     function abrirBuscadorDesdeConfigurador() {
@@ -3027,23 +2962,16 @@
       if (document.getElementById('chk-web').checked)    configItems.push(`Gestión de ${document.getElementById('num-web').value} página(s) web`);
       if (document.getElementById('chk-redes').checked) {
         const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-        const redes  = cfgGetRedesActivas();
-        if (marcas > 1 && redes.length > 0) {
-          // Detalle por marca
-          const porMarca = [];
-          for (let m = 1; m <= marcas; m++) {
-            const lista = redes.map(val => {
-              const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
-              const inp = document.querySelector(`.red-marca-input[data-key="${safeKey}_m${m}"]`);
-              const v = inp?.value?.trim();
-              const n = (v === '' || v === undefined) ? 0 : Math.max(0, parseInt(v) || 0);
-              return n > 0 ? `${val}(${n})` : null;
-            }).filter(Boolean);
-            if (lista.length) porMarca.push(`Marca ${m}: ${lista.join(', ')}`);
-          }
-          configItems.push(`Redes sociales (${marcas} marcas): ${porMarca.join(' · ')}`);
+        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
+        if (marcas > 1 && checked.length > 0) {
+          const detalle = checked.map(val => {
+            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
+            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
+            return `${val} ×${n}`;
+          });
+          configItems.push(`Redes sociales: ${detalle.join(' | ')} (${marcas} marcas)`);
         } else {
-          configItems.push(`Redes sociales: ${redes.length > 0 ? redes.join(', ') : 'sin especificar'}`);
+          configItems.push(`Redes sociales: ${checked.length > 0 ? checked.join(', ') : 'sin especificar'}`);
         }
       }
       if (document.getElementById('chk-diseno').checked) {
@@ -3057,10 +2985,27 @@
       }
       if (document.getElementById('chk-meta').checked)   configItems.push(`Meta Ads: ${document.getElementById('num-meta').value} campaña(s)/mes`);
       if (document.getElementById('chk-google').checked) configItems.push(`Google Ads: ${document.getElementById('num-google').value} campaña(s)/mes`);
+      if (document.getElementById('chk-comentarios').checked) configItems.push(`Respuesta a comentarios y DMs: ${document.getElementById('num-comentarios').value} plataforma(s)`);
+      if (document.getElementById('chk-seo').checked) {
+        const seoTipos = [];
+        if (document.getElementById('chk-seo-redes').checked) seoTipos.push('Redes Sociales');
+        if (document.getElementById('chk-seo-web').checked)   seoTipos.push('Página Web');
+        configItems.push(`SEO orgánico: ${seoTipos.length > 0 ? seoTipos.join(' + ') : 'sin tipo especificado'}`);
+      }
+      if (document.getElementById('chk-reporte').checked)   configItems.push('Reporte mensual + Analytics');
+      if (document.getElementById('chk-recursos').checked)  configItems.push('Recursos digitales entregados al cliente');
+      if (document.getElementById('chk-email').checked) {
+        const esUnit = document.getElementById('chk-email-unit').checked;
+        const esPaq  = document.getElementById('chk-email-paq').checked;
+        const n = parseInt(document.getElementById('num-email').value) || 5;
+        if (esUnit)       configItems.push('Email marketing: 1 envío unitario/mes');
+        else if (esPaq)   configItems.push(`Email marketing: ${n} envío(s)/mes (paquete)`);
+        else              configItems.push('Email marketing: plan no seleccionado');
+      }
+      if (document.getElementById('chk-dashboard').checked) configItems.push('Dashboard de métricas en tiempo real');
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
-        const durText = sel.value === 'rango'
-          ? 'Rango personalizado (fechas por confirmar en correo)'
+        const durText = sel.value === 'rango' ? 'Rango personalizado (fechas por confirmar en correo)'
           : (sel.value === '' ? 'No especificada' : sel.options[sel.selectedIndex].text);
         configItems.push(`Duración: ${durText}`);
       }
@@ -3097,7 +3042,7 @@
 <tr><td align="center">
 <table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
 <tr><td style="background:linear-gradient(135deg,#0A315B,#A64062);padding:28px 32px;">
-  <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" loading="lazy" style="display:block;margin-bottom:10px;">
+  <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
   <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Paquete Personalizado</div>
   <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🛠️ Configuración Recibida</div>
 </td></tr>
@@ -3128,11 +3073,9 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           from_name:  nombre,
           from_email: correo,
-          telefono,
-          servicio:   'f6e0️ Paquete personalizado\n• ' + configItems.join('\n• '),
-          mensaje:    mensaje || '—',
-          fecha,
-          reply_to:   correo,
+          phone:      telefono,
+          subject:    `🛠️ Paquete personalizado — ${nombre}`,
+          message:    configItems.join('\n• '),
           html_body,
         });
         fetch(APPS_SCRIPT_URL, {
@@ -3165,13 +3108,6 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
     }
 
     // ══ CARRUSEL ════════════════════════════════════════════════
-    function cfgDuracionChange() {
-      const sel = document.getElementById('sel-duracion');
-      const msg = document.getElementById('duracion-rango-msg');
-      if (msg) msg.style.display = sel.value === 'rango' ? 'block' : 'none';
-      cfgCalc();
-    }
-
     function toggleCat(el) { (el.classList.contains('cat-header') ? el.closest('.cat-block') : el).classList.toggle('open'); }
 
     const carousel = document.getElementById('paquetes-carousel');
@@ -3194,16 +3130,10 @@ ${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;tex
       carousel.scrollTo({ left: i * getCardWidth(), behavior: 'smooth' });
       updateDots(i);
     }
-    // Throttled scroll listener — evita repaints en cada pixel
-    let _scrollTimer = null;
     carousel.addEventListener('scroll', () => {
-      if (_scrollTimer) return;
-      _scrollTimer = setTimeout(() => {
-        currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
-        updateDots(currentSlide);
-        _scrollTimer = null;
-      }, 80);
-    }, { passive: true });
+      currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
+      updateDots(currentSlide);
+    });
   </script>
 </body>
 </html>
