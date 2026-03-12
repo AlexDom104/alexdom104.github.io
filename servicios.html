@@ -1027,6 +1027,18 @@
                   <label class="cfg-check-pill" id="pill-yt"><input type="checkbox" value="YouTube" onchange="cfgPillChange()"><i class="fab fa-youtube"></i> YouTube</label>
                 </div>
 
+                <!-- Redes personalizadas (hasta 5) -->
+                <div id="otras-redes-wrap" style="margin-top:8px;"></div>
+                <button type="button" id="btn-add-otra-red"
+                  onclick="cfgAddOtraRed()"
+                  style="margin-top:6px;background:none;border:1px dashed #333;color:#555;
+                         border-radius:8px;padding:5px 14px;font-size:0.76rem;cursor:pointer;
+                         font-family:inherit;transition:border-color .2s,color .2s;"
+                  onmouseover="this.style.borderColor='#70DDD8';this.style.color='#70DDD8';"
+                  onmouseout="this.style.borderColor='#333';this.style.color='#555';">
+                  <i class="fas fa-plus" style="margin-right:5px;font-size:0.68rem;"></i>+ Otra red
+                </button>
+
                 <!-- Cuadros por red — solo visible cuando marcas > 1 -->
                 <div class="redes-por-marca" id="redes-por-marca-wrap">
                   <div class="redes-por-marca-label">¿Cuántas cuentas de cada red? (por marca)</div>
@@ -2391,6 +2403,12 @@
       desc2:  null,
       desc3:  null,
       desc4:  null,
+      // Umbrales y descuentos de contenido (tramos de 8 piezas)
+      cU1:null, cD1:null,  // umbral 1 = 8, descuento 1 = 12%
+      cU2:null, cD2:null,
+      cU3:null, cD3:null,
+      cU4:null, cD4:null,
+      cU5:null, cD5:null,
     };
 
     // Mapa: clave de P → nombre exacto en el Sheet
@@ -2422,6 +2440,11 @@
       desc2:       'CFG: Descuento 2 módulos',
       desc3:       'CFG: Descuento 3 módulos',
       desc4:       'CFG: Descuento 4+ módulos',
+      cU1:'CFG: Contenido umbral 1',    cD1:'CFG: Contenido descuento 1',
+      cU2:'CFG: Contenido umbral 2',    cD2:'CFG: Contenido descuento 2',
+      cU3:'CFG: Contenido umbral 3',    cD3:'CFG: Contenido descuento 3',
+      cU4:'CFG: Contenido umbral 4',    cD4:'CFG: Contenido descuento 4',
+      cU5:'CFG: Contenido umbral 5',    cD5:'CFG: Contenido descuento 5',
     };
 
     // Llamada desde el window load — recibe el array servicios del Sheet
@@ -2514,6 +2537,42 @@
       });
       cfgActualizarRedesPorMarca();
       cfgCalc();
+    }
+
+    // Agregar campo "Otra red" (máx 5 personalizadas)
+    function cfgAddOtraRed() {
+      const wrap = document.getElementById('otras-redes-wrap');
+      const btn  = document.getElementById('btn-add-otra-red');
+      if (!wrap) return;
+      const count = wrap.querySelectorAll('.otra-red-row').length;
+      if (count >= 5) return;
+
+      const idx = Date.now();
+      const row = document.createElement('div');
+      row.className = 'otra-red-row';
+      row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:5px;';
+      row.innerHTML = `
+        <i class="fas fa-globe" style="color:#555;font-size:0.82rem;flex-shrink:0;"></i>
+        <input type="text" class="otra-red-input cfg-input"
+               placeholder="Nombre de la red…"
+               style="flex:1;min-width:0;"
+               oninput="cfgPillChange()"
+               data-idx="${idx}">
+        <button type="button"
+          onclick="this.closest('.otra-red-row').remove(); cfgActualizarOtraRedBtn(); cfgPillChange();"
+          style="background:none;border:none;color:#444;cursor:pointer;padding:2px 5px;font-size:0.85rem;line-height:1;flex-shrink:0;"
+          onmouseover="this.style.color='#ff6b6b'" onmouseout="this.style.color='#444'">✕</button>`;
+      wrap.appendChild(row);
+      row.querySelector('input').focus();
+      cfgActualizarOtraRedBtn();
+    }
+
+    function cfgActualizarOtraRedBtn() {
+      const wrap = document.getElementById('otras-redes-wrap');
+      const btn  = document.getElementById('btn-add-otra-red');
+      if (!wrap || !btn) return;
+      const count = wrap.querySelectorAll('.otra-red-row').length;
+      btn.style.display = count >= 5 ? 'none' : '';
     }
 
     // Renderiza los inputs "¿cuántas cuentas?" por red cuando marcas > 1
@@ -2682,51 +2741,141 @@
         document.getElementById('hint-web').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-web').textContent = ''; }
 
-      // 3. Redes
+      // 3. Redes — tiered: 1–2 unitario (sin desc módulo), 3 paquete (con desc), 4+ extras (sin desc)
       if (document.getElementById('chk-redes').checked) {
         const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
+
+        // Contar cuentas totales
         let totalCuentas = 0;
         let detalle = [];
 
-        if (marcas > 1 && checked.length > 0) {
-          // Modo multi-marca: suma cuentas de cada red según sus inputs
-          checked.forEach(val => {
-            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
-            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
-            totalCuentas += n;
-            detalle.push(`${val} ×${n}`);
+        if (marcas > 1) {
+          // Multi-marca: leer inputs red-marca-input
+          const seen = {};
+          document.querySelectorAll('.red-marca-input').forEach(inp => {
+            const n = parseInt(inp.value) || 0;
+            const red = inp.dataset.red;
+            if (n > 0) {
+              totalCuentas += n;
+              seen[red] = (seen[red] || 0) + n;
+            }
           });
+          detalle = Object.entries(seen).map(([r, n]) => `${r} ×${n}`);
+          if (totalCuentas === 0) {
+            // fallback: redes checkeadas × marcas
+            const checked2 = cfgGetRedesActivas();
+            totalCuentas = checked2.length * marcas;
+            detalle = checked2.map(r => `${r} ×${marcas}`);
+          }
         } else {
-          totalCuentas = checked.length || 1;
-          detalle = checked.length > 0 ? checked : ['1 red'];
+          const redes = cfgGetRedesActivas();
+          totalCuentas = redes.length;
+          detalle = redes;
         }
 
-        const p = precioO(P.redes, totalCuentas);
-        const nombreItem = marcas > 1 && detalle.length > 0
-          ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuentas`
-          : `Redes sociales (${detalle.join(', ')})`;
-        addItem(nombreItem, p);
-        document.getElementById('hint-redes').textContent = p !== null ? fmt(p) : 'Cotizable';
+        if (totalCuentas === 0) totalCuentas = 1;
+
+        // Aplicar lógica tiered por cuentas totales
+        let hintVal = 0;
+        if (totalCuentas <= 2) {
+          // 1–2: precio unitario, sin descuento de módulo
+          const p = precioO(P.redes, totalCuentas);
+          const label = detalle.length ? `Redes (${detalle.join(', ')})` : `Redes sociales (${totalCuentas} red${totalCuentas>1?'es':''})`;
+          addItem(label, p, true); // sinDescuento=true → no entra al pool con descuento de módulo
+          hintVal = p;
+        } else if (totalCuentas === 3) {
+          // 3 exactas: precio paquete, CON descuento de módulo
+          const p = precioO(P.redesPaq);
+          const label = detalle.length ? `Redes — paquete 3 (${detalle.join(', ')})` : 'Redes sociales — paquete 3';
+          addItem(label, p, false);
+          hintVal = p;
+        } else {
+          // 4+: paquete-3 + extras sin descuento
+          const pBase  = precioO(P.redesPaq);
+          const extras = totalCuentas - 3;
+          const pExtra = precioO(P.redesExtra, extras);
+          const labelBase = detalle.length ? `Redes — paquete 3 + ${extras} extra${extras>1?'s':''}` : `Redes sociales — paquete 3 + ${extras} extra${extras>1?'s':''}`;
+          addItem(labelBase, pBase, false);
+          if (extras > 0) addItem(`Redes — ${extras} red${extras>1?'es':''} extra${extras>1?'s':''} (sin descuento)`, pExtra, true);
+          hintVal = (pBase !== null && pExtra !== null) ? pBase + pExtra : null;
+        }
+        document.getElementById('hint-redes').textContent = hintVal !== null ? fmt(hintVal) : 'Cotizable';
       } else { document.getElementById('hint-redes').textContent = ''; }
 
-      // 4. Diseño — imágenes y videos por separado
+      // 4. Diseño — tiered por tramos de 8 piezas (img+vid mezclados)
       if (document.getElementById('chk-diseno').checked) {
         const img = parseInt(document.getElementById('num-diseno-img').value) || 0;
         const vid = parseInt(document.getElementById('num-diseno-vid').value) || 0;
-        if (img > 0) {
-          const p = precioO(P.imgMes, img);
-          addItem(`Imágenes: ${img} pieza${img>1?'s':''}/mes`, p);
+        const total_piezas = img + vid;
+
+        if (total_piezas === 0) {
+          document.getElementById('hint-diseno').textContent = '';
+        } else if (P.imgMes === null || P.vidMes === null) {
+          addItem(`Contenido: ${img > 0 ? img + ' img' : ''}${img>0&&vid>0?' + ':''}${vid > 0 ? vid + ' vid' : ''}/mes`, null);
+          document.getElementById('hint-diseno').textContent = 'Cotizable';
+        } else {
+          // Resolver umbrales desde P (con fallback hardcoded)
+          const umbrales = [
+            { u: P.cU1 ?? 8,  d: P.cD1 ?? 12 },
+            { u: P.cU2 ?? 16, d: P.cD2 ?? 18 },
+            { u: P.cU3 ?? 24, d: P.cD3 ?? 22 },
+            { u: P.cU4 ?? 40, d: P.cD4 ?? 25 },
+            { u: P.cU5 ?? 80, d: P.cD5 ?? 28 },
+          ].sort((a,b) => a.u - b.u);
+
+          // Encontrar el tramo activo: mayor umbral que no supere total_piezas
+          let tramo = null;
+          for (const t of umbrales) {
+            if (total_piezas >= t.u) tramo = t;
+          }
+
+          if (!tramo) {
+            // 1 a (umbral1 - 1): precio unitario individual, sin descuento de módulo
+            if (img > 0) addItem(`Imágenes: ${img} pieza${img>1?'s':''}/mes (individual)`, precioO(P.imgMes, img), true);
+            if (vid > 0) addItem(`Videos: ${vid} video${vid>1?'s':''}/mes (individual)`, precioO(P.vidMes, vid), true);
+          } else {
+            // Determinar siguiente umbral para saber el techo del tramo
+            const idx = umbrales.indexOf(tramo);
+            const siguiente_u = idx + 1 < umbrales.length ? umbrales[idx+1].u : Infinity;
+
+            // Piezas en tramo (primeras tramo.u) vs extras (lo que pasa de tramo.u)
+            const piezasEnTramo = tramo.u;
+            const piezasExtra   = total_piezas - piezasEnTramo;
+
+            // Distribución proporcional img/vid dentro del tramo
+            const ratioImg = img / total_piezas;
+            const ratioVid = vid / total_piezas;
+            const imgEnTramo   = Math.round(piezasEnTramo * ratioImg);
+            const vidEnTramo   = piezasEnTramo - imgEnTramo;
+            const imgExtra_cnt = img - imgEnTramo;
+            const vidExtra_cnt = vid - vidEnTramo;
+
+            const desc = tramo.d / 100;
+            if (imgEnTramo > 0) addItem(
+              `Imágenes: ${imgEnTramo} (en paquete, −${tramo.d}%)`,
+              Math.round(P.imgMes * imgEnTramo * (1 - desc)), false);
+            if (vidEnTramo > 0) addItem(
+              `Videos: ${vidEnTramo} (en paquete, −${tramo.d}%)`,
+              Math.round(P.vidMes * vidEnTramo * (1 - desc)), false);
+            if (imgExtra_cnt > 0) addItem(
+              `Imágenes extra: ${imgExtra_cnt} (sin descuento)`,
+              precioO(P.imgExtra ?? P.imgMes, imgExtra_cnt), true);
+            if (vidExtra_cnt > 0) addItem(
+              `Videos extra: ${vidExtra_cnt} (sin descuento)`,
+              precioO(P.vidExtra ?? P.vidMes, vidExtra_cnt), true);
+          }
+
+          // Hint total estimado
+          const pHintBase = (img > 0 ? P.imgMes * img : 0) + (vid > 0 ? P.vidMes * vid : 0);
+          const descPct = tramo ? tramo.d / 100 : 0;
+          const pHintPkg = tramo
+            ? Math.round((P.imgMes * (img - (img - Math.round(tramo.u * img/total_piezas))) * (1-descPct)) +
+                         (P.vidMes * (vid - (vid - (tramo.u - Math.round(tramo.u * img/total_piezas)))) * (1-descPct)) +
+                         (P.imgExtra ?? P.imgMes) * Math.max(0, img - Math.round(tramo.u * img/total_piezas)) +
+                         (P.vidExtra ?? P.vidMes) * Math.max(0, vid - (tramo.u - Math.round(tramo.u * img/total_piezas))))
+            : pHintBase;
+          document.getElementById('hint-diseno').textContent = fmt(tramo ? pHintPkg : pHintBase);
         }
-        if (vid > 0) {
-          const p = precioO(P.vidMes, vid);
-          addItem(`Videos: ${vid} video${vid>1?'s':''}/mes (base 2 min)`, p);
-        }
-        // Precio total diseño para el hint
-        const pImg = precioO(P.imgMes, img) || 0;
-        const pVid = precioO(P.vidMes, vid) || 0;
-        const pTotal = (P.imgMes !== null && P.vidMes !== null) ? pImg + pVid : null;
-        document.getElementById('hint-diseno').textContent = pTotal !== null ? fmt(pTotal) : 'Cotizable';
       } else { document.getElementById('hint-diseno').textContent = ''; }
 
       // 5. CRM
