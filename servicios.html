@@ -730,21 +730,20 @@
       display: inline-flex; align-items: center; justify-content: center;
       width: 15px; height: 15px; border-radius: 50%;
       background: #2a2a2a; border: 1px solid #444; color: #666;
-      font-size: 0.6rem; cursor: default; margin-left: 5px;
-      position: relative; flex-shrink: 0;
+      font-size: 0.6rem; cursor: pointer; margin-left: 5px;
+      flex-shrink: 0;
       transition: background 0.2s, color 0.2s;
     }
-    .cfg-tooltip:hover { background: #333; color: var(--cian-brillo); border-color: var(--cian-brillo); }
-    .cfg-tooltip .tip-text {
-      display: none; position: absolute; right: 22px; left: auto; top: 50%; transform: translateY(-50%);
-      background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-      padding: 7px 11px; font-size: 0.72rem; color: #ccc; white-space: normal; max-width: 230px;
-      z-index: 200; box-shadow: 0 4px 14px rgba(0,0,0,0.6);
-      pointer-events: none; line-height: 1.5;
-    }
-    .cfg-tooltip:hover .tip-text { display: block; }
-    @media (max-width: 520px) {
-      .cfg-tooltip .tip-text { right: 0; left: auto; top: 22px; transform: none; white-space: normal; max-width: 210px; }
+    .cfg-tooltip.active { background: #333; color: var(--cian-brillo); border-color: var(--cian-brillo); }
+
+    /* Tooltip flotante — se posiciona via JS pegado al body para evitar clipping */
+    #cfg-tip-float {
+      display: none; position: fixed; z-index: 9999;
+      background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
+      padding: 8px 12px; font-size: 0.72rem; color: #ccc;
+      max-width: 240px; line-height: 1.55;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+      pointer-events: none;
     }
 
     /* ── Grid de cuentas por red (cuando marcas > 1) ── */
@@ -979,7 +978,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-marcas" onchange="cfgToggle('marcas')">
                 <label for="chk-marcas">🏷️ Gestión de marcas</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Número de marcas o empresas distintas<br>que necesitas gestionar en redes y medios.</span></span>
+                <span class="cfg-tooltip" data-tip="Número de marcas o empresas distintas<br>que necesitas gestionar en redes y medios.">?</span>
                 <span class="cfg-price-hint" id="hint-marcas"></span>
               </div>
               <div class="cfg-section-body" id="body-marcas">
@@ -996,7 +995,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-web" onchange="cfgToggle('web')">
                 <label for="chk-web">🌐 Gestión de páginas web</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Mantenimiento de sitios web existentes:<br>actualizaciones, contenido y soporte técnico.</span></span>
+                <span class="cfg-tooltip" data-tip="Mantenimiento de sitios web existentes:<br>actualizaciones, contenido y soporte técnico.">?</span>
                 <span class="cfg-price-hint" id="hint-web"></span>
               </div>
               <div class="cfg-section-body" id="body-web">
@@ -1013,7 +1012,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-redes" onchange="cfgToggle('redes')">
                 <label for="chk-redes">📱 Redes sociales</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Redes sociales a gestionar por marca.<br>1–2 redes: precio unitario c/u.<br>3 redes: precio de paquete fijo.<br>4ª red en adelante: +precio individual (sin descuento).</span></span>
+                <span class="cfg-tooltip" data-tip="Redes sociales a gestionar por marca.<br>1–2 redes: precio unitario c/u.<br>3 redes: precio de paquete fijo.<br>4ª red en adelante: +precio individual (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-redes"></span>
               </div>
               <div class="cfg-section-body" id="body-redes">
@@ -1043,7 +1042,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-diseno" onchange="cfgToggle('diseno')">
                 <label for="chk-diseno">🎨 Diseño gráfico y creación de contenido</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Piezas de contenido visual por mes.<br>1 pieza = imagen o video que se publica<br>en todas tus redes activas.</span></span>
+                <span class="cfg-tooltip" data-tip="Piezas de contenido visual por mes.<br>1 pieza = imagen o video que se publica<br>en todas tus redes activas.">?</span>
                 <span class="cfg-price-hint" id="hint-diseno"></span>
               </div>
               <div class="cfg-section-body" id="body-diseno">
@@ -1073,7 +1072,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-crm" onchange="cfgToggle('crm')">
                 <label for="chk-crm">⚙️ Gestión de CRM</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Configuración y mantenimiento de Bitrix24<br>u otro CRM. Con o sin automatizaciones vía APIs.</span></span>
+                <span class="cfg-tooltip" data-tip="Configuración y mantenimiento de Bitrix24<br>u otro CRM. Con o sin automatizaciones vía APIs.">?</span>
                 <span class="cfg-price-hint" id="hint-crm"></span>
               </div>
               <div class="cfg-section-body" id="body-crm">
@@ -1090,7 +1089,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-meta" onchange="cfgToggle('meta')">
                 <label for="chk-meta">📣 Gestión de campañas en Meta Ads</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$300 c/u (sin descuento).</span></span>
+                <span class="cfg-tooltip" data-tip="Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$300 c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-meta"></span>
               </div>
               <div class="cfg-section-body" id="body-meta">
@@ -1108,7 +1107,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-google" onchange="cfgToggle('google')">
                 <label for="chk-google">🔍 Gestión de campañas en Google Ads</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$350 c/u (sin descuento).</span></span>
+                <span class="cfg-tooltip" data-tip="Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$350 c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-google"></span>
               </div>
               <div class="cfg-section-body" id="body-google">
@@ -1126,7 +1125,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-duracion" onchange="cfgToggle('duracion')">
                 <label for="chk-duracion">📅 Duración del servicio</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Tiempo estimado del contrato.<br>Informativo — no afecta el precio mensual.</span></span>
+                <span class="cfg-tooltip" data-tip="Tiempo estimado del contrato.<br>Informativo — no afecta el precio mensual.">?</span>
                 <span class="cfg-price-hint" id="hint-duracion"></span>
               </div>
               <div class="cfg-section-body" id="body-duracion">
@@ -1304,6 +1303,9 @@
   </div>
 
 
+  <!-- Tooltip flotante — se posiciona via JS -->
+  <div id="cfg-tip-float"></div>
+
   <!-- Toast de confirmación -->
   <div id="cfg-toast">
     <div><i class="fas fa-check-circle"></i>¡Cotización enviada!</div>
@@ -1323,6 +1325,73 @@
     // ═══════════════════════════════════════════════════════════
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    // ══ TOOLTIPS FLOTANTES — evita clipping del overflow del modal ═
+    (function() {
+      const float = document.getElementById('cfg-tip-float');
+      if (!float) return;
+      let activeEl = null;
+
+      function showTip(el) {
+        const text = el.dataset.tip;
+        if (!text) return;
+        float.innerHTML = text;
+        float.style.display = 'block';
+        el.classList.add('active');
+        activeEl = el;
+        positionTip(el);
+      }
+
+      function positionTip(el) {
+        const rect = el.getBoundingClientRect();
+        const fw = float.offsetWidth;
+        const fh = float.offsetHeight;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        // Preferir a la izquierda del ?; si no cabe, a la derecha
+        let left = rect.left - fw - 8;
+        if (left < 8) left = rect.right + 8;
+        if (left + fw > vw - 8) left = vw - fw - 8;
+        // Centrar verticalmente respecto al ?
+        let top = rect.top + rect.height / 2 - fh / 2;
+        if (top < 8) top = 8;
+        if (top + fh > vh - 8) top = vh - fh - 8;
+        float.style.left = left + 'px';
+        float.style.top  = top  + 'px';
+      }
+
+      function hideTip(el) {
+        float.style.display = 'none';
+        if (el) el.classList.remove('active');
+        activeEl = null;
+      }
+
+      // Desktop: hover
+      document.addEventListener('mouseover', e => {
+        const el = e.target.closest('.cfg-tooltip');
+        if (el) showTip(el);
+      });
+      document.addEventListener('mouseout', e => {
+        const el = e.target.closest('.cfg-tooltip');
+        if (el) hideTip(el);
+      });
+
+      // Mobile/tablet: tap toggle
+      document.addEventListener('click', e => {
+        const el = e.target.closest('.cfg-tooltip');
+        if (el) {
+          e.stopPropagation();
+          if (activeEl === el) { hideTip(el); }
+          else { if (activeEl) hideTip(activeEl); showTip(el); }
+          return;
+        }
+        // Tap fuera cierra el tooltip
+        if (activeEl) hideTip(activeEl);
+      });
+
+      // Reposicionar al hacer scroll
+      window.addEventListener('scroll', () => { if (activeEl) positionTip(activeEl); }, { passive: true });
+    })();
 
     // ══ SINCRONIZACIÓN CON GOOGLE SHEETS ════════════════════════
     // Lee la hoja "Servicios" y actualiza nombre, descripción, precio y visibilidad.
@@ -2354,6 +2423,7 @@
       });
       document.getElementById('cfg-msg').textContent = '';
       document.getElementById('cfg-msg').className = 'cfg-msg';
+      cfgActualizarRedesLock();
       cfgCalc();
       document.getElementById('cfg-overlay').classList.add('visible');
       document.body.style.overflow = 'hidden';
@@ -2371,6 +2441,17 @@
     function cfgToggle(seccion) {
       const chk  = document.getElementById(`chk-${seccion}`);
       const body = document.getElementById(`body-${seccion}`);
+
+      // Redes requiere que Marcas esté activo
+      if (seccion === 'redes' && chk.checked) {
+        const marcasChk = document.getElementById('chk-marcas');
+        if (!marcasChk.checked) {
+          // Activar Marcas automáticamente y abrir su sección
+          marcasChk.checked = true;
+          document.getElementById('body-marcas').classList.add('open');
+        }
+      }
+
       body.classList.toggle('open', chk.checked);
       cfgCalc();
     }
@@ -2534,9 +2615,27 @@
       return val * (mult || 1);
     }
 
+    // Bloquear visualmente Redes si Marcas no está activo
+    function cfgActualizarRedesLock() {
+      const marcasOk = document.getElementById('chk-marcas').checked;
+      const redesSection = document.getElementById('cs-redes');
+      const redesChk = document.getElementById('chk-redes');
+      if (!redesSection) return;
+      if (!marcasOk) {
+        redesSection.style.opacity = '0.45';
+        redesSection.style.pointerEvents = 'none';
+        redesSection.title = 'Activa "Gestión de marcas" primero';
+      } else {
+        redesSection.style.opacity = '';
+        redesSection.style.pointerEvents = '';
+        redesSection.title = '';
+      }
+    }
+
     function cfgCalc() {
       // Si cambió el número de marcas, actualizar inputs por red
       cfgActualizarRedesPorMarca();
+      cfgActualizarRedesLock();
 
       const items = [];
       let total = 0;          // subtotal con descuento aplicable
@@ -2558,7 +2657,15 @@
         const p = precioO(P.marcas, n);
         addItem(`Gestión de ${n} marca${n>1?'s':''}`, p);
         document.getElementById('hint-marcas').textContent = p !== null ? fmt(p) : 'Cotizable';
-      } else { document.getElementById('hint-marcas').textContent = ''; }
+      } else {
+        // Si se desmarca Marcas, desmarcar Redes también
+        const redesChk = document.getElementById('chk-redes');
+        if (redesChk && redesChk.checked) {
+          redesChk.checked = false;
+          document.getElementById('body-redes').classList.remove('open');
+        }
+        document.getElementById('hint-marcas').textContent = '';
+      }
 
       // 2. Web
       if (document.getElementById('chk-web').checked) {
