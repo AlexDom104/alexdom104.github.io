@@ -714,15 +714,15 @@
     }
     .cfg-tooltip:hover { background: #333; color: var(--cian-brillo); border-color: var(--cian-brillo); }
     .cfg-tooltip .tip-text {
-      display: none; position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+      display: none; position: absolute; right: 26px; left: auto; top: 50%; transform: translateY(-50%);
       background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-      padding: 7px 11px; font-size: 0.72rem; color: #ccc; white-space: nowrap;
+      padding: 7px 11px; font-size: 0.72rem; color: #ccc; white-space: normal; max-width: 220px;
       z-index: 200; box-shadow: 0 4px 14px rgba(0,0,0,0.6);
       pointer-events: none; line-height: 1.5;
     }
     .cfg-tooltip:hover .tip-text { display: block; }
     @media (max-width: 520px) {
-      .cfg-tooltip .tip-text { left: auto; right: 0; top: 22px; transform: none; white-space: normal; max-width: 220px; }
+      .cfg-tooltip .tip-text { right: 0; left: auto; top: 22px; transform: none; white-space: normal; max-width: 200px; }
     }
 
     /* ── Grid de cuentas por red (cuando marcas > 1) ── */
@@ -1003,7 +1003,9 @@
                   <label class="cfg-check-pill" id="pill-li"><input type="checkbox" value="LinkedIn" onchange="cfgPillChange()"><i class="fab fa-linkedin"></i> LinkedIn</label>
                   <label class="cfg-check-pill" id="pill-tt"><input type="checkbox" value="TikTok" onchange="cfgPillChange()"><i class="fab fa-tiktok"></i> TikTok</label>
                   <label class="cfg-check-pill" id="pill-yt"><input type="checkbox" value="YouTube" onchange="cfgPillChange()"><i class="fab fa-youtube"></i> YouTube</label>
+                  <label class="cfg-check-pill" id="pill-otra" style="border-style:dashed;cursor:pointer;" onclick="cfgAgregarOtraRed(event)"><i class="fas fa-plus" style="font-size:0.7rem;"></i> Otra red</label>
                 </div>
+                <div id="otras-redes-wrap" style="display:none;margin-top:10px;flex-wrap:wrap;gap:8px;"></div>
 
                 <!-- Cuadros por red — solo visible cuando marcas > 1 -->
                 <div class="redes-por-marca" id="redes-por-marca-wrap">
@@ -2500,33 +2502,108 @@
       { value:'YouTube',   icon:'fab fa-youtube',    color:'#ff0000' },
     ];
 
+    // ── Devuelve todas las redes activas: predefinidas + personalizadas ──
+    function cfgGetRedesActivas() {
+      const predefinidas = [...document.querySelectorAll('#checks-redes .cfg-check-pill input[type=checkbox]:checked')]
+                            .map(i => i.value);
+      const otras = [...document.querySelectorAll('.otra-red-input')]
+                      .map(i => i.value.trim()).filter(Boolean);
+      return [...predefinidas, ...otras];
+    }
+
     function cfgActualizarRedesPorMarca() {
-      const marcas  = parseInt(document.getElementById('num-marcas')?.value) || 1;
-      const wrap    = document.getElementById('redes-por-marca-wrap');
-      const grid    = document.getElementById('redes-cuentas-grid');
-      const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')]
-                        .map(i => i.value);
+      const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
+      const wrap   = document.getElementById('redes-por-marca-wrap');
+      const grid   = document.getElementById('redes-cuentas-grid');
+      const redes  = cfgGetRedesActivas();
 
       if (!wrap || !grid) return;
 
-      if (marcas > 1 && checked.length > 0) {
+      if (marcas > 1 && redes.length > 0) {
         wrap.classList.add('visible');
-        grid.innerHTML = checked.map(val => {
-          const meta = REDES_META.find(r => r.value === val) || { icon:'fab fa-globe', color:'#888' };
-          return `
-            <div class="red-cuenta-row">
-              <i class="${meta.icon}" style="color:${meta.color};"></i>
-              <span style="flex:1;">${val}</span>
-              <input type="number" id="cuentas-${val.replace(/[^a-z]/gi,'').toLowerCase()}"
-                     min="1" max="20" value="${marcas}" oninput="cfgCalc()"
-                     title="Cuentas de ${val} a manejar">
-              <span>cuenta(s) en total</span>
-            </div>`;
-        }).join('');
+
+        // Preservar valores actuales antes de re-renderizar
+        const prev = {};
+        document.querySelectorAll('.red-marca-input').forEach(inp => {
+          prev[inp.dataset.key] = inp.value;
+        });
+
+        // Tabla: filas = redes, columnas = marcas (cada celda = cuentas independientes)
+        let tbl = '<div style="overflow-x:auto;">';
+        tbl += '<table style="width:100%;border-collapse:collapse;font-size:0.78rem;">';
+        tbl += '<thead><tr>';
+        tbl += '<th style="padding:5px 8px 8px;color:#555;text-align:left;font-weight:normal;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #222;">Red</th>';
+        for (let m = 1; m <= marcas; m++) {
+          tbl += '<th style="padding:5px 8px 8px;color:#70DDD8;text-align:center;font-size:0.72rem;font-weight:600;border-bottom:1px solid #222;min-width:68px;">Marca ' + m + '</th>';
+        }
+        tbl += '</tr></thead><tbody>';
+
+        redes.forEach(val => {
+          const meta = REDES_META.find(r => r.value === val) || { icon:'fas fa-globe', color:'#888' };
+          const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
+          tbl += '<tr style="border-top:1px solid #1a1a1a;">';
+          tbl += '<td style="padding:7px 8px;color:#ccc;white-space:nowrap;"><i class="' + meta.icon + '" style="color:' + meta.color + ';width:14px;text-align:center;margin-right:5px;flex-shrink:0;"></i>' + val + '</td>';
+          for (let m = 1; m <= marcas; m++) {
+            const key = safeKey + '_m' + m;
+            const pv = (prev[key] !== undefined) ? prev[key] : '1';
+            tbl += '<td style="padding:4px 6px;text-align:center;">'
+                 + '<input type="number" class="red-marca-input" data-key="' + key + '" data-red="' + val + '" data-marca="' + m + '"'
+                 + ' min="0" max="20" value="' + pv + '"'
+                 + ' style="width:54px;background:#111;border:1.5px solid #2a2a2a;color:#fff;border-radius:6px;padding:4px 0;font-size:0.82rem;text-align:center;outline:none;font-family:inherit;"'
+                 + ' oninput="cfgCalc()"'
+                 + ' onfocus="this.style.borderColor='#70DDD8'"'
+                 + ' onblur="this.style.borderColor='#2a2a2a'"'
+                 + ' title="' + val + ' — Marca ' + m + '">'
+                 + '</td>';
+          }
+          tbl += '</tr>';
+        });
+
+        tbl += '</tbody></table></div>';
+        tbl += '<div style="font-size:0.67rem;color:#555;margin-top:7px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Pon <strong style="color:#666;">0</strong> si esa marca no usa esa red.</div>';
+        grid.innerHTML = tbl;
       } else {
         wrap.classList.remove('visible');
         grid.innerHTML = '';
       }
+    }
+
+    // ── Redes sociales personalizadas ("Otra red") ─────────────────
+    let _otrasRedesCount = 0;
+    function cfgAgregarOtraRed(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (_otrasRedesCount >= 4) return; // máximo 4 redes personalizadas
+      _otrasRedesCount++;
+      const wrap = document.getElementById('otras-redes-wrap');
+      if (!wrap) return;
+      wrap.style.display = 'flex';
+      const uid = 'otra-' + Date.now();
+      const div = document.createElement('div');
+      div.id = 'wrap-' + uid;
+      div.style.cssText = 'display:inline-flex;align-items:center;gap:5px;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:20px;padding:4px 10px;';
+      div.innerHTML =
+        '<i class="fas fa-globe" style="color:#888;font-size:0.72rem;flex-shrink:0;"></i>' +
+        '<input type="text" class="otra-red-input" id="' + uid + '" maxlength="20" placeholder="Nombre de la red" ' +
+        'style="background:none;border:none;outline:none;color:#ccc;font-size:0.78rem;width:115px;font-family:inherit;" ' +
+        'oninput="cfgActualizarRedesPorMarca();cfgCalc()">' +
+        '<button onclick="cfgQuitarOtraRed('' + uid + '')" ' +
+        'style="background:none;border:none;color:#555;cursor:pointer;padding:0;font-size:0.75rem;line-height:1;" ' +
+        'onmouseover="this.style.color='#EF5085'" onmouseout="this.style.color='#555'">' +
+        '<i class="fas fa-times"></i></button>';
+      wrap.appendChild(div);
+      setTimeout(function(){ document.getElementById(uid).focus(); }, 50);
+      cfgActualizarRedesPorMarca();
+    }
+
+    function cfgQuitarOtraRed(uid) {
+      var wrap = document.getElementById('wrap-' + uid);
+      if (wrap) wrap.remove();
+      _otrasRedesCount = document.querySelectorAll('.otra-red-input').length;
+      var w = document.getElementById('otras-redes-wrap');
+      if (w && !_otrasRedesCount) w.style.display = 'none';
+      cfgActualizarRedesPorMarca();
+      cfgCalc();
     }
 
     function cfgToggleCrmAuto(el) {
@@ -2591,27 +2668,34 @@
       // 3. Redes
       if (document.getElementById('chk-redes').checked) {
         const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
+        const redes = cfgGetRedesActivas();
         let totalCuentas = 0;
         let detalle = [];
 
-        if (marcas > 1 && checked.length > 0) {
-          // Modo multi-marca: suma cuentas de cada red según sus inputs
-          checked.forEach(val => {
-            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
-            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
-            totalCuentas += n;
-            detalle.push(`${val} ×${n}`);
+        if (marcas > 1 && redes.length > 0) {
+          // Suma de la matriz marca×red (cada celda puede ser distinto)
+          redes.forEach(val => {
+            let cuentasEstaRed = 0;
+            for (let m = 1; m <= marcas; m++) {
+              const key = val.replace(/[^a-z0-9]/gi,'').toLowerCase() + '_m' + m;
+              const inp = document.querySelector('.red-marca-input[data-key="' + key + '"]');
+              cuentasEstaRed += parseInt(inp?.value) || 0;
+            }
+            if (cuentasEstaRed > 0) {
+              totalCuentas += cuentasEstaRed;
+              detalle.push(val + '×' + cuentasEstaRed);
+            }
           });
+          if (totalCuentas === 0) { totalCuentas = redes.length; detalle = redes; }
         } else {
-          totalCuentas = checked.length || 1;
-          detalle = checked.length > 0 ? checked : ['1 red'];
+          totalCuentas = redes.length || 1;
+          detalle = redes.length > 0 ? redes : ['1 red'];
         }
 
         const p = precioO(P.redes, totalCuentas);
         const nombreItem = marcas > 1 && detalle.length > 0
-          ? `Redes (${detalle.join(', ')}) — ${totalCuentas} cuentas`
-          : `Redes sociales (${detalle.join(', ')})`;
+          ? 'Redes (' + detalle.join(', ') + ') — ' + totalCuentas + ' cuentas'
+          : 'Redes sociales (' + detalle.join(', ') + ')';
         addItem(nombreItem, p);
         document.getElementById('hint-redes').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-redes').textContent = ''; }
@@ -2770,16 +2854,21 @@
       if (document.getElementById('chk-web').checked)    configItems.push(`Gestión de ${document.getElementById('num-web').value} página(s) web`);
       if (document.getElementById('chk-redes').checked) {
         const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
-        if (marcas > 1 && checked.length > 0) {
-          const detalle = checked.map(val => {
-            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
-            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
-            return `${val} ×${n}`;
-          });
-          configItems.push(`Redes sociales: ${detalle.join(' | ')} (${marcas} marcas)`);
+        const redes = cfgGetRedesActivas();
+        if (marcas > 1 && redes.length > 0) {
+          const porMarca = [];
+          for (let m = 1; m <= marcas; m++) {
+            const cuentasMarca = redes.map(val => {
+              const key = val.replace(/[^a-z0-9]/gi,'').toLowerCase() + '_m' + m;
+              const inp = document.querySelector('.red-marca-input[data-key="' + key + '"]');
+              const n = parseInt(inp?.value) || 0;
+              return n > 0 ? val + '(' + n + ')' : null;
+            }).filter(Boolean);
+            if (cuentasMarca.length) porMarca.push('Marca ' + m + ': ' + cuentasMarca.join(', '));
+          }
+          configItems.push('Redes sociales (' + marcas + ' marcas): ' + (porMarca.join(' · ') || 'sin especificar'));
         } else {
-          configItems.push(`Redes sociales: ${checked.length > 0 ? checked.join(', ') : 'sin especificar'}`);
+          configItems.push('Redes sociales: ' + (redes.length > 0 ? redes.join(', ') : 'sin especificar'));
         }
       }
       if (document.getElementById('chk-diseno').checked) {
