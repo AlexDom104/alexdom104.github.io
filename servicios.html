@@ -1068,15 +1068,16 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-meta" onchange="cfgToggle('meta')">
                 <label for="chk-meta">📣 Gestión de campañas en Meta Ads</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Creación, segmentación y optimización<br>de campañas en Facebook / Instagram Ads.<br>Base incluye 3 campañas/mes.</span></span>
+                <span class="cfg-tooltip">?<span class="tip-text">Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$300 c/u (sin descuento).</span></span>
                 <span class="cfg-price-hint" id="hint-meta"></span>
               </div>
               <div class="cfg-section-body" id="body-meta">
-                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(base 3 — campaña extra tiene costo adicional)</span></div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio unitario · 4ª+ $300 extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
                 <div class="cfg-input-row">
-                  <input type="number" class="cfg-input" id="num-meta" min="1" max="100" value="3" oninput="cfgCalc()">
+                  <input type="number" class="cfg-input" id="num-meta" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">campaña(s)/mes</span>
                 </div>
+                <div id="meta-desglose" style="margin-top:8px;font-size:0.74rem;color:#888;"></div>
               </div>
             </div>
 
@@ -1085,15 +1086,16 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-google" onchange="cfgToggle('google')">
                 <label for="chk-google">🔍 Gestión de campañas en Google Ads</label>
-                <span class="cfg-tooltip">?<span class="tip-text">Creación y optimización de campañas<br>en Google Search / Display Ads.<br>Base incluye 3 campañas/mes.</span></span>
+                <span class="cfg-tooltip">?<span class="tip-text">Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: +$350 c/u (sin descuento).</span></span>
                 <span class="cfg-price-hint" id="hint-google"></span>
               </div>
               <div class="cfg-section-body" id="body-google">
-                <div class="cfg-label">¿Cuántos anuncios al mes necesitas gestionar?</div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio unitario · 4ª+ $350 extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
                 <div class="cfg-input-row">
-                  <input type="number" class="cfg-input" id="num-google" min="1" max="100" value="3" oninput="cfgCalc()">
+                  <input type="number" class="cfg-input" id="num-google" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">campaña(s)/mes</span>
                 </div>
+                <div id="google-desglose" style="margin-top:8px;font-size:0.74rem;color:#888;"></div>
               </div>
             </div>
 
@@ -2394,10 +2396,10 @@
       vidExtra:    null,   // CFG: Video extra
       crm:         null,
       crmAuto:     null,
-      metaBase:    null,
-      metaExtra:   null,
-      googleBase:  null,
-      googleExtra: null,
+      metaBase:    null,   // precio por 1 campaña Meta (viene del Sheet)
+      metaExtra:   null,   // costo por campaña 4ª+ Meta (viene del Sheet)
+      googleBase:  null,   // precio por 1 campaña Google (viene del Sheet)
+      googleExtra: null,   // costo por campaña 4ª+ Google (viene del Sheet)
     };
 
     // Mapa: clave de P → nombre exacto en el Sheet
@@ -2415,6 +2417,7 @@
       metaExtra:   'CFG: Meta Ads extra',
       googleBase:  'CFG: Google Ads base',
       googleExtra: 'CFG: Google Ads extra',
+      // metaExtra y googleExtra ahora también vienen del Sheet
     };
 
     // Llamada desde el window load — recibe el array servicios del Sheet
@@ -2432,8 +2435,8 @@
         ['hint-web',     P.web,        '/página'],
         ['hint-redes',   P.redes,      '/red'],
         ['hint-crm',     P.crm,        ''],
-        ['hint-meta',    P.metaBase,   ' base'],
-        ['hint-google',  P.googleBase, ' base'],
+        ['hint-meta',    P.metaBase,   '/campaña'],
+        ['hint-google',  P.googleBase, '/campaña'],
       ];
       hints.forEach(([id, val, suf]) => {
         const el = document.getElementById(id);
@@ -2646,12 +2649,17 @@
       cfgActualizarRedesPorMarca();
 
       const items = [];
-      let total = 0;
+      let total = 0;          // subtotal con descuento aplicable
+      let totalSinDesc = 0;   // subtotal SIN descuento (extras de ads campañas 4+)
       let hayNull = false; // si algún precio no cargó
 
-      function addItem(nombre, precio) {
+      function addItem(nombre, precio, sinDescuento) {
         if (precio === null) { items.push({ nombre, precio: null }); hayNull = true; }
-        else { items.push({ nombre, precio }); total += precio; }
+        else {
+          items.push({ nombre, precio });
+          if (sinDescuento) totalSinDesc += precio;
+          else total += precio;
+        }
       }
 
       // 1. Marcas
@@ -2734,25 +2742,69 @@
 
       // 6. Meta Ads
       if (document.getElementById('chk-meta').checked) {
-        const n = parseInt(document.getElementById('num-meta').value) || 3;
+        const n = parseInt(document.getElementById('num-meta').value) || 1;
         let p = null;
-        if (P.metaBase !== null && P.metaExtra !== null) {
-          p = P.metaBase + Math.max(0, n - 3) * P.metaExtra;
+        let desgloseText = '';
+        if (P.metaBase !== null) {
+          if (n <= 3) {
+            p = P.metaBase * n;
+            addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, p);
+            desgloseText = `${n} campaña${n>1?'s':''} × ${fmt(P.metaBase)} = ${fmt(p)}`;
+          } else if (P.metaExtra !== null) {
+            const pBase  = P.metaBase * 3;
+            const pExtra = (n - 3) * P.metaExtra;
+            addItem(`Meta Ads — 3 campañas base (${3*2} anuncios)`, pBase);
+            addItem(`Meta Ads — ${n-3} campaña${n-3>1?'s':''} extra${n-3>1?'s':''} (sin descuento)`, pExtra, true);
+            p = pBase + pExtra;
+            desgloseText = `3 × ${fmt(P.metaBase)} + ${n-3} extra${n-3>1?'s':''} × ${fmt(P.metaExtra)} = ${fmt(p)}`;
+          } else {
+            addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, null);
+            desgloseText = 'Precio de campaña extra no disponible';
+          }
+        } else {
+          addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null);
         }
-        addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, p);
         document.getElementById('hint-meta').textContent = p !== null ? fmt(p) : 'Cotizable';
-      } else { document.getElementById('hint-meta').textContent = ''; }
+        const desgloseEl = document.getElementById('meta-desglose');
+        if (desgloseEl) desgloseEl.textContent = desgloseText;
+      } else {
+        document.getElementById('hint-meta').textContent = '';
+        const desgloseEl = document.getElementById('meta-desglose');
+        if (desgloseEl) desgloseEl.textContent = '';
+      }
 
       // 7. Google Ads
       if (document.getElementById('chk-google').checked) {
-        const n = parseInt(document.getElementById('num-google').value) || 3;
+        const n = parseInt(document.getElementById('num-google').value) || 1;
         let p = null;
-        if (P.googleBase !== null && P.googleExtra !== null) {
-          p = P.googleBase + Math.max(0, n - 3) * P.googleExtra;
+        let desgloseText = '';
+        if (P.googleBase !== null) {
+          if (n <= 3) {
+            p = P.googleBase * n;
+            addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, p);
+            desgloseText = `${n} campaña${n>1?'s':''} × ${fmt(P.googleBase)} = ${fmt(p)}`;
+          } else if (P.googleExtra !== null) {
+            const pBase  = P.googleBase * 3;
+            const pExtra = (n - 3) * P.googleExtra;
+            addItem(`Google Ads — 3 campañas base (${3*2} anuncios)`, pBase);
+            addItem(`Google Ads — ${n-3} campaña${n-3>1?'s':''} extra${n-3>1?'s':''} (sin descuento)`, pExtra, true);
+            p = pBase + pExtra;
+            desgloseText = `3 × ${fmt(P.googleBase)} + ${n-3} extra${n-3>1?'s':''} × ${fmt(P.googleExtra)} = ${fmt(p)}`;
+          } else {
+            addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, null);
+            desgloseText = 'Precio de campaña extra no disponible';
+          }
+        } else {
+          addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null);
         }
-        addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, p);
         document.getElementById('hint-google').textContent = p !== null ? fmt(p) : 'Cotizable';
-      } else { document.getElementById('hint-google').textContent = ''; }
+        const desgloseEl = document.getElementById('google-desglose');
+        if (desgloseEl) desgloseEl.textContent = desgloseText;
+      } else {
+        document.getElementById('hint-google').textContent = '';
+        const desgloseEl = document.getElementById('google-desglose');
+        if (desgloseEl) desgloseEl.textContent = '';
+      }
 
       // 8. Duración (informativo)
       if (document.getElementById('chk-duracion').checked) {
@@ -2800,8 +2852,8 @@
                          : modulosActivos === 3 ? 15
                          : 20;
 
-      const totalBase = total;
-      const totalPkg  = Math.round(total * (1 - pctDescuento / 100));
+      const totalBase = total + totalSinDesc;   // precio individual completo (sin descuento aplicado)
+      const totalPkg  = Math.round(total * (1 - pctDescuento / 100)) + totalSinDesc;  // descuento solo sobre la base
       const ahorro    = totalBase - totalPkg;
 
       document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
