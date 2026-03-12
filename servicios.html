@@ -2577,7 +2577,7 @@
       }
 
       const totalBase = total;
-      const totalPkg  = Math.round(total * 0.8);
+      const totalPkg  = Math.round(total * 0.85);
 
       document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
       document.getElementById('cfg-precio-total').innerHTML  = totalPkg > 0
