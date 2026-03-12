@@ -156,6 +156,23 @@
     .leyenda { margin-top: 32px; background: var(--contraste-fondo); border-left: 4px solid var(--cian-brillo); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 0.82rem; color: #aaa; }
     .leyenda strong { color: var(--cian-brillo); }
 
+    /* ══ AVISO PRECIOS ══ */
+    #aviso-precios {
+      position: fixed; bottom: 80px; right: 24px; z-index: 899;
+      background: #1e1e1e; border: 1px solid #333;
+      color: #aaa; font-size: 0.78rem;
+      padding: 10px 14px; border-radius: 10px;
+      max-width: 220px; line-height: 1.4;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      animation: fadeInAviso 0.4s ease;
+      transition: opacity 0.6s ease;
+    }
+    #aviso-precios.oculto { opacity: 0; pointer-events: none; }
+    @keyframes fadeInAviso { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+    @media (max-width: 480px) {
+      #aviso-precios { bottom: 72px; right: 16px; max-width: 180px; }
+    }
+
     /* ══ BOTÓN FLOTANTE COTIZAR ══ */
     .btn-flotante {
       position: fixed; bottom: 24px; right: 24px; z-index: 900;
@@ -1549,6 +1566,12 @@
     </div>
   </main>
 
+  <!-- ══ AVISO PRECIOS ══ -->
+  <div id="aviso-precios">
+    <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:6px;"></i>
+    Algunos precios pueden variar debido a la complejidad de la solicitud.
+  </div>
+
   <!-- ══ BOTÓN FLOTANTE ══ -->
   <button class="btn-flotante" onclick="abrirModal('')">
     <i class="fas fa-paper-plane"></i> Cotizar
@@ -1810,6 +1833,16 @@
     }
 
     window.addEventListener('load', sincronizarDesdeSheets);
+
+    // ══ AVISO PRECIOS — desaparece a los 10 seg ══════════════════
+    window.addEventListener('load', () => {
+      const aviso = document.getElementById('aviso-precios');
+      if (!aviso) return;
+      setTimeout(() => {
+        aviso.classList.add('oculto');
+        setTimeout(() => aviso.remove(), 600);
+      }, 10000);
+    });
 
     // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
     const CATALOGO = [
