@@ -523,7 +523,7 @@
 
     <!-- 1. BOTÓN CONTACTAR (sin cajón) -->
     <button class="btn-contacto" onclick="abrirContacto()">
-      <i class="fas fa-paper-plane"></i>
+      <i class="fas fa-paper-plane" id="icon-contacto"></i>
       Contáctame
     </button>
 
@@ -935,11 +935,15 @@
     function abrirContacto() {
       document.getElementById('modal-contacto').classList.add('visible');
       document.body.style.overflow = 'hidden';
+      const ic = document.getElementById('icon-contacto');
+      if (ic) ic.style.display = 'none';
     }
 
     function cerrarContacto() {
       document.getElementById('modal-contacto').classList.remove('visible');
       document.body.style.overflow = '';
+      const ic = document.getElementById('icon-contacto');
+      if (ic) ic.style.display = '';
     }
 
     function cerrarContactoOverlay(e) {
