@@ -1384,7 +1384,10 @@
         <div id="modal-desc-servicio"
              style="display:none;margin-bottom:16px;padding:10px 14px;
                     background:#111;border-left:3px solid #70DDD8;border-radius:0 8px 8px 0;
-                    font-size:0.78rem;color:#aaa;line-height:1.55;"></div>
+                    font-size:0.78rem;color:#aaa;line-height:1.55;">
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:#70DDD8;margin-bottom:5px;"><i class="fas fa-info-circle" style="margin-right:5px;"></i>Sobre este servicio</div>
+          <span id="modal-desc-texto"></span>
+        </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -1728,6 +1731,9 @@
       const catIdsPresentes = Object.keys(porCat).filter(id => porCat[id].length > 0);
       const SECCIONES = buildSecciones(catIdsPresentes);
       CATALOGO = [];
+      // Limpiar mapa de descripciones en cada re-render
+      Object.keys(DESC_MAP).forEach(k => delete DESC_MAP[k]);
+      let descIdx = 0;
       let html = '';
       SECCIONES.forEach(seccion => {
         const tieneGrupos = seccion.grupos.some(g => g.cat_ids.some(id => (porCat[id] || []).length > 0));
@@ -1743,11 +1749,19 @@
             const esCotiz = /cotiz|a cotizar/i.test(item.precio || '');
             const precioHtml = esCotiz ? '<span class="precio-pres">Cotizable</span>' : (item.precio || '');
             const modalLabel = esCotiz ? item.nombre : `${item.nombre} — ${item.precio}`;
+            // Guardar label y descripción en el mapa para evitar problemas de escape en onclick
+            const dKey = 'di_' + (descIdx++);
+            DESC_MAP[dKey] = { label: modalLabel, desc: item.descripcion || '' };
+            // Mostrar descripción truncada en la tabla (tooltip completo al hover)
+            const descCorta = (item.descripcion || '').length > 90
+              ? (item.descripcion || '').slice(0, 88) + '…'
+              : (item.descripcion || '');
+            const descTitle = (item.descripcion || '').replace(/"/g, '&quot;');
             return `<tr>
               <td class="td-servicio">${item.nombre}</td>
-              <td class="td-desc">${item.descripcion || ''}</td>
+              <td class="td-desc" title="${descTitle}">${descCorta}</td>
               <td class="td-precio">${precioHtml}</td>
-              <td><button class="btn-cotizar-tabla" onclick="abrirModal(${JSON.stringify(modalLabel)}, ${JSON.stringify(item.descripcion || '')})">Cotizar</button></td>
+              <td><button class="btn-cotizar-tabla" onclick="abrirModalDesdeTabla('${dKey}')">Cotizar</button></td>
             </tr>`;
           }).join('');
           const notaHtml = grupo.notaBox ? `<div class="nota-box">${grupo.notaBox}</div>` : '';
@@ -1888,9 +1902,18 @@
 
     // ══ CATÁLOGO — se construye dinámicamente desde el Sheet ════
     let CATALOGO = [];
+    // Mapa de descripciones por índice para evitar problemas de escape en onclick
+    const DESC_MAP = {};
 
     // ══ ESTADO ══════════════════════════════════════════════════
     let serviciosSeleccionados = []; // array de strings
+
+    // Abre el modal desde la tabla usando el mapa de descripciones (evita problemas de escape)
+    function abrirModalDesdeTabla(dKey) {
+      const entry = DESC_MAP[dKey];
+      if (!entry) { abrirModal(''); return; }
+      abrirModal(entry.label, entry.desc);
+    }
 
     // Abre el modal desde una tarjeta de paquete, leyendo el precio actual del DOM
     function abrirModalPaquete(btn) {
@@ -1908,9 +1931,10 @@
       renderBadges();
       // Mostrar descripción del servicio si viene del botón Cotizar
       const descEl = document.getElementById('modal-desc-servicio');
-      if (descEl) {
+      const descTxt = document.getElementById('modal-desc-texto');
+      if (descEl && descTxt) {
         if (desc && desc.trim()) {
-          descEl.textContent = desc;
+          descTxt.textContent = desc;
           descEl.style.display = 'block';
         } else {
           descEl.style.display = 'none';
