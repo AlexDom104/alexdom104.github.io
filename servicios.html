@@ -149,6 +149,17 @@
     tbody td { padding: 10px 14px; vertical-align: middle; line-height: 1.4; }
     .td-servicio { color: var(--blanco); min-width: 160px; }
     .td-desc { color: #888; font-size: 0.78rem; max-width: 340px; line-height: 1.4; }
+
+    /* ── Fila expandible de descripción ── */
+    .tr-expandible { cursor: pointer; }
+    .tr-expandible:hover { background: rgba(112,221,216,0.07) !important; }
+    .td-desc-wrap { display: block; }
+    .td-desc-corta { color: #888; font-size: 0.78rem; line-height: 1.4; }
+    .td-desc-full  { color: #bbb; font-size: 0.78rem; line-height: 1.55; }
+    .tr-expandible.expandida { background: rgba(112,221,216,0.04) !important; }
+    .tr-expandible.expandida .td-desc-corta { display: none; }
+    .tr-expandible.expandida .td-desc-full  { display: block !important; }
+    .tr-expandible.expandida .td-servicio   { color: var(--cian-brillo); }
     .td-precio { font-weight: bold; color: var(--cian-brillo); white-space: nowrap; text-align: right; }
     .td-nota { font-size: 0.76rem; color: #888; font-style: italic; }
     .precio-pres { color: #f0a060; font-weight: bold; }
@@ -1517,16 +1528,12 @@
       document.addEventListener('mouseover', e => {
         const tt = e.target.closest('.cfg-tooltip');
         if (tt) { showTip(tt); return; }
-        const dt = e.target.closest('.desc-tip-trigger');
-        if (dt) { showTip(dt); return; }
         const lt = e.target.closest('[data-lock-tip]');
         if (lt) showTip(lt);
       });
       document.addEventListener('mouseout', e => {
         const tt = e.target.closest('.cfg-tooltip');
         if (tt) { hideTip(tt); return; }
-        const dt = e.target.closest('.desc-tip-trigger');
-        if (dt) { hideTip(dt); return; }
         const lt = e.target.closest('[data-lock-tip]');
         if (lt) hideTip(lt);
       });
@@ -1536,13 +1543,6 @@
           e.stopPropagation();
           if (activeEl === tt) { hideTip(tt); }
           else { if (activeEl) hideTip(activeEl); showTip(tt); }
-          return;
-        }
-        const dt = e.target.closest('.desc-tip-trigger');
-        if (dt) {
-          e.stopPropagation();
-          if (activeEl === dt) { hideTip(dt); }
-          else { if (activeEl) hideTip(activeEl); showTip(dt); }
           return;
         }
         const lt = e.target.closest('[data-lock-tip]');
@@ -1760,27 +1760,21 @@
             const esCotiz = /cotiz|a cotizar/i.test(item.precio || '');
             const precioHtml = esCotiz ? '<span class="precio-pres">Cotizable</span>' : (item.precio || '');
             const modalLabel = esCotiz ? item.nombre : `${item.nombre} — ${item.precio}`;
-            // Guardar label y descripción en el mapa para evitar problemas de escape en onclick
             const dKey = 'di_' + (descIdx++);
             DESC_MAP[dKey] = { label: modalLabel, desc: item.desc || '' };
-            // Descripción con tooltip flotante (mismo sistema que los ? del configurador)
-            const descEscapada = (item.desc || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            const descEscapada = (item.desc || '').replace(/`/g, '&#96;').replace(/\\/g, '\\\\');
+            const descCorta = item.desc && item.desc.length > 55 ? item.desc.slice(0, 53) + '…' : (item.desc || '');
             const descHtml = item.desc
-              ? `<span class="desc-tip-trigger" data-tip="${descEscapada}" style="
-                  display:inline-flex;align-items:center;gap:5px;cursor:pointer;
-                  color:#888;font-size:0.78rem;line-height:1.4;">
-                  <span class="desc-tip-texto">${(item.desc.length > 55 ? item.desc.slice(0, 53) + '…' : item.desc)}</span>
-                  <span style="display:inline-flex;align-items:center;justify-content:center;
-                    width:14px;height:14px;border-radius:50%;background:#1a2a3a;
-                    border:1px solid #2a4a6a;color:#70DDD8;font-size:0.58rem;
-                    flex-shrink:0;font-style:normal;">?</span>
+              ? `<span class="td-desc-wrap">
+                  <span class="td-desc-corta">${descCorta}</span>
+                  <span class="td-desc-full" style="display:none;">${item.desc}</span>
                 </span>`
               : '';
-            return `<tr>
+            return `<tr class="tr-expandible" onclick="expandirDesc(this)">
               <td class="td-servicio">${item.nombre}</td>
               <td class="td-desc">${descHtml}</td>
               <td class="td-precio">${precioHtml}</td>
-              <td><button class="btn-cotizar-tabla" onclick="abrirModalDesdeTabla('${dKey}')">Cotizar</button></td>
+              <td><button class="btn-cotizar-tabla" onclick="event.stopPropagation();abrirModalDesdeTabla('${dKey}')">Cotizar</button></td>
             </tr>`;
           }).join('');
           const notaHtml = grupo.notaBox ? `<div class="nota-box">${grupo.notaBox}</div>` : '';
@@ -1933,6 +1927,26 @@
       if (!entry) { abrirModal(''); return; }
       abrirModal(entry.label, entry.desc);
     }
+
+    // ── Expandir / colapsar descripción al hacer click en la fila ──
+    function expandirDesc(tr) {
+      const yaExpandida = tr.classList.contains('expandida');
+      // Colapsar cualquier fila que esté abierta
+      document.querySelectorAll('.tr-expandible.expandida').forEach(r => r.classList.remove('expandida'));
+      // Si no estaba expandida, expandirla
+      if (!yaExpandida) tr.classList.add('expandida');
+    }
+
+    // Colapsar todas las filas expandidas al hacer scroll (desktop y móvil)
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.tr-expandible.expandida').forEach(r => r.classList.remove('expandida'));
+    }, { passive: true });
+    // También colapsar al scroll dentro de contenedores internos (cat-body con overflow)
+    document.addEventListener('scroll', e => {
+      if (e.target && e.target !== window) {
+        document.querySelectorAll('.tr-expandible.expandida').forEach(r => r.classList.remove('expandida'));
+      }
+    }, { passive: true, capture: true });
 
     // Abre el modal desde una tarjeta de paquete, leyendo el precio actual del DOM
     function abrirModalPaquete(btn) {
