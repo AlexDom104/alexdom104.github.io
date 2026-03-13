@@ -368,14 +368,14 @@
     .age-gate-remember input { accent-color: var(--rosa-principal); cursor: pointer; }
 
     .age-gate-deny {
-      font-size: 0.7rem; color: #444; cursor: pointer;
+      font-size: 0.7rem; color: #888; cursor: pointer;
       background: none; border: none; font-family: inherit;
       text-decoration: underline; transition: color 0.2s;
     }
 
-    .age-gate-deny:hover { color: #777; }
+    .age-gate-deny:hover { color: #bbb; }
 
-    .picante-locked   { display: block; }
+    .picante-locked   { display: block; position: relative; z-index: 2; }
     .picante-unlocked { display: none; }
 
     /* ══ MODAL DE CONTACTO ══ */
@@ -882,17 +882,6 @@
 
     window.addEventListener('scroll', checkAvatarScroll, { passive: true });
 
-    // ══ CAJONES — un solo cajón abierto a la vez ════════════════
-    function toggleDrawer(id) {
-      const drawer = document.getElementById(id);
-      if (!drawer) return;
-      const yaAbierto = drawer.classList.contains('open');
-      // Cerrar todos
-      document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
-      // Si estaba cerrado, abrirlo; si estaba abierto, queda cerrado
-      if (!yaAbierto) drawer.classList.add('open');
-    }
-
     // ══ ZONA PICANTE — caché de edad ════════════════════════════
     const EDAD_KEY = 'alexdom104_mayor18';
 
@@ -926,6 +915,27 @@
         locked.style.display = 'none';
         unlocked.style.display = 'block';
       }
+    }
+
+    // Al abrir el cajón picante, resetear vista si no está desbloqueado
+    const _origToggle = toggleDrawer;
+    function toggleDrawer(id) {
+      if (id === 'drawer-picante') {
+        const locked   = document.getElementById('picante-locked');
+        const unlocked = document.getElementById('picante-unlocked');
+        // Si el contenido está desbloqueado, abrir directo
+        // Si no, asegurarse de que el gate esté visible y el unlocked oculto
+        if (locked && unlocked && unlocked.style.display !== 'block') {
+          locked.style.display = 'block';
+          locked.style.opacity = '1';
+          unlocked.style.display = 'none';
+        }
+      }
+      const drawer = document.getElementById(id);
+      if (!drawer) return;
+      const yaAbierto = drawer.classList.contains('open');
+      document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
+      if (!yaAbierto) drawer.classList.add('open');
     }
 
     // Verificar caché al cargar
