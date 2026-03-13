@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Links | AlexDom104</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --fondo: #333333;
+      --contraste-fondo: #262626;
+      --rosa-principal: #EF5085;
+      --rosa-oscuro: #A64062;
+      --cian-brillo: #70DDD8;
+      --azul-boton: #0A315B;
+      --blanco: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: var(--fondo);
+      color: var(--blanco);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ══ HERO ══ */
+    .hero {
+      position: relative;
+      height: 240px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a1a2e 0%, #1a0a1e 45%, #2a0a18 100%);
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(239,80,133,0.18) 0%, transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(112,221,216,0.13) 0%, transparent 45%),
+        radial-gradient(circle at 55% 85%, rgba(166,64,98,0.12) 0%, transparent 40%);
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(112,221,216,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(112,221,216,0.035) 1px, transparent 1px);
+      background-size: 38px 38px;
+    }
+
+    /* Avatar — vuela a la izquierda al scroll */
+    .avatar-wrap {
+      position: absolute;
+      left: 50%;
+      bottom: -44px;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 88px;
+      height: 88px;
+      transition: left 0.35s ease, bottom 0.35s ease, top 0.35s ease,
+                  width 0.35s ease, height 0.35s ease, transform 0.35s ease;
+    }
+
+    .avatar-wrap.sticky-small {
+      position: fixed;
+      left: 18px;
+      bottom: auto;
+      top: 14px;
+      transform: none;
+      width: 46px;
+      height: 46px;
+      z-index: 999;
+    }
+
+    .avatar-img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--rosa-principal);
+      box-shadow: 0 0 18px rgba(239,80,133,0.5);
+      display: block;
+      cursor: pointer;
+    }
+
+    .avatar-wrap.sticky-small .avatar-img {
+      border-width: 2px;
+      box-shadow: 0 2px 10px rgba(239,80,133,0.5);
+    }
+
+    .hero-info {
+      position: absolute;
+      bottom: 22px; left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    .hero-info h1 {
+      font-size: 1.45rem; font-weight: 800;
+      color: var(--blanco);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .hero-sub {
+      font-size: 0.72rem; color: var(--cian-brillo);
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-top: 3px; opacity: 0.85;
+    }
+
+    .back-link {
+      position: absolute; top: 16px; left: 18px;
+      color: var(--rosa-principal); text-decoration: none;
+      font-weight: bold; font-size: 0.85rem;
+      z-index: 20; transition: color 0.3s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .back-link:hover { color: var(--cian-brillo); }
+
+    /* ══ CONTENIDO ══ */
+    .main-content {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 62px 14px 80px;
+    }
+
+    /* ══ BOTÓN CONTACTAR (no cajón) ══ */
+    .btn-contacto {
+      display: flex;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--rosa-oscuro), var(--rosa-principal));
+      color: var(--blanco);
+      border: none; border-radius: 16px;
+      padding: 17px 24px;
+      font-size: 0.97rem; font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(239,80,133,0.35);
+      letter-spacing: 0.4px;
+      margin-bottom: 12px;
+      font-family: inherit;
+      opacity: 0;
+      animation: fadeUp 0.4s ease 0.05s forwards;
+    }
+
+    .btn-contacto:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(239,80,133,0.55);
+    }
+
+    .btn-contacto i { font-size: 1.15rem; }
+
+    /* ══ CAJONES ══ */
+    .drawer {
+      margin-bottom: 10px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid var(--azul-boton);
+      background: var(--contraste-fondo);
+      transition: border-color 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    .drawer:nth-child(2) { animation-delay: 0.10s; }
+    .drawer:nth-child(3) { animation-delay: 0.17s; }
+    .drawer:nth-child(4) { animation-delay: 0.24s; }
+    .drawer:nth-child(5) { animation-delay: 0.31s; }
+
+    .drawer.open { border-color: var(--rosa-oscuro); }
+
+    .drawer-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px;
+      cursor: pointer; user-select: none;
+      transition: background 0.2s;
+    }
+
+    .drawer-header:hover { background: rgba(255,255,255,0.03); }
+
+    .drawer-icon { font-size: 1.05rem; min-width: 22px; text-align: center; }
+
+    .drawer-title {
+      flex: 1;
+      font-size: 0.88rem; font-weight: 700;
+      color: var(--blanco);
+    }
+
+    .drawer-count {
+      font-size: 0.63rem; padding: 2px 8px;
+      border-radius: 20px;
+      background: #1a2a3a; color: var(--cian-brillo);
+      border: 1px solid var(--cian-brillo); font-weight: bold;
+    }
+
+    .drawer-chevron {
+      color: var(--cian-brillo); font-size: 0.76rem;
+      transition: transform 0.35s; flex-shrink: 0;
+    }
+
+    .drawer.open .drawer-chevron { transform: rotate(180deg); }
+
+    .drawer-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .drawer.open .drawer-body { max-height: 2000px; }
+
+    .drawer-inner { padding: 4px 12px 12px; }
+
+    /* ══ TARJETA DE ENLACE ══ */
+    .link-card {
+      display: flex; align-items: center; gap: 13px;
+      background: #1e1e1e;
+      border: 1.5px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 11px 13px;
+      margin-bottom: 7px;
+      text-decoration: none;
+      color: var(--blanco);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+
+    .link-card:last-child { margin-bottom: 0; }
+
+    .link-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--cian-brillo);
+      box-shadow: 0 4px 14px rgba(112,221,216,0.15);
+      background: #232323;
+    }
+
+    .link-card:active { transform: scale(0.98); }
+
+    .link-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0; overflow: hidden;
+      color: #fff;
+    }
+
+    .link-icon img {
+      width: 100%; height: 100%;
+      object-fit: cover; border-radius: 10px;
+    }
+
+    .link-info { flex: 1; min-width: 0; }
+
+    .link-name {
+      font-size: 0.88rem; font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .link-handle {
+      font-size: 0.7rem; color: #777; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .link-arrow {
+      color: #3a3a3a; font-size: 0.76rem; flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .link-card:hover .link-arrow { color: var(--cian-brillo); transform: translateX(3px); }
+
+    /* ══ COLORES PLATAFORMA ══ */
+    .ic-twitch    { background: #6441a5; }
+    .ic-youtube   { background: #ff0000; }
+    .ic-tiktok    { background: #111; border: 1px solid #333; }
+    .ic-kick      { background: #53fc18; }
+    .ic-kick i    { color: #000 !important; }
+    .ic-trovo     { background: #1cad60; }
+    .ic-dlive     { background: #f9b900; }
+    .ic-facebook  { background: #1877f2; }
+    .ic-instagram { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .ic-x         { background: #000; border: 1px solid #333; }
+    .ic-discord   { background: #5865f2; }
+    .ic-patreon   { background: #ff424d; }
+    .ic-kofi      { background: #13c3ff; color: #000 !important; }
+    .ic-kofi i    { color: #000 !important; }
+    .ic-paypal    { background: #003087; }
+    .ic-fansly    { background: #1da1f2; }
+    .ic-onlyfans  { background: #00aff0; color: #000 !important; }
+    .ic-whatsapp  { background: #25d366; }
+    .ic-telegram  { background: #2ca5e0; }
+    .ic-email     { background: #ea4335; }
+    .ic-default   { background: var(--azul-boton); }
+
+    /* ══ ZONA PICANTE — gate de edad ══ */
+    .age-gate {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      padding: 20px 16px; text-align: center;
+    }
+
+    .age-gate-emoji { font-size: 2.2rem; }
+
+    .age-gate h4 {
+      font-size: 0.95rem; color: #ff6699;
+      font-weight: 700;
+    }
+
+    .age-gate p {
+      font-size: 0.78rem; color: #888;
+      line-height: 1.55; max-width: 300px;
+    }
+
+    .age-gate-confirm {
+      background: linear-gradient(135deg, #5a0020, #a0003a);
+      color: #fff;
+      border: 1.5px solid #ff3366;
+      border-radius: 10px;
+      padding: 11px 28px;
+      font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; transition: 0.2s; font-family: inherit;
+    }
+
+    .age-gate-confirm:hover {
+      background: linear-gradient(135deg, #7a0030, #c0004a);
+      box-shadow: 0 4px 16px rgba(255,51,102,0.4);
+    }
+
+    .age-gate-remember {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.72rem; color: #555; cursor: pointer;
+    }
+
+    .age-gate-remember input { accent-color: var(--rosa-principal); cursor: pointer; }
+
+    .age-gate-deny {
+      font-size: 0.7rem; color: #444; cursor: pointer;
+      background: none; border: none; font-family: inherit;
+      text-decoration: underline; transition: color 0.2s;
+    }
+
+    .age-gate-deny:hover { color: #777; }
+
+    .picante-locked   { display: block; }
+    .picante-unlocked { display: none; }
+
+    /* ══ MODAL DE CONTACTO ══ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.visible { display: flex; }
+
+    .modal-box {
+      background: #1c1c1c; border: 1.5px solid #333;
+      border-radius: 16px; width: 100%; max-width: 420px;
+      overflow: hidden; animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(0.94) translateY(10px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+    }
+
+    .modal-header h3 { font-size: 1.05rem; color: var(--blanco); margin-bottom: 3px; }
+    .modal-header p  { font-size: 0.75rem; color: #888; }
+
+    .modal-close {
+      background: none; border: none; color: #666;
+      font-size: 1.05rem; cursor: pointer; padding: 2px 6px;
+      transition: color 0.2s; flex-shrink: 0;
+    }
+    .modal-close:hover { color: var(--rosa-principal); }
+
+    .modal-body { padding: 16px 20px 20px; }
+
+    .contact-opts { display: flex; flex-direction: column; gap: 8px; }
+
+    .contact-opt {
+      display: flex; align-items: center; gap: 13px;
+      background: #111; border: 1.5px solid #2a2a2a;
+      border-radius: 12px; padding: 13px 15px;
+      text-decoration: none; color: var(--blanco);
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .contact-opt:hover {
+      border-color: var(--cian-brillo);
+      transform: translateX(4px);
+    }
+
+    .contact-opt-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem; flex-shrink: 0; color: #fff;
+    }
+
+    .contact-opt-label { font-size: 0.86rem; font-weight: 700; }
+    .contact-opt-sub   { font-size: 0.7rem; color: #777; margin-top: 2px; }
+
+    .contact-opt-arrow {
+      margin-left: auto; color: #3a3a3a; font-size: 0.76rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .contact-opt:hover .contact-opt-arrow {
+      color: var(--cian-brillo); transform: translateX(3px);
+    }
+
+    /* ══ FOOTER ══ */
+    .page-footer {
+      text-align: center; padding: 20px 16px;
+      font-size: 0.68rem; color: #3a3a3a;
+    }
+
+    /* ══ TOAST ══ */
+    #toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1a1a1a; border: 1px solid var(--cian-brillo);
+      color: var(--cian-brillo); border-radius: 10px;
+      padding: 9px 20px; font-size: 0.8rem;
+      z-index: 2000; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+    }
+
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .main-content { padding: 54px 10px 60px; }
+      .hero { height: 210px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HERO ══ -->
+  <div class="hero" id="hero">
+    <div class="hero-bg"></div>
+
+    <a href="sobremi.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Volver
+    </a>
+
+    <!-- Avatar que vuela al hacer scroll -->
+    <div class="avatar-wrap" id="avatar-wrap">
+      <img
+        src="https://i.imgur.com/kcHX24F.jpg"
+        alt="AlexDom104"
+        class="avatar-img"
+        id="avatar-img"
+        title="Volver arriba"
+        onclick="window.scrollTo({top:0,behavior:'smooth'})"
+      />
+    </div>
+
+    <div class="hero-info" id="hero-info">
+      <h1>AlexDom104</h1>
+      <div class="hero-sub">Streamer · Creador · Freelance</div>
+    </div>
+  </div>
+
+  <!-- ══ CONTENIDO PRINCIPAL ══ -->
+  <div class="main-content">
+
+    <!-- 1. BOTÓN CONTACTAR (sin cajón) -->
+    <button class="btn-contacto" onclick="abrirContacto()">
+      <i class="fas fa-paper-plane"></i>
+      Contáctame
+    </button>
+
+    <!-- 2. STREAMS Y VIDEOS -->
+    <div class="drawer open" id="drawer-streams" data-key="streams">
+      <div class="drawer-header" onclick="toggleDrawer('drawer-streams')">
+        <i class="fas fa-broadcast-tower drawer-icon" style="color:#9146ff;"></i>
+        <span class="drawer-title">Streams &amp; Videos</span>
+        <span class="drawer-count">6 links</span>
+        <i class="fas fa-chevron-down drawer-chevron"></i>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-inner">
+          <a href="https://twitch.tv/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-twitch"><i class="fab fa-twitch"></i></div>
+            <div class="link-info">
+              <div class="link-name">Twitch</div>
+              <div class="link-handle">twitch.tv/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://youtube.com/@alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-youtube"><i class="fab fa-youtube"></i></div>
+            <div class="link-info">
+              <div class="link-name">YouTube</div>
+              <div class="link-handle">@alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://tiktok.com/@alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-tiktok"><i class="fab fa-tiktok"></i></div>
+            <div class="link-info">
+              <div class="link-name">TikTok</div>
+              <div class="link-handle">@alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://kick.com/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-kick"><i class="fas fa-broadcast-tower"></i></div>
+            <div class="link-info">
+              <div class="link-name">Kick</div>
+              <div class="link-handle">kick.com/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://trovo.live/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-trovo"><i class="fas fa-play-circle"></i></div>
+            <div class="link-info">
+              <div class="link-name">Trovo</div>
+              <div class="link-handle">trovo.live/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://dlive.tv/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-dlive"><i class="fas fa-satellite-dish"></i></div>
+            <div class="link-info">
+              <div class="link-name">DLive</div>
+              <div class="link-handle">dlive.tv/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. REDES SOCIALES -->
+    <div class="drawer" id="drawer-redes" data-key="redes">
+      <div class="drawer-header" onclick="toggleDrawer('drawer-redes')">
+        <i class="fas fa-share-alt drawer-icon" style="color:var(--cian-brillo);"></i>
+        <span class="drawer-title">Redes Sociales</span>
+        <span class="drawer-count">4 links</span>
+        <i class="fas fa-chevron-down drawer-chevron"></i>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-inner">
+          <a href="https://instagram.com/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-instagram"><i class="fab fa-instagram"></i></div>
+            <div class="link-info">
+              <div class="link-name">Instagram</div>
+              <div class="link-handle">@alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://x.com/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-x"><i class="fab fa-x-twitter"></i></div>
+            <div class="link-info">
+              <div class="link-name">X / Twitter</div>
+              <div class="link-handle">@alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://facebook.com/alexdom104of" target="_blank" class="link-card">
+            <div class="link-icon ic-facebook"><i class="fab fa-facebook"></i></div>
+            <div class="link-info">
+              <div class="link-name">Facebook</div>
+              <div class="link-handle">AlexDom104of</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://discord.gg/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-discord"><i class="fab fa-discord"></i></div>
+            <div class="link-info">
+              <div class="link-name">Discord</div>
+              <div class="link-handle">Servidor AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. APOYO AL CREADOR -->
+    <div class="drawer" id="drawer-apoyo" data-key="apoyo">
+      <div class="drawer-header" onclick="toggleDrawer('drawer-apoyo')">
+        <i class="fas fa-heart drawer-icon" style="color:#ff424d;"></i>
+        <span class="drawer-title">Apoyo al Creador</span>
+        <span class="drawer-count">3 links</span>
+        <i class="fas fa-chevron-down drawer-chevron"></i>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-inner">
+          <a href="https://patreon.com/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-patreon"><i class="fab fa-patreon"></i></div>
+            <div class="link-info">
+              <div class="link-name">Patreon</div>
+              <div class="link-handle">patreon.com/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://ko-fi.com/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-kofi"><i class="fas fa-mug-hot"></i></div>
+            <div class="link-info">
+              <div class="link-name">Ko-fi</div>
+              <div class="link-handle">ko-fi.com/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://paypal.me/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon ic-paypal"><i class="fab fa-paypal"></i></div>
+            <div class="link-info">
+              <div class="link-name">PayPal</div>
+              <div class="link-handle">paypal.me/alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ZONA PICANTE 🔞 -->
+    <div class="drawer" id="drawer-picante" data-key="picante">
+      <div class="drawer-header" onclick="toggleDrawer('drawer-picante')">
+        <i class="fas fa-fire drawer-icon" style="color:#ff3366;"></i>
+        <span class="drawer-title">Zona Picante 🔞</span>
+        <span class="drawer-count">2 links</span>
+        <i class="fas fa-chevron-down drawer-chevron"></i>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-inner">
+
+          <!-- Gate de edad -->
+          <div class="picante-locked" id="picante-locked">
+            <div class="age-gate">
+              <div class="age-gate-emoji">🔞</div>
+              <h4>Contenido para adultos</h4>
+              <p>Esta sección contiene enlaces a plataformas con contenido para adultos. Al continuar confirmas que tienes 18 años o más.</p>
+              <button class="age-gate-confirm" onclick="confirmarEdad()">
+                Soy mayor de 18 años — Entrar
+              </button>
+              <button class="age-gate-deny" onclick="toggleDrawer('drawer-picante')">
+                No, cerrar
+              </button>
+            </div>
+          </div>
+
+          <!-- Contenido desbloqueado -->
+          <div class="picante-unlocked" id="picante-unlocked">
+            <a href="https://fansly.com/alexdom104" target="_blank" class="link-card">
+              <div class="link-icon ic-fansly"><i class="fas fa-star"></i></div>
+              <div class="link-info">
+                <div class="link-name">Fansly</div>
+                <div class="link-handle">fansly.com/alexdom104</div>
+              </div>
+              <i class="fas fa-chevron-right link-arrow"></i>
+            </a>
+            <a href="https://onlyfans.com/alexdom104" target="_blank" class="link-card">
+              <div class="link-icon ic-onlyfans"><i class="fas fa-lock-open"></i></div>
+              <div class="link-info">
+                <div class="link-name">OnlyFans</div>
+                <div class="link-handle">onlyfans.com/alexdom104</div>
+              </div>
+              <i class="fas fa-chevron-right link-arrow"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <div class="page-footer">AlexDom104 · Hecho con 💜</div>
+
+  <!-- ══ MODAL CONTACTO ══ -->
+  <div class="modal-overlay" id="modal-contacto" onclick="cerrarContactoOverlay(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3>¿Cómo quieres contactarme?</h3>
+          <p>Elige la opción que prefieras</p>
+        </div>
+        <button class="modal-close" onclick="cerrarContacto()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="contact-opts">
+          <a href="https://wa.me/529930000000" target="_blank" class="contact-opt">
+            <div class="contact-opt-icon ic-whatsapp"><i class="fab fa-whatsapp"></i></div>
+            <div>
+              <div class="contact-opt-label">WhatsApp</div>
+              <div class="contact-opt-sub">Respuesta rápida</div>
+            </div>
+            <i class="fas fa-chevron-right contact-opt-arrow"></i>
+          </a>
+          <a href="https://t.me/alexdom104" target="_blank" class="contact-opt">
+            <div class="contact-opt-icon ic-telegram"><i class="fab fa-telegram"></i></div>
+            <div>
+              <div class="contact-opt-label">Telegram</div>
+              <div class="contact-opt-sub">@alexdom104</div>
+            </div>
+            <i class="fas fa-chevron-right contact-opt-arrow"></i>
+          </a>
+          <a href="https://discord.gg/alexdom104" target="_blank" class="contact-opt">
+            <div class="contact-opt-icon ic-discord"><i class="fab fa-discord"></i></div>
+            <div>
+              <div class="contact-opt-label">Discord</div>
+              <div class="contact-opt-sub">Servidor AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right contact-opt-arrow"></i>
+          </a>
+          <div class="contact-opt" onclick="copiarCorreo()">
+            <div class="contact-opt-icon ic-email"><i class="fas fa-envelope"></i></div>
+            <div>
+              <div class="contact-opt-label">Correo</div>
+              <div class="contact-opt-sub">alexis_enrique97@outlook.com</div>
+            </div>
+            <i class="fas fa-copy contact-opt-arrow"></i>
+          </div>
+          <a href="servicios.html" class="contact-opt" style="border-color: rgba(112,221,216,0.3); background: rgba(10,49,91,0.4);">
+            <div class="contact-opt-icon" style="background: var(--azul-boton);"><i class="fas fa-rocket"></i></div>
+            <div>
+              <div class="contact-opt-label" style="color: var(--cian-brillo);">Cotizar un servicio</div>
+              <div class="contact-opt-sub">Ver servicios freelance</div>
+            </div>
+            <i class="fas fa-chevron-right contact-opt-arrow"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast">✓ Correo copiado</div>
+
+  <script>
+    // ══ AVATAR SCROLL — igual que sobremi.html ══════════════════
+    const avatarWrap = document.getElementById('avatar-wrap');
+    const heroEl     = document.getElementById('hero');
+
+    function checkAvatarScroll() {
+      const heroBottom = heroEl.getBoundingClientRect().bottom;
+      // Se hace pequeño cuando el hero sale de pantalla
+      if (heroBottom < 60) {
+        avatarWrap.classList.add('sticky-small');
+      } else {
+        avatarWrap.classList.remove('sticky-small');
+      }
+    }
+
+    window.addEventListener('scroll', checkAvatarScroll, { passive: true });
+
+    // ══ CAJONES — un solo cajón abierto a la vez ════════════════
+    function toggleDrawer(id) {
+      const drawer = document.getElementById(id);
+      if (!drawer) return;
+      const yaAbierto = drawer.classList.contains('open');
+      // Cerrar todos
+      document.querySelectorAll('.drawer').forEach(d => d.classList.remove('open'));
+      // Si estaba cerrado, abrirlo; si estaba abierto, queda cerrado
+      if (!yaAbierto) drawer.classList.add('open');
+    }
+
+    // ══ ZONA PICANTE — caché de edad ════════════════════════════
+    const EDAD_KEY = 'alexdom104_mayor18';
+
+    function checkEdadCache() {
+      try {
+        const val = localStorage.getItem(EDAD_KEY);
+        if (val === '1') desbloquearPicante(false);
+      } catch(e) {}
+    }
+
+    function confirmarEdad() {
+      try { localStorage.setItem(EDAD_KEY, '1'); } catch(e) {}
+      desbloquearPicante(true);
+    }
+
+    function desbloquearPicante(animar) {
+      const locked   = document.getElementById('picante-locked');
+      const unlocked = document.getElementById('picante-unlocked');
+      if (!locked || !unlocked) return;
+      if (animar) {
+        locked.style.transition = 'opacity 0.3s';
+        locked.style.opacity = '0';
+        setTimeout(() => {
+          locked.style.display = 'none';
+          unlocked.style.display = 'block';
+          unlocked.style.opacity = '0';
+          unlocked.style.transition = 'opacity 0.3s';
+          setTimeout(() => { unlocked.style.opacity = '1'; }, 20);
+        }, 300);
+      } else {
+        locked.style.display = 'none';
+        unlocked.style.display = 'block';
+      }
+    }
+
+    // Verificar caché al cargar
+    checkEdadCache();
+
+    // ══ MODAL CONTACTO ══════════════════════════════════════════
+    function abrirContacto() {
+      document.getElementById('modal-contacto').classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarContacto() {
+      document.getElementById('modal-contacto').classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    function cerrarContactoOverlay(e) {
+      if (e.target === document.getElementById('modal-contacto')) cerrarContacto();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') cerrarContacto();
+    });
+
+    // ══ COPIAR CORREO ══════════════════════════════════════════
+    function copiarCorreo() {
+      navigator.clipboard.writeText('alexis_enrique97@outlook.com').then(() => {
+        mostrarToast('✓ Correo copiado');
+      }).catch(() => {
+        mostrarToast('alexis_enrique97@outlook.com');
+      });
+    }
+
+    function mostrarToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+  </script>
+</body>
+</html>
