@@ -1742,7 +1742,7 @@
         seccion.grupos.forEach(grupo => {
           const items = grupo.cat_ids.flatMap(id => porCat[id] || []);
           if (!items.length) return;
-          items.forEach(item => { CATALOGO.push({ cat: grupo.titulo, nombre: item.nombre, precio: item.precio || '', desc: item.descripcion || '' }); });
+          items.forEach(item => { CATALOGO.push({ cat: grupo.titulo, nombre: item.nombre, precio: item.precio || '', desc: item.desc || '' }); });
           const thPrecio = grupo.thPrecio || 'Precio (MXN)';
           const count = items.length;
           let filas = items.map(item => {
@@ -1751,12 +1751,12 @@
             const modalLabel = esCotiz ? item.nombre : `${item.nombre} — ${item.precio}`;
             // Guardar label y descripción en el mapa para evitar problemas de escape en onclick
             const dKey = 'di_' + (descIdx++);
-            DESC_MAP[dKey] = { label: modalLabel, desc: item.descripcion || '' };
+            DESC_MAP[dKey] = { label: modalLabel, desc: item.desc || '' };
             // Mostrar descripción truncada en la tabla (tooltip completo al hover)
-            const descCorta = (item.descripcion || '').length > 90
-              ? (item.descripcion || '').slice(0, 88) + '…'
-              : (item.descripcion || '');
-            const descTitle = (item.descripcion || '').replace(/"/g, '&quot;');
+            const descCorta = (item.desc || '').length > 90
+              ? (item.desc || '').slice(0, 88) + '…'
+              : (item.desc || '');
+            const descTitle = (item.desc || '').replace(/"/g, '&quot;');
             return `<tr>
               <td class="td-servicio">${item.nombre}</td>
               <td class="td-desc" title="${descTitle}">${descCorta}</td>
