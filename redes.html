@@ -58,7 +58,7 @@
       background-size: 38px 38px;
     }
 
-    /* Avatar — vuela a la izquierda al scroll */
+    /* Avatar — centrado fijo en desktop, vuela en móvil */
     .avatar-wrap {
       position: absolute;
       left: 50%;
@@ -67,19 +67,38 @@
       z-index: 10;
       width: 88px;
       height: 88px;
-      transition: left 0.35s ease, bottom 0.35s ease, top 0.35s ease,
-                  width 0.35s ease, height 0.35s ease, transform 0.35s ease;
     }
 
-    .avatar-wrap.sticky-small {
-      position: fixed;
-      left: 18px;
-      bottom: auto;
-      top: 14px;
-      transform: none;
-      width: 46px;
-      height: 46px;
-      z-index: 999;
+    /* En desktop (>600px) el avatar NO se mueve, se queda centrado */
+    @media (min-width: 601px) {
+      .avatar-wrap { transition: none; }
+      .avatar-wrap.sticky-small {
+        position: absolute;
+        left: 50%;
+        bottom: -44px;
+        top: auto;
+        transform: translateX(-50%);
+        width: 88px;
+        height: 88px;
+      }
+    }
+
+    /* En móvil (<= 600px) sí hace la animación hacia la esquina */
+    @media (max-width: 600px) {
+      .avatar-wrap {
+        transition: left 0.35s ease, bottom 0.35s ease, top 0.35s ease,
+                    width 0.35s ease, height 0.35s ease, transform 0.35s ease;
+      }
+      .avatar-wrap.sticky-small {
+        position: fixed;
+        left: 18px;
+        bottom: auto;
+        top: 14px;
+        transform: none;
+        width: 46px;
+        height: 46px;
+        z-index: 999;
+      }
     }
 
     .avatar-img {
@@ -178,6 +197,7 @@
     .drawer:nth-child(3) { animation-delay: 0.17s; }
     .drawer:nth-child(4) { animation-delay: 0.24s; }
     .drawer:nth-child(5) { animation-delay: 0.31s; }
+    .drawer:nth-child(6) { animation-delay: 0.38s; }
 
     .drawer.open { border-color: var(--rosa-oscuro); }
 
@@ -471,7 +491,7 @@
     <!-- Avatar que vuela al hacer scroll -->
     <div class="avatar-wrap" id="avatar-wrap">
       <img
-        src="https://i.imgur.com/kcHX24F.jpg"
+        src="https://i.imgur.com/dSIZrFm.png"
         alt="AlexDom104"
         class="avatar-img"
         id="avatar-img"
@@ -603,7 +623,93 @@
       </div>
     </div>
 
-    <!-- 4. APOYO AL CREADOR -->
+    <!-- 4. MÚSICA -->
+    <div class="drawer" id="drawer-musica" data-key="musica">
+      <div class="drawer-header" onclick="toggleDrawer('drawer-musica')">
+        <i class="fas fa-music drawer-icon" style="color:#1db954;"></i>
+        <span class="drawer-title">Música</span>
+        <span class="drawer-count">9 links</span>
+        <i class="fas fa-chevron-down drawer-chevron"></i>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-inner">
+          <a href="https://open.spotify.com/artist/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#1db954;"><i class="fab fa-spotify"></i></div>
+            <div class="link-info">
+              <div class="link-name">Spotify</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://music.apple.com/artist/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:linear-gradient(135deg,#fc3c44,#ff2d55);"><i class="fab fa-apple"></i></div>
+            <div class="link-info">
+              <div class="link-name">Apple Music</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://music.amazon.com/artists/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#00a8e1;"><i class="fab fa-amazon"></i></div>
+            <div class="link-info">
+              <div class="link-name">Amazon Music</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://music.youtube.com/channel/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#ff0000;"><i class="fab fa-youtube"></i></div>
+            <div class="link-info">
+              <div class="link-name">YouTube Music</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://www.deezer.com/artist/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#a238ff;"><i class="fas fa-headphones"></i></div>
+            <div class="link-info">
+              <div class="link-name">Deezer</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://tidal.com/artist/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#000; border:1px solid #333;"><i class="fas fa-water"></i></div>
+            <div class="link-info">
+              <div class="link-name">Tidal</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://claromusica.com/artist/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#da0000;"><i class="fas fa-music"></i></div>
+            <div class="link-info">
+              <div class="link-name">Claro Música</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://soundcloud.com/alexdom104" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#ff5500;"><i class="fab fa-soundcloud"></i></div>
+            <div class="link-info">
+              <div class="link-name">SoundCloud</div>
+              <div class="link-handle">AlexDom104</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+          <a href="https://alexdom104.bandcamp.com" target="_blank" class="link-card">
+            <div class="link-icon" style="background:#1da0c3;"><i class="fab fa-bandcamp"></i></div>
+            <div class="link-info">
+              <div class="link-name">Bandcamp</div>
+              <div class="link-handle">alexdom104.bandcamp.com</div>
+            </div>
+            <i class="fas fa-chevron-right link-arrow"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. APOYO AL CREADOR -->
     <div class="drawer" id="drawer-apoyo" data-key="apoyo">
       <div class="drawer-header" onclick="toggleDrawer('drawer-apoyo')">
         <i class="fas fa-heart drawer-icon" style="color:#ff424d;"></i>
@@ -641,7 +747,7 @@
       </div>
     </div>
 
-    <!-- 5. ZONA PICANTE 🔞 -->
+    <!-- 6. ZONA PICANTE 🔞 -->
     <div class="drawer" id="drawer-picante" data-key="picante">
       <div class="drawer-header" onclick="toggleDrawer('drawer-picante')">
         <i class="fas fa-fire drawer-icon" style="color:#ff3366;"></i>
