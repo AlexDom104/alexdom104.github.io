@@ -9,6 +9,77 @@
   --blanco: #ffffff; 
 }
 
+/* ══════════════════════════════════════════════════════════════
+   📦 BIBLIOTECA DE ICONOS — AlexDom104
+   Iconos alojados en Imgur. Uso en HTML:
+     <img src="var(--ic-spotify)" alt="" loading="lazy">
+   O referencia directa a la URL en cualquier img src.
+   ══════════════════════════════════════════════════════════════
+   Plataforma     │ URL
+   ───────────────┼──────────────────────────────────────────────
+   amazon         │ https://i.imgur.com/ll7NsR7.png
+   apple          │ https://i.imgur.com/JcCuef7.png
+   beacon         │ https://i.imgur.com/Vy1QF8X.png
+   cv             │ https://i.imgur.com/Gu6KHjs.png
+   deezer         │ https://i.imgur.com/8DaFQKt.png
+   discord        │ https://i.imgur.com/t49dIAR.png
+   dlive          │ https://i.imgur.com/7qTTLuR.png
+   email          │ https://i.imgur.com/iabQH76.png
+   facebook       │ https://i.imgur.com/lZbfJjh.png
+   fansly         │ https://i.imgur.com/j7qThLB.png
+   hearnow        │ https://i.imgur.com/bpa79ZO.png
+   instagram      │ https://i.imgur.com/DH9derS.png
+   kick           │ https://i.imgur.com/EAAvJak.png
+   ko-fi          │ https://i.imgur.com/grxxffG.png
+   linkedin       │ https://i.imgur.com/7DCPUfn.png
+   onlyfans       │ https://i.imgur.com/aSHfV9e.png
+   patreon        │ https://i.imgur.com/7NNQ7bR.png
+   portafolio     │ https://i.imgur.com/NAGtMLj.png
+   soundcloud     │ https://i.imgur.com/M3otwiX.png
+   spotify        │ https://i.imgur.com/rA5pTLb.png
+   tiktok         │ https://i.imgur.com/H4xT9h1.png
+   trovo          │ https://i.imgur.com/zfqX2cK.png
+   tumblr         │ https://i.imgur.com/5d5dgDQ.png
+   twitch         │ https://i.imgur.com/wwogLnL.png
+   whatsapp       │ https://i.imgur.com/dpBlNxE.png
+   x              │ https://i.imgur.com/vosCiy6.png
+   youtube        │ https://i.imgur.com/BN0ZTK7.png
+   youtube-music  │ https://i.imgur.com/UQgIqjF.png
+   ══════════════════════════════════════════════════════════════ */
+
+/* Variables CSS de iconos — úsalas con url() en content/background,
+   o copia la URL directamente en src de <img>.                     */
+:root {
+  --ic-amazon:       url('https://i.imgur.com/ll7NsR7.png');
+  --ic-apple:        url('https://i.imgur.com/JcCuef7.png');
+  --ic-beacon:       url('https://i.imgur.com/Vy1QF8X.png');
+  --ic-cv:           url('https://i.imgur.com/Gu6KHjs.png');
+  --ic-deezer:       url('https://i.imgur.com/8DaFQKt.png');
+  --ic-discord:      url('https://i.imgur.com/t49dIAR.png');
+  --ic-dlive:        url('https://i.imgur.com/7qTTLuR.png');
+  --ic-email:        url('https://i.imgur.com/iabQH76.png');
+  --ic-facebook:     url('https://i.imgur.com/lZbfJjh.png');
+  --ic-fansly:       url('https://i.imgur.com/j7qThLB.png');
+  --ic-hearnow:      url('https://i.imgur.com/bpa79ZO.png');
+  --ic-instagram:    url('https://i.imgur.com/DH9derS.png');
+  --ic-kick:         url('https://i.imgur.com/EAAvJak.png');
+  --ic-kofi:         url('https://i.imgur.com/grxxffG.png');
+  --ic-linkedin:     url('https://i.imgur.com/7DCPUfn.png');
+  --ic-onlyfans:     url('https://i.imgur.com/aSHfV9e.png');
+  --ic-patreon:      url('https://i.imgur.com/7NNQ7bR.png');
+  --ic-portafolio:   url('https://i.imgur.com/NAGtMLj.png');
+  --ic-soundcloud:   url('https://i.imgur.com/M3otwiX.png');
+  --ic-spotify:      url('https://i.imgur.com/rA5pTLb.png');
+  --ic-tiktok:       url('https://i.imgur.com/H4xT9h1.png');
+  --ic-trovo:        url('https://i.imgur.com/zfqX2cK.png');
+  --ic-tumblr:       url('https://i.imgur.com/5d5dgDQ.png');
+  --ic-twitch:       url('https://i.imgur.com/wwogLnL.png');
+  --ic-whatsapp:     url('https://i.imgur.com/dpBlNxE.png');
+  --ic-x:            url('https://i.imgur.com/vosCiy6.png');
+  --ic-youtube:      url('https://i.imgur.com/BN0ZTK7.png');
+  --ic-ytmusic:      url('https://i.imgur.com/UQgIqjF.png');
+}
+
 * { 
   box-sizing: border-box; 
   margin: 0; 
@@ -82,7 +153,7 @@ main, .container {
 .nav-card:hover { 
   transform: translateY(-8px); 
   border-color: var(--rosa-principal);
-  box-shadow: 0 8px 25px rgba(112, 221, 216, 0.3); /* Brillo cian */
+  box-shadow: 0 8px 25px rgba(112, 221, 216, 0.3);
 }
 
 .nav-card i { 
@@ -124,7 +195,7 @@ main, .container {
 .beacons-btn img {
   width: 24px;
   height: 24px;
-  border-radius: 50%; /* Hace que la imagen sea circular */
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -133,6 +204,7 @@ main, .container {
   box-shadow: 0 0 15px rgba(112, 221, 216, 0.4);
   transform: translateY(-3px);
 }
+
 #aviso-precios {
   position: fixed; bottom: 80px; right: 24px; z-index: 899;
   background: #1e1e1e; border: 1px solid #333;
@@ -143,5 +215,10 @@ main, .container {
   animation: fadeInAviso 0.4s ease;
   transition: opacity 0.6s ease;
 }
+
 #aviso-precios.oculto { opacity: 0; pointer-events: none; }
-@keyframes fadeInAviso { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+@keyframes fadeInAviso {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
