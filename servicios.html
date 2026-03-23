@@ -180,8 +180,73 @@
     }
     .btn-flotante:hover { background: var(--rosa-oscuro); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(239,80,133,0.55); }
     .btn-flotante i { font-size: 1rem; }
+
+    /* ══ BOTÓN FLOTANTE WHATSAPP ══ */
+    .btn-whatsapp {
+      position: fixed; bottom: 82px; right: 24px; z-index: 900;
+      background: #25D366; color: #fff;
+      border: none; border-radius: 50px;
+      padding: 13px 22px; font-size: 0.88rem; font-weight: bold;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 8px 28px rgba(37,211,102,0.55); }
+    .btn-whatsapp i { font-size: 1.05rem; }
+
     @media (max-width: 480px) {
-      .btn-flotante { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+      .btn-flotante  { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+      .btn-whatsapp  { bottom: 72px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+    }
+
+    /* ══ BANNER DE BIENVENIDA ══ */
+    .banner-fb {
+      position: relative; overflow: hidden;
+      background: linear-gradient(120deg, #0d1b2a 0%, #1a0d24 50%, #0d1b2a 100%);
+      border: 1px solid rgba(239,80,133,0.25);
+      border-radius: 14px; padding: 20px 24px 20px 20px;
+      margin-bottom: 28px; display: flex; align-items: center; gap: 18px;
+    }
+    .banner-fb::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(239,80,133,0.08) 0%, transparent 50%, rgba(112,221,216,0.06) 100%);
+      pointer-events: none;
+    }
+    .banner-fb::after {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--rosa-principal), var(--cian-brillo));
+      border-radius: 4px 0 0 4px;
+    }
+    .banner-fb-icon {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(239,80,133,0.15); border: 1.5px solid rgba(239,80,133,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+    .banner-fb-body { flex: 1; }
+    .banner-fb-body strong { display: block; color: #fff; font-size: 0.97rem; margin-bottom: 3px; }
+    .banner-fb-body span { color: #aaa; font-size: 0.82rem; line-height: 1.5; }
+    .banner-fb-cta {
+      flex-shrink: 0;
+      background: var(--rosa-principal); color: #fff;
+      border: none; border-radius: 8px; padding: 10px 18px;
+      font-size: 0.82rem; font-weight: bold; cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: 0.2s; white-space: nowrap;
+    }
+    .banner-fb-cta:hover { background: var(--rosa-oscuro); transform: translateY(-1px); }
+    .banner-fb-close {
+      flex-shrink: 0; background: none; border: none; color: #555;
+      cursor: pointer; font-size: 0.85rem; padding: 4px; transition: color 0.2s;
+      align-self: flex-start;
+    }
+    .banner-fb-close:hover { color: #aaa; }
+    @media (max-width: 560px) {
+      .banner-fb { flex-wrap: wrap; gap: 12px; }
+      .banner-fb-cta { width: 100%; justify-content: center; }
+      .banner-fb-close { position: absolute; top: 12px; right: 12px; }
     }
 
     /* ══ BTN COTIZAR EN TABLA ══ */
@@ -807,6 +872,21 @@
   </header>
 
   <main>
+    <!-- ══ BANNER BIENVENIDA ══ -->
+    <div class="banner-fb" id="banner-fb">
+      <div class="banner-fb-icon">🎯</div>
+      <div class="banner-fb-body">
+        <strong>¡Bienvenido! Llegaste al lugar correcto.</strong>
+        <span>Explora los servicios y paquetes disponibles. Cotiza sin compromiso — trato directo, sin intermediarios.</span>
+      </div>
+      <button class="banner-fb-cta" onclick="abrirModal('')">
+        <i class="fas fa-paper-plane"></i> Cotizar ahora
+      </button>
+      <button class="banner-fb-close" onclick="document.getElementById('banner-fb').style.display='none'" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
     <div class="page-header">
       <h1><i class="fas fa-rocket" style="margin-right:8px; font-size:1.6rem;"></i>Servicios Freelance</h1>
       <p>Soluciones digitales a la medida. Explora los paquetes o servicios individuales y cotiza sin compromiso.</p>
@@ -1361,6 +1441,11 @@
     <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:6px;"></i>
     Algunos precios pueden variar debido a la complejidad de la solicitud.
   </div>
+
+  <!-- ══ BOTÓN FLOTANTE WHATSAPP ══ -->
+  <a class="btn-whatsapp" href="https://wa.me/+529931741910" target="_blank" rel="noopener">
+    <i class="fab fa-whatsapp"></i> WhatsApp
+  </a>
 
   <!-- ══ BOTÓN FLOTANTE ══ -->
   <button class="btn-flotante" onclick="abrirModal('')">
