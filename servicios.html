@@ -1,1978 +1,286 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Servicios Freelance | Alexis Pérez</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre Mí | Alexis Pérez</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
+    /* ══ PERFIL ══ */
+    .profile-header { text-align: center; margin-bottom: 40px; }
 
-    /* ══ GENERAL ══ */
-    .page-header { text-align: center; margin-bottom: 6px; }
-    .page-header h1 { font-size: 2.1rem; color: var(--cian-brillo); margin-bottom: 6px; }
-    .page-header p { color: #aaa; font-size: 0.93rem; max-width: 580px; margin: 0 auto 28px; }
-
-    /* ══ SECCIÓN TÍTULO ══ */
-    .section-title {
-      font-size: 0.85rem; font-weight: bold; text-transform: uppercase;
-      letter-spacing: 2px; color: var(--rosa-principal);
-      border-bottom: 2px solid var(--rosa-oscuro);
-      padding-bottom: 8px; margin: 44px 0 18px;
-      display: flex; align-items: center; gap: 10px;
-    }
-
-    /* ══ PAQUETES – CARRUSEL DIRECTO ══ */
-    .paquetes-section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
-    }
-    .paquetes-section-header h2 {
-      font-size: 1.5rem; color: var(--blanco); margin: 0;
-    }
-    .paquetes-section-header p {
-      font-size: 0.82rem; color: #888; margin: 0;
-    }
-    .paquetes-carousel-wrap {
+    /* Contenedor de la foto — ocupa espacio fijo para que el layout no salte */
+    .profile-img-wrap {
+      display: inline-block;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 20px;
       position: relative;
-      padding: 0 6px;
-    }
-    .paquetes-grid {
-      display: flex; gap: 14px;
-      overflow-x: auto; scroll-behavior: smooth;
-      padding: 8px 2px 14px;
-      scrollbar-width: none;
-    }
-    .paquetes-grid::-webkit-scrollbar { display: none; }
-
-    /* ── Tarjeta ── */
-    .paquete-card {
-      border-radius: 12px; border: 1.5px solid #2a2a2a;
-      background: #1e1e1e;
-      display: flex; flex-direction: column; position: relative;
-      min-width: 268px; max-width: 268px; flex-shrink: 0;
-      overflow: hidden; transition: transform 0.25s, box-shadow 0.25s;
-    }
-    .paquete-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.5); }
-    .paquete-card.destacado { border-color: var(--rosa-principal); box-shadow: 0 0 22px rgba(239,80,133,0.2); }
-    .paquete-card.enterprise { border-color: #7040b0; }
-
-    .paquete-band { height: 4px; background: #2a2a2a; }
-    .paquete-card.destacado .paquete-band { background: linear-gradient(90deg,var(--rosa-oscuro),var(--rosa-principal)); }
-    .paquete-card.enterprise .paquete-band { background: linear-gradient(90deg,#4a1a7a,#9146ff); }
-
-    .badge-popular {
-      position: absolute; top: 12px; right: 12px;
-      background: var(--rosa-principal); color: #fff; font-size: 0.6rem;
-      font-weight: bold; padding: 2px 9px; border-radius: 20px;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .paquete-head { padding: 18px 18px 14px; border-bottom: 1px solid #282828; }
-    .paquete-tier { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 2px; color: #666; margin-bottom: 5px; }
-    .paquete-card.destacado .paquete-tier { color: var(--rosa-principal); }
-    .paquete-card.enterprise .paquete-tier { color: #9146ff; }
-    .paquete-nombre { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
-    .paquete-precio { font-size: 1.9rem; font-weight: 800; color: var(--cian-brillo); line-height: 1; }
-    .paquete-precio sub { font-size: 0.82rem; font-weight: 400; color: #777; vertical-align: baseline; margin-left: 2px; }
-    .paquete-card.enterprise .paquete-precio { font-size: 1.5rem; color: #b080f0; }
-    .paquete-desc { font-size: 0.76rem; color: #888; margin-top: 7px; line-height: 1.45; }
-
-    .paquete-features { padding: 14px 18px; flex: 1; }
-    .feat-group-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; color: #555; margin: 12px 0 7px; }
-    .feat-group-label:first-child { margin-top: 0; }
-    .feat-row { display: flex; align-items: flex-start; gap: 9px; padding: 4px 0; border-bottom: 1px solid #242424; font-size: 0.8rem; line-height: 1.4; }
-    .feat-row:last-child { border-bottom: none; }
-    .fi { width: 13px; flex-shrink: 0; margin-top: 2px; font-size: 0.72rem; }
-    .fi-yes { color: #50d890; }
-    .fi-no { color: #3a3a3a; }
-    .fi-plus { color: var(--cian-brillo); }
-    .feat-yes { color: #ccc; }
-    .feat-no { color: #3a3a3a; text-decoration: line-through; }
-    .feat-plus { color: #fff; }
-    .feat-val { color: var(--cian-brillo); font-weight: 600; }
-    .feat-new-badge { font-size: 0.56rem; background: rgba(112,221,216,0.15); color: var(--cian-brillo); padding: 1px 5px; border-radius: 4px; font-weight: bold; margin-left: 3px; vertical-align: middle; text-transform: uppercase; border: 1px solid rgba(112,221,216,0.3); }
-
-    .paquete-cta { padding: 14px 18px; border-top: 1px solid #282828; }
-
-    /* Flechas carrusel */
-    .carousel-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #1e1e1e; border: 1.5px solid #444;
-      color: #ccc; cursor: pointer; font-size: 0.78rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: 0.2s; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    .carousel-btn:hover { border-color: var(--cian-brillo); color: var(--cian-brillo); }
-    .carousel-btn.prev { left: -10px; }
-    .carousel-btn.next { right: -10px; }
-    @media (max-width: 600px) { .carousel-btn { display: none; } }
-
-    /* Puntos */
-    .dot-indicator { width: 7px; height: 7px; border-radius: 50%; background: #333; cursor: pointer; transition: 0.2s; border: 1.5px solid #555; display: inline-block; }
-    .dot-indicator.active { background: var(--rosa-principal); border-color: var(--rosa-principal); }
-
-    /* ══ BLOQUES COLAPSABLES ══ */
-    .cat-block { background: var(--contraste-fondo); border: 2px solid var(--azul-boton); border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.3s; }
-    .cat-block.open { border-color: var(--rosa-oscuro); }
-    .cat-header { display: flex; align-items: center; gap: 14px; padding: 14px 20px; cursor: pointer; user-select: none; transition: background 0.2s; }
-    .cat-header:hover { background: rgba(255,255,255,0.03); }
-    .cat-icon { font-size: 1.4rem; min-width: 28px; text-align: center; }
-    .cat-info { flex: 1; }
-    .cat-info h2 { font-size: 1rem; color: var(--blanco); margin-bottom: 2px; }
-    .cat-info span { font-size: 0.73rem; color: #888; }
-    .cat-count { font-size: 0.68rem; padding: 3px 10px; border-radius: 20px; background: #1a2a3a; color: var(--cian-brillo); border: 1px solid var(--cian-brillo); font-weight: bold; }
-    .chevron { color: var(--cian-brillo); font-size: 0.82rem; transition: transform 0.35s; }
-    .cat-block.open .chevron { transform: rotate(180deg); }
-    .cat-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
-    .cat-block.open .cat-body { max-height: 3000px; }
-
-    /* ══ TABLA ══ */
-    .services-table-wrap { padding: 0 16px 18px; overflow-x: auto; }
-    .subtitulo-tabla { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--cian-brillo); background: #112233; padding: 6px 14px; border-top: 1px solid #1a3a55; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-    thead tr { background: #1a2d40; color: var(--cian-brillo); text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.6px; }
-    thead th { padding: 9px 14px; text-align: left; white-space: nowrap; }
-    tbody tr { border-bottom: 1px solid #2a2a2a; transition: background 0.15s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(112,221,216,0.05); }
-    tbody td { padding: 10px 14px; vertical-align: middle; line-height: 1.4; }
-    .td-servicio { color: var(--blanco); min-width: 200px; }
-    .td-precio { font-weight: bold; color: var(--cian-brillo); white-space: nowrap; text-align: right; }
-    .td-nota { font-size: 0.76rem; color: #888; font-style: italic; }
-    .precio-pres { color: #f0a060; font-weight: bold; }
-    .nota-box { margin: 8px 16px 16px; background: #1a1a1a; border-left: 3px solid #f0a060; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.79rem; color: #bbb; }
-    .nota-box strong { color: #f0a060; }
-    .leyenda { margin-top: 32px; background: var(--contraste-fondo); border-left: 4px solid var(--cian-brillo); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 0.82rem; color: #aaa; }
-    .leyenda strong { color: var(--cian-brillo); }
-
-    /* ══ BOTÓN FLOTANTE COTIZAR ══ */
-    .btn-flotante {
-      position: fixed; bottom: 24px; right: 24px; z-index: 900;
-      background: var(--rosa-principal); color: #fff;
-      border: none; border-radius: 50px;
-      padding: 13px 22px; font-size: 0.88rem; font-weight: bold;
-      cursor: pointer; box-shadow: 0 4px 20px rgba(239,80,133,0.45);
-      display: flex; align-items: center; gap: 9px;
-      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
-    }
-    .btn-flotante:hover { background: var(--rosa-oscuro); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(239,80,133,0.55); }
-    .btn-flotante i { font-size: 1rem; }
-
-    /* ══ BOTÓN FLOTANTE WHATSAPP ══ */
-    .btn-whatsapp {
-      position: fixed; bottom: 82px; right: 24px; z-index: 900;
-      background: #25D366; color: #fff;
-      border: none; border-radius: 50px;
-      padding: 13px 22px; font-size: 0.88rem; font-weight: bold;
-      cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.45);
-      display: flex; align-items: center; gap: 9px;
-      text-decoration: none;
-      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
-    }
-    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 8px 28px rgba(37,211,102,0.55); }
-    .btn-whatsapp i { font-size: 1.05rem; }
-
-    @media (max-width: 480px) {
-      .btn-flotante  { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
-      .btn-whatsapp  { bottom: 72px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
     }
 
-    /* ══ BANNER DE BIENVENIDA ══ */
-    .banner-fb {
-      position: relative; overflow: hidden;
-      background: linear-gradient(120deg, #0d1b2a 0%, #1a0d24 50%, #0d1b2a 100%);
-      border: 1px solid rgba(239,80,133,0.25);
-      border-radius: 14px; padding: 20px 24px 20px 20px;
-      margin-bottom: 28px; display: flex; align-items: center; gap: 18px;
-    }
-    .banner-fb::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(239,80,133,0.08) 0%, transparent 50%, rgba(112,221,216,0.06) 100%);
-      pointer-events: none;
-    }
-    /* línea izquierda decorativa */
-    .banner-fb::after {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 4px;
-      background: linear-gradient(180deg, var(--rosa-principal), var(--cian-brillo));
-      border-radius: 4px 0 0 4px;
-    }
-    .banner-fb-icon {
-      flex-shrink: 0; width: 48px; height: 48px; border-radius: 12px;
-      background: rgba(239,80,133,0.15); border: 1.5px solid rgba(239,80,133,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-    }
-    .banner-fb-body { flex: 1; }
-    .banner-fb-body strong {
-      display: block; color: #fff; font-size: 0.97rem; margin-bottom: 3px;
-    }
-    .banner-fb-body span { color: #aaa; font-size: 0.82rem; line-height: 1.5; }
-    .banner-fb-cta {
-      flex-shrink: 0;
-      background: var(--rosa-principal); color: #fff;
-      border: none; border-radius: 8px; padding: 10px 18px;
-      font-size: 0.82rem; font-weight: bold; cursor: pointer;
-      display: flex; align-items: center; gap: 7px;
-      transition: 0.2s; white-space: nowrap;
-    }
-    .banner-fb-cta:hover { background: var(--rosa-oscuro); transform: translateY(-1px); }
-    .banner-fb-close {
-      flex-shrink: 0; background: none; border: none; color: #555;
-      cursor: pointer; font-size: 0.85rem; padding: 4px; transition: color 0.2s;
-      align-self: flex-start;
-    }
-    .banner-fb-close:hover { color: #aaa; }
-    @media (max-width: 560px) {
-      .banner-fb { flex-wrap: wrap; gap: 12px; }
-      .banner-fb-cta { width: 100%; justify-content: center; }
-      .banner-fb-close { position: absolute; top: 12px; right: 12px; }
+    /* La foto propiamente dicha */
+    .profile-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid var(--rosa-principal);
+      box-shadow: 0 0 15px var(--rosa-oscuro);
+      /* Transición suave de tamaño y posición */
+      transition: width 0.35s ease, height 0.35s ease,
+                  border-width 0.35s ease, box-shadow 0.35s ease,
+                  top 0.35s ease, left 0.35s ease,
+                  transform 0.35s ease;
+      position: absolute;
+      top: 0; left: 0;
     }
 
-    /* ══ BTN COTIZAR EN TABLA ══ */
-    .btn-cotizar-tabla {
-      background: none; border: 1px solid #2a4a6a; color: var(--cian-brillo);
-      padding: 5px 14px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;
-      transition: 0.2s; font-weight: bold;
-    }
-    .btn-cotizar-tabla:hover { background: rgba(112,221,216,0.1); border-color: var(--cian-brillo); }
-
-    /* ══ BTN COTIZAR EN TARJETA PAQUETE ══ */
-    .btn-cotizar-pkg {
-      display: block; width: 100%; text-align: center;
-      background: #1a3a5c; color: #fff;
-      border: 1px solid #1a5080; border-radius: 8px;
-      padding: 11px; font-size: 0.87rem; font-weight: 700;
-      cursor: pointer; transition: 0.2s; letter-spacing: 0.4px;
-    }
-    .btn-cotizar-pkg:hover { background: var(--rosa-principal); border-color: var(--rosa-principal); }
-    .paquete-card.destacado .btn-cotizar-pkg { background: var(--rosa-principal); border-color: var(--rosa-oscuro); }
-    .paquete-card.destacado .btn-cotizar-pkg:hover { background: var(--rosa-oscuro); }
-    .paquete-card.enterprise .btn-cotizar-pkg { background: #4a1a7a; border-color: #7040b0; }
-    .paquete-card.enterprise .btn-cotizar-pkg:hover { background: #6a2a9a; }
-
-    /* ══ MODAL ══ */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 1000;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
-      display: none; align-items: center; justify-content: center;
-      padding: 16px;
-    }
-    .modal-overlay.visible { display: flex; }
-
-    .modal-box {
-      background: #1c1c1c; border: 1.5px solid #333; border-radius: 16px;
-      width: 100%; max-width: 480px; overflow: hidden;
-      animation: modalIn 0.25s ease;
-    }
-    @keyframes modalIn { from { opacity:0; transform: scale(0.94) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
-
-    .modal-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid #2a2a2a;
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-    }
-    .modal-header h3 { font-size: 1.15rem; color: var(--blanco); margin-bottom: 3px; }
-    .modal-header p { font-size: 0.78rem; color: #888; }
-    .modal-close {
-      background: none; border: none; color: #666;
-      font-size: 1.1rem; cursor: pointer; padding: 2px 6px;
-      transition: color 0.2s; flex-shrink: 0; margin-top: 2px;
-    }
-    .modal-close:hover { color: var(--rosa-principal); }
-
-    .modal-body { padding: 20px 24px; }
-
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 0.76rem; color: #aaa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%; background: #111; border: 1.5px solid #2a2a2a;
-      color: #fff; border-radius: 8px; padding: 10px 14px;
-      font-size: 0.88rem; transition: border-color 0.2s; outline: none;
-      font-family: inherit;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: var(--cian-brillo); }
-    .form-group select option { background: #1c1c1c; }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 420px) { .form-row { grid-template-columns: 1fr; } }
-
-    .modal-footer { padding: 0 24px 20px; }
-    .btn-enviar {
-      width: 100%; background: var(--rosa-principal); color: #fff;
-      border: none; border-radius: 10px; padding: 13px;
-      font-size: 0.92rem; font-weight: bold; cursor: pointer;
-      transition: 0.25s; display: flex; align-items: center; justify-content: center; gap: 9px;
-    }
-    .btn-enviar:hover:not(:disabled) { background: var(--rosa-oscuro); }
-    .btn-enviar:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .form-msg { font-size: 0.8rem; margin-top: 10px; text-align: center; padding: 8px; border-radius: 8px; display: none; }
-    .form-msg.ok { background: rgba(80,216,144,0.12); color: #50d890; border: 1px solid rgba(80,216,144,0.25); display: block; }
-    .form-msg.err { background: rgba(239,80,133,0.12); color: var(--rosa-principal); border: 1px solid rgba(239,80,133,0.25); display: block; }
-
-    .servicio-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(112,221,216,0.1); color: var(--cian-brillo);
-      border: 1px solid rgba(112,221,216,0.25); border-radius: 6px;
-      padding: 6px 12px; font-size: 0.8rem; margin: 0 6px 8px 0;
-    }
-    .servicio-badge .badge-remove {
-      background: none; border: none; color: rgba(112,221,216,0.5);
-      cursor: pointer; padding: 0; font-size: 0.8rem; line-height: 1;
-      transition: color 0.2s; margin-left: 2px;
-    }
-    .servicio-badge .badge-remove:hover { color: var(--rosa-principal); }
-
-    /* ── Botón agregar servicio ── */
-    .btn-add-service {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: none; border: 1.5px dashed #333; color: #666;
-      border-radius: 6px; padding: 6px 14px; font-size: 0.8rem;
-      cursor: pointer; transition: 0.2s; margin-bottom: 8px;
-    }
-    .btn-add-service:hover { border-color: var(--cian-brillo); color: var(--cian-brillo); }
-
-    /* ── Panel de búsqueda de servicios ── */
-    .service-search-panel {
-      display: none; position: fixed; inset: 0; z-index: 1100;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-      align-items: center; justify-content: center; padding: 16px;
-    }
-    .service-search-panel.visible { display: flex; }
-    .service-search-box {
-      background: #1c1c1c; border: 1.5px solid #333; border-radius: 14px;
-      width: 100%; max-width: 480px; overflow: hidden;
-      animation: modalIn 0.2s ease;
-    }
-    .service-search-header {
-      padding: 16px 20px; border-bottom: 1px solid #2a2a2a;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .service-search-header input {
-      flex: 1; background: #111; border: 1.5px solid #2a2a2a;
-      color: #fff; border-radius: 8px; padding: 9px 14px;
-      font-size: 0.87rem; outline: none; font-family: inherit;
-    }
-    .service-search-header input:focus { border-color: var(--cian-brillo); }
-    .service-search-header button {
-      background: none; border: none; color: #666; cursor: pointer;
-      font-size: 1rem; padding: 4px 8px; transition: color 0.2s; flex-shrink: 0;
-    }
-    .service-search-header button:hover { color: var(--rosa-principal); }
-    .service-search-list {
-      max-height: 360px; overflow-y: auto; padding: 8px 0;
-      scrollbar-width: thin; scrollbar-color: #333 transparent;
-    }
-    .service-search-list::-webkit-scrollbar { width: 5px; }
-    .service-search-list::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-    .service-search-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 20px; cursor: pointer; transition: background 0.15s;
-      font-size: 0.84rem; color: #ccc;
-    }
-    .service-search-item:hover { background: rgba(112,221,216,0.07); color: #fff; }
-    .service-search-item.selected { color: var(--cian-brillo); }
-    .service-search-item .ssi-check {
-      width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
-      border: 1.5px solid #333; display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; transition: 0.2s;
-    }
-    .service-search-item.selected .ssi-check {
-      background: var(--cian-brillo); border-color: var(--cian-brillo); color: #111;
-    }
-    .service-search-item .ssi-price {
-      margin-left: auto; font-size: 0.75rem; color: #555; white-space: nowrap; flex-shrink: 0;
-    }
-    .service-search-item.selected .ssi-price { color: var(--cian-brillo); }
-    .service-search-cat {
-      padding: 10px 20px 4px; font-size: 0.65rem; text-transform: uppercase;
-      letter-spacing: 1.5px; color: #444; font-weight: bold;
-    }
-    .service-search-empty { padding: 24px; text-align: center; color: #555; font-size: 0.84rem; }
-    .service-search-footer {
-      padding: 12px 20px; border-top: 1px solid #2a2a2a;
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    }
-    .service-search-footer span { font-size: 0.78rem; color: #666; }
-    .service-search-footer span strong { color: var(--cian-brillo); }
-    .btn-confirm-services {
-      background: var(--rosa-principal); color: #fff; border: none;
-      border-radius: 8px; padding: 9px 20px; font-size: 0.85rem;
-      font-weight: bold; cursor: pointer; transition: 0.2s;
-    }
-    .btn-confirm-services:hover { background: var(--rosa-oscuro); }
-
-    /* ══ GALERÍA DE EJEMPLOS ══ */
-    .ejemplos-toggle {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 20px; cursor: pointer; user-select: none;
-      border-top: 1px solid #1e2e3e; background: rgba(112,221,216,0.03);
-      transition: background 0.2s;
-    }
-    .ejemplos-toggle:hover { background: rgba(112,221,216,0.07); }
-    .ejemplos-toggle span {
-      font-size: 0.78rem; color: #70DDD8; font-weight: 600;
-      flex: 1; letter-spacing: 0.3px;
-    }
-    .ejemplos-toggle .ej-chevron {
-      color: #70DDD8; font-size: 0.72rem; transition: transform 0.3s;
-    }
-    .ejemplos-toggle.open .ej-chevron { transform: rotate(180deg); }
-    .ejemplos-toggle .ej-count {
-      font-size: 0.65rem; background: rgba(112,221,216,0.12);
-      color: #70DDD8; border: 1px solid rgba(112,221,216,0.25);
-      padding: 2px 8px; border-radius: 20px;
+    /* Estado "fija y pequeña" — se activa con JS al hacer scroll */
+    .profile-img.sticky-small {
+      position: fixed;
+      top: 14px;
+      left: 18px;
+      width: 46px;
+      height: 46px;
+      border-width: 2px;
+      box-shadow: 0 2px 10px rgba(239,80,133,0.5);
+      z-index: 999;
+      cursor: pointer;
     }
 
-    .ejemplos-body {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.4s ease;
-    }
-    .ejemplos-body.open { max-height: 600px; }
+    .profile-header h1 { font-size: 2.5rem; color: var(--rosa-principal); margin-bottom: 10px; }
 
-    .ejemplos-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 14px 16px 18px;
+    .bio-section {
+      background: var(--contraste-fondo); padding: 30px; border-radius: 15px;
+      border-left: 5px solid var(--azul-boton); box-shadow: 5px 5px 0px var(--rosa-oscuro); margin-bottom: 40px;
     }
 
-    /* Thumbnail fijo: 110×110 px */
-    .ej-thumb {
-      position: relative;
-      width: 110px; height: 110px;
-      flex-shrink: 0;
-      border-radius: 8px; overflow: hidden; cursor: pointer;
-      background: #111; border: 1.5px solid #2a2a2a;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .ej-thumb:hover { transform: scale(1.05); border-color: #70DDD8; }
-    .ej-thumb img {
-      width: 100%; height: 100%; object-fit: cover;
-      display: block;
-    }
-    .ej-thumb .ej-overlay {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0); display: flex;
-      align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .ej-thumb:hover .ej-overlay { background: rgba(0,0,0,0.5); }
-    .ej-thumb .ej-overlay i {
-      color: #fff; font-size: 1.4rem; opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .ej-thumb:hover .ej-overlay i { opacity: 1; }
+    h3 { color: var(--cian-brillo); margin: 25px 0 12px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    .skills-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
 
-    /* Placeholder cuando no hay imagen */
-    .ej-thumb.placeholder {
-      cursor: default; border-style: dashed; border-color: #252525;
+    .skill-tag {
+      background: var(--azul-boton); color: #fff; padding: 6px 14px; border-radius: 8px;
+      font-size: 0.85rem; border: 1px solid #1a4a7a; display: inline-flex; align-items: center; gap: 8px;
+      transition: 0.3s; text-decoration: none;
     }
-    .ej-thumb.placeholder:hover { transform: none; border-color: #252525; }
-    .ej-thumb.placeholder .ej-overlay {
-      background: rgba(0,0,0,0) !important;
-      flex-direction: column; gap: 5px;
-    }
-    .ej-thumb.placeholder i {
-      opacity: 1 !important; color: #2a2a2a !important; font-size: 1.3rem !important;
-    }
-    .ej-thumb.placeholder span {
-      font-size: 0.6rem; color: #2a2a2a; text-align: center;
-    }
+    .skill-tag:hover { border-color: var(--cian-brillo); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(112,221,216,0.2); }
 
-    /* ── Sync bar ── */
-    .sync-bar {
-      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-      background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.15);
-      border-radius: 10px; padding: 10px 18px; margin-bottom: 12px;
-    }
-    #btn-sync-sheets {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(112,221,216,0.1); border: 1.5px solid rgba(112,221,216,0.3);
-      color: var(--cian-brillo); border-radius: 8px; padding: 8px 16px;
-      font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      transition: 0.2s; font-family: inherit;
-    }
-    #btn-sync-sheets:hover:not(:disabled) {
-      background: rgba(112,221,216,0.2); border-color: var(--cian-brillo);
-    }
-    #btn-sync-sheets:disabled { opacity: 0.6; cursor: default; }
-    #sync-status { font-size: 0.78rem; color: #666; }
+    .tag-ia { border-color: var(--rosa-principal); }
+    .tag-ia i { color: var(--rosa-principal); }
+    .tag-ia:hover { box-shadow: 0 4px 10px rgba(239, 80, 133, 0.3); }
 
-    /* ── Lightbox ──
-    .lightbox {
-      display: none; position: fixed; inset: 0; z-index: 1200;
-      background: rgba(0,0,0,0.88); backdrop-filter: blur(6px);
-      align-items: center; justify-content: center;
-      padding: 16px;
-    }
-    .lightbox.visible { display: flex; }
-    .lightbox-inner {
-      position: relative;
-      width: 500px; max-width: calc(100vw - 80px);
-      animation: modalIn 0.2s ease;
-    }
-    .lightbox-inner img {
-      width: 100%; max-height: 520px; object-fit: contain;
-      border-radius: 10px; display: block; background: #111;
-    }
-    .lightbox-caption {
-      text-align: center; color: #aaa; font-size: 0.82rem;
-      margin-top: 10px;
-    }
-    .lightbox-close {
-      position: absolute; top: -14px; right: -14px;
-      background: #EF5085; border: none; color: #fff;
-      width: 32px; height: 32px; border-radius: 50%;
-      font-size: 0.85rem; cursor: pointer; z-index: 1;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .lightbox-close:hover { background: #A64062; }
-    .lightbox-nav {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(20,20,20,0.9); border: 1.5px solid #444;
-      color: #ccc; width: 38px; height: 38px; border-radius: 50%;
-      font-size: 0.85rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: 0.2s;
-    }
-    .lightbox-nav:hover { border-color: #70DDD8; color: #70DDD8; }
-    .lightbox-nav.prev { left: -52px; }
-    .lightbox-nav.next { right: -52px; }
-    @media (max-width: 660px) {
-      .lightbox-inner { max-width: calc(100vw - 32px); }
-      .lightbox-nav.prev { left: 6px; }
-      .lightbox-nav.next { right: 6px; }
-    }
+    .experience-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #444; }
+    .experience-item:last-child { border-bottom: none; }
+    .exp-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 10px; }
+    .exp-title { color: var(--rosa-principal); font-weight: bold; font-size: 1.2rem; }
+    .exp-company { color: var(--cian-brillo); font-weight: bold; }
+    .exp-date { font-size: 0.9rem; color: #aaa; font-style: italic; }
+    .exp-list { margin: 10px 0; padding-left: 20px; list-style-type: square; }
+    .exp-list li { margin-bottom: 5px; font-size: 0.95rem; }
   </style>
 </head>
 <body>
+  <div class="container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
 
-  <header>
-    <a href="sobremi.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver</a>
-    <div class="logo"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104"></div>
-  </header>
+    <div class="profile-header">
 
-  <main>
-    <!-- ══ BANNER BIENVENIDA FACEBOOK ══ -->
-    <div class="banner-fb" id="banner-fb">
-      <div class="banner-fb-icon">🎯</div>
-      <div class="banner-fb-body">
-        <strong>¡Bienvenido! Llegaste al lugar correcto.</strong>
-        <span>Explora los servicios y paquetes disponibles. Cotiza sin compromiso — trato directo, sin intermediarios.</span>
-      </div>
-      <button class="banner-fb-cta" onclick="abrirModal('')">
-        <i class="fas fa-paper-plane"></i> Cotizar ahora
-      </button>
-      <button class="banner-fb-close" onclick="document.getElementById('banner-fb').style.display='none'" title="Cerrar">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
-    <div class="page-header">
-      <h1><i class="fas fa-rocket" style="margin-right:8px; font-size:1.6rem;"></i>Servicios Freelance</h1>
-      <p>Soluciones digitales a la medida. Explora los paquetes o servicios individuales y cotiza sin compromiso.</p>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════
-         SECCIÓN 1: PAQUETES COMMUNITY MANAGER (SIEMPRE VISIBLES)
-    ══════════════════════════════════════════════════════ -->
-    <div style="margin-bottom: 6px;">
-      <div class="paquetes-section-header">
-        <div>
-          <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:2px; color:var(--rosa-principal); margin-bottom:4px;"><i class="fas fa-users" style="margin-right:6px;"></i>Community Manager</div>
-          <h2 style="font-size:1.5rem; color:#fff; margin:0 0 4px;">Paquetes Mensuales</h2>
-          <p style="font-size:0.8rem; color:#888; margin:0;">Gestión de redes, contenido, SEO y comunidad · 5 niveles</p>
-        </div>
+      <!-- Contenedor ocupa el espacio fijo; la img vuela encima con position:absolute -->
+      <div class="profile-img-wrap" id="img-wrap">
+        <img
+          src="https://i.imgur.com/kcHX24F.jpg"
+          alt="Alexis Pérez"
+          class="profile-img"
+          id="profile-img"
+          title="Volver al inicio"
+        >
       </div>
 
-      <div class="paquetes-carousel-wrap">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
+      <h1>Alexis Pérez</h1>
+      <p>Lic. en Mercadotecnia | Perfil Tecnológico | Especialista en Automatización</p>
 
-        <div class="paquetes-grid" id="paquetes-carousel">
-
-          <!-- ══ 1. DESPEGUE ══ -->
-          <div class="paquete-card">
-            <div class="paquete-band"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Starter</div>
-              <div class="paquete-nombre">🚀 Despegue</div>
-              <div class="paquete-precio">$1,200<sub>/mes</sub></div>
-              <div class="paquete-desc">Para emprendedores que arrancan. Presencia mínima, sin complicaciones.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-group-label">Redes y publicaciones</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 red social</span> (FB o IG)</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">8 publicaciones</span>/mes</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imagen + texto</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Stories / Reels / Shorts</span></div>
-              <div class="feat-group-label">Web y gestión</div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Gestión de página web</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
-              <div class="feat-group-label">Estrategia y reportes</div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('🚀 Despegue — $1,200/mes')">Contratar</button>
-            </div>
+      <div class="nav-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <a href="https://drive.google.com/file/d/17CmmYiOBJi9BHYVzmZkaE5nNZp-152Vb/view?usp=sharing" target="_blank" class="nav-card">
+          <i class="fas fa-file-pdf"></i>
+          <h3>Curriculum Vitae</h3>
+        </a>
+        <a href="https://drive.google.com/file/d/1kCITSfX6NCnD0xHDtutoTTc7gbWJkcDG/view?usp=sharing" target="_blank" class="nav-card">
+          <i class="fas fa-briefcase"></i>
+          <h3>Portafolio</h3>
+        </a>
+        <a href="servicios.html" class="nav-card" style="
+          grid-column: 1 / -1; padding: 18px 20px;
+          border-color: var(--cian-brillo);
+          background: linear-gradient(135deg, var(--contraste-fondo), #0d3a5c);
+          display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px;">
+          <i class="fas fa-rocket" style="font-size:2rem; color: var(--cian-brillo); margin-bottom:0;"></i>
+          <div style="text-align:left;">
+            <h3 style="color: var(--cian-brillo); font-size:1.3rem;">Servicios Freelance</h3>
+            <p style="margin-top:3px; font-size:0.88rem;">Automatización · Marketing Digital · Diseño · Desarrollo Web</p>
           </div>
-
-          <!-- ══ 2. ARRANQUE DIGITAL ══ -->
-          <div class="paquete-card">
-            <div class="paquete-band"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Básico</div>
-              <div class="paquete-nombre">📡 Arranque Digital</div>
-              <div class="paquete-precio">$2,500<sub>/mes</sub></div>
-              <div class="paquete-desc">3 plataformas activas con contenido publicado y una web gestionada.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-group-label">Redes y publicaciones</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">3 redes</span>: FB, IG + 1 a elección</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">12 publicaciones</span>/mes</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño de contenido incluido</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Formatos: imágenes y stories</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reels / Shorts / Carruseles</span></div>
-              <div class="feat-group-label">Web y gestión</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 página web</span> gestionada</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Respuesta a comentarios / DMs</span></div>
-              <div class="feat-group-label">Estrategia y reportes</div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">SEO orgánico</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Reporte de métricas / KPIs</span></div>
-              <div class="feat-row"><i class="fi fi-no fas fa-times"></i><span class="feat-no">Calendario editorial</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('📡 Arranque Digital — $2,500/mes')">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 3. SEÑAL FUERTE ══ -->
-          <div class="paquete-card destacado">
-            <div class="paquete-band"></div>
-            <div class="badge-popular">⭐ Más Popular</div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Intermedio</div>
-              <div class="paquete-nombre">🔥 Señal Fuerte</div>
-              <div class="paquete-precio">$4,800<sub>/mes</sub></div>
-              <div class="paquete-desc">Gestión completa de 5 plataformas: contenido exclusivo, SEO, comunidad activa y entrega de recursos.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-group-label">Redes y publicaciones</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">5 redes</span>: FB, IG, X, LinkedIn, TikTok</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">18 piezas/mes por red</span> = 90 totales</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Diseño exclusivo y rotativo por plataforma</span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reels, Shorts, Stories, Carruseles <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-group-label">Web y gestión</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1–2 páginas web</span> gestionadas <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Respuesta a comentarios y DMs <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-group-label">Estrategia y reportes</div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">SEO orgánico: redes + Google <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Calendario editorial mensual <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Reporte mensual + Analytics <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes">Recursos digitales entregados al cliente <span class="feat-new-badge">nuevo</span></span></div>
-              <div class="feat-row"><i class="fi fi-yes fas fa-check"></i><span class="feat-yes"><span class="feat-val">1 marca</span></span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('🔥 Señal Fuerte — $4,800/mes')">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 4. DOMINIO TOTAL ══ -->
-          <div class="paquete-card">
-            <div class="paquete-band" style="background:linear-gradient(90deg,#0a315b,#70DDD8);"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Profesional</div>
-              <div class="paquete-nombre">🏆 Dominio Total</div>
-              <div class="paquete-precio">$8,500<sub>/mes</sub></div>
-              <div class="paquete-desc">Todo lo de Señal Fuerte, ampliado a múltiples marcas con reportes semanales.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-group-label" style="color:var(--rosa-principal);">Todo de Señal Fuerte, más:</div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Hasta <span class="feat-val">15 redes sociales</span></span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus"><span class="feat-val">2 o 3 marcas</span> simultáneas</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Contenido independiente por marca</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Gestión <span class="feat-val">multisite</span> (webs por marca)</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Producción audiovisual básica incluida</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reporte ejecutivo <span class="feat-val">semanal</span></span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Reunión estratégica mensual (videollamada)</span></div>
-              <div class="feat-row"><i class="fi fi-plus fas fa-plus"></i><span class="feat-plus">Entrega de recursos por cada marca</span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('🏆 Dominio Total — $8,500/mes')">Contratar</button>
-            </div>
-          </div>
-
-          <!-- ══ 5. IMPERIO DIGITAL ══ -->
-          <div class="paquete-card enterprise">
-            <div class="paquete-band"></div>
-            <div class="paquete-head">
-              <div class="paquete-tier">Enterprise</div>
-              <div class="paquete-nombre" style="color:#c090ff;">👑 Imperio Digital</div>
-              <div class="paquete-precio">A cotizar</div>
-              <div class="paquete-desc">Solución 360° con pauta Meta, CRM y automatización para operaciones de alto volumen.</div>
-            </div>
-            <div class="paquete-features">
-              <div class="feat-group-label" style="color:#9146ff;">Todo de Dominio Total, más:</div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Gestión de <span class="feat-val">Pauta Meta Ads</span></span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Automatización CRM (Bitrix24)</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Email marketing segmentado</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Dashboard de métricas en tiempo real</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">SEO técnico + contenido para buscadores</span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Soporte <span class="feat-val">prioritario 7 días</span></span></div>
-              <div class="feat-row"><i class="fi fas fa-plus" style="color:#9146ff;"></i><span class="feat-plus">Consultoría ejecutiva mensual</span></div>
-            </div>
-            <div class="paquete-cta">
-              <button class="btn-cotizar-pkg" onclick="abrirModal('👑 Imperio Digital — A cotizar')">Solicitar Propuesta</button>
-            </div>
-          </div>
-
-        </div><!-- /paquetes-grid -->
-      </div><!-- /carousel-wrap -->
-
-      <div style="display:flex; justify-content:center; gap:8px; margin: 4px 0 0;">
-        <span class="dot-indicator active" onclick="goToSlide(0)"></span>
-        <span class="dot-indicator" onclick="goToSlide(1)"></span>
-        <span class="dot-indicator" onclick="goToSlide(2)"></span>
-        <span class="dot-indicator" onclick="goToSlide(3)"></span>
-        <span class="dot-indicator" onclick="goToSlide(4)"></span>
+        </a>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════
-         SERVICIOS INDIVIDUALES
-    ══════════════════════════════════════════════════════ -->
-    <div class="section-title"><i class="fas fa-bullhorn"></i> Marketing Digital – Servicios Individuales</div>
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header">
-        <i class="fas fa-share-alt cat-icon" style="color:#70DDD8;"></i>
-        <div class="cat-info"><h2>Community Management y Redes Sociales</h2><span>Gestión · Publicidad · Estrategia</span></div>
-        <span class="cat-count">9 servicios</span>
-        <i class="fas fa-chevron-down chevron"></i>
+    <div class="bio-section">
+      <p>Me llamo <strong>Alexis Pérez</strong>, Licenciado en <strong>Mercadotecnia</strong> especializado en la convergencia de estrategia digital, automatización CRM y programación.</p>
+      <p>Mi enfoque no es la venta directa, sino el diseño de ecosistemas tecnológicos y flujos de trabajo optimizados mediante IA para potenciar resultados institucionales.</p>
+      <p>Experto en gestión de comunidades internacionales, liderazgo editorial y desarrollo de activos multimedia con un perfil métrico, meticuloso y autodidacta.</p>
+
+      <h3>Ecosistema Adobe</h3>
+      <div class="skills-group">
+        <a href="https://www.adobe.com/products/photoshop.html" target="_blank" class="skill-tag"><i class="fas fa-bezier-curve"></i> Photoshop</a>
+        <a href="https://www.adobe.com/products/illustrator.html" target="_blank" class="skill-tag"><i class="fas fa-pen-nib"></i> Illustrator</a>
+        <a href="https://www.adobe.com/products/premiere.html" target="_blank" class="skill-tag"><i class="fas fa-video"></i> Premiere Pro</a>
+        <a href="https://www.adobe.com/products/aftereffects.html" target="_blank" class="skill-tag"><i class="fas fa-magic"></i> After Effects</a>
+        <a href="https://www.adobe.com/products/audition.html" target="_blank" class="skill-tag"><i class="fas fa-headphones"></i> Adobe Audition</a>
       </div>
-      <div class="cat-body"><div class="services-table-wrap">
-        <table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Community Manager – Administración en Redes Sociales</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Community Manager – Administración en Redes Sociales')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Manejo de Publicidad (Meta Ads)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manejo de Publicidad (Meta Ads)')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Gestión de Anuncios en Meta (Campaña puntual)</td><td class="td-precio">$1,800/mes<br><small class="td-nota">+ inversión publicitaria</small></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Gestión de Anuncios en Meta — $1,800/mes'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Auditoría de Business Manager</td><td class="td-precio">$600</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Auditoría de Business Manager — $600'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Consultoría Administrativa de Marketing</td><td class="td-precio">$1,200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Consultoría Administrativa de Marketing — $1,200'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Asesoría de Marketing (sesión 60–90 min)</td><td class="td-precio">$500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de Marketing (sesión) — $500'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Plan de Mercadotecnia</td><td class="td-precio">$1,800</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Mercadotecnia — $1,800'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Plan de Social Media Marketing</td><td class="td-precio">$1,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Plan de Social Media Marketing — $1,500'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Investigación de Mercados / Encuestas</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación de Mercados / Encuestas')">Cotizar</button></td></tr>
-          </tbody>
-        </table>
+
+      <h3>Diseño y Producción Digital</h3>
+      <div class="skills-group">
+        <a href="https://www.coreldraw.com/" target="_blank" class="skill-tag"><i class="fas fa-palette"></i> Corel Draw</a>
+        <a href="https://www.blender.org/" target="_blank" class="skill-tag"><i class="fas fa-cube"></i> Blender</a>
+        <a href="https://filmora.wondershare.com/" target="_blank" class="skill-tag"><i class="fas fa-film"></i> Filmora</a>
+        <a href="https://www.capcut.com/" target="_blank" class="skill-tag"><i class="fas fa-cut"></i> CapCut</a>
+        <a href="https://obsproject.com/" target="_blank" class="skill-tag"><i class="fas fa-broadcast-tower"></i> OBS Studio</a>
+        <a href="https://www.canva.com/" target="_blank" class="skill-tag"><i class="fas fa-clover"></i> Canva</a>
+        <a href="https://www.audacityteam.org/" target="_blank" class="skill-tag"><i class="fas fa-microphone-alt"></i> Audacity</a>
       </div>
-        <div class="galeria-slot" data-galeria="marketing">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
+
+      <h3>Gestión Web y Marketing</h3>
+      <div class="skills-group">
+        <a href="https://wordpress.org/" target="_blank" class="skill-tag"><i class="fab fa-wordpress"></i> WordPress</a>
+        <a href="https://es.wix.com/" target="_blank" class="skill-tag"><i class="fab fa-wix"></i> Wix</a>
+        <a href="https://business.facebook.com/" target="_blank" class="skill-tag"><i class="fab fa-facebook-square"></i> Meta Business</a>
+        <a href="https://www.bitrix24.com/" target="_blank" class="skill-tag"><i class="fas fa-users"></i> Bitrix24 (CRM)</a>
+        <a href="https://www.brevo.com/" target="_blank" class="skill-tag"><i class="fas fa-paper-plane"></i> Brevo</a>
+        <a href="https://www.constantcontact.com/" target="_blank" class="skill-tag"><i class="fas fa-envelope-open-text"></i> Constant Contact</a>
       </div>
-    </div>
 
-    <div class="section-title"><i class="fas fa-palette"></i> Diseño Gráfico</div>
-
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-star cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Logotipos e Isotipos</h2><span>Creación · Rediseño · Vectorización · Identidad</span></div><span class="cat-count">5 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Creación de logotipo</td><td class="td-precio">$450</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación de logotipo — $450'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Rediseño de logotipo</td><td class="td-precio">$350</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Rediseño de logotipo — $350'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Vectorización de logotipo</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Vectorización de logotipo — $180'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Cambio de formato de logotipo</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cambio de formato de logotipo — $80'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Manual de identidad corporativa</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Manual de identidad corporativa')">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="logos">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
+      <h3>Programación y Desarrollo</h3>
+      <div class="skills-group">
+        <a href="https://developer.mozilla.org/es/docs/Web/HTML" target="_blank" class="skill-tag"><i class="fas fa-code"></i> HTML + CSS</a>
+        <a href="https://developer.mozilla.org/es/docs/Web/JavaScript" target="_blank" class="skill-tag"><i class="fab fa-js"></i> JavaScript</a>
+        <a href="https://www.python.org/" target="_blank" class="skill-tag"><i class="fab fa-python"></i> Python</a>
+        <a href="https://developers.google.com/apps-script" target="_blank" class="skill-tag"><i class="fas fa-gears"></i> Google App Script</a>
       </div>
-    </div>
 
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-id-card cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Impresos Pequeños</h2><span>Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets</span></div><span class="cat-count">7 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Tarjeta de presentación / visita (1 o 2 caras)</td><td class="td-precio">$70</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación — $70'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Tarjeta de presentación doble (1 o 2 caras)</td><td class="td-precio">$110</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tarjeta de presentación doble — $110'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Etiquetas / Minietiquetas (1 o 2 caras)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Etiquetas / Minietiquetas — $80'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Invitaciones (1 cara)</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Invitaciones — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Marcapáginas / Separador (1 o 2 caras)</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Marcapáginas / Separador — $50'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Pegatinas / Calcomanías</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pegatinas / Calcomanías — $90'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Tickets / Notas (1 o 2 caras)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tickets / Notas — $80'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="impresos">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
+      <h3>Inteligencia Artificial</h3>
+      <div class="skills-group">
+        <a href="https://chat.openai.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-robot"></i> ChatGPT</a>
+        <a href="https://gemini.google.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-brain"></i> Gemini</a>
+        <a href="https://copilot.microsoft.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-microsoft"></i> Copilot</a>
+        <a href="https://stability.ai/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-images"></i> Stable Diffusion</a>
+        <a href="https://suno.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-music"></i> Suno IA</a>
+        <a href="https://www.deepseek.com/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-search"></i> DeepSeek</a>
+        <a href="https://kimi.moonshot.cn/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-comment-dots"></i> Kimi</a>
+        <a href="https://qwen.ai/" target="_blank" class="skill-tag tag-ia"><i class="fas fa-network-wired"></i> Qwen3</a>
       </div>
-    </div>
 
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-newspaper cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Folletos, Flyers y Dípticos</h2><span>Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos</span></div><span class="cat-count">7 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Flyer para redes sociales (10×10 cm / 591×591 px)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer para redes sociales — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Flyer para redes sociales (tamaño personalizado)</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Flyer tamaño personalizado')">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Folleto</td><td class="td-precio">$160</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Folleto — $160'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Díptico (2 partes)</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Díptico — $200'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Tríptico (3 partes)</td><td class="td-precio">$250</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Tríptico — $250'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Cuadríptico (4 partes)</td><td class="td-precio">$300</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Cuadríptico — $300'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Políptico (5+ partes)</td><td class="td-precio">$350</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Políptico — $350'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="folletos">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
+      <h3>Ofimática y Nube</h3>
+      <div class="skills-group">
+        <a href="https://www.microsoft.com/es-mx/microsoft-365" target="_blank" class="skill-tag"><i class="fas fa-file-word"></i> Paquetería Office</a>
+        <a href="https://drive.google.com/" target="_blank" class="skill-tag"><i class="fab fa-google-drive"></i> Google Drive</a>
+        <a href="https://onedrive.live.com/" target="_blank" class="skill-tag"><i class="fas fa-cloud"></i> OneDrive</a>
+        <a href="https://www.ionos.mx/" target="_blank" class="skill-tag"><i class="fas fa-server"></i> IONOS</a>
       </div>
-    </div>
 
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-expand-arrows-alt cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Lonas y Banners de Gran Formato</h2><span>Precio por tamaño en centímetros</span></div><span class="cat-count">5 rangos</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Tamaño</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Hasta 99 cm</td><td class="td-precio">$130</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner hasta 99 cm — $130'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 100 a 199 cm</td><td class="td-precio">$170</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 100–199 cm — $170'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 200 a 399 cm</td><td class="td-precio">$210</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 200–399 cm — $210'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 400 a 599 cm</td><td class="td-precio">$260</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 400–599 cm — $260'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">De 600 cm en adelante</td><td class="td-precio">$310+</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Lona / Banner 600+ cm — $310+'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="lonas">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
+      <h3 style="margin-top: 40px;">Experiencia Profesional</h3>
+
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Administrador de Marketing</span>
+          <span class="exp-date">Julio 2025 - Actual</span>
         </div>
-          </div>
-        </div>
+        <div class="exp-company">UHA GLOBAL (EE. UU. - Remoto)</div>
+        <ul class="exp-list">
+          <li>Gestión y optimización avanzada de Bitrix24 y automatización mediante Google Apps Script.</li>
+          <li>Estrategia de Meta Ads y configuración de campañas para mercado internacional.</li>
+          <li>Implementación de email marketing masivo y personalizado (Brevo, Constant Contact).</li>
+          <li>Copywriting y diseño estratégico para publicaciones en redes sociales.</li>
+          <li>Mantenimiento técnico web utilizando HTML, CSS, JS y Python.</li>
+        </ul>
       </div>
-    </div>
 
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-file-alt cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Papelería Corporativa</h2><span>Carpetas · Membretes · Sellos · Talonarios · Facturas</span></div><span class="cat-count">6 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Carpeta con o sin solapa</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Carpeta corporativa — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Membrete tamaño Carta</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Carta — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Membrete tamaño Oficio</td><td class="td-precio">$130</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Membrete Oficio — $130'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Talonarios (10 a 30 caras)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Talonarios — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Sellos</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de sellos — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Albaranes y facturas</td><td class="td-precio">$60</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Albaranes y facturas — $60'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="papeleria">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Community Manager y Gestor Web</span>
+          <span class="exp-date">Enero 2024 - Febrero 2025</span>
         </div>
-          </div>
-        </div>
+        <div class="exp-company">GRUPO GREMOL (Remoto)</div>
+        <ul class="exp-list">
+          <li>Liderazgo editorial y redacción especializada para Revista Guinda y En Cambio Diario.</li>
+          <li>Administración de CMS (WordPress) y monitoreo de métricas de impacto.</li>
+          <li>Producción multimedia, diseño gráfico y edición de video adaptado a línea editorial.</li>
+        </ul>
       </div>
-    </div>
 
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-calendar-alt cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Calendarios</h2><span>Bolsillo · Sobremesa · Pared</span></div><span class="cat-count">6 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Tipo</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Calendario de bolsillo (1 o 2 caras)</td><td class="td-precio">$50</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (1-2 caras) — $50'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario de bolsillo (4 caras)</td><td class="td-precio">$70</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario de bolsillo (4 caras) — $70'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario Sobremesa (1 o 2 caras)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (1-2 caras) — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario Sobremesa (12 o 13 caras)</td><td class="td-precio">$240</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario Sobremesa (12-13 caras) — $240'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario De Pared (1 cara)</td><td class="td-precio">$120</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (1 cara) — $120'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Calendario De Pared (12 a 13 caras)</td><td class="td-precio">$240</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Calendario De Pared (12-13 caras) — $240'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="calendarios">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Jefe de Edición</span>
+          <span class="exp-date">Agosto 2022 - Enero 2024</span>
         </div>
-          </div>
-        </div>
+        <div class="exp-company">GRUPO MULTIMEDIOS 620 AM SIN RESERVAS</div>
+        <ul class="exp-list">
+          <li>Dirección de la estrategia digital para noticias de última hora y cobertura nacional.</li>
+          <li>Creación de contenido audiovisual de alto impacto para redes sociales.</li>
+          <li>Soporte técnico y cobertura ocasional como operador de radio, asistiendo en vivo a los programas estelares "Panorama Sin Reservas" y "La Hora del Chaquiste".</li>
+        </ul>
       </div>
-    </div>
 
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-desktop cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Archivos Digitales y Presentaciones</h2><span>Catálogos · Revistas · Portadas · PowerPoint</span></div><span class="cat-count">8 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body">
-        <div class="subtitulo-tabla">📄 Archivos Digitales</div>
-        <div class="services-table-wrap"><table>
-          <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">Catálogo PDF</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Catálogo PDF')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Revista o libro digital</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Revista o libro digital')">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">Diseño de portada y/o contraportada</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Diseño de portada / contraportada')">Cotizar</button></td></tr>
-          </tbody>
-        </table></div>
-        <div class="subtitulo-tabla">📊 Presentaciones Digitales</div>
-        <div class="services-table-wrap"><table>
-          <thead><tr><th>Paquete</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-          <tbody>
-            <tr><td class="td-servicio">1 Diapositiva</td><td class="td-precio">$40</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 1 Diapositiva — $40'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">5 Diapositivas</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 5 Diapositivas — $150'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">10 Diapositivas</td><td class="td-precio">$220</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 10 Diapositivas — $220'">Cotizar</button></td></tr>
-            <tr><td class="td-servicio">20 Diapositivas</td><td class="td-precio">$320</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Presentación: 20 Diapositivas — $320'">Cotizar</button></td></tr>
-          </tbody>
-        </table>
-        <div class="nota-box"><strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u. Precios MXN al tipo de cambio del día de contratación.</div>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Streamer e Innovación con IA</span>
+          <span class="exp-date">Enero 2022 - Actual</span>
         </div>
-        <div class="galeria-slot" data-galeria="presentaciones">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
+        <div class="exp-company">TWITCH / ALEXDOM104</div>
+        <ul class="exp-list">
+          <li>Composición de música original con Suno IA y generación de activos con Stable Diffusion.</li>
+          <li>Conducción técnica de transmisiones en vivo y gestión de comunidades digitales.</li>
+        </ul>
       </div>
-    </div>
 
-    <div class="section-title"><i class="fas fa-film"></i> Producción Audiovisual</div>
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-photo-video cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Edición Fotográfica y de Video</h2><span>Recorte · Retoque · Caricaturización · Producción · IA</span></div><span class="cat-count">9 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Recortar sujeto a PNG (fondo transparente)</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Recorte a PNG — $80'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Reparación fotográfica</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Reparación fotográfica — $180'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Edición fotográfica</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición fotográfica — $200'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Caricaturización de imagen</td><td class="td-precio">$90</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Caricaturización de imagen — $90'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Producción de video</td><td class="td-precio">$280</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Producción de video — $280'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Edición de video – Formato corto (Reels/TikTok)</td><td class="td-precio">$180</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato corto — $180'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Edición de video – Formato largo (YouTube)</td><td class="td-precio">$400 – $700</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Edición video formato largo — $400–$700'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Imágenes generadas por IA (lote)</td><td class="td-precio">$280 – $450</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Imágenes por IA — $280–$450'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Canciones / Jingles por IA</td><td class="td-precio">$250 – $400</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Jingle / Canción por IA — $250–$400'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="audiovisual">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
+      <div class="experience-item">
+        <div class="exp-header">
+          <span class="exp-title">Diseñador Junior</span>
+          <span class="exp-date">Junio 2020 - Diciembre 2021</span>
         </div>
-          </div>
-        </div>
+        <div class="exp-company">DEPEC SEMINUEVOS / RMJP TABASCO</div>
+        <ul class="exp-list">
+          <li>Producción audiovisual y levantamiento fotográfico de inventario vehicular.</li>
+          <li>Diseño de catálogos digitales, flyers y administración de publicaciones web.</li>
+        </ul>
       </div>
-    </div>
 
-    <div class="section-title"><i class="fas fa-gears"></i> Automatización y CRM</div>
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-robot cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Bitrix24, Google Sheets y Scripts</h2><span>CRM · Dashboards · Python · Apps Script</span></div><span class="cat-count">3 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Implementación y configuración de Bitrix24</td><td class="td-precio">$3,000 – $6,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Implementación Bitrix24 — $3,000–$6,000'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Dashboard dinámico en Google Sheets (Apps Script)</td><td class="td-precio">$1,500 – $3,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Dashboard Google Sheets — $1,500–$3,500'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Script de automatización (Python / Apps Script)</td><td class="td-precio">$900 – $2,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Script de automatización — $900–$2,500'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="crm">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title"><i class="fas fa-globe"></i> Desarrollo Web y Soporte Técnico</div>
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-code cat-icon" style="color:#70DDD8;"></i><div class="cat-info"><h2>Web, Soporte y Otros Servicios Digitales</h2><span>Landings · Discord · Asistencia · Instalaciones</span></div><span class="cat-count">7 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Desarrollo de Landing Page / Widget / Herramienta Web</td><td class="td-precio">$1,200 – $3,500</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Landing Page / Widget Web — $1,200–$3,500'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Creación y mantenimiento de página web</td><td class="td-precio"><span class="precio-pres">Cotizable</span></td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Creación y mantenimiento de página web')">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Creación de servidor de Discord</td><td class="td-precio">$220</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Servidor de Discord — $220'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Asesoría para buscar / seleccionar software</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asesoría de software — $100'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Instalación de programa (presencial)</td><td class="td-precio">$200</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Instalación de programa — $200'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Asistencia remota en instalación de programa</td><td class="td-precio">$150</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia remota — $150'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Asistencia técnica general</td><td class="td-precio">$100</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Asistencia técnica general — $100'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="web">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title"><i class="fas fa-broadcast-tower"></i> Streaming y Setup</div>
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-broadcast-tower cat-icon" style="color:#9146ff;"></i><div class="cat-info"><h2>OBS Studio, Overlays y Escenas</h2><span>Twitch · Kick · YouTube</span></div><span class="cat-count">2 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio (MXN)</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Configuración Pro en OBS Studio (multistream, doble lienzo, alertas)</td><td class="td-precio">$1,200 – $2,000</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('OBS Studio Pro — $1,200–$2,000'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Pack de Overlays y Escenas (8+ escenas de marca)</td><td class="td-precio">$900</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Pack Overlays y Escenas — $900'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="streaming">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title"><i class="fas fa-graduation-cap"></i> Servicios Escolares</div>
-    <div class="cat-block" onclick="toggleCat(this)">
-      <div class="cat-header"><i class="fas fa-pen-alt cat-icon" style="color:#EF5085;"></i><div class="cat-info"><h2>Redacción Académica</h2><span>Resúmenes · Ensayos · Investigaciones</span></div><span class="cat-count">3 servicios</span><i class="fas fa-chevron-down chevron"></i></div>
-      <div class="cat-body"><div class="services-table-wrap"><table>
-        <thead><tr><th>Servicio</th><th style="text-align:right;">Precio por cuartilla</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="td-servicio">Resumen</td><td class="td-precio">$40</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Resumen académico — $40/cuartilla'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Ensayo</td><td class="td-precio">$40</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Ensayo académico — $40/cuartilla'">Cotizar</button></td></tr>
-          <tr><td class="td-servicio">Investigación</td><td class="td-precio">$80</td><td><button class="btn-cotizar-tabla" onclick="abrirModal('Investigación académica — $80/cuartilla'">Cotizar</button></td></tr>
-        </tbody>
-      </table></div>
-        <div class="galeria-slot" data-galeria="escolares">
-          <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
-            <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
-            <span>Ver ejemplos</span>
-            <span class="ej-count">Sin ejemplos aún</span>
-            <i class="fas fa-chevron-down ej-chevron"></i>
-          </div>
-          <div class="ejemplos-body">
-            <div class="ejemplos-grid"></div>
-          </div>
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sync-bar">
-      <button id="btn-sync-sheets" onclick="sincronizarDesdeSheets()">
-        <i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets
-      </button>
-      <span id="sync-status"></span>
-    </div>
-
-    <div class="leyenda">
-      <strong>Acerca de los precios:</strong> Todos los precios están en pesos mexicanos (MXN) y son referencias base. El costo final puede variar según alcance y urgencia. Los servicios marcados como <strong style="color:#f0a060;">Cotizable</strong> requieren una reunión breve para generar una propuesta personalizada.
-    </div>
-  </main>
-
-  <!-- ══ BOTÓN FLOTANTE WHATSAPP ══ -->
-  <a class="btn-whatsapp" href="https://wa.me/+529931741910" target="_blank" rel="noopener">
-    <i class="fab fa-whatsapp"></i> WhatsApp
-  </a>
-
-  <!-- ══ BOTÓN FLOTANTE ══ -->
-  <button class="btn-flotante" onclick="abrirModal('')">
-    <i class="fas fa-paper-plane"></i> Cotizar
-  </button>
-
-  <!-- ══════════════════════════════════════════
-       MODAL DE COTIZACIÓN
-  ══════════════════════════════════════════ -->
-  <div class="modal-overlay" id="modal-overlay" onclick="cerrarModalOverlay(event)">
-    <div class="modal-box" id="modal-box">
-      <div class="modal-header">
-        <div>
-          <h3>Solicitar Cotización</h3>
-          <p>Te contactaré en menos de 24 horas para confirmar los detalles.</p>
-        </div>
-        <button class="modal-close" onclick="cerrarModal()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="modal-body" id="modal-body-content">
-
-        <!-- Servicios seleccionados -->
-        <div style="margin-bottom:16px;">
-          <div style="font-size:0.76rem;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Servicio(s) de interés</div>
-          <div id="servicio-badge-wrap" style="display:flex;flex-wrap:wrap;gap:0;min-height:8px;"></div>
-          <button class="btn-add-service" id="btn-add-service" onclick="abrirBuscadorServicios()">
-            <i class="fas fa-plus"></i> Seleccionar servicio
-          </button>
-          <div style="font-size:0.72rem;color:#555;margin-top:2px;" id="servicios-hint"></div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" id="f-nombre" placeholder="Tu nombre" autocomplete="given-name">
-          </div>
-          <div class="form-group">
-            <label>Apellido</label>
-            <input type="text" id="f-apellido" placeholder="Tu apellido" autocomplete="family-name">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>WhatsApp / Teléfono</label>
-          <input type="tel" id="f-telefono" placeholder="+52 993 000 0000" autocomplete="tel">
-        </div>
-
-        <div class="form-group">
-          <label>Correo electrónico</label>
-          <input type="email" id="f-correo" placeholder="tu@correo.com" autocomplete="email">
-        </div>
-
-        <div class="form-group">
-          <label>Mensaje <span style="color:#555; font-size:0.9em;">(opcional)</span></label>
-          <textarea id="f-mensaje" placeholder="Cuéntame brevemente sobre tu proyecto o cualquier detalle adicional..."></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-enviar" id="btn-enviar" onclick="enviarFormulario()">
-          <i class="fas fa-paper-plane"></i> Enviar Solicitud
-        </button>
-        <div class="form-msg" id="form-msg"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ PANEL BUSCADOR DE SERVICIOS ══ -->
-  <div class="service-search-panel" id="service-search-panel" onclick="cerrarBuscadorOverlay(event)">
-    <div class="service-search-box">
-      <div class="service-search-header">
-        <i class="fas fa-search" style="color:#555;flex-shrink:0;"></i>
-        <input type="text" id="service-search-input" placeholder="Buscar servicio..." oninput="filtrarServicios()" autocomplete="off">
-        <button onclick="cerrarBuscador()"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="service-search-list" id="service-search-list"></div>
-      <div class="service-search-footer">
-        <span>Seleccionados: <strong id="search-count">0</strong> / 10</span>
-        <button class="btn-confirm-services" onclick="confirmarServicios()">Confirmar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ LIGHTBOX ══ -->
-  <div class="lightbox" id="lightbox" onclick="cerrarLightboxOverlay(event)">
-    <div class="lightbox-inner">
-      <button class="lightbox-close" onclick="cerrarLightbox()"><i class="fas fa-times"></i></button>
-      <button class="lightbox-nav prev" onclick="navLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
-      <button class="lightbox-nav next" onclick="navLightbox(1)"><i class="fas fa-chevron-right"></i></button>
-      <img id="lightbox-img" src="" alt="">
-      <div class="lightbox-caption" id="lightbox-caption"></div>
     </div>
   </div>
 
   <script>
-    // ══ CONFIGURACIÓN ══════════════════════════════════════════
-    const APPS_SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbxb0O6xlOiNKAtS84tL6EORHeWHQWmIkBDYhdADlYiUyvutGPf6xZ_b7sO-qKhZdIzkmA/exec';
-    const EMAILJS_PUBLIC_KEY  = 'OycohWyqCo97LPgia';
-    const EMAILJS_SERVICE_ID  = 'service_9zlhqd8';
-    const EMAILJS_TEMPLATE_ID = 'template_xeougpd';
+    const img     = document.getElementById('profile-img');
+    const wrap    = document.getElementById('img-wrap');
 
-    // ── Google Sheets: ID de tu hoja ────────────────────────────
-    // 1. Abre tu Google Sheet → Archivo → Compartir → "Cualquier persona con el enlace" (Viewer)
-    // 2. Copia el ID de la URL: docs.google.com/spreadsheets/d/[ESTE_ES_EL_ID]/edit
-    // 3. Pégalo aquí abajo:
-    const GOOGLE_SHEET_ID = 'TU_SHEET_ID_AQUI';  // ← reemplazar
-    // ═══════════════════════════════════════════════════════════
+    // Calculamos el umbral: cuando el wrap ya no sea visible en pantalla
+    function handleScroll() {
+      const wrapBottom = wrap.getBoundingClientRect().bottom;
 
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-
-    // ══ SINCRONIZACIÓN CON GOOGLE SHEETS ════════════════════════
-    // Lee la hoja "servicios" y actualiza precios/nombres en pantalla
-    async function sincronizarDesdeSheets() {
-      const btn    = document.getElementById('btn-sync-sheets');
-      const status = document.getElementById('sync-status');
-
-      if (!GOOGLE_SHEET_ID || GOOGLE_SHEET_ID === 'TU_SHEET_ID_AQUI') {
-        status.textContent = '⚠️ Configura el GOOGLE_SHEET_ID en el script primero.';
-        status.style.color = '#f0a060';
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
-      status.textContent = '';
-
-      // URL pública CSV de la hoja "servicios"
-      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=servicios`;
-
-      try {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error('No se pudo acceder al Google Sheet');
-        const text = await resp.text();
-
-        // Parsear CSV simple (sin librerías)
-        const rows = text.trim().split('\n').map(row =>
-          row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
-             .map(cell => cell.replace(/^"|"$/g, '').trim())
-        );
-
-        // Encabezado: cat_id, Categoría, Nombre, Descripción, Precio, PrecioMín, PrecioMáx, Visible
-        const headers = rows[0].map(h => h.toLowerCase().replace(/\s+/g,'_'));
-        const ciCatId  = headers.findIndex(h => h.includes('cat_id'));
-        const ciNombre = headers.findIndex(h => h.includes('nombre'));
-        const ciPrecio = headers.findIndex(h => h === 'precio');
-        const ciVisible= headers.findIndex(h => h.includes('visible'));
-
-        if (ciNombre === -1 || ciPrecio === -1) {
-          throw new Error('No encontré columnas Nombre/Precio en la hoja "servicios"');
-        }
-
-        // Construir mapa nombre → precio desde el sheet
-        const mapa = {};
-        rows.slice(1).forEach(r => {
-          if (!r[ciNombre] || !r[ciPrecio]) return;
-          const visible = ciVisible >= 0 ? r[ciVisible].toLowerCase() : 'sí';
-          if (visible === 'no') return;
-          mapa[r[ciNombre].trim()] = r[ciPrecio].trim();
-        });
-
-        // Actualizar precios en la tabla HTML
-        let actualizados = 0;
-        document.querySelectorAll('.td-servicio').forEach(tdNombre => {
-          const nombre = tdNombre.textContent.trim();
-          // Buscar coincidencia parcial
-          const key = Object.keys(mapa).find(k =>
-            k.toLowerCase() === nombre.toLowerCase() ||
-            nombre.toLowerCase().includes(k.toLowerCase().substring(0,15))
-          );
-          if (key && mapa[key]) {
-            const tdPrecio = tdNombre.nextElementSibling;
-            if (tdPrecio && tdPrecio.classList.contains('td-precio')) {
-              // Preservar el span .precio-pres si existe, sino texto simple
-              if (mapa[key].toLowerCase() === 'cotizable') {
-                tdPrecio.innerHTML = '<span class="precio-pres">Cotizable</span>';
-              } else {
-                tdPrecio.textContent = mapa[key];
-              }
-              actualizados++;
-            }
-          }
-        });
-
-        // Actualizar también el CATÁLOGO interno (buscador modal)
-        CATALOGO.forEach(item => {
-          const key = Object.keys(mapa).find(k =>
-            k.toLowerCase() === item.nombre.toLowerCase()
-          );
-          if (key) item.precio = mapa[key];
-        });
-
-        // Actualizar precios en paquetes (cards)
-        document.querySelectorAll('.paquete-precio').forEach(el => {
-          const card = el.closest('.paquete-card');
-          if (!card) return;
-          const nombreEl = card.querySelector('.paquete-nombre');
-          if (!nombreEl) return;
-          const nombreCard = nombreEl.textContent.trim();
-          const key = Object.keys(mapa).find(k => nombreCard.includes(k.substring(0,10)));
-          if (key && mapa[key]) {
-            const precio = mapa[key].replace('/mes','');
-            el.innerHTML = `${precio}<sub>/mes</sub>`;
-          }
-        });
-
-        const ts = new Date().toLocaleTimeString('es-MX');
-        status.textContent = `✅ ${actualizados} precios actualizados · ${ts}`;
-        status.style.color = '#70DDD8';
-
-        // Guardar timestamp en localStorage para referencia
-        try { localStorage.setItem('lastSync', new Date().toISOString()); } catch(e){}
-
-      } catch(err) {
-        console.error('Sync error:', err);
-        status.textContent = `❌ ${err.message}`;
-        status.style.color = '#EF5085';
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar desde Google Sheets';
-      }
-    }
-
-    // Auto-intentar sync al cargar (silencioso si no hay SHEET_ID)
-    window.addEventListener('load', () => {
-      if (GOOGLE_SHEET_ID && GOOGLE_SHEET_ID !== 'TU_SHEET_ID_AQUI') {
-        sincronizarDesdeSheets();
-      }
-    });
-
-    // ══ CATÁLOGO COMPLETO DE SERVICIOS ══════════════════════════
-    const CATALOGO = [
-      { cat: '📣 Community Manager', nombre: 'Community Manager – Administración en Redes Sociales', precio: 'Cotizable' },
-      { cat: '📣 Community Manager', nombre: 'Manejo de Publicidad (Meta Ads)', precio: 'Cotizable' },
-      { cat: '📣 Community Manager', nombre: 'Gestión de Anuncios en Meta (Campaña puntual)', precio: '$1,800/mes' },
-      { cat: '📣 Community Manager', nombre: 'Auditoría de Business Manager', precio: '$600' },
-      { cat: '📣 Community Manager', nombre: 'Consultoría Administrativa de Marketing', precio: '$1,200' },
-      { cat: '📣 Community Manager', nombre: 'Asesoría de Marketing (sesión 60–90 min)', precio: '$500' },
-      { cat: '📣 Community Manager', nombre: 'Plan de Mercadotecnia', precio: '$1,800' },
-      { cat: '📣 Community Manager', nombre: 'Plan de Social Media Marketing', precio: '$1,500' },
-      { cat: '📣 Community Manager', nombre: 'Investigación de Mercados / Encuestas', precio: 'Cotizable' },
-      { cat: '🚀 Paquetes Mensuales', nombre: '🚀 Despegue — Starter', precio: '$1,200/mes' },
-      { cat: '🚀 Paquetes Mensuales', nombre: '📡 Arranque Digital — Básico', precio: '$2,500/mes' },
-      { cat: '🚀 Paquetes Mensuales', nombre: '🔥 Señal Fuerte — Intermedio ⭐', precio: '$4,800/mes' },
-      { cat: '🚀 Paquetes Mensuales', nombre: '🏆 Dominio Total — Profesional', precio: '$8,500/mes' },
-      { cat: '🚀 Paquetes Mensuales', nombre: '👑 Imperio Digital — Enterprise', precio: 'A cotizar' },
-      { cat: '🎨 Logotipos', nombre: 'Creación de logotipo', precio: '$450' },
-      { cat: '🎨 Logotipos', nombre: 'Rediseño de logotipo', precio: '$350' },
-      { cat: '🎨 Logotipos', nombre: 'Vectorización de logotipo', precio: '$180' },
-      { cat: '🎨 Logotipos', nombre: 'Cambio de formato de logotipo', precio: '$80' },
-      { cat: '🎨 Logotipos', nombre: 'Manual de identidad corporativa', precio: 'Cotizable' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Tarjeta de presentación (1 o 2 caras)', precio: '$70' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Tarjeta de presentación doble', precio: '$110' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Etiquetas / Minietiquetas', precio: '$80' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Invitaciones', precio: '$100' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Marcapáginas / Separador', precio: '$50' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Pegatinas / Calcomanías', precio: '$90' },
-      { cat: '🖨️ Impresos Pequeños', nombre: 'Tickets / Notas', precio: '$80' },
-      { cat: '📰 Folletos y Flyers', nombre: 'Flyer para redes sociales', precio: '$120' },
-      { cat: '📰 Folletos y Flyers', nombre: 'Folleto', precio: '$160' },
-      { cat: '📰 Folletos y Flyers', nombre: 'Díptico', precio: '$200' },
-      { cat: '📰 Folletos y Flyers', nombre: 'Tríptico', precio: '$250' },
-      { cat: '📰 Folletos y Flyers', nombre: 'Cuadríptico', precio: '$300' },
-      { cat: '📰 Folletos y Flyers', nombre: 'Políptico (5+ partes)', precio: '$350' },
-      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner hasta 99 cm', precio: '$130' },
-      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 100–199 cm', precio: '$170' },
-      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 200–399 cm', precio: '$210' },
-      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 400–599 cm', precio: '$260' },
-      { cat: '🖼️ Lonas y Banners', nombre: 'Lona / Banner 600+ cm', precio: '$310+' },
-      { cat: '📄 Papelería Corporativa', nombre: 'Carpeta corporativa', precio: '$100' },
-      { cat: '📄 Papelería Corporativa', nombre: 'Membrete tamaño Carta', precio: '$100' },
-      { cat: '📄 Papelería Corporativa', nombre: 'Membrete tamaño Oficio', precio: '$130' },
-      { cat: '📄 Papelería Corporativa', nombre: 'Talonarios (10 a 30 caras)', precio: '$120' },
-      { cat: '📄 Papelería Corporativa', nombre: 'Sellos', precio: '$100' },
-      { cat: '📄 Papelería Corporativa', nombre: 'Albaranes y facturas', precio: '$60' },
-      { cat: '📅 Calendarios', nombre: 'Calendario de bolsillo (1 o 2 caras)', precio: '$50' },
-      { cat: '📅 Calendarios', nombre: 'Calendario de bolsillo (4 caras)', precio: '$70' },
-      { cat: '📅 Calendarios', nombre: 'Calendario Sobremesa (1 o 2 caras)', precio: '$120' },
-      { cat: '📅 Calendarios', nombre: 'Calendario Sobremesa (12 o 13 caras)', precio: '$240' },
-      { cat: '📅 Calendarios', nombre: 'Calendario De Pared (1 cara)', precio: '$120' },
-      { cat: '📅 Calendarios', nombre: 'Calendario De Pared (12 a 13 caras)', precio: '$240' },
-      { cat: '💻 Presentaciones', nombre: 'Presentación: 1 Diapositiva', precio: '$40' },
-      { cat: '💻 Presentaciones', nombre: 'Presentación: 5 Diapositivas', precio: '$150' },
-      { cat: '💻 Presentaciones', nombre: 'Presentación: 10 Diapositivas', precio: '$220' },
-      { cat: '💻 Presentaciones', nombre: 'Presentación: 20 Diapositivas', precio: '$320' },
-      { cat: '💻 Presentaciones', nombre: 'Catálogo PDF', precio: 'Cotizable' },
-      { cat: '💻 Presentaciones', nombre: 'Revista o libro digital', precio: 'Cotizable' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Recorte a PNG (fondo transparente)', precio: '$80' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Reparación fotográfica', precio: '$180' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Edición fotográfica', precio: '$200' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Caricaturización de imagen', precio: '$90' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Producción de video', precio: '$280' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Edición de video – Formato corto (Reels/TikTok)', precio: '$180' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Edición de video – Formato largo (YouTube)', precio: '$400–$700' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Imágenes generadas por IA (lote)', precio: '$280–$450' },
-      { cat: '🎬 Producción Audiovisual', nombre: 'Canciones / Jingles por IA', precio: '$250–$400' },
-      { cat: '⚙️ Automatización y CRM', nombre: 'Implementación y configuración de Bitrix24', precio: '$3,000–$6,000' },
-      { cat: '⚙️ Automatización y CRM', nombre: 'Dashboard dinámico en Google Sheets', precio: '$1,500–$3,500' },
-      { cat: '⚙️ Automatización y CRM', nombre: 'Script de automatización (Python / Apps Script)', precio: '$900–$2,500' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Landing Page / Widget / Herramienta Web', precio: '$1,200–$3,500' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Creación y mantenimiento de página web', precio: 'Cotizable' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Creación de servidor de Discord', precio: '$220' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Asesoría para buscar / seleccionar software', precio: '$100' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Instalación de programa (presencial)', precio: '$200' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Asistencia remota en instalación de programa', precio: '$150' },
-      { cat: '🌐 Desarrollo Web', nombre: 'Asistencia técnica general', precio: '$100' },
-      { cat: '🎙️ Streaming y Setup', nombre: 'Configuración Pro en OBS Studio', precio: '$1,200–$2,000' },
-      { cat: '🎙️ Streaming y Setup', nombre: 'Pack de Overlays y Escenas (8+ escenas)', precio: '$900' },
-      { cat: '📚 Servicios Escolares', nombre: 'Resumen académico', precio: '$40/cuartilla' },
-      { cat: '📚 Servicios Escolares', nombre: 'Ensayo académico', precio: '$40/cuartilla' },
-      { cat: '📚 Servicios Escolares', nombre: 'Investigación académica', precio: '$80/cuartilla' },
-    ];
-
-    // ══ ESTADO ══════════════════════════════════════════════════
-    let serviciosSeleccionados = []; // array de strings
-
-    // ══ MODAL ═══════════════════════════════════════════════════
-    function abrirModal(servicio) {
-      serviciosSeleccionados = servicio ? [servicio] : [];
-      renderBadges();
-      document.getElementById('form-msg').className = 'form-msg';
-      document.getElementById('form-msg').textContent = '';
-      document.getElementById('modal-overlay').classList.add('visible');
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => document.getElementById('f-nombre').focus(), 100);
-    }
-
-    function cerrarModal() {
-      document.getElementById('modal-overlay').classList.remove('visible');
-      document.body.style.overflow = '';
-    }
-
-    function cerrarModalOverlay(e) {
-      if (e.target === document.getElementById('modal-overlay')) cerrarModal();
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        if (document.getElementById('service-search-panel').classList.contains('visible')) {
-          cerrarBuscador();
-        } else {
-          cerrarModal();
-        }
-      }
-    });
-
-    // ── Renderiza los badges de servicios seleccionados ──
-    function renderBadges() {
-      const wrap = document.getElementById('servicio-badge-wrap');
-      const btn  = document.getElementById('btn-add-service');
-      const hint = document.getElementById('servicios-hint');
-
-      wrap.innerHTML = serviciosSeleccionados.map((s, i) => `
-        <div class="servicio-badge">
-          <i class="fas fa-tag"></i>
-          <span>${s}</span>
-          <button class="badge-remove" onclick="quitarServicio(${i})" title="Quitar">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      `).join('');
-
-      const n = serviciosSeleccionados.length;
-      btn.innerHTML = `<i class="fas fa-plus"></i> ${n === 0 ? 'Seleccionar servicio' : 'Agregar otro servicio'}`;
-      btn.style.display = n >= 10 ? 'none' : 'inline-flex';
-      hint.textContent  = n >= 10 ? 'Máximo 10 servicios por solicitud.' : '';
-    }
-
-    function quitarServicio(i) {
-      serviciosSeleccionados.splice(i, 1);
-      renderBadges();
-    }
-
-    // ══ BUSCADOR DE SERVICIOS ════════════════════════════════════
-    function abrirBuscadorServicios() {
-      document.getElementById('service-search-input').value = '';
-      renderListaServicios('');
-      document.getElementById('service-search-panel').classList.add('visible');
-      setTimeout(() => document.getElementById('service-search-input').focus(), 100);
-    }
-
-    function cerrarBuscador() {
-      document.getElementById('service-search-panel').classList.remove('visible');
-    }
-
-    function cerrarBuscadorOverlay(e) {
-      if (e.target === document.getElementById('service-search-panel')) cerrarBuscador();
-    }
-
-    function filtrarServicios() {
-      const q = document.getElementById('service-search-input').value;
-      renderListaServicios(q);
-    }
-
-    function renderListaServicios(query) {
-      const list = document.getElementById('service-search-list');
-      const q = query.toLowerCase().trim();
-      const filtrados = q ? CATALOGO.filter(s => s.nombre.toLowerCase().includes(q) || s.cat.toLowerCase().includes(q)) : CATALOGO;
-
-      if (!filtrados.length) {
-        list.innerHTML = `<div class="service-search-empty"><i class="fas fa-search" style="margin-right:6px;"></i>Sin resultados para "${query}"</div>`;
-        return;
-      }
-
-      let html = '';
-      let lastCat = null;
-      filtrados.forEach(s => {
-        if (!q && s.cat !== lastCat) {
-          html += `<div class="service-search-cat">${s.cat}</div>`;
-          lastCat = s.cat;
-        }
-        const sel = serviciosSeleccionados.includes(s.nombre);
-        const disabled = !sel && serviciosSeleccionados.length >= 10;
-        html += `
-          <div class="service-search-item ${sel ? 'selected' : ''} ${disabled ? 'style="opacity:0.4;pointer-events:none;"' : ''}"
-               onclick="toggleServicio('${s.nombre.replace(/'/g, "\\'")}')">
-            <div class="ssi-check">${sel ? '<i class="fas fa-check"></i>' : ''}</div>
-            <span>${s.nombre}</span>
-            <span class="ssi-price">${s.precio}</span>
-          </div>`;
-      });
-      list.innerHTML = html;
-      actualizarContador();
-    }
-
-    function toggleServicio(nombre) {
-      const idx = serviciosSeleccionados.indexOf(nombre);
-      if (idx >= 0) {
-        serviciosSeleccionados.splice(idx, 1);
-      } else if (serviciosSeleccionados.length < 10) {
-        serviciosSeleccionados.push(nombre);
-      }
-      actualizarContador();
-      renderListaServicios(document.getElementById('service-search-input').value);
-    }
-
-    function actualizarContador() {
-      document.getElementById('search-count').textContent = serviciosSeleccionados.length;
-    }
-
-    function confirmarServicios() {
-      cerrarBuscador();
-      renderBadges();
-    }
-
-    // ══ ENVÍO ════════════════════════════════════════════════════
-    async function enviarFormulario() {
-      const nombre   = document.getElementById('f-nombre').value.trim();
-      const apellido = document.getElementById('f-apellido').value.trim();
-      const telefono = document.getElementById('f-telefono').value.trim();
-      const correo   = document.getElementById('f-correo').value.trim();
-      const mensaje  = document.getElementById('f-mensaje').value.trim();
-      const msg = document.getElementById('form-msg');
-      const btn = document.getElementById('btn-enviar');
-
-      if (!nombre || !telefono || !correo) {
-        msg.className = 'form-msg err';
-        msg.textContent = 'Por favor completa nombre, teléfono y correo.';
-        return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
-        msg.className = 'form-msg err';
-        msg.textContent = 'El correo no parece válido.';
-        return;
-      }
-      if (serviciosSeleccionados.length === 0) {
-        msg.className = 'form-msg err';
-        msg.textContent = 'Selecciona al menos un servicio de interés.';
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-      msg.className = 'form-msg';
-
-      const nombreCompleto = nombre + (apellido ? ' ' + apellido : '');
-      const servicioTexto  = serviciosSeleccionados.join('\n• ');
-      const servicioLista  = serviciosSeleccionados.map(s => `• ${s}`).join('\n');
-      const fecha = new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' });
-
-      const datos = {
-        nombre:   nombreCompleto,
-        telefono,
-        correo,
-        servicio: serviciosSeleccionados.join(' | '),
-        mensaje:  mensaje || '—',
-        fecha
-      };
-
-      // HTML bonito para el correo
-      const serviciosHTML = serviciosSeleccionados.map(s =>
-        `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;">
-          <i style="color:#70DDD8;">●</i> ${s}
-        </td></tr>`
-      ).join('');
-
-      const html_body = `
-<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;">
-  <tr><td align="center">
-    <table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
-
-      <!-- Header -->
-      <tr><td style="background:linear-gradient(135deg,#A64062,#EF5085);padding:28px 32px;">
-        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
-        <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Nueva Solicitud</div>
-        <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🔔 Cotización Recibida</div>
-      </td></tr>
-
-      <!-- Cliente -->
-      <tr><td style="padding:28px 32px 0;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Datos del cliente</div>
-        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;">
-          <tr style="background:#111;">
-            <td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td>
-            <td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombreCompleto}</td>
-          </tr>
-          <tr style="background:#161616;">
-            <td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td>
-            <td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td>
-          </tr>
-          <tr style="background:#111;">
-            <td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td>
-            <td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td>
-          </tr>
-          <tr style="background:#161616;">
-            <td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td>
-            <td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td>
-          </tr>
-        </table>
-      </td></tr>
-
-      <!-- Servicios -->
-      <tr><td style="padding:24px 32px 0;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">
-          Servicio(s) solicitado(s) <span style="background:rgba(112,221,216,0.15);color:#70DDD8;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${serviciosSeleccionados.length}</span>
-        </div>
-        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
-          ${serviciosHTML}
-        </table>
-      </td></tr>
-
-      <!-- Mensaje -->
-      ${mensaje ? `
-      <tr><td style="padding:24px 32px 0;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:10px;">Mensaje</div>
-        <div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div>
-      </td></tr>` : ''}
-
-      <!-- CTA -->
-      <tr><td style="padding:28px 32px;">
-        <table cellpadding="0" cellspacing="0">
-          <tr><td style="background:#EF5085;border-radius:8px;">
-            <a href="mailto:${correo}" style="display:inline-block;padding:12px 24px;color:#fff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.4px;">
-              ✉️ Responder a ${nombre}
-            </a>
-          </td></tr>
-        </table>
-        <div style="margin-top:10px;font-size:11px;color:#555;">Al responder este correo, tu mensaje irá directo a ${correo}</div>
-      </td></tr>
-
-      <!-- Footer -->
-      <tr><td style="background:#111;padding:16px 32px;border-top:1px solid #222;text-align:center;">
-        <div style="font-size:11px;color:#444;">AlexDom104 · alexis_enrique97@outlook.com · linktr.ee/alexdom104</div>
-      </td></tr>
-
-    </table>
-  </td></tr>
-</table>
-</body></html>`;
-
-      let sheetOk = false, emailOk = false;
-
-      // 1 ── Guardar en Google Sheets
-      try {
-        await fetch(APPS_SCRIPT_URL, {
-          method:  'POST',
-          mode:    'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(datos)
-        });
-        sheetOk = true;
-      } catch (e) { console.warn('Sheets error:', e); }
-
-      // 2 ── Enviar correo vía EmailJS
-      try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          from_name:  nombreCompleto,
-          from_email: correo,
-          telefono,
-          servicio:   servicioLista,
-          mensaje:    mensaje || '—',
-          fecha,
-          reply_to:   correo,
-          html_body
-        });
-        emailOk = true;
-      } catch (e) { console.warn('EmailJS error:', e); }
-
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
-
-      if (sheetOk || emailOk) {
-        msg.className = 'form-msg ok';
-        msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
-        setTimeout(() => {
-          ['f-nombre','f-apellido','f-telefono','f-correo','f-mensaje'].forEach(id => {
-            document.getElementById(id).value = '';
-          });
-          serviciosSeleccionados = [];
-          cerrarModal();
-        }, 3000);
+      if (wrapBottom < 0) {
+        // El contenedor original ya salió por arriba → foto pequeña y fija
+        img.classList.add('sticky-small');
       } else {
-        msg.className = 'form-msg err';
-        msg.textContent = 'Ocurrió un error. Escríbeme directamente por WhatsApp.';
+        // El contenedor original aún es visible → foto grande en su lugar
+        img.classList.remove('sticky-small');
       }
     }
 
-    // ══════════════════════════════════════════════════════════════
-    // 🖼️  GALERÍA DE EJEMPLOS — AGREGA TUS IMÁGENES AQUÍ
-    //
-    //  Cada categoría tiene un array de objetos { url, cap }
-    //  · url → enlace directo de Imgur  (https://i.imgur.com/XXXXX.jpg)
-    //  · cap → descripción breve (aparece en el lightbox)
-    //
-    //  Puedes poner de 1 a N imágenes por categoría.
-    //  Las que no tengan imagen muestran un placeholder automáticamente.
-    // ══════════════════════════════════════════════════════════════
-    const GALERIA = {
-
-      marketing: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Campaña Meta Ads' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Reporte de métricas' },
-      ],
-
-      logos: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Logo marca de ropa' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Isotipo inmobiliaria' },
-      ],
-
-      impresos: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Tarjeta de presentación doble cara' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Etiquetas producto cosmético' },
-      ],
-
-      folletos: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Tríptico restaurante' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Flyer evento cultural' },
-      ],
-
-      lonas: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Lona promocional 200cm' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Banner gran formato' },
-      ],
-
-      papeleria: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Membrete corporativo' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Carpeta con solapa' },
-      ],
-
-      calendarios: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Calendario de pared 2025' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Calendario de bolsillo' },
-      ],
-
-      presentaciones: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Presentación corporativa 20 diapositivas' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Catálogo PDF de productos' },
-      ],
-
-      audiovisual: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Edición Reels / TikTok' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Caricaturización de imagen' },
-      ],
-
-      crm: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Dashboard Google Sheets' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'CRM Bitrix24 configurado' },
-      ],
-
-      web: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Landing page negocio local' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Servidor de Discord personalizado' },
-      ],
-
-      streaming: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Overlay OBS estilo gaming' },
-        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Pack escenas Twitch' },
-      ],
-
-      escolares: [
-        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Ensayo académico ejemplo' },
-      ],
-    };
-
-    // Renderiza todas las galerías al cargar la página
-    function renderGalerias() {
-      document.querySelectorAll('.galeria-slot').forEach(slot => {
-        const catId   = slot.dataset.galeria;
-        const imgs    = GALERIA[catId] || [];
-        const grid    = slot.querySelector('.ejemplos-grid');
-        const counter = slot.querySelector('.ej-count');
-
-        // Actualizar contador
-        counter.textContent = imgs.length > 0
-          ? `${imgs.length} ejemplo${imgs.length !== 1 ? 's' : ''}`
-          : 'Sin ejemplos aún';
-
-        // Generar thumbnails
-        const imgsJson = JSON.stringify(imgs);
-        grid.innerHTML = '';
-
-        if (imgs.length > 0) {
-          imgs.forEach((img, i) => {
-            const thumb = document.createElement('div');
-            thumb.className = 'ej-thumb';
-            thumb.onclick = () => abrirLightbox(imgs, i);
-            thumb.innerHTML = `
-              <img src="${img.url}" alt="${img.cap || ''}" loading="lazy">
-              <div class="ej-overlay"><i class="fas fa-expand-alt"></i></div>`;
-            grid.appendChild(thumb);
-          });
-        } else {
-          // Placeholders cuando no hay imágenes
-          for (let p = 0; p < 4; p++) {
-            const ph = document.createElement('div');
-            ph.className = 'ej-thumb placeholder';
-            ph.innerHTML = `<div class="ej-overlay"><i class="fas fa-image"></i><span>Próximamente</span></div>`;
-            grid.appendChild(ph);
-          }
-        }
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', renderGalerias);
-
-    // ══ GALERÍA DE EJEMPLOS ══════════════════════════════════════
-    function toggleEjemplos(toggleEl, e) {
-      e.stopPropagation(); // No dispara toggleCat del padre
-      toggleEl.classList.toggle('open');
-      const body = toggleEl.nextElementSibling;
-      body.classList.toggle('open');
-    }
-
-    // ══ LIGHTBOX ════════════════════════════════════════════════
-    let lbImages = [], lbIndex = 0;
-
-    function abrirLightbox(images, index) {
-      lbImages = images;
-      lbIndex  = index;
-      renderLightbox();
-      document.getElementById('lightbox').classList.add('visible');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function renderLightbox() {
-      document.getElementById('lightbox-img').src     = lbImages[lbIndex].url;
-      document.getElementById('lightbox-caption').textContent = lbImages[lbIndex].cap || '';
-      document.querySelector('.lightbox-nav.prev').style.display = lbImages.length > 1 ? 'flex' : 'none';
-      document.querySelector('.lightbox-nav.next').style.display = lbImages.length > 1 ? 'flex' : 'none';
-    }
-
-    function navLightbox(dir) {
-      lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-      renderLightbox();
-    }
-
-    function cerrarLightbox() {
-      document.getElementById('lightbox').classList.remove('visible');
-      document.body.style.overflow = '';
-    }
-
-    function cerrarLightboxOverlay(e) {
-      if (e.target === document.getElementById('lightbox')) cerrarLightbox();
-    }
-
-    // ══ CARRUSEL ════════════════════════════════════════════════
-    function toggleCat(block) { block.classList.toggle('open'); }
-
-    const carousel = document.getElementById('paquetes-carousel');
-    const dots = document.querySelectorAll('.dot-indicator');
-    let currentSlide = 0;
-    const totalSlides = 5;
-
-    function getCardWidth() {
-      const card = carousel.querySelector('.paquete-card');
-      return card ? card.offsetWidth + 14 : 282;
-    }
-    function updateDots(i) { dots.forEach((d, j) => d.classList.toggle('active', j === i)); }
-    function scrollCarousel(dir) {
-      currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + dir));
-      carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' });
-      updateDots(currentSlide);
-    }
-    function goToSlide(i) {
-      currentSlide = i;
-      carousel.scrollTo({ left: i * getCardWidth(), behavior: 'smooth' });
-      updateDots(i);
-    }
-    carousel.addEventListener('scroll', () => {
-      currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
-      updateDots(currentSlide);
+    // Al hacer clic en la foto pequeña, vuelve al inicio de la página
+    img.addEventListener('click', () => {
+      if (img.classList.contains('sticky-small')) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
   </script>
 </body>
 </html>
