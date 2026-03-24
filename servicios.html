@@ -180,8 +180,174 @@
     }
     .btn-flotante:hover { background: var(--rosa-oscuro); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(239,80,133,0.55); }
     .btn-flotante i { font-size: 1rem; }
+
+    /* ══ BOTÓN FLOTANTE WHATSAPP ══ */
+    .btn-whatsapp {
+      position: fixed; bottom: 82px; right: 24px; z-index: 900;
+      background: #25D366; color: #fff;
+      border: none; border-radius: 50px;
+      padding: 13px 22px; font-size: 0.88rem; font-weight: bold;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 8px 28px rgba(37,211,102,0.55); }
+    .btn-whatsapp i { font-size: 1.05rem; }
+
     @media (max-width: 480px) {
-      .btn-flotante { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+      .btn-flotante  { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+      .btn-whatsapp  { bottom: 72px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
+    }
+
+    /* ══ BANNER DE BIENVENIDA ══ */
+    .banner-fb {
+      position: relative; overflow: hidden;
+      background: linear-gradient(120deg, #0d1b2a 0%, #1a0d24 50%, #0d1b2a 100%);
+      border: 1px solid rgba(239,80,133,0.25);
+      border-radius: 14px; padding: 20px 24px 20px 20px;
+      margin-bottom: 28px; display: flex; align-items: center; gap: 18px;
+    }
+    .banner-fb::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(239,80,133,0.08) 0%, transparent 50%, rgba(112,221,216,0.06) 100%);
+      pointer-events: none;
+    }
+    .banner-fb::after {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--rosa-principal), var(--cian-brillo));
+      border-radius: 4px 0 0 4px;
+    }
+    .banner-fb-icon {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(239,80,133,0.15); border: 1.5px solid rgba(239,80,133,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+    .banner-fb-body { flex: 1; }
+    .banner-fb-body strong { display: block; color: #fff; font-size: 0.97rem; margin-bottom: 3px; }
+    .banner-fb-body span { color: #aaa; font-size: 0.82rem; line-height: 1.5; }
+    .banner-fb-cta {
+      flex-shrink: 0;
+      background: var(--rosa-principal); color: #fff;
+      border: none; border-radius: 8px; padding: 10px 18px;
+      font-size: 0.82rem; font-weight: bold; cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: 0.2s; white-space: nowrap;
+    }
+    .banner-fb-cta:hover { background: var(--rosa-oscuro); transform: translateY(-1px); }
+    .banner-fb-close {
+      flex-shrink: 0; background: none; border: none; color: #555;
+      cursor: pointer; font-size: 0.85rem; padding: 4px; transition: color 0.2s;
+      align-self: flex-start;
+    }
+    .banner-fb-close:hover { color: #aaa; }
+    @media (max-width: 560px) {
+      .banner-fb { flex-wrap: wrap; gap: 12px; }
+      .banner-fb-cta { width: 100%; justify-content: center; }
+      .banner-fb-close { position: absolute; top: 12px; right: 12px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       OPTIMIZACIONES MÓVIL Y RENDIMIENTO
+    ══════════════════════════════════════════════════════════ */
+
+    /* Reducir animaciones en equipos lentos / accesibilidad */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* En móvil: quitar backdrop-filter (costoso en GPU débil) */
+    @media (max-width: 768px) {
+      .modal-overlay        { background: rgba(0,0,0,0.92) !important; backdrop-filter: none !important; }
+      .service-search-panel { background: rgba(0,0,0,0.92) !important; backdrop-filter: none !important; }
+      .lightbox             { background: rgba(0,0,0,0.96) !important; backdrop-filter: none !important; }
+      #cfg-overlay          { background: rgba(0,0,0,0.92) !important; backdrop-filter: none !important; }
+    }
+
+    /* Scroll táctil nativo */
+    .paquetes-grid, .service-search-list, #cfg-opciones,
+    #cfg-res-items, .services-table-wrap { -webkit-overflow-scrolling: touch; }
+
+    /* Scroll snap en carrusel */
+    .paquetes-grid { scroll-snap-type: x mandatory; }
+    .paquete-card  { scroll-snap-align: start; }
+
+    /* Evitar scroll horizontal global */
+    body, main { overflow-x: hidden; }
+
+    /* Contención de layout para tarjetas y modales */
+    .cat-block, .paquete-card, .modal-box { contain: layout style; }
+
+    /* ── Móvil pequeño (≤ 480px) ── */
+    @media (max-width: 480px) {
+      header { padding: 10px 14px; }
+      .page-header h1 { font-size: 1.6rem; }
+      .page-header p  { font-size: 0.85rem; }
+      .banner-fb { padding: 14px 14px 14px 18px; gap: 10px; }
+      .banner-fb-icon { width: 38px; height: 38px; font-size: 1.1rem; }
+      .banner-fb-body strong { font-size: 0.88rem; }
+      .banner-fb-body span   { font-size: 0.76rem; }
+      .section-title { font-size: 0.75rem; margin: 28px 0 12px; }
+      .paquete-card  { min-width: 240px; max-width: 240px; }
+      .paquete-precio { font-size: 1.6rem; }
+      .paquete-nombre { font-size: 1.05rem; }
+      .cat-header { padding: 12px 14px; gap: 10px; }
+      .cat-icon   { font-size: 1.2rem; min-width: 22px; }
+      .cat-count  { display: none; }
+      table { font-size: 0.78rem; }
+      tbody td { padding: 8px 10px; }
+      thead th  { padding: 7px 10px; font-size: 0.62rem; }
+      .td-servicio { min-width: 120px; }
+      /* Modal pantalla completa desde abajo */
+      .modal-overlay { padding: 0; align-items: flex-end; }
+      .modal-box { max-width: 100%; border-radius: 18px 18px 0 0; max-height: 92vh; overflow-y: auto; }
+      .modal-header { padding: 16px 18px 12px; }
+      .modal-body   { padding: 14px 18px; }
+      .modal-footer { padding: 0 18px 16px; }
+      .service-search-panel { align-items: flex-end; padding: 0; }
+      .service-search-box   { border-radius: 18px 18px 0 0; }
+      #cfg-overlay  { align-items: flex-end; padding: 0; }
+      #cfg-box      { border-radius: 18px 18px 0 0; max-height: 95vh; }
+      .ej-thumb     { width: 90px; height: 90px; }
+      .lightbox-inner { max-width: 100%; width: calc(100vw - 24px); }
+      .td-desc, .td-desc-wrap { display: none !important; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+
+    /* ── Móvil mediano (481–768px) ── */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .page-header h1 { font-size: 1.85rem; }
+      .paquete-card   { min-width: 256px; max-width: 256px; }
+      .modal-overlay  { padding: 16px 8px 0; align-items: flex-end; }
+      .modal-box      { border-radius: 16px 16px 0 0; max-height: 90vh; overflow-y: auto; }
+      .lightbox-inner { max-width: calc(100vw - 32px); }
+      .lightbox-nav.prev { left: 4px; }
+      .lightbox-nav.next { right: 4px; }
+    }
+
+    /* ── Targets táctiles mínimos 44px ── */
+    @media (max-width: 768px) {
+      .btn-cotizar-tabla { padding: 8px 14px; min-height: 36px; }
+      .btn-cotizar-pkg   { padding: 13px; min-height: 44px; }
+      .cat-header        { min-height: 54px; }
+      .dot-indicator     { width: 10px; height: 10px; margin: 0 3px; }
+      .ejemplos-toggle   { min-height: 44px; padding: 12px 16px; }
+      .badge-remove      { padding: 4px 6px; min-width: 24px; min-height: 24px; }
+      .service-search-item { padding: 12px 16px; min-height: 44px; }
+    }
+
+    /* ── Configurador: una columna en móvil ── */
+    @media (max-width: 680px) {
+      #cfg-body     { grid-template-columns: 1fr; }
+      #cfg-resumen  { border-left: none; border-top: 1px solid #2a2a2a; }
+      #cfg-opciones { max-height: 50vh; }
+      #cfg-res-items { max-height: 180px; }
     }
 
     /* ══ BTN COTIZAR EN TABLA ══ */
@@ -807,6 +973,21 @@
   </header>
 
   <main>
+    <!-- ══ BANNER BIENVENIDA ══ -->
+    <div class="banner-fb" id="banner-fb">
+      <div class="banner-fb-icon">🎯</div>
+      <div class="banner-fb-body">
+        <strong>¡Bienvenido! Llegaste al lugar correcto.</strong>
+        <span>Explora los servicios y paquetes disponibles. Cotiza sin compromiso — trato directo, sin intermediarios.</span>
+      </div>
+      <button class="banner-fb-cta" onclick="abrirModal('')">
+        <i class="fas fa-paper-plane"></i> Cotizar ahora
+      </button>
+      <button class="banner-fb-close" onclick="document.getElementById('banner-fb').style.display='none'" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
     <div class="page-header">
       <h1><i class="fas fa-rocket" style="margin-right:8px; font-size:1.6rem;"></i>Servicios Freelance</h1>
       <p>Soluciones digitales a la medida. Explora los paquetes o servicios individuales y cotiza sin compromiso.</p>
@@ -1361,6 +1542,11 @@
     <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:6px;"></i>
     Algunos precios pueden variar debido a la complejidad de la solicitud.
   </div>
+
+  <!-- ══ BOTÓN FLOTANTE WHATSAPP ══ -->
+  <a class="btn-whatsapp" href="https://wa.me/+529931741910" target="_blank" rel="noopener">
+    <i class="fab fa-whatsapp"></i> WhatsApp
+  </a>
 
   <!-- ══ BOTÓN FLOTANTE ══ -->
   <button class="btn-flotante" onclick="abrirModal('')">
