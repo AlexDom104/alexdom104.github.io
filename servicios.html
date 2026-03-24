@@ -180,73 +180,8 @@
     }
     .btn-flotante:hover { background: var(--rosa-oscuro); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(239,80,133,0.55); }
     .btn-flotante i { font-size: 1rem; }
-
-    /* ══ BOTÓN FLOTANTE WHATSAPP ══ */
-    .btn-whatsapp {
-      position: fixed; bottom: 82px; right: 24px; z-index: 900;
-      background: #25D366; color: #fff;
-      border: none; border-radius: 50px;
-      padding: 13px 22px; font-size: 0.88rem; font-weight: bold;
-      cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.45);
-      display: flex; align-items: center; gap: 9px;
-      text-decoration: none;
-      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
-    }
-    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 8px 28px rgba(37,211,102,0.55); }
-    .btn-whatsapp i { font-size: 1.05rem; }
-
     @media (max-width: 480px) {
-      .btn-flotante  { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
-      .btn-whatsapp  { bottom: 72px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
-    }
-
-    /* ══ BANNER DE BIENVENIDA ══ */
-    .banner-fb {
-      position: relative; overflow: hidden;
-      background: linear-gradient(120deg, #0d1b2a 0%, #1a0d24 50%, #0d1b2a 100%);
-      border: 1px solid rgba(239,80,133,0.25);
-      border-radius: 14px; padding: 20px 24px 20px 20px;
-      margin-bottom: 28px; display: flex; align-items: center; gap: 18px;
-    }
-    .banner-fb::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(239,80,133,0.08) 0%, transparent 50%, rgba(112,221,216,0.06) 100%);
-      pointer-events: none;
-    }
-    .banner-fb::after {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 4px;
-      background: linear-gradient(180deg, var(--rosa-principal), var(--cian-brillo));
-      border-radius: 4px 0 0 4px;
-    }
-    .banner-fb-icon {
-      flex-shrink: 0; width: 48px; height: 48px; border-radius: 12px;
-      background: rgba(239,80,133,0.15); border: 1.5px solid rgba(239,80,133,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-    }
-    .banner-fb-body { flex: 1; }
-    .banner-fb-body strong { display: block; color: #fff; font-size: 0.97rem; margin-bottom: 3px; }
-    .banner-fb-body span { color: #aaa; font-size: 0.82rem; line-height: 1.5; }
-    .banner-fb-cta {
-      flex-shrink: 0;
-      background: var(--rosa-principal); color: #fff;
-      border: none; border-radius: 8px; padding: 10px 18px;
-      font-size: 0.82rem; font-weight: bold; cursor: pointer;
-      display: flex; align-items: center; gap: 7px;
-      transition: 0.2s; white-space: nowrap;
-    }
-    .banner-fb-cta:hover { background: var(--rosa-oscuro); transform: translateY(-1px); }
-    .banner-fb-close {
-      flex-shrink: 0; background: none; border: none; color: #555;
-      cursor: pointer; font-size: 0.85rem; padding: 4px; transition: color 0.2s;
-      align-self: flex-start;
-    }
-    .banner-fb-close:hover { color: #aaa; }
-    @media (max-width: 560px) {
-      .banner-fb { flex-wrap: wrap; gap: 12px; }
-      .banner-fb-cta { width: 100%; justify-content: center; }
-      .banner-fb-close { position: absolute; top: 12px; right: 12px; }
+      .btn-flotante { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 0.82rem; }
     }
 
     /* ══ BTN COTIZAR EN TABLA ══ */
@@ -530,7 +465,7 @@
 
     /* ══ AVISO PRECIOS ══ */
     #aviso-precios {
-      position: fixed; bottom: 80px; right: 24px; z-index: 899;
+      position: fixed; bottom: 142px; right: 24px; z-index: 899;
       background: #1e1e1e; border: 1px solid #333;
       color: #aaa; font-size: 0.78rem;
       padding: 10px 14px; border-radius: 10px;
@@ -542,7 +477,7 @@
     #aviso-precios.oculto { opacity: 0; pointer-events: none; }
     @keyframes fadeInAviso { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
     @media (max-width: 480px) {
-      #aviso-precios { bottom: 72px; right: 16px; max-width: 180px; }
+      #aviso-precios { bottom: 132px; right: 16px; max-width: 180px; }
     }
 
     /* ── Lightbox ── */
@@ -872,21 +807,6 @@
   </header>
 
   <main>
-    <!-- ══ BANNER BIENVENIDA ══ -->
-    <div class="banner-fb" id="banner-fb">
-      <div class="banner-fb-icon">🎯</div>
-      <div class="banner-fb-body">
-        <strong>¡Bienvenido! Llegaste al lugar correcto.</strong>
-        <span>Explora los servicios y paquetes disponibles. Cotiza sin compromiso — trato directo, sin intermediarios.</span>
-      </div>
-      <button class="banner-fb-cta" onclick="abrirModal('')">
-        <i class="fas fa-paper-plane"></i> Cotizar ahora
-      </button>
-      <button class="banner-fb-close" onclick="document.getElementById('banner-fb').style.display='none'" title="Cerrar">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
     <div class="page-header">
       <h1><i class="fas fa-rocket" style="margin-right:8px; font-size:1.6rem;"></i>Servicios Freelance</h1>
       <p>Soluciones digitales a la medida. Explora los paquetes o servicios individuales y cotiza sin compromiso.</p>
@@ -1071,7 +991,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-marcas" onchange="cfgToggle('marcas')">
                 <label for="chk-marcas">🏷️ Gestión de marcas</label>
-                <span class="cfg-tooltip" data-tip="Número de marcas o empresas distintas<br>que necesitas gestionar en redes y medios.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="marcas" data-tip="Número de marcas o empresas distintas<br>que necesitas gestionar en redes y medios.">?</span>
                 <span class="cfg-price-hint" id="hint-marcas"></span>
               </div>
               <div class="cfg-section-body" id="body-marcas">
@@ -1088,7 +1008,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-web" onchange="cfgToggle('web')">
                 <label for="chk-web">🌐 Gestión de páginas web</label>
-                <span class="cfg-tooltip" data-tip="Mantenimiento de sitios web existentes:<br>actualizaciones, contenido y soporte técnico.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="webs" data-tip="Mantenimiento de sitios web existentes:<br>actualizaciones, contenido y soporte técnico.">?</span>
                 <span class="cfg-price-hint" id="hint-web"></span>
               </div>
               <div class="cfg-section-body" id="body-web">
@@ -1105,7 +1025,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-redes" onchange="cfgToggle('redes')">
                 <label for="chk-redes">📱 Redes sociales</label>
-                <span class="cfg-tooltip" data-tip="Redes sociales a gestionar por marca.<br>1–2 redes: precio unitario c/u.<br>3 redes: precio de paquete fijo.<br>4ª red en adelante: +precio individual (sin descuento).">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="redes" data-tip="Redes sociales a gestionar por marca.<br>1–2 redes: precio unitario c/u.<br>3 redes: precio de paquete fijo.<br>4ª red en adelante: +precio individual (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-redes"></span>
               </div>
               <div class="cfg-section-body" id="body-redes">
@@ -1144,7 +1064,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-diseno" onchange="cfgToggle('diseno')">
                 <label for="chk-diseno">🎨 Diseño gráfico y creación de contenido</label>
-                <span class="cfg-tooltip" data-tip="Piezas de contenido visual por mes.<br>1 pieza = imagen o video que se publica<br>en todas tus redes activas.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="imagenes" data-tip="Piezas de contenido visual por mes.<br>1 pieza = imagen o video que se publica<br>en todas tus redes activas.">?</span>
                 <span class="cfg-price-hint" id="hint-diseno"></span>
               </div>
               <div class="cfg-section-body" id="body-diseno">
@@ -1174,7 +1094,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-crm" onchange="cfgToggle('crm')">
                 <label for="chk-crm">⚙️ Gestión de CRM</label>
-                <span class="cfg-tooltip" data-tip="Configuración y mantenimiento de Bitrix24<br>u otro CRM. Con o sin automatizaciones vía APIs.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="crm" data-tip="Configuración y mantenimiento de Bitrix24<br>u otro CRM. Con o sin automatizaciones vía APIs.">?</span>
                 <span class="cfg-price-hint" id="hint-crm"></span>
               </div>
               <div class="cfg-section-body" id="body-crm">
@@ -1191,7 +1111,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-meta" onchange="cfgToggle('meta')">
                 <label for="chk-meta">📣 Gestión de campañas en Meta Ads</label>
-                <span class="cfg-tooltip" data-tip="Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: costo extra c/u (sin descuento).">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="meta-ads" data-tip="Gestión integral en Facebook / Instagram Ads.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-meta"></span>
               </div>
               <div class="cfg-section-body" id="body-meta">
@@ -1209,7 +1129,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-google" onchange="cfgToggle('google')">
                 <label for="chk-google">🔍 Gestión de campañas en Google Ads</label>
-                <span class="cfg-tooltip" data-tip="Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: costo extra c/u (sin descuento).">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="google-ads" data-tip="Gestión de campañas en Google Search / Display.<br>Cada campaña incluye hasta 2 anuncios diseñados.<br>1–3 campañas: precio por unidad.<br>4ª campaña en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-google"></span>
               </div>
               <div class="cfg-section-body" id="body-google">
@@ -1227,7 +1147,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-comentarios" onchange="cfgToggle('comentarios')">
                 <label for="chk-comentarios">💬 Respuesta a comentarios y DMs</label>
-                <span class="cfg-tooltip" data-tip="Gestión activa de comentarios en publicaciones<br>y mensajes directos en tus redes sociales.<br>Respuestas en nombre de tu marca con tu tono y voz.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="comunidad" data-tip="Gestión activa de comentarios en publicaciones<br>y mensajes directos en tus redes sociales.<br>Respuestas en nombre de tu marca con tu tono y voz.">?</span>
                 <span class="cfg-price-hint" id="hint-comentarios"></span>
               </div>
               <div class="cfg-section-body" id="body-comentarios">
@@ -1248,7 +1168,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-seo" onchange="cfgToggle('seo')">
                 <label for="chk-seo">🔎 SEO orgánico</label>
-                <span class="cfg-tooltip" data-tip="Optimización orgánica para mejorar tu posicionamiento.<br><b>Redes:</b> bio, hashtags, palabras clave en publicaciones.<br><b>Web:</b> metaetiquetas, velocidad, estructura y contenido.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="seo" data-tip="Optimización orgánica para mejorar tu posicionamiento.<br><b>Redes:</b> bio, hashtags, palabras clave en publicaciones.<br><b>Web:</b> metaetiquetas, velocidad, estructura y contenido.">?</span>
                 <span class="cfg-price-hint" id="hint-seo"></span>
               </div>
               <div class="cfg-section-body" id="body-seo">
@@ -1271,7 +1191,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-reporte" onchange="cfgToggle('reporte')">
                 <label for="chk-reporte">📊 Reporte mensual + Analytics</label>
-                <span class="cfg-tooltip" data-tip="Informe detallado de tus métricas cada mes:<br>alcance, interacciones, seguidores nuevos,<br>top contenidos y comparativa contra el mes anterior.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="reporte" data-tip="Informe detallado de tus métricas cada mes:<br>alcance, interacciones, seguidores nuevos,<br>top contenidos y comparativa contra el mes anterior.">?</span>
                 <span class="cfg-price-hint" id="hint-reporte"></span>
               </div>
               <div class="cfg-section-body" id="body-reporte">
@@ -1288,7 +1208,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-recursos" onchange="cfgToggle('recursos')">
                 <label for="chk-recursos">🗂️ Recursos digitales entregados al cliente</label>
-                <span class="cfg-tooltip" data-tip="Entrega mensual de archivos originales:<br>diseños editables (PSD / AI / Canva), videos sin<br>marca de agua y exportaciones en múltiples formatos.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="recursos" data-tip="Entrega mensual de archivos originales:<br>diseños editables (PSD / AI / Canva), videos sin<br>marca de agua y exportaciones en múltiples formatos.">?</span>
                 <span class="cfg-price-hint" id="hint-recursos"></span>
               </div>
               <div class="cfg-section-body" id="body-recursos">
@@ -1305,7 +1225,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-email" onchange="cfgToggle('email')">
                 <label for="chk-email">✉️ Email marketing</label>
-                <span class="cfg-tooltip" data-tip="Diseño y envío de newsletters o campañas de correo.<br>Hasta 1,000 destinatarios por envío, diseño incluido.<br>1–4 envíos: precio unitario c/u.<br>5 envíos: precio de paquete fijo.<br>6.° en adelante: costo extra c/u (sin descuento).">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="email-mkt" data-tip="Diseño y envío de newsletters o campañas de correo.<br>Hasta 1,000 destinatarios por envío, diseño incluido.<br>1–4 envíos: precio unitario c/u.<br>5 envíos: precio de paquete fijo.<br>6.° en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-email"></span>
               </div>
               <div class="cfg-section-body" id="body-email">
@@ -1327,7 +1247,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-dashboard" onchange="cfgToggle('dashboard')">
                 <label for="chk-dashboard">📈 Dashboard de métricas en tiempo real</label>
-                <span class="cfg-tooltip" data-tip="Panel interactivo con tus KPIs actualizado diariamente.<br>Acceso 24/7 desde cualquier dispositivo.<br>Construido en Looker Studio o plataforma similar.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="dashboard" data-tip="Panel interactivo con tus KPIs actualizado diariamente.<br>Acceso 24/7 desde cualquier dispositivo.<br>Construido en Looker Studio o plataforma similar.">?</span>
                 <span class="cfg-price-hint" id="hint-dashboard"></span>
               </div>
               <div class="cfg-section-body" id="body-dashboard">
@@ -1344,7 +1264,7 @@
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-duracion" onchange="cfgToggle('duracion')">
                 <label for="chk-duracion">📅 Duración del servicio</label>
-                <span class="cfg-tooltip" data-tip="Tiempo estimado del contrato.<br>Informativo — no afecta el precio mensual.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="duracion" data-tip="Tiempo estimado del contrato.<br>Informativo — no afecta el precio mensual.">?</span>
                 <span class="cfg-price-hint" id="hint-duracion"></span>
               </div>
               <div class="cfg-section-body" id="body-duracion">
@@ -1441,11 +1361,6 @@
     <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:6px;"></i>
     Algunos precios pueden variar debido a la complejidad de la solicitud.
   </div>
-
-  <!-- ══ BOTÓN FLOTANTE WHATSAPP ══ -->
-  <a class="btn-whatsapp" href="https://wa.me/+529931741910" target="_blank" rel="noopener">
-    <i class="fab fa-whatsapp"></i> WhatsApp
-  </a>
 
   <!-- ══ BOTÓN FLOTANTE ══ -->
   <button class="btn-flotante" onclick="abrirModal('')">
@@ -1987,6 +1902,40 @@
     }
 
     window.addEventListener('load', sincronizarDesdeSheets, { passive: true });
+
+    // ══ SINCRONIZACIÓN DE TOOLTIPS DESDE GOOGLE SHEETS ══════════
+    // Lee la hoja "Tooltips" (columnas: tooltip_id, Nombre Legible, Texto del Tooltip)
+    // y actualiza los textos de los ? del configurador en tiempo real.
+    async function sincronizarTooltips() {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('TU_')) return;
+      try {
+        const ctrl = new AbortController();
+        setTimeout(() => ctrl.abort(), 8000);
+        const resp = await fetch(APPS_SCRIPT_URL + '?action=tooltips', {
+          redirect: 'follow', signal: ctrl.signal
+        });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (!data.ok || !data.tooltips) return;
+        let actualizados = 0;
+        data.tooltips.forEach(({ id, texto }) => {
+          if (!id || !texto) return;
+          const textoHtml = texto.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+          const el = document.querySelector(`.cfg-tooltip[data-tooltip-id="${id}"]`);
+          if (el) { el.setAttribute('data-tip', textoHtml); actualizados++; }
+        });
+        if (actualizados > 0) {
+          const st = document.getElementById('sync-status');
+          if (st) {
+            const prev = st.textContent;
+            st.textContent = prev && prev !== '⏳ Sincronizando precios...'
+              ? `${prev} · ${actualizados} tooltips`
+              : `✅ Precios y ${actualizados} tooltips sincronizados`;
+          }
+        }
+      } catch(e) { /* silencioso — tooltips no son críticos */ }
+    }
+    window.addEventListener('load', sincronizarTooltips, { passive: true });
 
     // ══ AVISO PRECIOS — desaparece a los 10 seg ══════════════════
     window.addEventListener('load', () => {
