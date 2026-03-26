@@ -249,10 +249,11 @@
       .banner-fb-close { position: absolute; top: 12px; right: 12px; }
     }
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════════════════════
        OPTIMIZACIONES MÓVIL Y RENDIMIENTO
-    ══════════════════════════════════════════════════════════════════════ */
+    ══════════════════════════════════════════════════════════ */
 
+    /* Reducir animaciones en equipos lentos / accesibilidad */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -261,6 +262,7 @@
       }
     }
 
+    /* En móvil: quitar backdrop-filter (costoso en GPU débil) */
     @media (max-width: 768px) {
       .modal-overlay        { background: rgba(0,0,0,0.92) !important; backdrop-filter: none !important; }
       .service-search-panel { background: rgba(0,0,0,0.92) !important; backdrop-filter: none !important; }
@@ -268,16 +270,21 @@
       #cfg-overlay          { background: rgba(0,0,0,0.92) !important; backdrop-filter: none !important; }
     }
 
+    /* Scroll táctil nativo */
     .paquetes-grid, .service-search-list, #cfg-opciones,
     #cfg-res-items, .services-table-wrap { -webkit-overflow-scrolling: touch; }
 
+    /* Scroll snap en carrusel */
     .paquetes-grid { scroll-snap-type: x mandatory; }
     .paquete-card  { scroll-snap-align: start; }
 
+    /* Evitar scroll horizontal global */
     body, main { overflow-x: hidden; }
 
+    /* Contención de layout para tarjetas y modales */
     .cat-block, .paquete-card, .modal-box { contain: layout style; }
 
+    /* ── Móvil pequeño (≤ 480px) ── */
     @media (max-width: 480px) {
       header { padding: 10px 14px; }
       .page-header h1 { font-size: 1.6rem; }
@@ -297,6 +304,7 @@
       tbody td { padding: 8px 10px; }
       thead th  { padding: 7px 10px; font-size: 0.62rem; }
       .td-servicio { min-width: 120px; }
+      /* Modal pantalla completa desde abajo */
       .modal-overlay { padding: 0; align-items: flex-end; }
       .modal-box { max-width: 100%; border-radius: 18px 18px 0 0; max-height: 92vh; overflow-y: auto; }
       .modal-header { padding: 16px 18px 12px; }
@@ -312,6 +320,7 @@
       .form-row { grid-template-columns: 1fr; gap: 0; }
     }
 
+    /* ── Móvil mediano (481–768px) ── */
     @media (min-width: 481px) and (max-width: 768px) {
       .page-header h1 { font-size: 1.85rem; }
       .paquete-card   { min-width: 256px; max-width: 256px; }
@@ -322,6 +331,7 @@
       .lightbox-nav.next { right: 4px; }
     }
 
+    /* ── Targets táctiles mínimos 44px ── */
     @media (max-width: 768px) {
       .btn-cotizar-tabla { padding: 8px 14px; min-height: 36px; }
       .btn-cotizar-pkg   { padding: 13px; min-height: 44px; }
@@ -332,6 +342,7 @@
       .service-search-item { padding: 12px 16px; min-height: 44px; }
     }
 
+    /* ── Configurador: una columna en móvil ── */
     @media (max-width: 680px) {
       #cfg-body     { grid-template-columns: 1fr; }
       #cfg-resumen  { border-left: none; border-top: 1px solid #2a2a2a; }
@@ -439,6 +450,7 @@
     }
     .servicio-badge .badge-remove:hover { color: var(--rosa-principal); }
 
+    /* ── Botón agregar servicio ── */
     .btn-add-service {
       display: inline-flex; align-items: center; gap: 7px;
       background: none; border: 1.5px dashed #333; color: #666;
@@ -447,6 +459,7 @@
     }
     .btn-add-service:hover { border-color: var(--cian-brillo); color: var(--cian-brillo); }
 
+    /* ── Panel de búsqueda de servicios ── */
     .service-search-panel {
       display: none; position: fixed; inset: 0; z-index: 1100;
       background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
@@ -551,6 +564,7 @@
       padding: 14px 16px 18px;
     }
 
+    /* Thumbnail fijo: 110×110 px */
     .ej-thumb {
       position: relative;
       width: 110px; height: 110px;
@@ -580,6 +594,7 @@
     }
     .ej-thumb:hover .ej-overlay i { opacity: 1; }
 
+    /* Placeholder cuando no hay imagen */
     .ej-thumb.placeholder {
       cursor: default; border-style: dashed; border-color: #252525;
     }
@@ -594,6 +609,25 @@
     .ej-thumb.placeholder span {
       font-size: 0.6rem; color: #2a2a2a; text-align: center;
     }
+
+    /* ── Sync bar ── */
+    .sync-bar {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.15);
+      border-radius: 10px; padding: 10px 18px; margin-bottom: 12px;
+    }
+    #btn-sync-sheets {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(112,221,216,0.1); border: 1.5px solid rgba(112,221,216,0.3);
+      color: var(--cian-brillo); border-radius: 8px; padding: 8px 16px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: 0.2s; font-family: inherit;
+    }
+    #btn-sync-sheets:hover:not(:disabled) {
+      background: rgba(112,221,216,0.2); border-color: var(--cian-brillo);
+    }
+    #btn-sync-sheets:disabled { opacity: 0.6; cursor: default; }
+    #sync-status { font-size: 0.78rem; color: #666; }
 
     /* ══ AVISO PRECIOS ══ */
     #aviso-precios {
@@ -671,7 +705,7 @@
       .lightbox-nav.next { right: 6px; }
     }
 
-    /* ══ BOTÓN PERSONALIZA TU PAQUETE ══ */
+    /* ══ BOTÓN PERSONALIZA TU PAQUETE ══════════════════════════ */
     .personaliza-wrap {
       display: flex; justify-content: center; margin: 18px 0 6px;
     }
@@ -690,7 +724,7 @@
     }
     .btn-personaliza i { font-size: 1rem; }
 
-    /* ══ MODAL CONFIGURADOR ══ */
+    /* ══ MODAL CONFIGURADOR ═════════════════════════════════════ */
     #cfg-overlay {
       position: fixed; inset: 0; z-index: 1100;
       background: rgba(0,0,0,0.82); backdrop-filter: blur(5px);
@@ -725,20 +759,21 @@
       #cfg-resumen { border-left: none; border-top: 1px solid #2a2a2a; }
     }
 
+    /* Columna izquierda — opciones */
     #cfg-opciones {
       padding: 22px 24px; overflow-y: auto; max-height: 70vh;
     }
     .cfg-section {
       background: #161616; border: 1px solid #262626;
       border-radius: 10px; margin-bottom: 12px;
-      overflow: visible;
+      overflow: visible; /* FIX: era "hidden" — cortaba los tooltips */
       position: relative;
     }
     .cfg-section-header {
       display: flex; align-items: center; gap: 10px;
       padding: 13px 16px; cursor: pointer;
       user-select: none;
-      border-radius: 10px;
+      border-radius: 10px; /* mantiene las esquinas redondeadas al quitar overflow:hidden del padre */
       background: #161616;
     }
     .cfg-section-header input[type=checkbox] {
@@ -797,6 +832,7 @@
     .cfg-select:focus { border-color: var(--cian-brillo); }
     .cfg-select option { background: #1c1c1c; }
 
+    /* Columna derecha — resumen */
     #cfg-resumen {
       padding: 22px 22px; border-left: 1px solid #242424;
       display: flex; flex-direction: column; gap: 0;
@@ -857,6 +893,7 @@
     .cfg-msg.ok  { color: #50d890; }
     .cfg-msg.err { color: #ff6b6b; }
 
+    /* ── Skeleton de carga para tarjetas ── */
     .precio-skeleton { color: #444; animation: skPulse 1.4s ease-in-out infinite; }
     @keyframes skPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
     .feat-skeleton { padding: 4px 0; }
@@ -867,6 +904,7 @@
     .feat-skel-line.short { width: 60%; }
     .feat-error { color: #555; font-size: 0.78rem; font-style: italic; padding: 12px 0; }
 
+    /* ── Tooltips de ayuda ── */
     .cfg-tooltip {
       display: inline-flex; align-items: center; justify-content: center;
       width: 15px; height: 15px; border-radius: 50%;
@@ -877,6 +915,7 @@
     }
     .cfg-tooltip.active { background: #333; color: var(--cian-brillo); border-color: var(--cian-brillo); }
 
+    /* Tooltip flotante — se posiciona via JS pegado al body para evitar clipping */
     #cfg-tip-float {
       display: none; position: fixed; z-index: 9999;
       background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
@@ -886,6 +925,7 @@
       pointer-events: none;
     }
 
+    /* ── Grid de cuentas por red (cuando marcas > 1) ── */
     .redes-por-marca { display: none; margin-top: 12px; }
     .redes-por-marca.visible { display: block; }
     .redes-por-marca-label {
@@ -906,6 +946,7 @@
     .red-cuenta-row input:focus { border-color: var(--cian-brillo); }
     .red-cuenta-row span { color: #666; font-size: 0.72rem; }
 
+    /* ── Toast de confirmación ── */
     #cfg-toast {
       position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
       background: linear-gradient(135deg,#0a315b,#1a5a8a);
@@ -921,19 +962,7 @@
     }
     #cfg-toast i { color: var(--cian-brillo); margin-right: 8px; }
     #cfg-toast p { font-size: 0.78rem; color: #aaa; margin-top: 4px; font-weight: 400; }
-
-    /* ══ BADGE CACHÉ ══ */
-    #cache-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.7rem; color: #70DDD8;
-      background: rgba(112,221,216,0.08);
-      border: 1px solid rgba(112,221,216,0.2);
-      border-radius: 20px; padding: 3px 10px;
-      cursor: pointer; transition: 0.2s;
-      vertical-align: middle; margin-left: 8px;
-    }
-    #cache-badge:hover { background: rgba(239,80,133,0.1); border-color: rgba(239,80,133,0.3); color: #EF5085; }
-    #cache-badge i { font-size: 0.65rem; }
+    /* ═══════════════════════════════════════════════════════════ */
   </style>
 </head>
 <body>
@@ -1000,7 +1029,9 @@
   <p>Soluciones digitales a la medida. Explora los paquetes o servicios individuales y cotiza sin compromiso.</p>
 </div>
 
-    <!-- ══ PAQUETES COMMUNITY MANAGER ══ -->
+    <!-- ══════════════════════════════════════════════════════
+         SECCIÓN 1: PAQUETES COMMUNITY MANAGER (SIEMPRE VISIBLES)
+    ══════════════════════════════════════════════════════ -->
     <div style="margin-bottom: 6px;">
       <div class="paquetes-section-header">
         <div>
@@ -1016,6 +1047,7 @@
 
         <div class="paquetes-grid" id="paquetes-carousel">
 
+          <!-- ══ 1. DESPEGUE ══ -->
           <div class="paquete-card" data-pid="despegue">
             <div class="paquete-band"></div>
             <div class="paquete-head">
@@ -1026,14 +1058,19 @@
             </div>
             <div class="paquete-features">
               <div class="feat-skeleton">
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
                 <div class="feat-skel-line"></div>
               </div>
             </div>
-            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button></div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
+            </div>
           </div>
 
+          <!-- ══ 2. ARRANQUE DIGITAL ══ -->
           <div class="paquete-card" data-pid="arranque">
             <div class="paquete-band"></div>
             <div class="paquete-head">
@@ -1044,14 +1081,19 @@
             </div>
             <div class="paquete-features">
               <div class="feat-skeleton">
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
                 <div class="feat-skel-line"></div>
               </div>
             </div>
-            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button></div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
+            </div>
           </div>
 
+          <!-- ══ 3. SEÑAL FUERTE ══ -->
           <div class="paquete-card destacado" data-pid="senal">
             <div class="paquete-band"></div>
             <div class="badge-popular">⭐ Más Popular</div>
@@ -1063,14 +1105,19 @@
             </div>
             <div class="paquete-features">
               <div class="feat-skeleton">
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
                 <div class="feat-skel-line"></div>
               </div>
             </div>
-            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button></div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
+            </div>
           </div>
 
+          <!-- ══ 4. DOMINIO TOTAL ══ -->
           <div class="paquete-card" data-pid="dominio">
             <div class="paquete-band" style="background:linear-gradient(90deg,#0a315b,#70DDD8);"></div>
             <div class="paquete-head">
@@ -1081,14 +1128,19 @@
             </div>
             <div class="paquete-features">
               <div class="feat-skeleton">
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
                 <div class="feat-skel-line"></div>
               </div>
             </div>
-            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button></div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Contratar</button>
+            </div>
           </div>
 
+          <!-- ══ 5. IMPERIO DIGITAL ══ -->
           <div class="paquete-card enterprise" data-pid="imperio">
             <div class="paquete-band"></div>
             <div class="paquete-head">
@@ -1099,16 +1151,20 @@
             </div>
             <div class="paquete-features">
               <div class="feat-skeleton">
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
-                <div class="feat-skel-line"></div><div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
+                <div class="feat-skel-line"></div>
+                <div class="feat-skel-line short"></div>
                 <div class="feat-skel-line"></div>
               </div>
             </div>
-            <div class="paquete-cta"><button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Solicitar Propuesta</button></div>
+            <div class="paquete-cta">
+              <button class="btn-cotizar-pkg" onclick="abrirModalPaquete(this)">Solicitar Propuesta</button>
+            </div>
           </div>
 
-        </div>
-      </div>
+        </div><!-- /paquetes-grid -->
+      </div><!-- /carousel-wrap -->
 
       <div style="display:flex; justify-content:center; gap:8px; margin: 4px 0 0;">
         <span class="dot-indicator active" onclick="goToSlide(0)"></span>
@@ -1118,6 +1174,7 @@
         <span class="dot-indicator" onclick="goToSlide(4)"></span>
       </div>
 
+      <!-- ── Botón Personaliza tu paquete ─────────────────── -->
       <div class="personaliza-wrap">
         <button class="btn-personaliza" onclick="abrirConfigurador()">
           <i class="fas fa-sliders-h"></i>
@@ -1127,9 +1184,12 @@
       </div>
     </div>
 
-    <!-- ══ MODAL CONFIGURADOR ══ -->
+    <!-- ══ MODAL CONFIGURADOR DE PAQUETE PERSONALIZADO ════════════
+         Se abre al hacer clic en "Personaliza tu paquete"
+    ═══════════════════════════════════════════════════════════ -->
     <div id="cfg-overlay" onclick="cerrarCfgOverlay(event)">
       <div id="cfg-box">
+
         <div id="cfg-header">
           <div>
             <h3>🛠️ Configura tu paquete personalizado</h3>
@@ -1139,8 +1199,11 @@
         </div>
 
         <div id="cfg-body">
+
+          <!-- ── Columna izquierda: Opciones ───────────────── -->
           <div id="cfg-opciones">
 
+            <!-- 1. Marcas -->
             <div class="cfg-section" id="cs-marcas">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-marcas" onchange="cfgToggle('marcas')">
@@ -1157,6 +1220,7 @@
               </div>
             </div>
 
+            <!-- 2. Web -->
             <div class="cfg-section" id="cs-web">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-web" onchange="cfgToggle('web')">
@@ -1173,6 +1237,7 @@
               </div>
             </div>
 
+            <!-- 3. Redes sociales -->
             <div class="cfg-section" id="cs-redes">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-redes" onchange="cfgToggle('redes')">
@@ -1190,13 +1255,20 @@
                   <label class="cfg-check-pill" id="pill-tt"><input type="checkbox" value="TikTok" onchange="cfgPillChange()"><i class="fab fa-tiktok"></i> TikTok</label>
                   <label class="cfg-check-pill" id="pill-yt"><input type="checkbox" value="YouTube" onchange="cfgPillChange()"><i class="fab fa-youtube"></i> YouTube</label>
                 </div>
+
+                <!-- Redes personalizadas (hasta 5) -->
                 <div id="otras-redes-wrap" style="margin-top:8px;"></div>
-                <button type="button" id="btn-add-otra-red" onclick="cfgAddOtraRed()"
-                  style="margin-top:6px;background:none;border:1px dashed #333;color:#555;border-radius:8px;padding:5px 14px;font-size:0.76rem;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s;"
+                <button type="button" id="btn-add-otra-red"
+                  onclick="cfgAddOtraRed()"
+                  style="margin-top:6px;background:none;border:1px dashed #333;color:#555;
+                         border-radius:8px;padding:5px 14px;font-size:0.76rem;cursor:pointer;
+                         font-family:inherit;transition:border-color .2s,color .2s;"
                   onmouseover="this.style.borderColor='#70DDD8';this.style.color='#70DDD8';"
                   onmouseout="this.style.borderColor='#333';this.style.color='#555';">
                   <i class="fas fa-plus" style="margin-right:5px;font-size:0.68rem;"></i>+ Otra red
                 </button>
+
+                <!-- Cuadros por red — solo visible cuando marcas > 1 -->
                 <div class="redes-por-marca" id="redes-por-marca-wrap">
                   <div class="redes-por-marca-label">¿Cuántas cuentas de cada red? (por marca)</div>
                   <div id="redes-cuentas-grid"></div>
@@ -1204,6 +1276,7 @@
               </div>
             </div>
 
+            <!-- 4. Diseño y contenido -->
             <div class="cfg-section" id="cs-diseno">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-diseno" onchange="cfgToggle('diseno')">
@@ -1233,6 +1306,7 @@
               </div>
             </div>
 
+            <!-- 5. CRM -->
             <div class="cfg-section" id="cs-crm">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-crm" onchange="cfgToggle('crm')">
@@ -1249,6 +1323,7 @@
               </div>
             </div>
 
+            <!-- 6. Meta Ads -->
             <div class="cfg-section" id="cs-meta">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-meta" onchange="cfgToggle('meta')">
@@ -1257,7 +1332,7 @@
                 <span class="cfg-price-hint" id="hint-meta"></span>
               </div>
               <div class="cfg-section-body" id="body-meta">
-                <div class="cfg-label">¿Cuántas campañas al mes?</div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio por unidad · 4ª+ con costo extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-meta" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">campaña(s)/mes</span>
@@ -1266,6 +1341,7 @@
               </div>
             </div>
 
+            <!-- 7. Google Ads -->
             <div class="cfg-section" id="cs-google">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-google" onchange="cfgToggle('google')">
@@ -1274,7 +1350,7 @@
                 <span class="cfg-price-hint" id="hint-google"></span>
               </div>
               <div class="cfg-section-body" id="body-google">
-                <div class="cfg-label">¿Cuántas campañas al mes?</div>
+                <div class="cfg-label">¿Cuántas campañas al mes? <span style="color:#555;font-size:0.68rem;">(1–3 precio por unidad · 4ª+ con costo extra c/u · cada campaña incluye hasta 2 anuncios)</span></div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-google" min="1" max="20" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">campaña(s)/mes</span>
@@ -1283,11 +1359,12 @@
               </div>
             </div>
 
+            <!-- 8. Comentarios y DMs -->
             <div class="cfg-section" id="cs-comentarios">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-comentarios" onchange="cfgToggle('comentarios')">
                 <label for="chk-comentarios">💬 Respuesta a comentarios y DMs</label>
-                <span class="cfg-tooltip" data-tooltip-id="comunidad" data-tip="Gestión activa de comentarios en publicaciones<br>y mensajes directos en tus redes sociales.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="comunidad" data-tip="Gestión activa de comentarios en publicaciones<br>y mensajes directos en tus redes sociales.<br>Respuestas en nombre de tu marca con tu tono y voz.">?</span>
                 <span class="cfg-price-hint" id="hint-comentarios"></span>
               </div>
               <div class="cfg-section-body" id="body-comentarios">
@@ -1296,14 +1373,19 @@
                   <input type="number" class="cfg-input" id="num-comentarios" min="1" max="10" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">plataforma(s)</span>
                 </div>
+                <div style="font-size:0.74rem;color:#888;margin-top:8px;line-height:1.5;">
+                  <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:5px;opacity:0.8;"></i>
+                  Se coordinan respuestas con tus guidelines. Disponibilidad en horario laboral.
+                </div>
               </div>
             </div>
 
+            <!-- 9. SEO orgánico -->
             <div class="cfg-section" id="cs-seo">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-seo" onchange="cfgToggle('seo')">
                 <label for="chk-seo">🔎 SEO orgánico</label>
-                <span class="cfg-tooltip" data-tooltip-id="seo" data-tip="Optimización orgánica para mejorar tu posicionamiento.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="seo" data-tip="Optimización orgánica para mejorar tu posicionamiento.<br><b>Redes:</b> bio, hashtags, palabras clave en publicaciones.<br><b>Web:</b> metaetiquetas, velocidad, estructura y contenido.">?</span>
                 <span class="cfg-price-hint" id="hint-seo"></span>
               </div>
               <div class="cfg-section-body" id="body-seo">
@@ -1321,76 +1403,85 @@
               </div>
             </div>
 
+            <!-- 10. Reporte mensual -->
             <div class="cfg-section" id="cs-reporte">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-reporte" onchange="cfgToggle('reporte')">
                 <label for="chk-reporte">📊 Reporte mensual + Analytics</label>
-                <span class="cfg-tooltip" data-tooltip-id="reporte" data-tip="Informe detallado de tus métricas cada mes.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="reporte" data-tip="Informe detallado de tus métricas cada mes:<br>alcance, interacciones, seguidores nuevos,<br>top contenidos y comparativa contra el mes anterior.">?</span>
                 <span class="cfg-price-hint" id="hint-reporte"></span>
               </div>
               <div class="cfg-section-body" id="body-reporte">
                 <div style="font-size:0.78rem;color:#888;line-height:1.6;">
-                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Resumen ejecutivo mensual con gráficas de evolución</div>
-                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Top publicaciones con mayor alcance e interacción</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Resumen ejecutivo mensual con gráficas de evolución</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Top publicaciones con mayor alcance e interacción</div>
                   <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Recomendaciones estratégicas para el siguiente mes</div>
                 </div>
               </div>
             </div>
 
+            <!-- 11. Recursos digitales -->
             <div class="cfg-section" id="cs-recursos">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-recursos" onchange="cfgToggle('recursos')">
                 <label for="chk-recursos">🗂️ Recursos digitales entregados al cliente</label>
-                <span class="cfg-tooltip" data-tooltip-id="recursos" data-tip="Entrega mensual de archivos originales editables.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="recursos" data-tip="Entrega mensual de archivos originales:<br>diseños editables (PSD / AI / Canva), videos sin<br>marca de agua y exportaciones en múltiples formatos.">?</span>
                 <span class="cfg-price-hint" id="hint-recursos"></span>
               </div>
               <div class="cfg-section-body" id="body-recursos">
                 <div style="font-size:0.78rem;color:#888;line-height:1.6;">
-                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Archivos fuente editables de todos los diseños del mes</div>
-                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Videos en resolución original sin marca de agua</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Archivos fuente editables de todos los diseños del mes</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Videos en resolución original sin marca de agua</div>
                   <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Entregados vía Google Drive al cierre de mes</div>
                 </div>
               </div>
             </div>
 
+            <!-- 12. Email marketing -->
             <div class="cfg-section" id="cs-email">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-email" onchange="cfgToggle('email')">
                 <label for="chk-email">✉️ Email marketing</label>
-                <span class="cfg-tooltip" data-tooltip-id="email-mkt" data-tip="Diseño y envío de newsletters o campañas de correo.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="email-mkt" data-tip="Diseño y envío de newsletters o campañas de correo.<br>Hasta 1,000 destinatarios por envío, diseño incluido.<br>1–4 envíos: precio unitario c/u.<br>5 envíos: precio de paquete fijo.<br>6.° en adelante: costo extra c/u (sin descuento).">?</span>
                 <span class="cfg-price-hint" id="hint-email"></span>
               </div>
               <div class="cfg-section-body" id="body-email">
-                <div class="cfg-label">¿Cuántos envíos al mes?</div>
+                <div class="cfg-label">¿Cuántos envíos al mes? <span style="color:#555;font-size:0.68rem;">(1–4 precio unitario · 5 precio paquete · 6.° en adelante extra c/u)</span></div>
                 <div class="cfg-input-row">
                   <input type="number" class="cfg-input" id="num-email" min="1" max="30" value="1" oninput="cfgCalc()">
                   <span class="cfg-unit">envío(s)/mes</span>
                 </div>
                 <div id="email-desglose" style="margin-top:8px;font-size:0.74rem;color:#888;"></div>
+                <div style="font-size:0.74rem;color:#888;margin-top:8px;">
+                  <i class="fas fa-info-circle" style="color:#70DDD8;margin-right:5px;opacity:0.8;"></i>
+                  Hasta 1,000 destinatarios por envío · Diseño de plantilla incluido · Reporte de apertura y clics.
+                </div>
               </div>
             </div>
 
+            <!-- 13. Dashboard de métricas -->
             <div class="cfg-section" id="cs-dashboard">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-dashboard" onchange="cfgToggle('dashboard')">
                 <label for="chk-dashboard">📈 Dashboard de métricas en tiempo real</label>
-                <span class="cfg-tooltip" data-tooltip-id="dashboard" data-tip="Panel interactivo con tus KPIs actualizado diariamente.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="dashboard" data-tip="Panel interactivo con tus KPIs actualizado diariamente.<br>Acceso 24/7 desde cualquier dispositivo.<br>Construido en Looker Studio o plataforma similar.">?</span>
                 <span class="cfg-price-hint" id="hint-dashboard"></span>
               </div>
               <div class="cfg-section-body" id="body-dashboard">
                 <div style="font-size:0.78rem;color:#888;line-height:1.6;">
-                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Panel con acceso compartido para ti y tu equipo</div>
-                  <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Visualización de KPIs y seguimiento de objetivos</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Panel con acceso compartido para ti y tu equipo</div>
+                  <div style="margin-bottom:4px;"><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Visualización de KPIs y seguimiento de objetivos</div>
                   <div><i class="fas fa-check-circle" style="color:#70DDD8;margin-right:6px;"></i>Datos actualizados en tiempo real o diariamente</div>
                 </div>
               </div>
             </div>
 
+            <!-- 14. Duración -->
             <div class="cfg-section" id="cs-duracion">
               <div class="cfg-section-header">
                 <input type="checkbox" id="chk-duracion" onchange="cfgToggle('duracion')">
                 <label for="chk-duracion">📅 Duración del servicio</label>
-                <span class="cfg-tooltip" data-tooltip-id="duracion" data-tip="Tiempo estimado del contrato. Informativo.">?</span>
+                <span class="cfg-tooltip" data-tooltip-id="duracion" data-tip="Tiempo estimado del contrato.<br>Informativo — no afecta el precio mensual.">?</span>
                 <span class="cfg-price-hint" id="hint-duracion"></span>
               </div>
               <div class="cfg-section-body" id="body-duracion">
@@ -1404,13 +1495,16 @@
                   <option value="12">12 meses (1 año)</option>
                   <option value="rango">Rango personalizado de meses</option>
                 </select>
-                <div id="duracion-rango-msg" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(112,221,216,0.07);border:1px solid rgba(112,221,216,0.2);border-radius:8px;font-size:0.76rem;color:#70DDD8;line-height:1.5;">
+                <div id="duracion-rango-msg" style="display:none;margin-top:8px;padding:8px 12px;
+                  background:rgba(112,221,216,0.07);border:1px solid rgba(112,221,216,0.2);
+                  border-radius:8px;font-size:0.76rem;color:#70DDD8;line-height:1.5;">
                   <i class="fas fa-info-circle" style="margin-right:6px;opacity:0.8;"></i>
                   En la respuesta por correo se indicarán los detalles de las fechas de inicio y término.
                 </div>
               </div>
             </div>
 
+            <!-- 9. Agregar otro servicio -->
             <div style="margin-top:16px;">
               <button class="btn-add-service" id="btn-cfg-add" onclick="abrirBuscadorDesdeConfigurador()" style="width:100%;">
                 <i class="fas fa-plus"></i> Agregar otro servicio
@@ -1418,8 +1512,9 @@
               <div id="cfg-extra-badges" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;"></div>
             </div>
 
-          </div>
+          </div><!-- /cfg-opciones -->
 
+          <!-- ── Columna derecha: Resumen ───────────────────── -->
           <div id="cfg-resumen">
             <div class="cfg-res-title">📋 Resumen de tu paquete</div>
             <div id="cfg-res-items">
@@ -1433,6 +1528,8 @@
             <div class="cfg-res-total-label" id="cfg-res-total-label">Precio estimado del paquete</div>
             <div class="cfg-res-total" id="cfg-precio-total">$0 <sub>/mes</sub></div>
             <div class="cfg-res-note">* Ahorro incluido por contratar paquete. Precio final sujeto a propuesta.</div>
+
+            <!-- Datos del cliente (inline en resumen) -->
             <hr class="cfg-res-divider">
             <div class="cfg-label" style="margin-bottom:8px;">Tus datos para enviarte la propuesta</div>
             <input class="cfg-input" id="cfg-nombre" placeholder="Nombre completo *" style="margin-bottom:8px;">
@@ -1443,8 +1540,9 @@
               <i class="fas fa-info-circle" style="color:#555;margin-right:4px;"></i>
               Esta es una cotización rápida. El precio final puede variar de acuerdo al tipo de necesidades y presupuesto que tenga a su disposición.
             </div>
-          </div>
-        </div>
+          </div><!-- /cfg-resumen -->
+
+        </div><!-- /cfg-body -->
 
         <div id="cfg-footer">
           <button class="btn-cfg-cancel" onclick="cerrarConfigurador()">Cancelar</button>
@@ -1454,11 +1552,14 @@
           </button>
         </div>
 
-      </div>
-    </div>
+      </div><!-- /cfg-box -->
+    </div><!-- /cfg-overlay -->
 
-    <!-- ══ CATÁLOGO DINÁMICO ══ -->
+    <!-- ══════════════════════════════════════════════════════
+         SERVICIOS INDIVIDUALES — generados dinámicamente desde el Sheet
+    ══════════════════════════════════════════════════════ -->
     <div id="catalogo-dinamico" style="content-visibility:auto;">
+      <!-- Skeleton de carga -->
       <div id="catalogo-skeleton">
         <div class="section-title" style="opacity:.35;"><i class="fas fa-circle-notch fa-spin"></i> Cargando servicios…</div>
         <div class="cat-block" style="opacity:.25;"><div class="cat-header"><div class="cat-info"><h2 style="background:#333;color:transparent;border-radius:4px;width:220px;">&nbsp;</h2></div></div></div>
@@ -1488,7 +1589,9 @@
     <i class="fas fa-paper-plane"></i> Cotizar
   </button>
 
-  <!-- ══ MODAL DE COTIZACIÓN ══ -->
+  <!-- ══════════════════════════════════════════
+       MODAL DE COTIZACIÓN
+  ══════════════════════════════════════════ -->
   <div class="modal-overlay" id="modal-overlay" onclick="cerrarModalOverlay(event)">
     <div class="modal-box" id="modal-box">
       <div class="modal-header">
@@ -1499,6 +1602,8 @@
         <button class="modal-close" onclick="cerrarModal()"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body" id="modal-body-content">
+
+        <!-- Servicios seleccionados -->
         <div style="margin-bottom:16px;">
           <div style="font-size:0.76rem;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Servicio(s) de interés</div>
           <div id="servicio-badge-wrap" style="display:flex;flex-wrap:wrap;gap:0;min-height:8px;"></div>
@@ -1507,11 +1612,16 @@
           </button>
           <div style="font-size:0.72rem;color:#555;margin-top:2px;" id="servicios-hint"></div>
         </div>
+
+        <!-- Descripción del servicio seleccionado -->
         <div id="modal-desc-servicio"
-             style="display:none;margin-bottom:16px;padding:10px 14px;background:#111;border-left:3px solid #70DDD8;border-radius:0 8px 8px 0;font-size:0.78rem;color:#aaa;line-height:1.55;">
+             style="display:none;margin-bottom:16px;padding:10px 14px;
+                    background:#111;border-left:3px solid #70DDD8;border-radius:0 8px 8px 0;
+                    font-size:0.78rem;color:#aaa;line-height:1.55;">
           <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:#70DDD8;margin-bottom:5px;"><i class="fas fa-info-circle" style="margin-right:5px;"></i>Sobre este servicio</div>
           <span id="modal-desc-texto"></span>
         </div>
+
         <div class="form-row">
           <div class="form-group">
             <label>Nombre</label>
@@ -1522,17 +1632,20 @@
             <input type="text" id="f-apellido" placeholder="Tu apellido" autocomplete="family-name">
           </div>
         </div>
+
         <div class="form-group">
           <label>WhatsApp / Teléfono</label>
           <input type="tel" id="f-telefono" placeholder="+52 993 000 0000" autocomplete="tel">
         </div>
+
         <div class="form-group">
           <label>Correo electrónico</label>
           <input type="email" id="f-correo" placeholder="tu@correo.com" autocomplete="email">
         </div>
+
         <div class="form-group">
           <label>Mensaje <span style="color:#555; font-size:0.9em;">(opcional)</span></label>
-          <textarea id="f-mensaje" placeholder="Cuéntame brevemente sobre tu proyecto..."></textarea>
+          <textarea id="f-mensaje" placeholder="Cuéntame brevemente sobre tu proyecto o cualquier detalle adicional..."></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -1571,11 +1684,14 @@
     </div>
   </div>
 
+
+  <!-- Toast de confirmación -->
   <div id="cfg-toast">
     <div><i class="fas fa-check-circle"></i>¡Cotización enviada!</div>
     <p>Alexis te responderá lo más pronto posible 🚀</p>
   </div>
 
+  <!-- Tooltip flotante — se posiciona vía JS para evitar clipping del modal -->
   <div id="cfg-tip-float"></div>
 
   <script>
@@ -1585,225 +1701,15 @@
     const EMAILJS_SERVICE_ID  = 'service_9zlhqd8';
     const EMAILJS_TEMPLATE_ID = 'template_xeougpd';
 
+    // ── Google Sheets: ID de tu hoja ────────────────────────────
+    // 1. Abre tu Google Sheet → Archivo → Compartir → "Cualquier persona con el enlace" (Viewer)
+    // 2. Copia el ID de la URL: docs.google.com/spreadsheets/d/[ESTE_ES_EL_ID]/edit
+    // 3. Pégalo aquí abajo:
+    // ═══════════════════════════════════════════════════════════
+
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    // ══════════════════════════════════════════════════════════════
-    // SISTEMA DE CACHÉ — localStorage con TTL de 24 horas
-    // Evita recargar el Sheet cada vez que el usuario navega a la página.
-    // Se invalida automáticamente al pasar 24 horas desde la última descarga.
-    // ══════════════════════════════════════════════════════════════
-    const CACHE_KEY = 'alexdom_servicios_cache';
-    const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
-
-    function guardarCache(dataServicios, dataPaquetes) {
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          ts:        Date.now(),
-          servicios: dataServicios,
-          paquetes:  dataPaquetes
-        }));
-      } catch(e) {
-        // localStorage lleno o bloqueado — se ignora silenciosamente
-        console.warn('[Caché] No se pudo guardar:', e.message);
-      }
-    }
-
-    function leerCache() {
-      try {
-        const raw = localStorage.getItem(CACHE_KEY);
-        if (!raw) return null;
-        const data = JSON.parse(raw);
-        // Verificar que el caché no haya expirado
-        if (!data.ts || Date.now() - data.ts > CACHE_TTL) {
-          localStorage.removeItem(CACHE_KEY);
-          return null;
-        }
-        return data;
-      } catch(e) {
-        return null;
-      }
-    }
-
-    function limpiarCache() {
-      try { localStorage.removeItem(CACHE_KEY); } catch(e) {}
-    }
-
-    // Aplica los datos (ya sea desde caché o desde el Sheet) al DOM
-    function aplicarDatos(dataServicios, dataPaquetes) {
-      let sheetsOk = false;
-
-      if (dataServicios && dataServicios.ok && dataServicios.servicios) {
-        sheetsOk = true;
-        cfgInit(dataServicios.servicios);
-        renderCatalogoDinamico(dataServicios.servicios);
-
-        dataServicios.servicios.forEach(item => {
-          if (!item.esPaquete) return;
-          const pid = detectarPid(item.nombre);
-          if (!pid) return;
-          const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
-          if (!card) return;
-          const precioEl = card.querySelector('.paquete-precio');
-          const descEl   = card.querySelector('.paquete-desc');
-          if (precioEl && item.precio) {
-            const p = item.precio.trim();
-            precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
-              ? 'A cotizar' : p.replace(/\/mes/i, '') + '<sub>/mes</sub>';
-            precioEl.classList.remove('precio-skeleton');
-          }
-          if (descEl && item.desc) descEl.textContent = item.desc;
-        });
-      } else {
-        mostrarAvisoError();
-        const sk = document.getElementById('catalogo-skeleton');
-        if (sk) sk.remove();
-      }
-
-      if (dataPaquetes && dataPaquetes.ok && dataPaquetes.paquetes) {
-        sheetsOk = true;
-        Object.entries(dataPaquetes.paquetes).forEach(([pid, filas]) => {
-          const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
-          if (!card) return;
-          const featDiv = card.querySelector('.paquete-features');
-          if (!featDiv) return;
-          let html = '';
-          filas.forEach(f => {
-            if (f.tipo === 'grupo') {
-              const color = pid === 'imperio' ? 'color:#9146ff;' : (pid === 'dominio' ? 'color:var(--rosa-principal);' : '');
-              html += `<div class="feat-group-label" style="${color}">${f.texto}</div>`;
-              return;
-            }
-            let textoHTML = f.texto;
-            if (f.negrita) textoHTML = f.texto.replace(f.negrita, `<span class="feat-val">${f.negrita}</span>`);
-            if (f.nuevo)   textoHTML += ' <span class="feat-new-badge">nuevo</span>';
-            const cfgs = { yes: ['fi fi-yes fas fa-check','feat-yes'], no: ['fi fi-no fas fa-times','feat-no'], plus: ['fi fi-plus fas fa-plus','feat-plus'] };
-            const cfg = cfgs[f.tipo]; if (!cfg) return;
-            const iconStyle = pid === 'imperio' && f.tipo === 'plus' ? ' style="color:#9146ff;"' : '';
-            html += `<div class="feat-row"><i class="${cfg[0]}"${iconStyle}></i><span class="${cfg[1]}">${textoHTML}</span></div>`;
-          });
-          featDiv.innerHTML = html;
-        });
-      }
-
-      return sheetsOk;
-    }
-
-    // ── Función principal de sincronización con caché ───────────
-    function sincronizarDesdeSheets() {
-      const statusEl = document.getElementById('sync-status');
-      const cache = leerCache();
-
-      if (cache) {
-        // ✅ Datos disponibles en caché — carga instantánea
-        aplicarDatos(cache.servicios, cache.paquetes);
-
-        // Mostrar indicador de caché con opción de forzar actualización
-        if (statusEl) {
-          const edad = Math.round((Date.now() - cache.ts) / 60000); // minutos
-          const tiempoTexto = edad < 60
-            ? `hace ${edad} min`
-            : `hace ${Math.round(edad/60)} h`;
-          statusEl.innerHTML = `⚡ Cargado desde caché (${tiempoTexto}) <span id="cache-badge" onclick="forzarActualizacion()" title="Forzar actualización desde servidor"><i class="fas fa-rotate-right"></i> Actualizar</span>`;
-          statusEl.style.color = '#70DDD8';
-        }
-
-        // Refrescar en background silenciosamente (sin spinner visible)
-        // para tener datos frescos en la PRÓXIMA visita
-        fetchDesdeSheets(false);
-        return;
-      }
-
-      // Sin caché — fetch normal con indicador de carga
-      if (statusEl) { statusEl.textContent = '⏳ Cargando precios…'; statusEl.style.color = '#888'; }
-      fetchDesdeSheets(true);
-    }
-
-    // ── Descarga datos desde Google Sheets ─────────────────────
-    function fetchDesdeSheets(mostrarEstado) {
-      const statusEl = document.getElementById('sync-status');
-
-      const fetchJson = url => {
-        const ctrl = new AbortController();
-        const tid  = setTimeout(() => ctrl.abort(), 9000);
-        return fetch(url, { redirect: 'follow', signal: ctrl.signal })
-          .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-          .catch(() => null)
-          .finally(() => clearTimeout(tid));
-      };
-
-      Promise.all([
-        fetchJson(APPS_SCRIPT_URL + '?action=servicios'),
-        fetchJson(APPS_SCRIPT_URL + '?action=paquetes'),
-      ]).then(([dataServicios, dataPaquetes]) => {
-        const sheetsOk = aplicarDatos(dataServicios, dataPaquetes);
-
-        // Guardar en caché solo si ambas respuestas llegaron bien
-        if (dataServicios?.ok && dataPaquetes?.ok) {
-          guardarCache(dataServicios, dataPaquetes);
-        }
-
-        if (mostrarEstado && statusEl) {
-          if (sheetsOk) {
-            statusEl.textContent = '✅ Precios sincronizados';
-            statusEl.style.color = '#50d890';
-          } else {
-            statusEl.textContent = '⚠️ No se pudo sincronizar los precios';
-            statusEl.style.color = '#f0a060';
-          }
-        }
-      }).catch(err => {
-        if (mostrarEstado) {
-          mostrarAvisoError();
-          const sk = document.getElementById('catalogo-skeleton');
-          if (sk) sk.remove();
-          if (statusEl) { statusEl.textContent = '⚠️ Sin conexión — precios no sincronizados'; statusEl.style.color = '#f0a060'; }
-        }
-        console.warn('[Servicios] Error:', err.message);
-      });
-    }
-
-    // ── Fuerza actualización limpiando el caché ─────────────────
-    function forzarActualizacion() {
-      limpiarCache();
-      const statusEl = document.getElementById('sync-status');
-      if (statusEl) { statusEl.textContent = '⏳ Actualizando precios…'; statusEl.style.color = '#888'; }
-      fetchDesdeSheets(true);
-    }
-
-    window.addEventListener('load', sincronizarDesdeSheets, { passive: true });
-
-    // ══ SINCRONIZACIÓN DE TOOLTIPS ═══════════════════════════════
-    async function sincronizarTooltips() {
-      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('TU_')) return;
-      try {
-        const ctrl = new AbortController();
-        setTimeout(() => ctrl.abort(), 8000);
-        const resp = await fetch(APPS_SCRIPT_URL + '?action=tooltips', { redirect: 'follow', signal: ctrl.signal });
-        if (!resp.ok) return;
-        const data = await resp.json();
-        if (!data.ok || !data.tooltips) return;
-        let actualizados = 0;
-        data.tooltips.forEach(({ id, texto }) => {
-          if (!id || !texto) return;
-          const textoHtml = texto.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
-          const el = document.querySelector(`.cfg-tooltip[data-tooltip-id="${id}"]`);
-          if (el) { el.setAttribute('data-tip', textoHtml); actualizados++; }
-        });
-      } catch(e) { /* silencioso */ }
-    }
-    window.addEventListener('load', sincronizarTooltips, { passive: true });
-
-    // ══ AVISO PRECIOS ════════════════════════════════════════════
-    window.addEventListener('load', () => {
-      const aviso = document.getElementById('aviso-precios');
-      if (!aviso) return;
-      setTimeout(() => {
-        aviso.classList.add('oculto');
-        setTimeout(() => aviso.remove(), 600);
-      }, 10000);
-    });
-
-    // ══ TOOLTIPS FLOTANTES ═══════════════════════════════════════
+    // ══ TOOLTIPS FLOTANTES — evita clipping del overflow del modal ═
     (function() {
       const float = document.getElementById('cfg-tip-float');
       if (!float) return;
@@ -1855,42 +1761,170 @@
       });
       document.addEventListener('click', e => {
         const tt = e.target.closest('.cfg-tooltip');
-        if (tt) { e.stopPropagation(); if (activeEl === tt) { hideTip(tt); } else { if (activeEl) hideTip(activeEl); showTip(tt); } return; }
+        if (tt) {
+          e.stopPropagation();
+          if (activeEl === tt) { hideTip(tt); }
+          else { if (activeEl) hideTip(activeEl); showTip(tt); }
+          return;
+        }
         const lt = e.target.closest('[data-lock-tip]');
-        if (lt) { e.stopPropagation(); if (activeEl === lt) { hideTip(lt); } else { if (activeEl) hideTip(activeEl); showTip(lt); } return; }
+        if (lt) {
+          e.stopPropagation();
+          if (activeEl === lt) { hideTip(lt); }
+          else { if (activeEl) hideTip(activeEl); showTip(lt); }
+          return;
+        }
         if (activeEl) hideTip(activeEl);
       });
       window.addEventListener('scroll', () => { if (activeEl) positionTip(activeEl); }, { passive: true });
     })();
 
-    // ══ METADATOS DE CATEGORÍAS ══════════════════════════════════
+    // ══ SINCRONIZACIÓN CON GOOGLE SHEETS ════════════════════════
+    // Lee la hoja "Servicios" y actualiza nombre, descripción, precio y visibilidad.
+    // No requiere API key — solo que el Sheet esté compartido como "Viewer público".
+    //
+    // Cómo activar:
+    //   1. Abre tu Google Sheet → Compartir → "Cualquier persona con el enlace" (Visor)
+    //   2. Copia el ID de la URL:  docs.google.com/spreadsheets/d/[ESTE_ID]/edit
+    //
+    // Columnas que lee (fila 2 de la hoja "Servicios"):
+    //   cat_id | Categoría | Nombre del Servicio | Descripción | Precio | Precio Mín | Precio Máx | Visible
+    //
+    // ¿Qué actualiza en el HTML?
+    //   · Nombre del servicio en la tabla
+    //   · Precio (soporta "Cotizable", rangos "$X–$Y", "/mes", etc.)
+    //   · Filas con Visible = "No" se ocultan automáticamente
+    //   · Precio y nombre de paquetes en las tarjetas
+    //   · Catálogo interno del buscador modal
+    // ═══════════════════════════════════════════════════════════
+
+
+
+
+    // ── Mapeo robusto: detecta el pid de un paquete desde el Sheet ─
+    // Funciona aunque el nombre tenga "— Starter", emojis extras, etc.
+    function detectarPid(nombre) {
+      const n = nombre.toLowerCase();
+      if (n.includes('despegue'))  return 'despegue';
+      if (n.includes('arranque'))  return 'arranque';
+      if (n.includes('señal') || n.includes('senal') || n.includes('fuerte')) return 'senal';
+      if (n.includes('dominio'))   return 'dominio';
+      if (n.includes('imperio'))   return 'imperio';
+      return null;
+    }
+
+    // ── Sincronización con Google Sheets (en background) ───────────
+    // ══════════════════════════════════════════════════════════════
+    // METADATOS DE CATEGORÍAS
     const CAT_META = {
-      marketing: { seccion: 'Marketing Digital – Servicios Individuales', seccionIcono: 'fas fa-bullhorn', icono: 'fas fa-share-alt', color: '#70DDD8', titulo: 'Community Management y Redes Sociales', subtitulo: 'Gestión · Publicidad · Estrategia', thServicio: 'Servicio' },
-      logos:     { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-star', color: '#EF5085', titulo: 'Logotipos e Isotipos', subtitulo: 'Creación · Rediseño · Vectorización · Identidad', thServicio: 'Servicio' },
-      impresos:  { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-id-card', color: '#70DDD8', titulo: 'Impresos Pequeños', subtitulo: 'Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets', thServicio: 'Servicio' },
-      folletos:  { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-newspaper', color: '#EF5085', titulo: 'Folletos, Flyers y Dípticos', subtitulo: 'Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos', thServicio: 'Servicio' },
-      lonas:     { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-expand-arrows-alt', color: '#70DDD8', titulo: 'Lonas y Banners de Gran Formato', subtitulo: 'Precio por tamaño en centímetros', thServicio: 'Tamaño' },
-      papeleria: { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-file-alt', color: '#EF5085', titulo: 'Papelería Corporativa', subtitulo: 'Carpetas · Membretes · Sellos · Talonarios · Facturas', thServicio: 'Servicio' },
-      calendarios: { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-calendar-alt', color: '#70DDD8', titulo: 'Calendarios', subtitulo: 'Bolsillo · Sobremesa · Pared', thServicio: 'Tipo' },
-      presentaciones: { seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette', icono: 'fas fa-desktop', color: '#EF5085', titulo: 'Archivos Digitales y Presentaciones', subtitulo: 'Catálogos · Revistas · Portadas · PowerPoint', thServicio: 'Servicio', notaBox: '<strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u.' },
-      audiovisual: { seccion: 'Producción Audiovisual', seccionIcono: 'fas fa-film', icono: 'fas fa-photo-video', color: '#70DDD8', titulo: 'Edición Fotográfica, de Video y Animación', subtitulo: 'Recorte · Retoque · Chroma Key · Blender · GIF · Stickers · IA', thServicio: 'Servicio' },
-      crm:       { seccion: 'Automatización y CRM', seccionIcono: 'fas fa-gears', icono: 'fas fa-robot', color: '#EF5085', titulo: 'Bitrix24, Google Sheets y Scripts', subtitulo: 'CRM · Dashboards · Python · Apps Script', thServicio: 'Servicio' },
-      web:       { seccion: 'Desarrollo Web y Soporte Técnico', seccionIcono: 'fas fa-globe', icono: 'fas fa-code', color: '#70DDD8', titulo: 'Web, Soporte y Otros Servicios Digitales', subtitulo: 'Landings · Discord · Asistencia · Instalaciones', thServicio: 'Servicio' },
-      streaming: { seccion: 'Streaming y Setup', seccionIcono: 'fas fa-broadcast-tower', icono: 'fas fa-broadcast-tower', color: '#9146ff', titulo: 'OBS Studio, Overlays, Emotes y Escenas', subtitulo: 'Twitch · Kick · YouTube', thServicio: 'Servicio' },
-      escolares: { seccion: 'Servicios Escolares', seccionIcono: 'fas fa-graduation-cap', icono: 'fas fa-pen-alt', color: '#EF5085', titulo: 'Redacción Académica', subtitulo: 'Resúmenes · Ensayos · Investigaciones', thServicio: 'Servicio', thPrecio: 'Precio por cuartilla' },
-      _default:  { seccion: 'Otros Servicios', seccionIcono: 'fas fa-cogs', icono: 'fas fa-tag', color: '#888', titulo: null, subtitulo: '', thServicio: 'Servicio' },
+      marketing: {
+        seccion: 'Marketing Digital – Servicios Individuales', seccionIcono: 'fas fa-bullhorn',
+        icono: 'fas fa-share-alt', color: '#70DDD8',
+        titulo: 'Community Management y Redes Sociales',
+        subtitulo: 'Gestión · Publicidad · Estrategia', thServicio: 'Servicio',
+      },
+      logos: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-star', color: '#EF5085',
+        titulo: 'Logotipos e Isotipos',
+        subtitulo: 'Creación · Rediseño · Vectorización · Identidad', thServicio: 'Servicio',
+      },
+      impresos: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-id-card', color: '#70DDD8',
+        titulo: 'Impresos Pequeños',
+        subtitulo: 'Tarjetas · Etiquetas · Invitaciones · Calcomanías · Tickets', thServicio: 'Servicio',
+      },
+      folletos: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-newspaper', color: '#EF5085',
+        titulo: 'Folletos, Flyers y Dípticos',
+        subtitulo: 'Flyers digitales · Folletos · Dípticos · Trípticos · Polípticos', thServicio: 'Servicio',
+      },
+      lonas: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-expand-arrows-alt', color: '#70DDD8',
+        titulo: 'Lonas y Banners de Gran Formato',
+        subtitulo: 'Precio por tamaño en centímetros', thServicio: 'Tamaño',
+      },
+      papeleria: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-file-alt', color: '#EF5085',
+        titulo: 'Papelería Corporativa',
+        subtitulo: 'Carpetas · Membretes · Sellos · Talonarios · Facturas', thServicio: 'Servicio',
+      },
+      calendarios: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-calendar-alt', color: '#70DDD8',
+        titulo: 'Calendarios', subtitulo: 'Bolsillo · Sobremesa · Pared', thServicio: 'Tipo',
+      },
+      presentaciones: {
+        seccion: 'Diseño Gráfico', seccionIcono: 'fas fa-palette',
+        icono: 'fas fa-desktop', color: '#EF5085',
+        titulo: 'Archivos Digitales y Presentaciones',
+        subtitulo: 'Catálogos · Revistas · Portadas · PowerPoint', thServicio: 'Servicio',
+        notaBox: '<strong>Nota:</strong> A partir de la diapositiva 11 → $20 c/u. Pasando 20 → $15 c/u.',
+      },
+      audiovisual: {
+        seccion: 'Producción Audiovisual', seccionIcono: 'fas fa-film',
+        icono: 'fas fa-photo-video', color: '#70DDD8',
+        titulo: 'Edición Fotográfica, de Video y Animación',
+        subtitulo: 'Recorte · Retoque · Chroma Key · Blender · GIF · Stickers · IA', thServicio: 'Servicio',
+      },
+      crm: {
+        seccion: 'Automatización y CRM', seccionIcono: 'fas fa-gears',
+        icono: 'fas fa-robot', color: '#EF5085',
+        titulo: 'Bitrix24, Google Sheets y Scripts',
+        subtitulo: 'CRM · Dashboards · Python · Apps Script', thServicio: 'Servicio',
+      },
+      web: {
+        seccion: 'Desarrollo Web y Soporte Técnico', seccionIcono: 'fas fa-globe',
+        icono: 'fas fa-code', color: '#70DDD8',
+        titulo: 'Web, Soporte y Otros Servicios Digitales',
+        subtitulo: 'Landings · Discord · Asistencia · Instalaciones', thServicio: 'Servicio',
+      },
+      streaming: {
+        seccion: 'Streaming y Setup', seccionIcono: 'fas fa-broadcast-tower',
+        icono: 'fas fa-broadcast-tower', color: '#9146ff',
+        titulo: 'OBS Studio, Overlays, Emotes y Escenas',
+        subtitulo: 'Twitch · Kick · YouTube', thServicio: 'Servicio',
+      },
+      escolares: {
+        seccion: 'Servicios Escolares', seccionIcono: 'fas fa-graduation-cap',
+        icono: 'fas fa-pen-alt', color: '#EF5085',
+        titulo: 'Redacción Académica',
+        subtitulo: 'Resúmenes · Ensayos · Investigaciones', thServicio: 'Servicio',
+        thPrecio: 'Precio por cuartilla',
+      },
+      _default: {
+        seccion: 'Otros Servicios', seccionIcono: 'fas fa-cogs',
+        icono: 'fas fa-tag', color: '#888',
+        titulo: null, subtitulo: '', thServicio: 'Servicio',
+      },
     };
 
     function buildSecciones(catIdsPresentes) {
       const metaOrder = Object.keys(CAT_META).filter(k => k !== '_default');
-      const ordenados = [ ...metaOrder.filter(id => catIdsPresentes.includes(id)), ...catIdsPresentes.filter(id => !metaOrder.includes(id) && id !== '_default') ];
+      const ordenados = [
+        ...metaOrder.filter(id => catIdsPresentes.includes(id)),
+        ...catIdsPresentes.filter(id => !metaOrder.includes(id) && id !== '_default'),
+      ];
       const seccionesMap = {};
       const seccionesOrder = [];
       ordenados.forEach(catId => {
         const meta = CAT_META[catId] || CAT_META._default;
         const secNombre = meta.seccion;
-        if (!seccionesMap[secNombre]) { seccionesMap[secNombre] = { titulo: secNombre, icono: meta.seccionIcono, grupos: [] }; seccionesOrder.push(secNombre); }
-        seccionesMap[secNombre].grupos.push({ cat_ids: [catId], icono: meta.icono, color: meta.color, titulo: meta.titulo || (catId.charAt(0).toUpperCase() + catId.slice(1)), subtitulo: meta.subtitulo || '', galeria: catId, thServicio: meta.thServicio || 'Servicio', thPrecio: meta.thPrecio || null, notaBox: meta.notaBox || null });
+        if (!seccionesMap[secNombre]) {
+          seccionesMap[secNombre] = { titulo: secNombre, icono: meta.seccionIcono, grupos: [] };
+          seccionesOrder.push(secNombre);
+        }
+        seccionesMap[secNombre].grupos.push({
+          cat_ids: [catId], icono: meta.icono, color: meta.color,
+          titulo: meta.titulo || (catId.charAt(0).toUpperCase() + catId.slice(1)),
+          subtitulo: meta.subtitulo || '', galeria: catId,
+          thServicio: meta.thServicio || 'Servicio',
+          thPrecio: meta.thPrecio || null, notaBox: meta.notaBox || null,
+        });
       });
       return seccionesOrder.map(n => seccionesMap[n]);
     }
@@ -1899,11 +1933,14 @@
       const container = document.getElementById('catalogo-dinamico');
       if (container) {
         container.innerHTML = `
-          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 24px;text-align:center;border:1px dashed #333;border-radius:12px;margin:24px 0;color:#888;font-size:0.88rem;line-height:1.5;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;
+            padding:40px 24px;text-align:center;border:1px dashed #333;border-radius:12px;
+            margin:24px 0;color:#888;font-size:0.88rem;line-height:1.5;">
             <i class="fas fa-plug" style="font-size:1.8rem;color:#444;"></i>
             <span style="color:#ccc;font-size:0.95rem;font-weight:600;">No se pudieron cargar los servicios</span>
             <span>Intenta recargar la página o contáctame directamente.</span>
-            <button onclick="forzarActualizacion()" style="margin-top:6px;padding:8px 20px;background:transparent;border:1px solid #444;border-radius:8px;color:#70DDD8;cursor:pointer;font-size:0.82rem;">
+            <button onclick="location.reload()" style="margin-top:6px;padding:8px 20px;background:transparent;
+              border:1px solid #444;border-radius:8px;color:#70DDD8;cursor:pointer;font-size:0.82rem;">
               <i class="fas fa-rotate-right" style="margin-right:6px;"></i>Reintentar
             </button>
           </div>`;
@@ -1915,6 +1952,7 @@
       if (!container) return;
       const porCat = {};
       servicios.forEach(item => {
+        // FIX: filtrar filas de encabezado o cat_ids no válidos
         if (item.esPaquete || item.catId === 'cfg') return;
         if (!item.visible) return;
         const c = (item.catId || '').trim().toLowerCase();
@@ -1926,6 +1964,7 @@
       const catIdsPresentes = Object.keys(porCat).filter(id => porCat[id].length > 0);
       const SECCIONES = buildSecciones(catIdsPresentes);
       CATALOGO = [];
+      // Limpiar mapa de descripciones en cada re-render
       Object.keys(DESC_MAP).forEach(k => delete DESC_MAP[k]);
       let descIdx = 0;
       let html = '';
@@ -1945,8 +1984,14 @@
             const modalLabel = esCotiz ? item.nombre : `${item.nombre} — ${item.precio}`;
             const dKey = 'di_' + (descIdx++);
             DESC_MAP[dKey] = { label: modalLabel, desc: item.desc || '' };
+            const descEscapada = (item.desc || '').replace(/`/g, '&#96;').replace(/\\/g, '\\\\');
             const descCorta = item.desc && item.desc.length > 55 ? item.desc.slice(0, 53) + '…' : (item.desc || '');
-            const descHtml = item.desc ? `<span class="td-desc-wrap"><span class="td-desc-corta">${descCorta}</span><span class="td-desc-full" style="display:none;">${item.desc}</span></span>` : '';
+            const descHtml = item.desc
+              ? `<span class="td-desc-wrap">
+                  <span class="td-desc-corta">${descCorta}</span>
+                  <span class="td-desc-full" style="display:none;">${item.desc}</span>
+                </span>`
+              : '';
             return `<tr class="tr-expandible" onclick="expandirDesc(this)">
               <td class="td-servicio">${item.nombre}</td>
               <td class="td-desc">${descHtml}</td>
@@ -1955,52 +2000,211 @@
             </tr>`;
           }).join('');
           const notaHtml = grupo.notaBox ? `<div class="nota-box">${grupo.notaBox}</div>` : '';
-          const galeriaHtml = `<div class="galeria-slot" data-galeria="${grupo.galeria}"><div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)"><i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i><span>Ver ejemplos</span><span class="ej-count">Sin ejemplos aún</span><i class="fas fa-chevron-down ej-chevron"></i></div><div class="ejemplos-body"><div class="ejemplos-grid"></div></div></div>`;
-          html += `<div class="cat-block"><div class="cat-header" onclick="toggleCat(this)"><i class="${grupo.icono} cat-icon" style="color:${grupo.color};"></i><div class="cat-info"><h2>${grupo.titulo}</h2><span>${grupo.subtitulo}</span></div><span class="cat-count">${count} ${count===1?'servicio':'servicios'}</span><i class="fas fa-chevron-down chevron"></i></div><div class="cat-body"><div class="services-table-wrap"><table><thead><tr><th>${grupo.thServicio}</th><th>Descripción</th><th style="text-align:right;">${thPrecio}</th><th></th></tr></thead><tbody>${filas}</tbody></table></div>${notaHtml}${galeriaHtml}</div></div>`;
+          const galeriaHtml = `
+            <div class="galeria-slot" data-galeria="${grupo.galeria}">
+              <div class="ejemplos-toggle" onclick="toggleEjemplos(this,event)">
+                <i class="fas fa-images" style="color:#70DDD8;font-size:0.8rem;"></i>
+                <span>Ver ejemplos</span>
+                <span class="ej-count">Sin ejemplos aún</span>
+                <i class="fas fa-chevron-down ej-chevron"></i>
+              </div>
+              <div class="ejemplos-body"><div class="ejemplos-grid"></div></div>
+            </div>`;
+          html += `
+          <div class="cat-block">
+            <div class="cat-header" onclick="toggleCat(this)">
+              <i class="${grupo.icono} cat-icon" style="color:${grupo.color};"></i>
+              <div class="cat-info"><h2>${grupo.titulo}</h2><span>${grupo.subtitulo}</span></div>
+              <span class="cat-count">${count} ${count===1?'servicio':'servicios'}</span>
+              <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="cat-body">
+              <div class="services-table-wrap"><table>
+                <thead><tr><th>${grupo.thServicio}</th><th>Descripción</th><th style="text-align:right;">${thPrecio}</th><th></th></tr></thead>
+                <tbody>${filas}</tbody>
+              </table></div>
+              ${notaHtml}
+              ${galeriaHtml}
+            </div>
+          </div>`;
         });
       });
       container.innerHTML = html;
       renderGalerias();
     }
 
-    function detectarPid(nombre) {
-      const n = nombre.toLowerCase();
-      if (n.includes('despegue'))  return 'despegue';
-      if (n.includes('arranque'))  return 'arranque';
-      if (n.includes('señal') || n.includes('senal') || n.includes('fuerte')) return 'senal';
-      if (n.includes('dominio'))   return 'dominio';
-      if (n.includes('imperio'))   return 'imperio';
-      return null;
+    function sincronizarDesdeSheets() {
+      const statusEl = document.getElementById('sync-status');
+      if (statusEl) { statusEl.textContent = '⏳ Sincronizando precios...'; statusEl.style.color = '#888'; }
+
+      const fetchJson = url => {
+        const ctrl = new AbortController();
+        const tid  = setTimeout(() => ctrl.abort(), 9000);
+        return fetch(url, { redirect: 'follow', signal: ctrl.signal })
+          .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .catch(() => null)
+          .finally(() => clearTimeout(tid));
+      };
+
+      Promise.all([
+        fetchJson(APPS_SCRIPT_URL + '?action=servicios'),
+        fetchJson(APPS_SCRIPT_URL + '?action=paquetes'),
+      ]).then(([dataServicios, dataPaquetes]) => {
+        let sheetsOk = false;
+
+        if (dataServicios && dataServicios.ok && dataServicios.servicios) {
+          sheetsOk = true;
+          cfgInit(dataServicios.servicios);
+          renderCatalogoDinamico(dataServicios.servicios);
+
+          dataServicios.servicios.forEach(item => {
+            if (!item.esPaquete) return;
+            const pid = detectarPid(item.nombre);
+            if (!pid) return;
+            const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+            if (!card) return;
+            const precioEl = card.querySelector('.paquete-precio');
+            const descEl   = card.querySelector('.paquete-desc');
+            if (precioEl && item.precio) {
+              const p = item.precio.trim();
+              precioEl.innerHTML = /cotiz|a cotizar/i.test(p)
+                ? 'A cotizar' : p.replace(/\/mes/i, '') + '<sub>/mes</sub>';
+              precioEl.classList.remove('precio-skeleton');
+            }
+            if (descEl && item.desc) descEl.textContent = item.desc;
+          });
+        } else {
+          mostrarAvisoError();
+          const sk = document.getElementById('catalogo-skeleton');
+          if (sk) sk.remove();
+        }
+
+        if (dataPaquetes && dataPaquetes.ok && dataPaquetes.paquetes) {
+          sheetsOk = true;
+          Object.entries(dataPaquetes.paquetes).forEach(([pid, filas]) => {
+            const card = document.querySelector(`.paquete-card[data-pid="${pid}"]`);
+            if (!card) return;
+            const featDiv = card.querySelector('.paquete-features');
+            if (!featDiv) return;
+            let html = '';
+            filas.forEach(f => {
+              if (f.tipo === 'grupo') {
+                const color = pid === 'imperio' ? 'color:#9146ff;' : (pid === 'dominio' ? 'color:var(--rosa-principal);' : '');
+                html += `<div class="feat-group-label" style="${color}">${f.texto}</div>`;
+                return;
+              }
+              let textoHTML = f.texto;
+              if (f.negrita) textoHTML = f.texto.replace(f.negrita, `<span class="feat-val">${f.negrita}</span>`);
+              if (f.nuevo)   textoHTML += ' <span class="feat-new-badge">nuevo</span>';
+              const cfgs = { yes: ['fi fi-yes fas fa-check','feat-yes'], no: ['fi fi-no fas fa-times','feat-no'], plus: ['fi fi-plus fas fa-plus','feat-plus'] };
+              const cfg = cfgs[f.tipo]; if (!cfg) return;
+              const iconStyle = pid === 'imperio' && f.tipo === 'plus' ? ' style="color:#9146ff;"' : '';
+              html += `<div class="feat-row"><i class="${cfg[0]}"${iconStyle}></i><span class="${cfg[1]}">${textoHTML}</span></div>`;
+            });
+            featDiv.innerHTML = html;
+          });
+        }
+
+        if (statusEl) {
+          if (sheetsOk) {
+            statusEl.textContent = '✅ Precios sincronizados';
+            statusEl.style.color = '#50d890';
+          } else {
+            statusEl.textContent = '⚠️ No se pudo sincronizar los precios';
+            statusEl.style.color = '#f0a060';
+          }
+        }
+      }).catch(err => {
+        mostrarAvisoError();
+        const sk = document.getElementById('catalogo-skeleton');
+        if (sk) sk.remove();
+        if (statusEl) { statusEl.textContent = '⚠️ Sin conexión — precios no sincronizados'; statusEl.style.color = '#f0a060'; }
+        console.warn('[Servicios] Error:', err.message);
+      });
     }
 
-    // ══ CATÁLOGO ═════════════════════════════════════════════════
+    window.addEventListener('load', sincronizarDesdeSheets, { passive: true });
+
+    // ══ SINCRONIZACIÓN DE TOOLTIPS DESDE GOOGLE SHEETS ══════════
+    // Lee la hoja "Tooltips" (columnas: tooltip_id, Nombre Legible, Texto del Tooltip)
+    // y actualiza los textos de los ? del configurador en tiempo real.
+    async function sincronizarTooltips() {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('TU_')) return;
+      try {
+        const ctrl = new AbortController();
+        setTimeout(() => ctrl.abort(), 8000);
+        const resp = await fetch(APPS_SCRIPT_URL + '?action=tooltips', {
+          redirect: 'follow', signal: ctrl.signal
+        });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (!data.ok || !data.tooltips) return;
+        let actualizados = 0;
+        data.tooltips.forEach(({ id, texto }) => {
+          if (!id || !texto) return;
+          const textoHtml = texto.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+          const el = document.querySelector(`.cfg-tooltip[data-tooltip-id="${id}"]`);
+          if (el) { el.setAttribute('data-tip', textoHtml); actualizados++; }
+        });
+        if (actualizados > 0) {
+          const st = document.getElementById('sync-status');
+          if (st) {
+            const prev = st.textContent;
+            st.textContent = prev && prev !== '⏳ Sincronizando precios...'
+              ? `${prev} · ${actualizados} tooltips`
+              : `✅ Precios y ${actualizados} tooltips sincronizados`;
+          }
+        }
+      } catch(e) { /* silencioso — tooltips no son críticos */ }
+    }
+    window.addEventListener('load', sincronizarTooltips, { passive: true });
+
+    // ══ AVISO PRECIOS — desaparece a los 10 seg ══════════════════
+    window.addEventListener('load', () => {
+      const aviso = document.getElementById('aviso-precios');
+      if (!aviso) return;
+      setTimeout(() => {
+        aviso.classList.add('oculto');
+        setTimeout(() => aviso.remove(), 600);
+      }, 10000);
+    });
+
+    // ══ CATÁLOGO — se construye dinámicamente desde el Sheet ════
     let CATALOGO = [];
+    // Mapa de descripciones por índice para evitar problemas de escape en onclick
     const DESC_MAP = {};
 
-    // ══ ESTADO ═══════════════════════════════════════════════════
-    let serviciosSeleccionados = [];
+    // ══ ESTADO ══════════════════════════════════════════════════
+    let serviciosSeleccionados = []; // array de strings
 
+    // Abre el modal desde la tabla usando el mapa de descripciones (evita problemas de escape)
     function abrirModalDesdeTabla(dKey) {
       const entry = DESC_MAP[dKey];
       if (!entry) { abrirModal(''); return; }
       abrirModal(entry.label, entry.desc);
     }
 
+    // ── Expandir / colapsar descripción al hacer click en la fila ──
     function expandirDesc(tr) {
       const yaExpandida = tr.classList.contains('expandida');
+      // Colapsar cualquier fila que esté abierta
       document.querySelectorAll('.tr-expandible.expandida').forEach(r => r.classList.remove('expandida'));
+      // Si no estaba expandida, expandirla
       if (!yaExpandida) tr.classList.add('expandida');
     }
 
+    // Colapsar todas las filas expandidas al hacer scroll (desktop y móvil)
     window.addEventListener('scroll', () => {
       document.querySelectorAll('.tr-expandible.expandida').forEach(r => r.classList.remove('expandida'));
     }, { passive: true });
+    // También colapsar al scroll dentro de contenedores internos (cat-body con overflow)
     document.addEventListener('scroll', e => {
       if (e.target && e.target !== window) {
         document.querySelectorAll('.tr-expandible.expandida').forEach(r => r.classList.remove('expandida'));
       }
     }, { passive: true, capture: true });
 
+    // Abre el modal desde una tarjeta de paquete, leyendo el precio actual del DOM
     function abrirModalPaquete(btn) {
       const card = btn.closest('.paquete-card');
       const nombre = card.querySelector('.paquete-nombre').textContent.trim();
@@ -2010,15 +2214,20 @@
       abrirModal(texto);
     }
 
-    // ══ MODAL ════════════════════════════════════════════════════
+    // ══ MODAL ═══════════════════════════════════════════════════
     function abrirModal(servicio, desc) {
       serviciosSeleccionados = servicio ? [servicio] : [];
       renderBadges();
+      // Mostrar descripción del servicio si viene del botón Cotizar
       const descEl = document.getElementById('modal-desc-servicio');
       const descTxt = document.getElementById('modal-desc-texto');
       if (descEl && descTxt) {
-        if (desc && desc.trim()) { descTxt.textContent = desc; descEl.style.display = 'block'; }
-        else { descEl.style.display = 'none'; }
+        if (desc && desc.trim()) {
+          descTxt.textContent = desc;
+          descEl.style.display = 'block';
+        } else {
+          descEl.style.display = 'none';
+        }
       }
       document.getElementById('form-msg').className = 'form-msg';
       document.getElementById('form-msg').textContent = '';
@@ -2038,51 +2247,88 @@
 
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
-        if (document.getElementById('service-search-panel').classList.contains('visible')) { cerrarBuscador(); }
-        else { cerrarModal(); }
+        if (document.getElementById('service-search-panel').classList.contains('visible')) {
+          cerrarBuscador();
+        } else {
+          cerrarModal();
+        }
       }
     });
 
+    // ── Renderiza los badges de servicios seleccionados ──
     function renderBadges() {
       const wrap = document.getElementById('servicio-badge-wrap');
       const btn  = document.getElementById('btn-add-service');
       const hint = document.getElementById('servicios-hint');
+
       wrap.innerHTML = serviciosSeleccionados.map((s, i) => `
-        <div class="servicio-badge"><i class="fas fa-tag"></i><span>${s}</span>
-          <button class="badge-remove" onclick="quitarServicio(${i})" title="Quitar"><i class="fas fa-times"></i></button>
-        </div>`).join('');
+        <div class="servicio-badge">
+          <i class="fas fa-tag"></i>
+          <span>${s}</span>
+          <button class="badge-remove" onclick="quitarServicio(${i})" title="Quitar">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `).join('');
+
       const n = serviciosSeleccionados.length;
       btn.innerHTML = `<i class="fas fa-plus"></i> ${n === 0 ? 'Seleccionar servicio' : 'Agregar otro servicio'}`;
       btn.style.display = n >= 10 ? 'none' : 'inline-flex';
       hint.textContent  = n >= 10 ? 'Máximo 10 servicios por solicitud.' : '';
     }
 
-    function quitarServicio(i) { serviciosSeleccionados.splice(i, 1); renderBadges(); }
+    function quitarServicio(i) {
+      serviciosSeleccionados.splice(i, 1);
+      renderBadges();
+    }
 
-    // ══ BUSCADOR ═════════════════════════════════════════════════
+    // ══ BUSCADOR DE SERVICIOS ════════════════════════════════════
     function abrirBuscadorServicios() {
       document.getElementById('service-search-input').value = '';
       renderListaServicios('');
       document.getElementById('service-search-panel').classList.add('visible');
       setTimeout(() => document.getElementById('service-search-input').focus(), 100);
     }
-    function cerrarBuscador() { document.getElementById('service-search-panel').classList.remove('visible'); }
-    function cerrarBuscadorOverlay(e) { if (e.target === document.getElementById('service-search-panel')) cerrarBuscador(); }
-    function filtrarServicios() { renderListaServicios(document.getElementById('service-search-input').value); }
+
+    function cerrarBuscador() {
+      document.getElementById('service-search-panel').classList.remove('visible');
+    }
+
+    function cerrarBuscadorOverlay(e) {
+      if (e.target === document.getElementById('service-search-panel')) cerrarBuscador();
+    }
+
+    function filtrarServicios() {
+      const q = document.getElementById('service-search-input').value;
+      renderListaServicios(q);
+    }
 
     function renderListaServicios(query) {
       const list = document.getElementById('service-search-list');
       const q = query.toLowerCase().trim();
       const filtrados = q ? CATALOGO.filter(s => s.nombre.toLowerCase().includes(q) || s.cat.toLowerCase().includes(q)) : CATALOGO;
-      if (!filtrados.length) { list.innerHTML = `<div class="service-search-empty"><i class="fas fa-search" style="margin-right:6px;"></i>Sin resultados para "${query}"</div>`; return; }
-      let html = ''; let lastCat = null;
+
+      if (!filtrados.length) {
+        list.innerHTML = `<div class="service-search-empty"><i class="fas fa-search" style="margin-right:6px;"></i>Sin resultados para "${query}"</div>`;
+        return;
+      }
+
+      let html = '';
+      let lastCat = null;
       filtrados.forEach(s => {
-        if (!q && s.cat !== lastCat) { html += `<div class="service-search-cat">${s.cat}</div>`; lastCat = s.cat; }
+        if (!q && s.cat !== lastCat) {
+          html += `<div class="service-search-cat">${s.cat}</div>`;
+          lastCat = s.cat;
+        }
         const sel = serviciosSeleccionados.includes(s.nombre);
         const disabled = !sel && serviciosSeleccionados.length >= 10;
-        html += `<div class="service-search-item ${sel ? 'selected' : ''} ${disabled ? 'style="opacity:0.4;pointer-events:none;"' : ''}" onclick="toggleServicio('${s.nombre.replace(/'/g, "\\'")}')">
-          <div class="ssi-check">${sel ? '<i class="fas fa-check"></i>' : ''}</div>
-          <span>${s.nombre}</span><span class="ssi-price">${s.precio}</span></div>`;
+        html += `
+          <div class="service-search-item ${sel ? 'selected' : ''} ${disabled ? 'style="opacity:0.4;pointer-events:none;"' : ''}"
+               onclick="toggleServicio('${s.nombre.replace(/'/g, "\\'")}')">
+            <div class="ssi-check">${sel ? '<i class="fas fa-check"></i>' : ''}</div>
+            <span>${s.nombre}</span>
+            <span class="ssi-price">${s.precio}</span>
+          </div>`;
       });
       list.innerHTML = html;
       actualizarContador();
@@ -2090,20 +2336,32 @@
 
     function toggleServicio(nombre) {
       const idx = serviciosSeleccionados.indexOf(nombre);
-      if (idx >= 0) { serviciosSeleccionados.splice(idx, 1); }
-      else if (serviciosSeleccionados.length < 10) { serviciosSeleccionados.push(nombre); }
+      if (idx >= 0) {
+        serviciosSeleccionados.splice(idx, 1);
+      } else if (serviciosSeleccionados.length < 10) {
+        serviciosSeleccionados.push(nombre);
+      }
       actualizarContador();
       renderListaServicios(document.getElementById('service-search-input').value);
     }
 
-    function actualizarContador() { document.getElementById('search-count').textContent = serviciosSeleccionados.length; }
-
-    function confirmarServicios() {
-      if (cfgDesdeConfigurador) { cfgExtras = [...serviciosSeleccionados]; cfgRenderExtras(); cerrarBuscador(); cfgDesdeConfigurador = false; }
-      else { cerrarBuscador(); renderBadges(); }
+    function actualizarContador() {
+      document.getElementById('search-count').textContent = serviciosSeleccionados.length;
     }
 
-    // ══ ENVÍO MODAL ═══════════════════════════════════════════════
+    function confirmarServicios() {
+      if (cfgDesdeConfigurador) {
+        cfgExtras = [...serviciosSeleccionados];
+        cfgRenderExtras();
+        cerrarBuscador();
+        cfgDesdeConfigurador = false;
+      } else {
+        cerrarBuscador();
+        renderBadges();
+      }
+    }
+
+    // ══ ENVÍO ════════════════════════════════════════════════════
     async function enviarFormulario() {
       const nombre   = document.getElementById('f-nombre').value.trim();
       const apellido = document.getElementById('f-apellido').value.trim();
@@ -2113,25 +2371,150 @@
       const msg = document.getElementById('form-msg');
       const btn = document.getElementById('btn-enviar');
 
-      if (!nombre || !telefono || !correo) { msg.className = 'form-msg err'; msg.textContent = 'Por favor completa nombre, teléfono y correo.'; return; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { msg.className = 'form-msg err'; msg.textContent = 'El correo no parece válido.'; return; }
-      if (serviciosSeleccionados.length === 0) { msg.className = 'form-msg err'; msg.textContent = 'Selecciona al menos un servicio de interés.'; return; }
+      if (!nombre || !telefono || !correo) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'Por favor completa nombre, teléfono y correo.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'El correo no parece válido.';
+        return;
+      }
+      if (serviciosSeleccionados.length === 0) {
+        msg.className = 'form-msg err';
+        msg.textContent = 'Selecciona al menos un servicio de interés.';
+        return;
+      }
 
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
       msg.className = 'form-msg';
 
       const nombreCompleto = nombre + (apellido ? ' ' + apellido : '');
+      const servicioTexto  = serviciosSeleccionados.join('\n• ');
       const servicioLista  = serviciosSeleccionados.map(s => `• ${s}`).join('\n');
       const fecha = new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' });
-      const datos = { nombre: nombreCompleto, telefono, correo, servicio: serviciosSeleccionados.join(' | '), mensaje: mensaje || '—', fecha };
 
-      const serviciosHTML = serviciosSeleccionados.map(s => `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;"><i style="color:#70DDD8;">●</i> ${s}</td></tr>`).join('');
-      const html_body = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;"><tr><td style="background:linear-gradient(135deg,#A64062,#EF5085);padding:28px 32px;"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;"><div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Nueva Solicitud</div><div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🔔 Cotización Recibida</div></td></tr><tr><td style="padding:28px 32px 0;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Datos del cliente</div><table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;"><tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td><td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombreCompleto}</td></tr><tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td><td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td></tr><tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td><td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td></tr><tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td><td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td></tr></table></td></tr><tr><td style="padding:24px 32px 0;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Servicio(s) solicitado(s) <span style="background:rgba(112,221,216,0.15);color:#70DDD8;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${serviciosSeleccionados.length}</span></div><table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">${serviciosHTML}</table></td></tr>${mensaje ? `<tr><td style="padding:24px 32px 0;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:10px;">Mensaje</div><div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div></td></tr>` : ''}<tr><td style="padding:28px 32px;"><table cellpadding="0" cellspacing="0"><tr><td style="background:#EF5085;border-radius:8px;"><a href="mailto:${correo}" style="display:inline-block;padding:12px 24px;color:#fff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.4px;">✉️ Responder a ${nombre}</a></td></tr></table><div style="margin-top:10px;font-size:11px;color:#555;">Al responder este correo, tu mensaje irá directo a ${correo}</div></td></tr><tr><td style="background:#111;padding:16px 32px;border-top:1px solid #222;text-align:center;"><div style="font-size:11px;color:#444;">AlexDom104 · alexis_enrique97@outlook.com · linktr.ee/alexdom104</div></td></tr></table></td></tr></table></body></html>`;
+      const datos = {
+        nombre:   nombreCompleto,
+        telefono,
+        correo,
+        servicio: serviciosSeleccionados.join(' | '),
+        mensaje:  mensaje || '—',
+        fecha
+      };
+
+      // HTML bonito para el correo
+      const serviciosHTML = serviciosSeleccionados.map(s =>
+        `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;">
+          <i style="color:#70DDD8;">●</i> ${s}
+        </td></tr>`
+      ).join('');
+
+      const html_body = `
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;">
+  <tr><td align="center">
+    <table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
+
+      <!-- Header -->
+      <tr><td style="background:linear-gradient(135deg,#A64062,#EF5085);padding:28px 32px;">
+        <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
+        <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Nueva Solicitud</div>
+        <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🔔 Cotización Recibida</div>
+      </td></tr>
+
+      <!-- Cliente -->
+      <tr><td style="padding:28px 32px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Datos del cliente</div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;">
+          <tr style="background:#111;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td>
+            <td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombreCompleto}</td>
+          </tr>
+          <tr style="background:#161616;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td>
+            <td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td>
+          </tr>
+          <tr style="background:#111;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td>
+            <td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td>
+          </tr>
+          <tr style="background:#161616;">
+            <td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td>
+            <td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <!-- Servicios -->
+      <tr><td style="padding:24px 32px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">
+          Servicio(s) solicitado(s) <span style="background:rgba(112,221,216,0.15);color:#70DDD8;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${serviciosSeleccionados.length}</span>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
+          ${serviciosHTML}
+        </table>
+      </td></tr>
+
+      <!-- Mensaje -->
+      ${mensaje ? `
+      <tr><td style="padding:24px 32px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:10px;">Mensaje</div>
+        <div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div>
+      </td></tr>` : ''}
+
+      <!-- CTA -->
+      <tr><td style="padding:28px 32px;">
+        <table cellpadding="0" cellspacing="0">
+          <tr><td style="background:#EF5085;border-radius:8px;">
+            <a href="mailto:${correo}" style="display:inline-block;padding:12px 24px;color:#fff;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.4px;">
+              ✉️ Responder a ${nombre}
+            </a>
+          </td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#555;">Al responder este correo, tu mensaje irá directo a ${correo}</div>
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="background:#111;padding:16px 32px;border-top:1px solid #222;text-align:center;">
+        <div style="font-size:11px;color:#444;">AlexDom104 · alexis_enrique97@outlook.com · linktr.ee/alexdom104</div>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
 
       let sheetOk = false, emailOk = false;
-      try { await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) }); sheetOk = true; } catch (e) { console.warn('Sheets error:', e); }
-      try { await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { from_name: nombreCompleto, from_email: correo, telefono, servicio: servicioLista, mensaje: mensaje || '—', fecha, reply_to: correo, html_body }); emailOk = true; } catch (e) { console.warn('EmailJS error:', e); }
+
+      // 1 ── Guardar en Google Sheets
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method:  'POST',
+          mode:    'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(datos)
+        });
+        sheetOk = true;
+      } catch (e) { console.warn('Sheets error:', e); }
+
+      // 2 ── Enviar correo vía EmailJS
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          from_name:  nombreCompleto,
+          from_email: correo,
+          telefono,
+          servicio:   servicioLista,
+          mensaje:    mensaje || '—',
+          fecha,
+          reply_to:   correo,
+          html_body
+        });
+        emailOk = true;
+      } catch (e) { console.warn('EmailJS error:', e); }
 
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
@@ -2140,7 +2523,9 @@
         msg.className = 'form-msg ok';
         msg.textContent = '¡Solicitud enviada! Te contactaré en menos de 24 horas 🚀';
         setTimeout(() => {
-          ['f-nombre','f-apellido','f-telefono','f-correo','f-mensaje'].forEach(id => { document.getElementById(id).value = ''; });
+          ['f-nombre','f-apellido','f-telefono','f-correo','f-mensaje'].forEach(id => {
+            document.getElementById(id).value = '';
+          });
           serviciosSeleccionados = [];
           cerrarModal();
         }, 3000);
@@ -2150,40 +2535,113 @@
       }
     }
 
-    // ══ GALERÍA DE EJEMPLOS ══════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════
+    // 🖼️  GALERÍA DE EJEMPLOS — AGREGA TUS IMÁGENES AQUÍ
+    //
+    //  Cada categoría tiene un array de objetos { url, cap }
+    //  · url → enlace directo de Imgur  (https://i.imgur.com/XXXXX.jpg)
+    //  · cap → descripción breve (aparece en el lightbox)
+    //
+    //  Puedes poner de 1 a N imágenes por categoría.
+    //  Las que no tengan imagen muestran un placeholder automáticamente.
+    // ══════════════════════════════════════════════════════════════
     const GALERIA = {
-      marketing: [],
-      logos: [],
-      impresos: [{ url: 'https://i.imgur.com/4ANs5KX.jpg', cap: 'Tarjeta de presentación doble cara' }],
-      folletos: [{ url: 'https://i.imgur.com/RKgVW0n.png', cap: 'Flyer UHA Educación Online' }, { url: 'https://i.imgur.com/xWXogoN.png', cap: 'Invitación' }],
-      lonas: [{ url: 'https://i.imgur.com/yRrT8jJ.jpg', cap: 'Banner imprimible de 99 cm' }],
-      papeleria: [],
-      calendarios: [],
-      presentaciones: [],
-      audiovisual: [],
-      crm: [],
-      web: [],
-      streaming: [{ url: 'https://i.imgur.com/wtNBQH9.jpg', cap: 'OBS Studio' }],
-      escolares: [],
+
+      marketing: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Campaña Meta Ads' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Reporte de métricas' },
+      ],
+
+      logos: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Logo marca de ropa' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Isotipo inmobiliaria' },
+      ],
+
+      impresos: [
+        { url: 'https://i.imgur.com/4ANs5KX.jpg', cap: 'Tarjeta de presentación doble cara' },
+      ],
+
+      folletos: [
+        { url: 'https://i.imgur.com/RKgVW0n.png', cap: 'Flyer UHA Educación Online' },
+        { url: 'https://i.imgur.com/xWXogoN.png', cap: 'Invitación' },
+      ],
+
+      lonas: [
+        { url: 'https://i.imgur.com/yRrT8jJ.jpg', cap: 'Banner imprimible de 99 cm' }
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Lona promocional 200cm' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Banner gran formato' },
+      ],
+
+      papeleria: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Membrete corporativo' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Carpeta con solapa' },
+      ],
+
+      calendarios: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Calendario de pared 2025' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Calendario de bolsillo' },
+      ],
+
+      presentaciones: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Presentación corporativa 20 diapositivas' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Catálogo PDF de productos' },
+      ],
+
+      audiovisual: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Edición Reels / TikTok' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Caricaturización de imagen' },
+      ],
+
+      crm: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Dashboard Google Sheets' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'CRM Bitrix24 configurado' },
+      ],
+
+      web: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Landing page negocio local' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Servidor de Discord personalizado' },
+      ],
+
+      streaming: [
+        { url: 'https://i.imgur.com/wtNBQH9.jpg', cap: 'OBS Studio' }
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Overlay OBS estilo gaming' },
+        // { url: 'https://i.imgur.com/YYYYY.jpg', cap: 'Pack escenas Twitch' },
+      ],
+
+      escolares: [
+        // { url: 'https://i.imgur.com/XXXXX.jpg', cap: 'Ensayo académico ejemplo' },
+      ],
     };
 
+    // Renderiza todas las galerías al cargar la página
     function renderGalerias() {
       document.querySelectorAll('.galeria-slot').forEach(slot => {
         const catId   = slot.dataset.galeria;
         const imgs    = GALERIA[catId] || [];
         const grid    = slot.querySelector('.ejemplos-grid');
         const counter = slot.querySelector('.ej-count');
-        counter.textContent = imgs.length > 0 ? `${imgs.length} ejemplo${imgs.length !== 1 ? 's' : ''}` : 'Sin ejemplos aún';
+
+        // Actualizar contador
+        counter.textContent = imgs.length > 0
+          ? `${imgs.length} ejemplo${imgs.length !== 1 ? 's' : ''}`
+          : 'Sin ejemplos aún';
+
+        // Generar thumbnails
+        const imgsJson = JSON.stringify(imgs);
         grid.innerHTML = '';
+
         if (imgs.length > 0) {
           imgs.forEach((img, i) => {
             const thumb = document.createElement('div');
             thumb.className = 'ej-thumb';
             thumb.onclick = (e) => { e.stopPropagation(); abrirLightbox(imgs, i); };
-            thumb.innerHTML = `<img src="${img.url}" alt="${img.cap || ''}" loading="lazy"><div class="ej-overlay"><i class="fas fa-expand-alt"></i></div>`;
+            thumb.innerHTML = `
+              <img src="${img.url}" alt="${img.cap || ''}" loading="lazy">
+              <div class="ej-overlay"><i class="fas fa-expand-alt"></i></div>`;
             grid.appendChild(thumb);
           });
         } else {
+          // Placeholders cuando no hay imágenes
           for (let p = 0; p < 4; p++) {
             const ph = document.createElement('div');
             ph.className = 'ej-thumb placeholder';
@@ -2196,48 +2654,131 @@
 
     document.addEventListener('DOMContentLoaded', renderGalerias);
 
-    function toggleEjemplos(toggleEl, e) { e.stopPropagation(); toggleEl.classList.toggle('open'); const body = toggleEl.nextElementSibling; body.classList.toggle('open'); }
+    // ══ GALERÍA DE EJEMPLOS ══════════════════════════════════════
+    function toggleEjemplos(toggleEl, e) {
+      e.stopPropagation(); // No dispara toggleCat del padre
+      toggleEl.classList.toggle('open');
+      const body = toggleEl.nextElementSibling;
+      body.classList.toggle('open');
+    }
 
-    // ══ LIGHTBOX ═════════════════════════════════════════════════
+    // ══ LIGHTBOX ════════════════════════════════════════════════
     let lbImages = [], lbIndex = 0;
 
-    function abrirLightbox(images, index) { lbImages = images; lbIndex = index; renderLightbox(); document.getElementById('lightbox').classList.add('visible'); document.body.style.overflow = 'hidden'; }
-    function renderLightbox() { document.getElementById('lightbox-img').src = lbImages[lbIndex].url; document.getElementById('lightbox-caption').textContent = lbImages[lbIndex].cap || ''; document.querySelector('.lightbox-nav.prev').style.display = lbImages.length > 1 ? 'flex' : 'none'; document.querySelector('.lightbox-nav.next').style.display = lbImages.length > 1 ? 'flex' : 'none'; }
-    function navLightbox(dir) { lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length; renderLightbox(); }
-    function cerrarLightbox() { document.getElementById('lightbox').classList.remove('visible'); document.body.style.overflow = ''; }
-    function cerrarLightboxOverlay(e) { if (e.target === document.getElementById('lightbox')) cerrarLightbox(); }
+    function abrirLightbox(images, index) {
+      lbImages = images;
+      lbIndex  = index;
+      renderLightbox();
+      document.getElementById('lightbox').classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
 
-    // ══ CONFIGURADOR ═════════════════════════════════════════════
+    function renderLightbox() {
+      document.getElementById('lightbox-img').src     = lbImages[lbIndex].url;
+      document.getElementById('lightbox-caption').textContent = lbImages[lbIndex].cap || '';
+      document.querySelector('.lightbox-nav.prev').style.display = lbImages.length > 1 ? 'flex' : 'none';
+      document.querySelector('.lightbox-nav.next').style.display = lbImages.length > 1 ? 'flex' : 'none';
+    }
+
+    function navLightbox(dir) {
+      lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+      renderLightbox();
+    }
+
+    function cerrarLightbox() {
+      document.getElementById('lightbox').classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    function cerrarLightboxOverlay(e) {
+      if (e.target === document.getElementById('lightbox')) cerrarLightbox();
+    }
+
+
+    // ══════════════════════════════════════════════════════════════
+    //  CONFIGURADOR DE PAQUETE PERSONALIZADO
+    //  Todos los precios vienen del Sheet (hoja Servicios, cat_id=cfg)
+    //  Nombres exactos: "CFG: Gestión por marca", "CFG: Red social", etc.
+    //  El objeto P se llena en cfgInit() al cargar los datos del Sheet.
+    // ══════════════════════════════════════════════════════════════
+
+    // Precios del configurador — se llenan desde el Sheet en cfgInit()
+    // Si el Sheet no responde, el configurador muestra "Cotizable" en vez de $0
     const P = {
-      marcas: null, web: null, redes: null, redesPaq: null, redesExtra: null,
-      imgMes: null, vidMes: null, imgExtra: null, vidExtra: null,
-      crm: null, crmAuto: null, metaBase: null, metaExtra: null,
-      googleBase: null, googleExtra: null, comentarios: null,
-      seoRedes: null, seoWeb: null, reporte: null, recursos: null,
-      emailUnitario: null, emailBase: null, emailExtra: null, dashboard: null,
-      desc2: null, desc3: null, desc4: null,
-      cU1:null, cD1:null, cU2:null, cD2:null, cU3:null, cD3:null, cU4:null, cD4:null, cU5:null, cD5:null,
+      marcas:      null,
+      web:         null,
+      redes:       null,
+      redesPaq:    null,   // CFG: Red social paquete (3)
+      redesExtra:  null,   // CFG: Red social extra
+      imgMes:      null,   // CFG: Pieza de contenido (imagen)
+      vidMes:      null,   // CFG: Pieza de contenido (video)
+      imgExtra:    null,
+      vidExtra:    null,
+      crm:         null,
+      crmAuto:     null,
+      metaBase:    null,
+      metaExtra:   null,
+      googleBase:  null,
+      googleExtra: null,
+      // Nuevos servicios
+      comentarios: null,   // CFG: Respuesta comentarios y DMs (por plataforma)
+      seoRedes:    null,   // CFG: SEO orgánico redes
+      seoWeb:      null,   // CFG: SEO orgánico web
+      reporte:     null,   // CFG: Reporte mensual + Analytics
+      recursos:    null,   // CFG: Recursos digitales
+      emailUnitario: null,  // CFG: Email marketing unitario (precio c/u para 1–4 envíos)
+      emailBase:     null,  // CFG: Email marketing base (precio fijo para 5 envíos)
+      emailExtra:    null,  // CFG: Email marketing extra (por envío adicional, 6.° en adelante)
+      dashboard:   null,   // CFG: Dashboard métricas
+      // Descuentos por número de módulos
+      desc2:  null,
+      desc3:  null,
+      desc4:  null,
+      // Umbrales y descuentos de contenido (tramos de 8 piezas)
+      cU1:null, cD1:null,  // umbral 1 = 8, descuento 1 = 12%
+      cU2:null, cD2:null,
+      cU3:null, cD3:null,
+      cU4:null, cD4:null,
+      cU5:null, cD5:null,
     };
 
+    // Mapa: clave de P → nombre exacto en el Sheet
     const CFG_NOMBRES = {
-      marcas: 'CFG: Gestión por marca', web: 'CFG: Gestión de página web',
-      redes: 'CFG: Red social', redesPaq: 'CFG: Red social paquete (3)', redesExtra: 'CFG: Red social extra',
-      imgMes: 'CFG: Pieza de contenido (imagen)', vidMes: 'CFG: Pieza de contenido (video)',
-      imgExtra: 'CFG: Imagen extra', vidExtra: 'CFG: Video extra',
-      crm: 'CFG: Gestión de CRM', crmAuto: 'CFG: CRM + Automatizaciones',
-      metaBase: 'CFG: Meta Ads base', metaExtra: 'CFG: Meta Ads extra',
-      googleBase: 'CFG: Google Ads base', googleExtra: 'CFG: Google Ads extra',
+      marcas:      'CFG: Gestión por marca',
+      web:         'CFG: Gestión de página web',
+      redes:       'CFG: Red social',
+      redesPaq:    'CFG: Red social paquete (3)',
+      redesExtra:  'CFG: Red social extra',
+      imgMes:      'CFG: Pieza de contenido (imagen)',
+      vidMes:      'CFG: Pieza de contenido (video)',
+      imgExtra:    'CFG: Imagen extra',
+      vidExtra:    'CFG: Video extra',
+      crm:         'CFG: Gestión de CRM',
+      crmAuto:     'CFG: CRM + Automatizaciones',
+      metaBase:    'CFG: Meta Ads base',
+      metaExtra:   'CFG: Meta Ads extra',
+      googleBase:  'CFG: Google Ads base',
+      googleExtra: 'CFG: Google Ads extra',
       comentarios: 'CFG: Respuesta comentarios y DMs',
-      seoRedes: 'CFG: SEO orgánico redes', seoWeb: 'CFG: SEO orgánico web',
-      reporte: 'CFG: Reporte mensual + Analytics', recursos: 'CFG: Recursos digitales',
-      emailUnitario: 'CFG: Email marketing unitario', emailBase: 'CFG: Email marketing base', emailExtra: 'CFG: Email marketing extra',
-      dashboard: 'CFG: Dashboard métricas',
-      desc2: 'CFG: Descuento 2 módulos', desc3: 'CFG: Descuento 3 módulos', desc4: 'CFG: Descuento 4+ módulos',
-      cU1:'CFG: Contenido umbral 1', cD1:'CFG: Contenido descuento 1', cU2:'CFG: Contenido umbral 2', cD2:'CFG: Contenido descuento 2',
-      cU3:'CFG: Contenido umbral 3', cD3:'CFG: Contenido descuento 3', cU4:'CFG: Contenido umbral 4', cD4:'CFG: Contenido descuento 4',
-      cU5:'CFG: Contenido umbral 5', cD5:'CFG: Contenido descuento 5',
+      seoRedes:    'CFG: SEO orgánico redes',
+      seoWeb:      'CFG: SEO orgánico web',
+      reporte:     'CFG: Reporte mensual + Analytics',
+      recursos:    'CFG: Recursos digitales',
+      emailUnitario: 'CFG: Email marketing unitario',
+      emailBase:     'CFG: Email marketing base',
+      emailExtra:    'CFG: Email marketing extra',
+      dashboard:   'CFG: Dashboard métricas',
+      desc2:       'CFG: Descuento 2 módulos',
+      desc3:       'CFG: Descuento 3 módulos',
+      desc4:       'CFG: Descuento 4+ módulos',
+      cU1:'CFG: Contenido umbral 1',    cD1:'CFG: Contenido descuento 1',
+      cU2:'CFG: Contenido umbral 2',    cD2:'CFG: Contenido descuento 2',
+      cU3:'CFG: Contenido umbral 3',    cD3:'CFG: Contenido descuento 3',
+      cU4:'CFG: Contenido umbral 4',    cD4:'CFG: Contenido descuento 4',
+      cU5:'CFG: Contenido umbral 5',    cD5:'CFG: Contenido descuento 5',
     };
 
+    // Llamada desde el window load — recibe el array servicios del Sheet
     function cfgInit(servicios) {
       Object.keys(CFG_NOMBRES).forEach(key => {
         const nombre = CFG_NOMBRES[key];
@@ -2246,25 +2787,45 @@
         const m = item.precio.replace(/[$,]/g, '').match(/\d+(\.\d+)?/);
         if (m) P[key] = parseFloat(m[0]);
       });
+      // Actualizar hints de precio en las secciones
       const hints = [
-        ['hint-marcas', P.marcas, '/marca'], ['hint-web', P.web, '/página'],
-        ['hint-redes', P.redes, '/red'], ['hint-crm', P.crm, ''],
-        ['hint-meta', P.metaBase, '/campaña'], ['hint-google', P.googleBase, '/campaña'],
+        ['hint-marcas',      P.marcas,      '/marca'],
+        ['hint-web',         P.web,         '/página'],
+        ['hint-redes',       P.redes,       '/red'],
+        ['hint-crm',         P.crm,         ''],
+        ['hint-meta',        P.metaBase,    '/campaña'],
+        ['hint-google',      P.googleBase,  '/campaña'],
         ['hint-comentarios', P.comentarios, '/plataforma'],
-        ['hint-reporte', P.reporte, ''], ['hint-recursos', P.recursos, ''],
-        ['hint-email', P.emailUnitario, '/envío (1–4)'], ['hint-dashboard', P.dashboard, ''],
+        ['hint-seo',         null,          ''],  // calculado dinámicamente
+        ['hint-reporte',     P.reporte,     ''],
+        ['hint-recursos',    P.recursos,    ''],
+        ['hint-email',       P.emailUnitario, '/envío (1–4)'],
+        ['hint-dashboard',   P.dashboard,   ''],
       ];
-      hints.forEach(([id, val, suf]) => { const el = document.getElementById(id); if (el && val) el.textContent = fmt(val) + suf; });
+      hints.forEach(([id, val, suf]) => {
+        const el = document.getElementById(id);
+        if (el && val) el.textContent = fmt(val) + suf;
+      });
+      // Hint de imagen y video
       const imgHint = document.getElementById('precio-img-hint');
-      if (imgHint) { const i = P.imgMes ? fmt(P.imgMes) : '?'; const v = P.vidMes ? fmt(P.vidMes) : '?'; imgHint.textContent = `(${i}/img · ${v}/video)`; }
+      if (imgHint) {
+        const i = P.imgMes ? fmt(P.imgMes) : '?';
+        const v = P.vidMes ? fmt(P.vidMes) : '?';
+        imgHint.textContent = `(${i}/img · ${v}/video)`;
+      }
     }
 
+    // Extras desde buscador
     let cfgExtras = [];
     let cfgDesdeConfigurador = false;
 
     function abrirConfigurador() {
-      cfgExtras = []; cfgRenderExtras();
-      ['cfg-nombre','cfg-telefono','cfg-correo','cfg-mensaje'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      cfgExtras = [];
+      cfgRenderExtras();
+      ['cfg-nombre','cfg-telefono','cfg-correo','cfg-mensaje'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
       document.getElementById('cfg-msg').textContent = '';
       document.getElementById('cfg-msg').className = 'cfg-msg';
       cfgCalc();
@@ -2272,37 +2833,66 @@
       document.body.style.overflow = 'hidden';
     }
 
-    function cerrarConfigurador() { document.getElementById('cfg-overlay').classList.remove('visible'); document.body.style.overflow = ''; }
-    function cerrarCfgOverlay(e) { if (e.target === document.getElementById('cfg-overlay')) cerrarConfigurador(); }
+    function cerrarConfigurador() {
+      document.getElementById('cfg-overlay').classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    function cerrarCfgOverlay(e) {
+      if (e.target === document.getElementById('cfg-overlay')) cerrarConfigurador();
+    }
 
     function cfgToggle(seccion) {
       const chk  = document.getElementById(`chk-${seccion}`);
       const body = document.getElementById(`body-${seccion}`);
+
+      // Redes requiere que Marcas esté activo
       if (seccion === 'redes' && chk.checked) {
         const marcasChk = document.getElementById('chk-marcas');
-        if (!marcasChk.checked) { marcasChk.checked = true; document.getElementById('body-marcas').classList.add('open'); }
+        if (!marcasChk.checked) {
+          marcasChk.checked = true;
+          document.getElementById('body-marcas').classList.add('open');
+        }
       }
+
       body.classList.toggle('open', chk.checked);
       cfgCalc();
     }
 
+    function cfgSyncRedes() { cfgCalc(); }  // legacy — cfgPillChange maneja todo
+
     function cfgPillChange() {
-      document.querySelectorAll('.cfg-check-pill').forEach(pill => { const inp = pill.querySelector('input[type=checkbox]'); if (inp) pill.classList.toggle('checked', inp.checked); });
+      document.querySelectorAll('.cfg-check-pill').forEach(pill => {
+        const inp = pill.querySelector('input[type=checkbox]');
+        if (inp) pill.classList.toggle('checked', inp.checked);
+      });
       cfgActualizarRedesPorMarca();
       cfgCalc();
     }
 
+    // Agregar campo "Otra red" (máx 5 personalizadas)
     function cfgAddOtraRed() {
       const wrap = document.getElementById('otras-redes-wrap');
       const btn  = document.getElementById('btn-add-otra-red');
       if (!wrap) return;
       const count = wrap.querySelectorAll('.otra-red-row').length;
       if (count >= 5) return;
+
       const idx = Date.now();
       const row = document.createElement('div');
       row.className = 'otra-red-row';
       row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:5px;';
-      row.innerHTML = `<i class="fas fa-globe" style="color:#555;font-size:0.82rem;flex-shrink:0;"></i><input type="text" class="otra-red-input cfg-input" placeholder="Nombre de la red…" style="flex:1;min-width:0;" oninput="cfgPillChange()" data-idx="${idx}"><button type="button" onclick="this.closest('.otra-red-row').remove(); cfgActualizarOtraRedBtn(); cfgPillChange();" style="background:none;border:none;color:#444;cursor:pointer;padding:2px 5px;font-size:0.85rem;line-height:1;flex-shrink:0;" onmouseover="this.style.color='#ff6b6b'" onmouseout="this.style.color='#444'">✕</button>`;
+      row.innerHTML = `
+        <i class="fas fa-globe" style="color:#555;font-size:0.82rem;flex-shrink:0;"></i>
+        <input type="text" class="otra-red-input cfg-input"
+               placeholder="Nombre de la red…"
+               style="flex:1;min-width:0;"
+               oninput="cfgPillChange()"
+               data-idx="${idx}">
+        <button type="button"
+          onclick="this.closest('.otra-red-row').remove(); cfgActualizarOtraRedBtn(); cfgPillChange();"
+          style="background:none;border:none;color:#444;cursor:pointer;padding:2px 5px;font-size:0.85rem;line-height:1;flex-shrink:0;"
+          onmouseover="this.style.color='#ff6b6b'" onmouseout="this.style.color='#444'">✕</button>`;
       wrap.appendChild(row);
       row.querySelector('input').focus();
       cfgActualizarOtraRedBtn();
@@ -2312,21 +2902,26 @@
       const wrap = document.getElementById('otras-redes-wrap');
       const btn  = document.getElementById('btn-add-otra-red');
       if (!wrap || !btn) return;
-      btn.style.display = wrap.querySelectorAll('.otra-red-row').length >= 5 ? 'none' : '';
+      const count = wrap.querySelectorAll('.otra-red-row').length;
+      btn.style.display = count >= 5 ? 'none' : '';
     }
 
+    // Renderiza los inputs "¿cuántas cuentas?" por red cuando marcas > 1
     const REDES_META = [
-      { value:'Facebook', icon:'fab fa-facebook', color:'#1877f2' },
-      { value:'Instagram', icon:'fab fa-instagram', color:'#e1306c' },
-      { value:'X/Twitter', icon:'fab fa-x-twitter', color:'#ccc' },
-      { value:'LinkedIn', icon:'fab fa-linkedin', color:'#0a66c2' },
-      { value:'TikTok', icon:'fab fa-tiktok', color:'#ccc' },
-      { value:'YouTube', icon:'fab fa-youtube', color:'#ff0000' },
+      { value:'Facebook',  icon:'fab fa-facebook',  color:'#1877f2' },
+      { value:'Instagram', icon:'fab fa-instagram',  color:'#e1306c' },
+      { value:'X/Twitter', icon:'fab fa-x-twitter',  color:'#ccc' },
+      { value:'LinkedIn',  icon:'fab fa-linkedin',   color:'#0a66c2' },
+      { value:'TikTok',    icon:'fab fa-tiktok',     color:'#ccc' },
+      { value:'YouTube',   icon:'fab fa-youtube',    color:'#ff0000' },
     ];
 
+    // Helper: devuelve todas las redes activas (predefinidas checkeadas + personalizadas)
     function cfgGetRedesActivas() {
-      const predefinidas = [...document.querySelectorAll('#checks-redes .cfg-check-pill input[type=checkbox]:checked')].map(i => i.value);
-      const otras = [...document.querySelectorAll('.otra-red-input')].map(i => i.value.trim()).filter(Boolean);
+      const predefinidas = [...document.querySelectorAll('#checks-redes .cfg-check-pill input[type=checkbox]:checked')]
+                            .map(i => i.value);
+      const otras = [...document.querySelectorAll('.otra-red-input')]
+                      .map(i => i.value.trim()).filter(Boolean);
       return [...predefinidas, ...otras];
     }
 
@@ -2335,43 +2930,78 @@
       const wrap   = document.getElementById('redes-por-marca-wrap');
       const grid   = document.getElementById('redes-cuentas-grid');
       const redes  = cfgGetRedesActivas();
+
       if (!wrap || !grid) return;
+
       if (marcas > 1 && redes.length > 0) {
         wrap.classList.add('visible');
+
+        // Preservar valores existentes antes de re-renderizar
         const prev = {};
-        document.querySelectorAll('.red-marca-input').forEach(inp => { prev[inp.dataset.key] = inp.value; });
-        let html = '<div style="overflow-x:auto;margin-top:4px;"><table style="width:100%;border-collapse:collapse;font-size:0.78rem;"><thead><tr><th style="padding:5px 8px 8px;color:#555;text-align:left;font-weight:normal;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #222;">Red \\ Marca</th>';
-        for (let m = 1; m <= marcas; m++) html += `<th style="padding:5px 8px 8px;color:#70DDD8;text-align:center;font-size:0.72rem;border-bottom:1px solid #222;min-width:62px;">Marca ${m}</th>`;
+        document.querySelectorAll('.red-marca-input').forEach(inp => {
+          prev[inp.dataset.key] = inp.value;
+        });
+
+        let html = '<div style="overflow-x:auto;margin-top:4px;">';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:0.78rem;">';
+        html += '<thead><tr>';
+        html += '<th style="padding:5px 8px 8px;color:#555;text-align:left;font-weight:normal;font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #222;">Red \\ Marca</th>';
+        for (let m = 1; m <= marcas; m++) {
+          html += `<th style="padding:5px 8px 8px;color:#70DDD8;text-align:center;font-size:0.72rem;border-bottom:1px solid #222;min-width:62px;">Marca ${m}</th>`;
+        }
         html += '</tr></thead><tbody>';
+
         redes.forEach(val => {
           const meta = REDES_META.find(r => r.value === val) || { icon:'fas fa-globe', color:'#888' };
           const safeKey = val.replace(/[^a-z0-9]/gi,'').toLowerCase();
           const isFacebook = val === 'Facebook';
-          html += `<tr style="border-top:1px solid #1a1a1a;"><td style="padding:7px 8px;color:#ccc;white-space:nowrap;"><i class="${meta.icon}" style="color:${meta.color};width:14px;text-align:center;margin-right:5px;"></i>${val}</td>`;
+          html += '<tr style="border-top:1px solid #1a1a1a;">';
+          html += `<td style="padding:7px 8px;color:#ccc;white-space:nowrap;"><i class="${meta.icon}" style="color:${meta.color};width:14px;text-align:center;margin-right:5px;"></i>${val}</td>`;
           for (let m = 1; m <= marcas; m++) {
             const key = `${safeKey}_m${m}`;
             const prevVal = (prev[key] !== undefined) ? prev[key] : (isFacebook ? '1' : '');
-            html += `<td style="padding:4px 6px;text-align:center;"><input type="number" class="red-marca-input" data-key="${key}" data-red="${val}" data-marca="${m}" min="0" max="20" value="${prevVal}" placeholder="${isFacebook ? '1' : '0'}" style="width:50px;background:#111;border:1.5px solid #2a2a2a;color:#fff;border-radius:6px;padding:4px 2px;font-size:0.82rem;text-align:center;outline:none;font-family:inherit;" oninput="cfgCalc()" onfocus="this.style.borderColor='#70DDD8'" onblur="this.style.borderColor='#2a2a2a'"></td>`;
+            const placeholder = isFacebook ? '1' : '0';
+            html += `<td style="padding:4px 6px;text-align:center;">
+                       <input type="number" class="red-marca-input"
+                              data-key="${key}" data-red="${val}" data-marca="${m}"
+                              min="0" max="20" value="${prevVal}" placeholder="${placeholder}"
+                              style="width:50px;background:#111;border:1.5px solid #2a2a2a;color:#fff;border-radius:6px;padding:4px 2px;font-size:0.82rem;text-align:center;outline:none;font-family:inherit;"
+                              oninput="cfgCalc()"
+                              onfocus="this.style.borderColor='#70DDD8'"
+                              onblur="this.style.borderColor='#2a2a2a'"
+                              title="${val} — Marca ${m}">
+                     </td>`;
           }
           html += '</tr>';
         });
-        html += '</tbody></table></div><div style="font-size:0.67rem;color:#555;margin-top:6px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Deja en <strong style="color:#666;">0</strong> o vacío si esa marca no tiene esa red.</div>';
+
+        html += '</tbody></table></div>';
+        html += '<div style="font-size:0.67rem;color:#555;margin-top:6px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i>Deja en <strong style="color:#666;">0</strong> o vacío si esa marca no tiene esa red.</div>';
         grid.innerHTML = html;
-      } else { wrap.classList.remove('visible'); grid.innerHTML = ''; }
+      } else {
+        wrap.classList.remove('visible');
+        grid.innerHTML = '';
+      }
     }
 
+    // Bloquear visualmente Redes si Marcas no está activo
     function cfgActualizarRedesLock() {
       const marcasOk    = document.getElementById('chk-marcas').checked;
       const redesChk    = document.getElementById('chk-redes');
       const redesLabel  = document.querySelector('label[for="chk-redes"]');
       const redesSection = document.getElementById('cs-redes');
       if (!redesSection) return;
+
       if (!marcasOk) {
-        redesChk.disabled = true; redesChk.style.cursor = 'not-allowed';
+        redesChk.disabled = true;
+        redesChk.style.cursor = 'not-allowed';
         if (redesLabel) redesLabel.style.opacity = '0.45';
-        redesSection.querySelectorAll('input[id="chk-redes"], label[for="chk-redes"]').forEach(el => { el.setAttribute('data-lock-tip', '¡Tienes que indicar cuántas marcas quieres que gestione primero!'); });
+        redesSection.querySelectorAll('input[id="chk-redes"], label[for="chk-redes"]').forEach(el => {
+          el.setAttribute('data-lock-tip', '¡Tienes que indicar cuántas marcas quieres que gestione primero!');
+        });
       } else {
-        redesChk.disabled = false; redesChk.style.cursor = '';
+        redesChk.disabled = false;
+        redesChk.style.cursor = '';
         if (redesLabel) redesLabel.style.opacity = '';
         redesSection.querySelectorAll('[data-lock-tip]').forEach(el => el.removeAttribute('data-lock-tip'));
       }
@@ -2387,30 +3017,46 @@
       cfgCalc();
     }
 
+    // Validar que imágenes + videos = total piezas
     function cfgValidarDiseno() {
       const total = parseInt(document.getElementById('num-diseno-total').value) || 0;
       const img   = parseInt(document.getElementById('num-diseno-img').value)   || 0;
       const vid   = parseInt(document.getElementById('num-diseno-vid').value)   || 0;
-      document.getElementById('diseno-aviso').style.display = (img + vid !== total && (img + vid > 0)) ? 'block' : 'none';
+      const aviso = document.getElementById('diseno-aviso');
+      aviso.style.display = (img + vid !== total && (img + vid > 0)) ? 'block' : 'none';
       cfgCalc();
     }
 
-    function fmt(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
-    function precioO(val, mult) { if (val === null) return null; return val * (mult || 1); }
+    function fmt(n) {
+      return '$' + Math.round(n).toLocaleString('es-MX');
+    }
+
+    function precioO(val, mult) {
+      // Si el precio no cargó del Sheet, devuelve null (se mostrará "Cotizable")
+      if (val === null) return null;
+      return val * (mult || 1);
+    }
 
     function cfgCalc() {
+      // Si cambió el número de marcas, actualizar inputs por red y bloqueo
       cfgActualizarRedesPorMarca();
       cfgActualizarRedesLock();
+
       const items = [];
       let total = 0;
-      let totalSinDesc = 0;
-      let hayNull = false;
+      let totalSinDesc = 0;   // extras sin descuento de paquete (ej: campañas 4+)
+      let hayNull = false; // si algún precio no cargó
 
       function addItem(nombre, precio, sinDescuento) {
         if (precio === null) { items.push({ nombre, precio: null }); hayNull = true; }
-        else { items.push({ nombre, precio }); if (sinDescuento) totalSinDesc += precio; else total += precio; }
+        else {
+          items.push({ nombre, precio });
+          if (sinDescuento) totalSinDesc += precio;
+          else total += precio;
+        }
       }
 
+      // 1. Marcas
       if (document.getElementById('chk-marcas').checked) {
         const n = parseInt(document.getElementById('num-marcas').value) || 1;
         const p = precioO(P.marcas, n);
@@ -2418,6 +3064,7 @@
         document.getElementById('hint-marcas').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-marcas').textContent = ''; }
 
+      // 2. Web
       if (document.getElementById('chk-web').checked) {
         const n = parseInt(document.getElementById('num-web').value) || 1;
         const p = precioO(P.web, n);
@@ -2425,48 +3072,144 @@
         document.getElementById('hint-web').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-web').textContent = ''; }
 
+      // 3. Redes — tiered: 1–2 unitario (sin desc módulo), 3 paquete (con desc), 4+ extras (sin desc)
       if (document.getElementById('chk-redes').checked) {
         const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
-        let totalCuentas = 0; let detalle = [];
+
+        // Contar cuentas totales
+        let totalCuentas = 0;
+        let detalle = [];
+
         if (marcas > 1) {
+          // Multi-marca: leer inputs red-marca-input
           const seen = {};
-          document.querySelectorAll('.red-marca-input').forEach(inp => { const n = parseInt(inp.value) || 0; const red = inp.dataset.red; if (n > 0) { totalCuentas += n; seen[red] = (seen[red] || 0) + n; } });
+          document.querySelectorAll('.red-marca-input').forEach(inp => {
+            const n = parseInt(inp.value) || 0;
+            const red = inp.dataset.red;
+            if (n > 0) {
+              totalCuentas += n;
+              seen[red] = (seen[red] || 0) + n;
+            }
+          });
           detalle = Object.entries(seen).map(([r, n]) => `${r} ×${n}`);
-          if (totalCuentas === 0) { const checked2 = cfgGetRedesActivas(); totalCuentas = checked2.length * marcas; detalle = checked2.map(r => `${r} ×${marcas}`); }
-        } else { const redes = cfgGetRedesActivas(); totalCuentas = redes.length; detalle = redes; }
+          if (totalCuentas === 0) {
+            // fallback: redes checkeadas × marcas
+            const checked2 = cfgGetRedesActivas();
+            totalCuentas = checked2.length * marcas;
+            detalle = checked2.map(r => `${r} ×${marcas}`);
+          }
+        } else {
+          const redes = cfgGetRedesActivas();
+          totalCuentas = redes.length;
+          detalle = redes;
+        }
+
         if (totalCuentas === 0) totalCuentas = 1;
+
+        // Aplicar lógica tiered por cuentas totales
         let hintVal = 0;
-        if (totalCuentas <= 2) { const p = precioO(P.redes, totalCuentas); const label = detalle.length ? `Redes (${detalle.join(', ')})` : `Redes sociales (${totalCuentas} red${totalCuentas>1?'es':''})`; addItem(label, p, true); hintVal = p; }
-        else if (totalCuentas === 3) { const p = precioO(P.redesPaq); const label = detalle.length ? `Redes — paquete 3 (${detalle.join(', ')})` : 'Redes sociales — paquete 3'; addItem(label, p, false); hintVal = p; }
-        else { const pBase = precioO(P.redesPaq); const extras = totalCuentas - 3; const pExtra = precioO(P.redesExtra, extras); const labelBase = detalle.length ? `Redes — paquete 3 + ${extras} extra${extras>1?'s':''}` : `Redes sociales — paquete 3 + ${extras} extra${extras>1?'s':''}`; addItem(labelBase, pBase, false); if (extras > 0) addItem(`Redes — ${extras} red${extras>1?'es':''} extra${extras>1?'s':''} (sin descuento)`, pExtra, true); hintVal = (pBase !== null && pExtra !== null) ? pBase + pExtra : null; }
+        if (totalCuentas <= 2) {
+          // 1–2: precio unitario, sin descuento de módulo
+          const p = precioO(P.redes, totalCuentas);
+          const label = detalle.length ? `Redes (${detalle.join(', ')})` : `Redes sociales (${totalCuentas} red${totalCuentas>1?'es':''})`;
+          addItem(label, p, true); // sinDescuento=true → no entra al pool con descuento de módulo
+          hintVal = p;
+        } else if (totalCuentas === 3) {
+          // 3 exactas: precio paquete, CON descuento de módulo
+          const p = precioO(P.redesPaq);
+          const label = detalle.length ? `Redes — paquete 3 (${detalle.join(', ')})` : 'Redes sociales — paquete 3';
+          addItem(label, p, false);
+          hintVal = p;
+        } else {
+          // 4+: paquete-3 + extras sin descuento
+          const pBase  = precioO(P.redesPaq);
+          const extras = totalCuentas - 3;
+          const pExtra = precioO(P.redesExtra, extras);
+          const labelBase = detalle.length ? `Redes — paquete 3 + ${extras} extra${extras>1?'s':''}` : `Redes sociales — paquete 3 + ${extras} extra${extras>1?'s':''}`;
+          addItem(labelBase, pBase, false);
+          if (extras > 0) addItem(`Redes — ${extras} red${extras>1?'es':''} extra${extras>1?'s':''} (sin descuento)`, pExtra, true);
+          hintVal = (pBase !== null && pExtra !== null) ? pBase + pExtra : null;
+        }
         document.getElementById('hint-redes').textContent = hintVal !== null ? fmt(hintVal) : 'Cotizable';
       } else { document.getElementById('hint-redes').textContent = ''; }
 
+      // 4. Diseño — tiered por tramos de 8 piezas (img+vid mezclados)
       if (document.getElementById('chk-diseno').checked) {
         const img = parseInt(document.getElementById('num-diseno-img').value) || 0;
         const vid = parseInt(document.getElementById('num-diseno-vid').value) || 0;
         const total_piezas = img + vid;
-        if (total_piezas === 0) { document.getElementById('hint-diseno').textContent = ''; }
-        else if (P.imgMes === null || P.vidMes === null) { addItem(`Contenido: ${img > 0 ? img + ' img' : ''}${img>0&&vid>0?' + ':''}${vid > 0 ? vid + ' vid' : ''}/mes`, null); document.getElementById('hint-diseno').textContent = 'Cotizable'; }
-        else {
-          const umbrales = [{ u: P.cU1 ?? 8, d: P.cD1 ?? 12 }, { u: P.cU2 ?? 16, d: P.cD2 ?? 18 }, { u: P.cU3 ?? 24, d: P.cD3 ?? 22 }, { u: P.cU4 ?? 40, d: P.cD4 ?? 25 }, { u: P.cU5 ?? 80, d: P.cD5 ?? 28 }].sort((a,b) => a.u - b.u);
+
+        if (total_piezas === 0) {
+          document.getElementById('hint-diseno').textContent = '';
+        } else if (P.imgMes === null || P.vidMes === null) {
+          addItem(`Contenido: ${img > 0 ? img + ' img' : ''}${img>0&&vid>0?' + ':''}${vid > 0 ? vid + ' vid' : ''}/mes`, null);
+          document.getElementById('hint-diseno').textContent = 'Cotizable';
+        } else {
+          // Resolver umbrales desde P (con fallback hardcoded)
+          const umbrales = [
+            { u: P.cU1 ?? 8,  d: P.cD1 ?? 12 },
+            { u: P.cU2 ?? 16, d: P.cD2 ?? 18 },
+            { u: P.cU3 ?? 24, d: P.cD3 ?? 22 },
+            { u: P.cU4 ?? 40, d: P.cD4 ?? 25 },
+            { u: P.cU5 ?? 80, d: P.cD5 ?? 28 },
+          ].sort((a,b) => a.u - b.u);
+
+          // Encontrar el tramo activo: mayor umbral que no supere total_piezas
           let tramo = null;
-          for (const t of umbrales) { if (total_piezas >= t.u) tramo = t; }
-          if (!tramo) { if (img > 0) addItem(`Imágenes: ${img} pieza${img>1?'s':''}/mes (individual)`, precioO(P.imgMes, img), true); if (vid > 0) addItem(`Videos: ${vid} video${vid>1?'s':''}/mes (individual)`, precioO(P.vidMes, vid), true); }
-          else {
-            const imgEnTramo = Math.round(tramo.u * img / total_piezas); const vidEnTramo = tramo.u - imgEnTramo;
-            const imgExtra_cnt = img - imgEnTramo; const vidExtra_cnt = vid - vidEnTramo;
-            const desc = tramo.d / 100;
-            if (imgEnTramo > 0) addItem(`Imágenes: ${imgEnTramo} (en paquete, −${tramo.d}%)`, Math.round(P.imgMes * imgEnTramo * (1 - desc)), false);
-            if (vidEnTramo > 0) addItem(`Videos: ${vidEnTramo} (en paquete, −${tramo.d}%)`, Math.round(P.vidMes * vidEnTramo * (1 - desc)), false);
-            if (imgExtra_cnt > 0) addItem(`Imágenes extra: ${imgExtra_cnt} (sin descuento)`, precioO(P.imgExtra ?? P.imgMes, imgExtra_cnt), true);
-            if (vidExtra_cnt > 0) addItem(`Videos extra: ${vidExtra_cnt} (sin descuento)`, precioO(P.vidExtra ?? P.vidMes, vidExtra_cnt), true);
+          for (const t of umbrales) {
+            if (total_piezas >= t.u) tramo = t;
           }
+
+          if (!tramo) {
+            // 1 a (umbral1 - 1): precio unitario individual, sin descuento de módulo
+            if (img > 0) addItem(`Imágenes: ${img} pieza${img>1?'s':''}/mes (individual)`, precioO(P.imgMes, img), true);
+            if (vid > 0) addItem(`Videos: ${vid} video${vid>1?'s':''}/mes (individual)`, precioO(P.vidMes, vid), true);
+          } else {
+            // Determinar siguiente umbral para saber el techo del tramo
+            const idx = umbrales.indexOf(tramo);
+            const siguiente_u = idx + 1 < umbrales.length ? umbrales[idx+1].u : Infinity;
+
+            // Piezas en tramo (primeras tramo.u) vs extras (lo que pasa de tramo.u)
+            const piezasEnTramo = tramo.u;
+            const piezasExtra   = total_piezas - piezasEnTramo;
+
+            // Distribución proporcional img/vid dentro del tramo
+            const ratioImg = img / total_piezas;
+            const ratioVid = vid / total_piezas;
+            const imgEnTramo   = Math.round(piezasEnTramo * ratioImg);
+            const vidEnTramo   = piezasEnTramo - imgEnTramo;
+            const imgExtra_cnt = img - imgEnTramo;
+            const vidExtra_cnt = vid - vidEnTramo;
+
+            const desc = tramo.d / 100;
+            if (imgEnTramo > 0) addItem(
+              `Imágenes: ${imgEnTramo} (en paquete, −${tramo.d}%)`,
+              Math.round(P.imgMes * imgEnTramo * (1 - desc)), false);
+            if (vidEnTramo > 0) addItem(
+              `Videos: ${vidEnTramo} (en paquete, −${tramo.d}%)`,
+              Math.round(P.vidMes * vidEnTramo * (1 - desc)), false);
+            if (imgExtra_cnt > 0) addItem(
+              `Imágenes extra: ${imgExtra_cnt} (sin descuento)`,
+              precioO(P.imgExtra ?? P.imgMes, imgExtra_cnt), true);
+            if (vidExtra_cnt > 0) addItem(
+              `Videos extra: ${vidExtra_cnt} (sin descuento)`,
+              precioO(P.vidExtra ?? P.vidMes, vidExtra_cnt), true);
+          }
+
+          // Hint total estimado
           const pHintBase = (img > 0 ? P.imgMes * img : 0) + (vid > 0 ? P.vidMes * vid : 0);
-          document.getElementById('hint-diseno').textContent = fmt(pHintBase);
+          const descPct = tramo ? tramo.d / 100 : 0;
+          const pHintPkg = tramo
+            ? Math.round((P.imgMes * (img - (img - Math.round(tramo.u * img/total_piezas))) * (1-descPct)) +
+                         (P.vidMes * (vid - (vid - (tramo.u - Math.round(tramo.u * img/total_piezas)))) * (1-descPct)) +
+                         (P.imgExtra ?? P.imgMes) * Math.max(0, img - Math.round(tramo.u * img/total_piezas)) +
+                         (P.vidExtra ?? P.vidMes) * Math.max(0, vid - (tramo.u - Math.round(tramo.u * img/total_piezas))))
+            : pHintBase;
+          document.getElementById('hint-diseno').textContent = fmt(tramo ? pHintPkg : pHintBase);
         }
       } else { document.getElementById('hint-diseno').textContent = ''; }
 
+      // 5. CRM
       if (document.getElementById('chk-crm').checked) {
         const conAuto = document.getElementById('chk-crm-auto').checked;
         const p = conAuto ? precioO(P.crmAuto) : precioO(P.crm);
@@ -2474,30 +3217,63 @@
         document.getElementById('hint-crm').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-crm').textContent = ''; }
 
+      // 6. Meta Ads
       if (document.getElementById('chk-meta').checked) {
         const n = parseInt(document.getElementById('num-meta').value) || 1;
         let p = null, desgloseText = '';
         if (P.metaBase !== null) {
-          if (n <= 3) { p = P.metaBase * n; addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, p); desgloseText = `${n} campaña${n>1?'s':''} × ${fmt(P.metaBase)} = ${fmt(p)}`; }
-          else if (P.metaExtra !== null) { const pBase = P.metaBase * 3; const pExtra = (n - 3) * P.metaExtra; addItem(`Meta Ads — 3 campañas base`, pBase); addItem(`Meta Ads — ${n-3} campaña${n-3>1?'s':''} extra (sin descuento)`, pExtra, true); p = pBase + pExtra; desgloseText = `3 × ${fmt(P.metaBase)} + ${n-3} extra × ${fmt(P.metaExtra)} = ${fmt(p)}`; }
-          else { addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, null); }
-        } else { addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, null); }
+          if (n <= 3) {
+            p = P.metaBase * n;
+            addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, p);
+            desgloseText = `${n} campaña${n>1?'s':''} × ${fmt(P.metaBase)} = ${fmt(p)}`;
+          } else if (P.metaExtra !== null) {
+            const pBase  = P.metaBase * 3;
+            const pExtra = (n - 3) * P.metaExtra;
+            addItem(`Meta Ads — 3 campañas base (${3*2} anuncios)`, pBase);
+            addItem(`Meta Ads — ${n-3} campaña${n-3>1?'s':''} extra${n-3>1?'s':''} (sin descuento)`, pExtra, true);
+            p = pBase + pExtra;
+            desgloseText = `3 × ${fmt(P.metaBase)} + ${n-3} extra${n-3>1?'s':''} × ${fmt(P.metaExtra)} = ${fmt(p)}`;
+          } else {
+            addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes)`, null);
+          }
+        } else { addItem(`Meta Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null); }
         document.getElementById('hint-meta').textContent = p !== null ? fmt(p) : 'Cotizable';
-        const de = document.getElementById('meta-desglose'); if (de) de.textContent = desgloseText;
-      } else { document.getElementById('hint-meta').textContent = ''; const de = document.getElementById('meta-desglose'); if (de) de.textContent = ''; }
+        const desgloseEl = document.getElementById('meta-desglose');
+        if (desgloseEl) desgloseEl.textContent = desgloseText;
+      } else {
+        document.getElementById('hint-meta').textContent = '';
+        const de = document.getElementById('meta-desglose'); if (de) de.textContent = '';
+      }
 
+      // 7. Google Ads
       if (document.getElementById('chk-google').checked) {
         const n = parseInt(document.getElementById('num-google').value) || 1;
         let p = null, desgloseText = '';
         if (P.googleBase !== null) {
-          if (n <= 3) { p = P.googleBase * n; addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, p); desgloseText = `${n} × ${fmt(P.googleBase)} = ${fmt(p)}`; }
-          else if (P.googleExtra !== null) { const pBase = P.googleBase * 3; const pExtra = (n - 3) * P.googleExtra; addItem('Google Ads — 3 campañas base', pBase); addItem(`Google Ads — ${n-3} extra (sin descuento)`, pExtra, true); p = pBase + pExtra; desgloseText = `3 × ${fmt(P.googleBase)} + ${n-3} extra × ${fmt(P.googleExtra)} = ${fmt(p)}`; }
-          else { addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, null); }
-        } else { addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, null); }
+          if (n <= 3) {
+            p = P.googleBase * n;
+            addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, p);
+            desgloseText = `${n} campaña${n>1?'s':''} × ${fmt(P.googleBase)} = ${fmt(p)}`;
+          } else if (P.googleExtra !== null) {
+            const pBase  = P.googleBase * 3;
+            const pExtra = (n - 3) * P.googleExtra;
+            addItem(`Google Ads — 3 campañas base (${3*2} anuncios)`, pBase);
+            addItem(`Google Ads — ${n-3} campaña${n-3>1?'s':''} extra${n-3>1?'s':''} (sin descuento)`, pExtra, true);
+            p = pBase + pExtra;
+            desgloseText = `3 × ${fmt(P.googleBase)} + ${n-3} extra${n-3>1?'s':''} × ${fmt(P.googleExtra)} = ${fmt(p)}`;
+          } else {
+            addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes)`, null);
+          }
+        } else { addItem(`Google Ads (${n} campaña${n>1?'s':''}/mes, ${n*2} anuncios máx.)`, null); }
         document.getElementById('hint-google').textContent = p !== null ? fmt(p) : 'Cotizable';
-        const de = document.getElementById('google-desglose'); if (de) de.textContent = desgloseText;
-      } else { document.getElementById('hint-google').textContent = ''; const de = document.getElementById('google-desglose'); if (de) de.textContent = ''; }
+        const desgloseEl = document.getElementById('google-desglose');
+        if (desgloseEl) desgloseEl.textContent = desgloseText;
+      } else {
+        document.getElementById('hint-google').textContent = '';
+        const de = document.getElementById('google-desglose'); if (de) de.textContent = '';
+      }
 
+      // 8. Comentarios y DMs
       if (document.getElementById('chk-comentarios').checked) {
         const n = parseInt(document.getElementById('num-comentarios').value) || 1;
         const p = precioO(P.comentarios, n);
@@ -2505,82 +3281,184 @@
         document.getElementById('hint-comentarios').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-comentarios').textContent = ''; }
 
+      // 9. SEO orgánico
       if (document.getElementById('chk-seo').checked) {
         const seoR = document.getElementById('chk-seo-redes').checked;
         const seoW = document.getElementById('chk-seo-web').checked;
         let pTotal = 0; let hayNullSeo = false;
-        if (seoR) { const p = precioO(P.seoRedes); if (p !== null) pTotal += p; else hayNullSeo = true; addItem('SEO orgánico en Redes Sociales', p); }
-        if (seoW) { const p = precioO(P.seoWeb); if (p !== null) pTotal += p; else hayNullSeo = true; addItem('SEO orgánico en Página Web', p); }
+        if (seoR) {
+          const p = precioO(P.seoRedes);
+          if (p !== null) pTotal += p; else hayNullSeo = true;
+          addItem('SEO orgánico en Redes Sociales', p);
+        }
+        if (seoW) {
+          const p = precioO(P.seoWeb);
+          if (p !== null) pTotal += p; else hayNullSeo = true;
+          addItem('SEO orgánico en Página Web', p);
+        }
         if (!seoR && !seoW) addItem('SEO orgánico (sin tipo especificado)', null);
         const hintSeo = document.getElementById('hint-seo');
         if (hintSeo) hintSeo.textContent = (!seoR && !seoW) ? 'Selecciona tipo' : (hayNullSeo ? 'Cotizable' : fmt(pTotal));
       } else { const hs = document.getElementById('hint-seo'); if (hs) hs.textContent = ''; }
 
+      // 10. Reporte mensual
       if (document.getElementById('chk-reporte').checked) {
-        const p = precioO(P.reporte); addItem('Reporte mensual + Analytics', p);
+        const p = precioO(P.reporte);
+        addItem('Reporte mensual + Analytics', p);
         document.getElementById('hint-reporte').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-reporte').textContent = ''; }
 
+      // 11. Recursos digitales
       if (document.getElementById('chk-recursos').checked) {
-        const p = precioO(P.recursos); addItem('Recursos digitales entregados al cliente', p);
+        const p = precioO(P.recursos);
+        addItem('Recursos digitales entregados al cliente', p);
         document.getElementById('hint-recursos').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-recursos').textContent = ''; }
 
+      // 12. Email marketing
       if (document.getElementById('chk-email').checked) {
         const n = parseInt(document.getElementById('num-email').value) || 1;
         const desgloseEl = document.getElementById('email-desglose');
         let p = null, desgloseText = '';
-        if (n <= 4) { if (P.emailUnitario !== null) { p = P.emailUnitario * n; addItem(`Email marketing (${n} envío${n>1?'s':''}/mes)`, p); desgloseText = `${n} envío${n>1?'s':''} × ${fmt(P.emailUnitario)} = ${fmt(p)}`; } else { addItem(`Email marketing (${n} envío${n>1?'s':''}/mes)`, null); } }
-        else if (n === 5) { if (P.emailBase !== null) { p = P.emailBase; addItem('Email marketing — paquete 5 envíos/mes', p); desgloseText = `Paquete 5 envíos: ${fmt(P.emailBase)}`; } else { addItem('Email marketing — paquete 5 envíos/mes', null); } }
-        else { if (P.emailBase !== null && P.emailExtra !== null) { const pExtra = (n - 5) * P.emailExtra; addItem('Email marketing — 5 envíos base', P.emailBase); addItem(`Email marketing — ${n-5} envío${n-5>1?'s':''} extra (sin descuento)`, pExtra, true); p = P.emailBase + pExtra; desgloseText = `Paquete 5: ${fmt(P.emailBase)} + ${n-5} extra × ${fmt(P.emailExtra)} = ${fmt(p)}`; } else { addItem(`Email marketing (${n} envíos/mes)`, null); } }
+        if (n <= 4) {
+          // 1–4 envíos: precio unitario × n
+          if (P.emailUnitario !== null) {
+            p = P.emailUnitario * n;
+            addItem(`Email marketing (${n} envío${n>1?'s':''}/mes, diseño incluido)`, p);
+            desgloseText = `${n} envío${n>1?'s':''} × ${fmt(P.emailUnitario)} = ${fmt(p)}`;
+          } else {
+            addItem(`Email marketing (${n} envío${n>1?'s':''}/mes)`, null);
+          }
+        } else if (n === 5) {
+          // 5 envíos: precio de paquete fijo
+          if (P.emailBase !== null) {
+            p = P.emailBase;
+            addItem('Email marketing — paquete 5 envíos/mes (diseño incluido)', p);
+            desgloseText = `Paquete 5 envíos: ${fmt(P.emailBase)}`;
+          } else {
+            addItem('Email marketing — paquete 5 envíos/mes', null);
+          }
+        } else {
+          // 6+: paquete + extras sin descuento
+          if (P.emailBase !== null && P.emailExtra !== null) {
+            const pExtra = (n - 5) * P.emailExtra;
+            addItem('Email marketing — 5 envíos base (diseño incluido)', P.emailBase);
+            addItem(`Email marketing — ${n-5} envío${n-5>1?'s':''} extra${n-5>1?'s':''} (sin descuento)`, pExtra, true);
+            p = P.emailBase + pExtra;
+            desgloseText = `Paquete 5: ${fmt(P.emailBase)} + ${n-5} extra${n-5>1?'s':''} × ${fmt(P.emailExtra)} = ${fmt(p)}`;
+          } else if (P.emailBase !== null) {
+            addItem(`Email marketing (${n} envíos/mes)`, null);
+          } else {
+            addItem(`Email marketing (${n} envíos/mes)`, null);
+          }
+        }
         document.getElementById('hint-email').textContent = p !== null ? fmt(p) : 'Cotizable';
         if (desgloseEl) desgloseEl.textContent = desgloseText;
-      } else { document.getElementById('hint-email').textContent = ''; const de = document.getElementById('email-desglose'); if (de) de.textContent = ''; }
+      } else {
+        document.getElementById('hint-email').textContent = '';
+        const de = document.getElementById('email-desglose'); if (de) de.textContent = '';
+      }
 
+      // 13. Dashboard de métricas
       if (document.getElementById('chk-dashboard').checked) {
-        const p = precioO(P.dashboard); addItem('Dashboard de métricas en tiempo real', p);
+        const p = precioO(P.dashboard);
+        addItem('Dashboard de métricas en tiempo real', p);
         document.getElementById('hint-dashboard').textContent = p !== null ? fmt(p) : 'Cotizable';
       } else { document.getElementById('hint-dashboard').textContent = ''; }
 
+      // 14. Duración (informativo)
       if (document.getElementById('chk-duracion').checked) {
         const sel = document.getElementById('sel-duracion');
         const val = sel.value;
-        document.getElementById('hint-duracion').textContent = val === '' ? '' : val === 'rango' ? 'Rango personalizado' : sel.options[sel.selectedIndex].text;
+        document.getElementById('hint-duracion').textContent =
+          val === '' ? '' : val === 'rango' ? 'Rango personalizado' : sel.options[sel.selectedIndex].text;
       } else { document.getElementById('hint-duracion').textContent = ''; }
 
+      // 15. Extras del buscador
       cfgExtras.forEach(nombre => {
         const cat = CATALOGO.find(c => c.nombre === nombre);
         let p = null;
-        if (cat && cat.precio) { const m = cat.precio.replace(/[$,]/g,'').match(/\d+/); if (m) p = parseInt(m[0]); }
+        if (cat && cat.precio) {
+          const m = cat.precio.replace(/[$,]/g,'').match(/\d+/);
+          if (m) p = parseInt(m[0]);
+        }
         addItem(nombre, p);
       });
 
+      // ── Actualizar resumen ─────────────────────────────────────
       const itemsEl = document.getElementById('cfg-res-items');
-      if (items.length === 0) { itemsEl.innerHTML = '<div class="cfg-res-empty">Selecciona al menos un servicio para ver el resumen.</div>'; }
-      else { itemsEl.innerHTML = items.map(it => `<div class="cfg-res-item"><span class="cfg-res-item-name">${it.nombre}</span><span class="cfg-res-item-price">${it.precio !== null ? fmt(it.precio) : '<span style="color:#888;font-style:italic;">Cotizable</span>'}</span></div>`).join(''); }
+      if (items.length === 0) {
+        itemsEl.innerHTML = '<div class="cfg-res-empty">Selecciona al menos un servicio para ver el resumen.</div>';
+      } else {
+        itemsEl.innerHTML = items.map(it =>
+          `<div class="cfg-res-item">
+            <span class="cfg-res-item-name">${it.nombre}</span>
+            <span class="cfg-res-item-price">${it.precio !== null ? fmt(it.precio) : '<span style="color:#888;font-style:italic;">Cotizable</span>'}</span>
+          </div>`
+        ).join('');
+      }
 
-      const modulosActivos = ['marcas','web','redes','diseno','crm','meta','google','comentarios','seo','reporte','recursos','email','dashboard'].filter(id => document.getElementById(`chk-${id}`)?.checked).length + cfgExtras.length;
-      const pctDescuento = modulosActivos <= 1 ? 0 : modulosActivos === 2 ? (P.desc2 !== null ? P.desc2 : 10) : modulosActivos === 3 ? (P.desc3 !== null ? P.desc3 : 15) : (P.desc4 !== null ? P.desc4 : 20);
+      // Contar módulos activos
+      const modulosActivos = [
+        document.getElementById('chk-marcas').checked,
+        document.getElementById('chk-web').checked,
+        document.getElementById('chk-redes').checked,
+        document.getElementById('chk-diseno').checked,
+        document.getElementById('chk-crm').checked,
+        document.getElementById('chk-meta').checked,
+        document.getElementById('chk-google').checked,
+        document.getElementById('chk-comentarios').checked,
+        document.getElementById('chk-seo').checked,
+        document.getElementById('chk-reporte').checked,
+        document.getElementById('chk-recursos').checked,
+        document.getElementById('chk-email').checked,
+        document.getElementById('chk-dashboard').checked,
+      ].filter(Boolean).length + cfgExtras.length;
+
+      // Descuento escalonado — valores desde Sheet; fallback si no cargaron
+      const pctDescuento = modulosActivos <= 1 ? 0
+                         : modulosActivos === 2 ? (P.desc2 !== null ? P.desc2 : 10)
+                         : modulosActivos === 3 ? (P.desc3 !== null ? P.desc3 : 15)
+                         : (P.desc4 !== null ? P.desc4 : 20);
+
       const totalBase = total + totalSinDesc;
       const totalPkg  = Math.round(total * (1 - pctDescuento / 100)) + totalSinDesc;
       const ahorro    = totalBase - totalPkg;
 
       document.getElementById('cfg-precio-base').textContent = totalBase > 0 ? fmt(totalBase) : (hayNull ? 'Cotizable' : '$0');
+
       let descBadge = '';
-      if (pctDescuento > 0 && totalBase > 0) { descBadge = ` <span style="font-size:0.65rem;background:rgba(80,216,144,0.15);color:#50d890;border:1px solid rgba(80,216,144,0.3);padding:2px 7px;border-radius:10px;font-weight:600;vertical-align:middle;">−${pctDescuento}% paquete</span>`; }
+      if (pctDescuento > 0 && totalBase > 0) {
+        descBadge = ` <span style="font-size:0.65rem;background:rgba(80,216,144,0.15);color:#50d890;border:1px solid rgba(80,216,144,0.3);padding:2px 7px;border-radius:10px;font-weight:600;vertical-align:middle;">−${pctDescuento}% paquete</span>`;
+      }
       const etiquetaDescuento = document.getElementById('cfg-res-total-label');
-      if (etiquetaDescuento) { etiquetaDescuento.innerHTML = pctDescuento > 0 ? `Precio estimado con descuento<br>${descBadge}` : 'Precio estimado (precio individual)'; }
+      if (etiquetaDescuento) {
+        etiquetaDescuento.innerHTML = pctDescuento > 0
+          ? `Precio estimado con descuento<br>${descBadge}`
+          : 'Precio estimado (precio individual)';
+      }
       const notaEl = document.querySelector('.cfg-res-note');
       if (notaEl) {
-        if (pctDescuento > 0 && ahorro > 0) { notaEl.innerHTML = `<span style="color:#50d890;">✓ Ahorras ${fmt(ahorro)}/mes</span> por contratar en paquete · Precio final sujeto a propuesta.`; }
-        else if (modulosActivos === 1) { notaEl.textContent = 'Agrega más servicios para obtener descuento de paquete.'; }
-        else { notaEl.textContent = '* Precio final sujeto a propuesta.'; }
+        if (pctDescuento > 0 && ahorro > 0) {
+          notaEl.innerHTML = `<span style="color:#50d890;">✓ Ahorras ${fmt(ahorro)}/mes</span> por contratar en paquete · Precio final sujeto a propuesta.`;
+        } else if (modulosActivos === 1) {
+          notaEl.textContent = 'Agrega más servicios para obtener descuento de paquete.';
+        } else {
+          notaEl.textContent = '* Precio final sujeto a propuesta.';
+        }
       }
-      document.getElementById('cfg-precio-total').innerHTML = totalPkg > 0 ? `${fmt(totalPkg)} <sub>/mes</sub>` : (hayNull ? '<span style="color:#888;font-size:1rem;">A cotizar</span>' : '$0 <sub>/mes</sub>');
+
+      document.getElementById('cfg-precio-total').innerHTML = totalPkg > 0
+        ? `${fmt(totalPkg)} <sub>/mes</sub>`
+        : (hayNull ? '<span style="color:#888;font-size:1rem;">A cotizar</span>' : '$0 <sub>/mes</sub>');
     }
 
     function cfgToggleSeo() {
-      ['seo-redes','seo-web'].forEach(id => { const chk = document.getElementById(`chk-${id}`); const pill = document.getElementById(`pill-${id}`); if (chk && pill) pill.classList.toggle('checked', chk.checked); });
+      ['seo-redes','seo-web'].forEach(id => {
+        const chk  = document.getElementById(`chk-${id}`);
+        const pill = document.getElementById(`pill-${id}`);
+        if (chk && pill) pill.classList.toggle('checked', chk.checked);
+      });
       cfgCalc();
     }
 
@@ -2591,28 +3469,48 @@
       cfgCalc();
     }
 
-    function abrirBuscadorDesdeConfigurador() { cfgDesdeConfigurador = true; serviciosSeleccionados = [...cfgExtras]; renderBadges(); abrirBuscadorServicios(); }
+    function abrirBuscadorDesdeConfigurador() {
+      cfgDesdeConfigurador = true;
+      serviciosSeleccionados = [...cfgExtras];
+      renderBadges();
+      abrirBuscadorServicios();
+    }
 
     function cfgRenderExtras() {
       const wrap = document.getElementById('cfg-extra-badges');
       if (!wrap) return;
-      wrap.innerHTML = cfgExtras.map((s, i) => `<div class="servicio-badge"><i class="fas fa-tag"></i><span>${s}</span><button class="badge-remove" onclick="cfgQuitarExtra(${i})"><i class="fas fa-times"></i></button></div>`).join('');
+      wrap.innerHTML = cfgExtras.map((s, i) => `
+        <div class="servicio-badge">
+          <i class="fas fa-tag"></i>
+          <span>${s}</span>
+          <button class="badge-remove" onclick="cfgQuitarExtra(${i})"><i class="fas fa-times"></i></button>
+        </div>
+      `).join('');
       cfgCalc();
     }
 
-    function cfgQuitarExtra(i) { cfgExtras.splice(i, 1); cfgRenderExtras(); }
+    function cfgQuitarExtra(i) {
+      cfgExtras.splice(i, 1);
+      cfgRenderExtras();
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const btnConfirmar = document.getElementById('btn-confirmar-search');
       if (btnConfirmar) {
         btnConfirmar.onclick = function() {
-          if (cfgDesdeConfigurador) { cfgExtras = [...serviciosSeleccionados]; cfgRenderExtras(); cerrarBuscador(); cfgDesdeConfigurador = false; }
-          else { confirmarServicios(); }
+          if (cfgDesdeConfigurador) {
+            cfgExtras = [...serviciosSeleccionados];
+            cfgRenderExtras();
+            cerrarBuscador();
+            cfgDesdeConfigurador = false;
+          } else {
+            confirmarServicios();
+          }
         };
       }
     });
 
-    // ══ ENVÍO CONFIGURADOR ═══════════════════════════════════════
+    // ══ ENVÍO DEL CONFIGURADOR ════════════════════════════════════
     async function enviarConfigurador() {
       const nombre   = document.getElementById('cfg-nombre').value.trim();
       const telefono = document.getElementById('cfg-telefono').value.trim();
@@ -2621,27 +3519,73 @@
       const msg      = document.getElementById('cfg-msg');
       const btn      = document.getElementById('btn-cfg-enviar');
 
-      if (!nombre || !telefono || !correo) { msg.className = 'cfg-msg err'; msg.textContent = 'Completa nombre, WhatsApp y correo.'; return; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { msg.className = 'cfg-msg err'; msg.textContent = 'El correo no parece válido.'; return; }
+      if (!nombre || !telefono || !correo) {
+        msg.className = 'cfg-msg err';
+        msg.textContent = 'Completa nombre, WhatsApp y correo.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        msg.className = 'cfg-msg err';
+        msg.textContent = 'El correo no parece válido.';
+        return;
+      }
 
       const configItems = [];
       if (document.getElementById('chk-marcas').checked) configItems.push(`Gestión de ${document.getElementById('num-marcas').value} marca(s)`);
       if (document.getElementById('chk-web').checked)    configItems.push(`Gestión de ${document.getElementById('num-web').value} página(s) web`);
-      if (document.getElementById('chk-redes').checked) { const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value); configItems.push(`Redes sociales: ${checked.length > 0 ? checked.join(', ') : 'sin especificar'}`); }
-      if (document.getElementById('chk-diseno').checked) { const img = document.getElementById('num-diseno-img').value; const vid = document.getElementById('num-diseno-vid').value; if (parseInt(img) > 0) configItems.push(`Imágenes: ${img} pieza(s)/mes`); if (parseInt(vid) > 0) configItems.push(`Videos: ${vid} video(s)/mes`); }
-      if (document.getElementById('chk-crm').checked) { configItems.push(document.getElementById('chk-crm-auto').checked ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM'); }
+      if (document.getElementById('chk-redes').checked) {
+        const marcas = parseInt(document.getElementById('num-marcas')?.value) || 1;
+        const checked = [...document.querySelectorAll('#checks-redes .cfg-check-pill input:checked')].map(i => i.value);
+        if (marcas > 1 && checked.length > 0) {
+          const detalle = checked.map(val => {
+            const inputId = 'cuentas-' + val.replace(/[^a-z]/gi,'').toLowerCase();
+            const n = parseInt(document.getElementById(inputId)?.value) || marcas;
+            return `${val} ×${n}`;
+          });
+          configItems.push(`Redes sociales: ${detalle.join(' | ')} (${marcas} marcas)`);
+        } else {
+          configItems.push(`Redes sociales: ${checked.length > 0 ? checked.join(', ') : 'sin especificar'}`);
+        }
+      }
+      if (document.getElementById('chk-diseno').checked) {
+        const img = document.getElementById('num-diseno-img').value;
+        const vid = document.getElementById('num-diseno-vid').value;
+        if (parseInt(img) > 0) configItems.push(`Imágenes: ${img} pieza(s)/mes`);
+        if (parseInt(vid) > 0) configItems.push(`Videos: ${vid} video(s)/mes (base 2 min resultado final)`);
+      }
+      if (document.getElementById('chk-crm').checked) {
+        configItems.push(document.getElementById('chk-crm-auto').checked ? 'CRM + Automatizaciones con APIs' : 'Gestión de CRM');
+      }
       if (document.getElementById('chk-meta').checked)   configItems.push(`Meta Ads: ${document.getElementById('num-meta').value} campaña(s)/mes`);
       if (document.getElementById('chk-google').checked) configItems.push(`Google Ads: ${document.getElementById('num-google').value} campaña(s)/mes`);
-      if (document.getElementById('chk-comentarios').checked) configItems.push(`Comentarios y DMs: ${document.getElementById('num-comentarios').value} plataforma(s)`);
-      if (document.getElementById('chk-seo').checked) { const tipos = []; if (document.getElementById('chk-seo-redes').checked) tipos.push('Redes Sociales'); if (document.getElementById('chk-seo-web').checked) tipos.push('Página Web'); configItems.push(`SEO orgánico: ${tipos.length > 0 ? tipos.join(' + ') : 'sin tipo especificado'}`); }
+      if (document.getElementById('chk-comentarios').checked) configItems.push(`Respuesta a comentarios y DMs: ${document.getElementById('num-comentarios').value} plataforma(s)`);
+      if (document.getElementById('chk-seo').checked) {
+        const seoTipos = [];
+        if (document.getElementById('chk-seo-redes').checked) seoTipos.push('Redes Sociales');
+        if (document.getElementById('chk-seo-web').checked)   seoTipos.push('Página Web');
+        configItems.push(`SEO orgánico: ${seoTipos.length > 0 ? seoTipos.join(' + ') : 'sin tipo especificado'}`);
+      }
       if (document.getElementById('chk-reporte').checked)   configItems.push('Reporte mensual + Analytics');
       if (document.getElementById('chk-recursos').checked)  configItems.push('Recursos digitales entregados al cliente');
-      if (document.getElementById('chk-email').checked) { const n = parseInt(document.getElementById('num-email').value) || 1; configItems.push(`Email marketing: ${n} envío${n>1?'s':''}/mes`); }
+      if (document.getElementById('chk-email').checked) {
+        const n = parseInt(document.getElementById('num-email').value) || 1;
+        const tipo = n <= 4 ? 'unitario c/u' : n === 5 ? 'paquete' : `paquete + ${n-5} extra${n-5>1?'s':''}`;
+        configItems.push(`Email marketing: ${n} envío${n>1?'s':''}/mes (${tipo}, diseño incluido)`);
+      }
       if (document.getElementById('chk-dashboard').checked) configItems.push('Dashboard de métricas en tiempo real');
-      if (document.getElementById('chk-duracion').checked) { const sel = document.getElementById('sel-duracion'); configItems.push(`Duración: ${sel.value === 'rango' ? 'Rango personalizado' : (sel.value === '' ? 'No especificada' : sel.options[sel.selectedIndex].text)}`); }
+      if (document.getElementById('chk-duracion').checked) {
+        const sel = document.getElementById('sel-duracion');
+        const durText = sel.value === 'rango' ? 'Rango personalizado (fechas por confirmar en correo)'
+          : (sel.value === '' ? 'No especificada' : sel.options[sel.selectedIndex].text);
+        configItems.push(`Duración: ${durText}`);
+      }
       cfgExtras.forEach(s => configItems.push(s));
 
-      if (configItems.length === 0) { msg.className = 'cfg-msg err'; msg.textContent = 'Selecciona al menos un servicio.'; return; }
+      if (configItems.length === 0) {
+        msg.className = 'cfg-msg err';
+        msg.textContent = 'Selecciona al menos un servicio.';
+        return;
+      }
 
       const precioBaseEl  = document.getElementById('cfg-precio-base').textContent;
       const precioTotalEl = document.getElementById('cfg-precio-total').textContent;
@@ -2653,16 +3597,65 @@
       msg.textContent = '';
 
       const fecha = new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' });
-      const serviciosHTML = configItems.map(s => `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;"><i style="color:#70DDD8;">●</i> ${s}</td></tr>`).join('');
+
+      const serviciosHTML = configItems.map(s =>
+        `<tr><td style="padding:7px 14px;border-bottom:1px solid #222;color:#e0e0e0;font-size:14px;"><i style="color:#70DDD8;">●</i> ${s}</td></tr>`
+      ).join('');
+
       const precioBaseNum  = parseInt(precioBase.replace(/\D/g,'')) || 0;
       const precioTotalNum = parseInt(precioTotal.replace(/\D/g,'')) || 0;
       const mostrarPrecios = precioTotalNum > 0;
 
-      const html_body = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;"><tr><td style="background:linear-gradient(135deg,#0A315B,#A64062);padding:28px 32px;"><img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;"><div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Paquete Personalizado</div><div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🛠️ Configuración Recibida</div></td></tr><tr><td style="padding:28px 32px 0;"><table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;"><tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td><td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombre}</td></tr><tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td><td style="padding:10px 14px;color:#fff;">${telefono}</td></tr><tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td><td style="padding:10px 14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td></tr><tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td><td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td></tr></table></td></tr><tr><td style="padding:24px 32px 0;"><table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">${serviciosHTML}</table></td></tr>${mostrarPrecios ? `<tr><td style="padding:20px 32px 0;"><table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;"><tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Precio individual</td><td style="padding:10px 14px;color:#888;font-size:14px;text-decoration:line-through;">$${precioBaseNum.toLocaleString('es-MX')}/mes</td></tr><tr style="background:#111;"><td style="padding:12px 14px;color:#70DDD8;font-size:13px;font-weight:600;">Precio de paquete</td><td style="padding:12px 14px;color:#EF5085;font-size:18px;font-weight:800;">$${precioTotalNum.toLocaleString('es-MX')}/mes</td></tr></table></td></tr>` : ''}${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div></td></tr>` : ''}<tr><td style="padding:28px 32px;"><a href="mailto:${correo}" style="display:inline-block;background:#EF5085;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;">Responder al cliente</a></td></tr></table></td></tr></table></body></html>`;
+      const html_body = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#111;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#111;padding:32px 0;">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;max-width:560px;">
+<tr><td style="background:linear-gradient(135deg,#0A315B,#A64062);padding:28px 32px;">
+  <img src="https://imgur.com/dSIZrFm.png" alt="AlexDom104" height="36" style="display:block;margin-bottom:10px;">
+  <div style="color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.8;">Paquete Personalizado</div>
+  <div style="color:#fff;font-size:22px;font-weight:700;margin-top:4px;">🛠️ Configuración Recibida</div>
+</td></tr>
+<tr><td style="padding:28px 32px 0;">
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Datos del cliente</div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;">
+    <tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;width:110px;">Nombre</td><td style="padding:10px 14px;color:#fff;font-size:14px;font-weight:600;">${nombre}</td></tr>
+    <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">WhatsApp</td><td style="padding:10px 14px;color:#fff;font-size:14px;">${telefono}</td></tr>
+    <tr style="background:#111;"><td style="padding:10px 14px;color:#888;font-size:13px;">Correo</td><td style="padding:10px 14px;font-size:14px;"><a href="mailto:${correo}" style="color:#70DDD8;text-decoration:none;">${correo}</a></td></tr>
+    <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Fecha</td><td style="padding:10px 14px;color:#aaa;font-size:13px;">${fecha}</td></tr>
+  </table>
+</td></tr>
+<tr><td style="padding:24px 32px 0;">
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:14px;">Servicios configurados <span style="background:rgba(112,221,216,0.15);color:#70DDD8;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;">${configItems.length}</span></div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">${serviciosHTML}</table>
+</td></tr>
+${mostrarPrecios ? `<tr><td style="padding:20px 32px 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;background:#111;">
+    <tr style="background:#161616;"><td style="padding:10px 14px;color:#888;font-size:13px;">Precio individual estimado</td><td style="padding:10px 14px;color:#888;font-size:14px;text-decoration:line-through;">$${precioBaseNum.toLocaleString('es-MX')}/mes</td></tr>
+    <tr style="background:#111;"><td style="padding:12px 14px;color:#70DDD8;font-size:13px;font-weight:600;">Precio de paquete</td><td style="padding:12px 14px;color:#EF5085;font-size:18px;font-weight:800;">$${precioTotalNum.toLocaleString('es-MX')}/mes</td></tr>
+  </table>
+</td></tr>` : ''}
+${mensaje ? `<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#70DDD8;margin-bottom:10px;">Comentarios</div><div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;color:#ccc;font-size:14px;line-height:1.6;">${mensaje}</div></td></tr>` : ''}
+<tr><td style="padding:28px 32px;"><a href="mailto:${correo}" style="display:inline-block;background:#EF5085;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;">Responder al cliente</a></td></tr>
+</table></td></tr></table></body></html>`;
 
       try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { from_name: nombre, from_email: correo, phone: telefono, subject: `🛠️ Paquete personalizado — ${nombre}`, message: configItems.join('\n• '), html_body });
-        fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ fecha, nombre, telefono, correo, servicio: '[PAQUETE PERSONALIZADO] ' + configItems.join(' | '), mensaje: mensaje || '—' }) }).catch(() => {});
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          from_name:  nombre,
+          from_email: correo,
+          phone:      telefono,
+          subject:    `🛠️ Paquete personalizado — ${nombre}`,
+          message:    configItems.join('\n• '),
+          html_body,
+        });
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            fecha, nombre, telefono, correo,
+            servicio: '[PAQUETE PERSONALIZADO] ' + configItems.join(' | '),
+            mensaje:  mensaje || '—',
+          }),
+        }).catch(() => {});
         msg.className = 'cfg-msg ok';
         msg.innerHTML = '<i class="fas fa-check-circle"></i> Enviado.';
         btn.innerHTML = '<i class="fas fa-check"></i> Enviado';
@@ -2676,9 +3669,15 @@
       }
     }
 
-    function mostrarToast() { const t = document.getElementById('cfg-toast'); if (!t) return; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 5000); }
+    // ══ TOAST ═══════════════════════════════════════════════════════
+    function mostrarToast() {
+      const t = document.getElementById('cfg-toast');
+      if (!t) return;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 5000);
+    }
 
-    // ══ CARRUSEL ═════════════════════════════════════════════════
+    // ══ CARRUSEL ════════════════════════════════════════════════
     function toggleCat(el) { (el.classList.contains('cat-header') ? el.closest('.cat-block') : el).classList.toggle('open'); }
 
     const carousel = document.getElementById('paquetes-carousel');
@@ -2686,11 +3685,25 @@
     let currentSlide = 0;
     const totalSlides = 5;
 
-    function getCardWidth() { const card = carousel.querySelector('.paquete-card'); return card ? card.offsetWidth + 14 : 282; }
+    function getCardWidth() {
+      const card = carousel.querySelector('.paquete-card');
+      return card ? card.offsetWidth + 14 : 282;
+    }
     function updateDots(i) { dots.forEach((d, j) => d.classList.toggle('active', j === i)); }
-    function scrollCarousel(dir) { currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + dir)); carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' }); updateDots(currentSlide); }
-    function goToSlide(i) { currentSlide = i; carousel.scrollTo({ left: i * getCardWidth(), behavior: 'smooth' }); updateDots(i); }
-    carousel.addEventListener('scroll', () => { currentSlide = Math.round(carousel.scrollLeft / getCardWidth()); updateDots(currentSlide); });
+    function scrollCarousel(dir) {
+      currentSlide = Math.max(0, Math.min(totalSlides - 1, currentSlide + dir));
+      carousel.scrollTo({ left: currentSlide * getCardWidth(), behavior: 'smooth' });
+      updateDots(currentSlide);
+    }
+    function goToSlide(i) {
+      currentSlide = i;
+      carousel.scrollTo({ left: i * getCardWidth(), behavior: 'smooth' });
+      updateDots(i);
+    }
+    carousel.addEventListener('scroll', () => {
+      currentSlide = Math.round(carousel.scrollLeft / getCardWidth());
+      updateDots(currentSlide);
+    });
   </script>
 </body>
 </html>
