@@ -65,7 +65,7 @@
     </div>
 
     <!-- MÓDULO 1 -->
-    <details class="module-details">
+    <details class="module-details" id="mod-1">
       <summary class="module-summary">
         Módulo 1: Conocimientos Técnicos y Herramientas <i class="fas fa-chevron-down"></i>
       </summary>
@@ -144,7 +144,7 @@
     </details>
 
     <!-- MÓDULO 2 -->
-    <details class="module-details">
+    <details class="module-details" id="mod-2">
       <summary class="module-summary">
         Módulo 2: Razonamiento Lógico y Analítico <i class="fas fa-chevron-down"></i>
       </summary>
@@ -223,7 +223,7 @@
     </details>
 
     <!-- MÓDULO 3 -->
-    <details class="module-details" open>
+    <details class="module-details" id="mod-3">
       <summary class="module-summary">
         Módulo 3: Perfil Conductual y Personalidad <i class="fas fa-chevron-down"></i>
       </summary>
@@ -302,7 +302,7 @@
     </details>
 
     <!-- MÓDULO 4 -->
-    <details class="module-details">
+    <details class="module-details" id="mod-4">
       <summary class="module-summary">
         Módulo 4: Situacional y Toma de Decisiones <i class="fas fa-chevron-down"></i>
       </summary>
@@ -432,5 +432,49 @@
 
     <div class="footer">Alexis Enrique Pérez Escalante · Cédula 13076310 · alexis_enrique97@outlook.com · +52 993 174 1910</div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const detailsElements = document.querySelectorAll("details.module-details");
+      const storageKey = "analisis_modules_state";
+      const expirationTime = 60 * 60 * 1000; // 1 hora en milisegundos
+
+      // Cargar estado guardado
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        const { timestamp, states } = JSON.parse(savedData);
+        const now = new Date().getTime();
+
+        // Verificar si ha pasado menos de una hora
+        if (now - timestamp < expirationTime) {
+          detailsElements.forEach((details, index) => {
+            if (states[index]) {
+              details.setAttribute("open", "");
+            } else {
+              details.removeAttribute("open");
+            }
+          });
+        } else {
+          // Si expiró, limpiar memoria
+          localStorage.removeItem(storageKey);
+        }
+      }
+
+      // Función para guardar el estado en localStorage
+      const saveState = () => {
+        const states = Array.from(detailsElements).map(d => d.hasAttribute("open"));
+        const data = {
+          timestamp: new Date().getTime(),
+          states: states
+        };
+        localStorage.setItem(storageKey, JSON.stringify(data));
+      };
+
+      // Escuchar cuando el usuario abre o cierra un módulo
+      detailsElements.forEach(details => {
+        details.addEventListener("toggle", saveState);
+      });
+    });
+  </script>
 </body>
 </html>
