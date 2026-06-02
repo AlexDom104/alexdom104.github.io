@@ -82,24 +82,41 @@
 </head>
 <body>
   <div class="container">
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
 
     <div class="profile-header">
 
-      <!-- Contenedor ocupa el espacio fijo; la img vuela encima con position:absolute -->
+      <div class="profile-img-wrap" id="img-wrap">
+        <img
+          src="https://i.imgur.com/kcHX24F.jpg"
+          alt="Alexis Pérez"
+          class="profile-img"
+          id="profile-img"
+        >
+      </div>
 
-      <h1>Alexis Enrique Pérez Escalante</h1>
+      <h1>Alexis Pérez</h1>
       <p>Lic. en Mercadotecnia | Perfil Tecnológico | Especialista en Automatización</p>
 
-      <div class="nav-grid" style="grid-template-columns: repeat(2, 1fr);">
-        <a href="https://drive.google.com/file/d/17CmmYiOBJi9BHYVzmZkaE5nNZp-152Vb/view?usp=sharing" target="_blank" class="nav-card">
+      <div class="nav-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 25px;">
+        
+        <a href="https://drive.google.com/file/d/17CmmYiOBJi9BHYVzmZkaE5nNZp-152Vb/view?usp=sharing" target="_blank" class="nav-card" style="padding: 12px 10px;">
           <i class="fas fa-file-pdf"></i>
-          <h3>Curriculum Vitae</h3>
+          <h3 style="margin: 5px 0 0 0; padding: 0; border: none;">Curriculum Vitae</h3>
         </a>
-        <a href="https://drive.google.com/file/d/1kCITSfX6NCnD0xHDtutoTTc7gbWJkcDG/view?usp=sharing" target="_blank" class="nav-card">
+        <a href="https://drive.google.com/file/d/1kCITSfX6NCnD0xHDtutoTTc7gbWJkcDG/view?usp=sharing" target="_blank" class="nav-card" style="padding: 12px 10px;">
           <i class="fas fa-briefcase"></i>
-          <h3>Portafolio</h3>
+          <h3 style="margin: 5px 0 0 0; padding: 0; border: none;">Portafolio</h3>
         </a>
+
+        <a href="#" target="_blank" class="nav-card" style="padding: 8px 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fas fa-paperclip" style="font-size: 1rem; margin: 0;"></i>
+          <h3 style="margin: 0; padding: 0; border: none; font-size: 0.9rem;">Curriculum - Anexo</h3>
+        </a>
+        <a href="#" target="_blank" class="nav-card" style="padding: 8px 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fas fa-brain" style="font-size: 1rem; margin: 0;"></i>
+          <h3 style="margin: 0; padding: 0; border: none; font-size: 0.9rem;">Análisis Psicométrico</h3>
+        </a>
+
         <a href="servicios.html" class="nav-card" style="
           grid-column: 1 / -1; padding: 18px 20px;
           border-color: var(--cian-brillo);
@@ -107,8 +124,8 @@
           display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px;">
           <i class="fas fa-rocket" style="font-size:2rem; color: var(--cian-brillo); margin-bottom:0;"></i>
           <div style="text-align:left;">
-            <h3 style="color: var(--cian-brillo); font-size:1.3rem;">Servicios Freelance</h3>
-            <p style="margin-top:3px; font-size:0.88rem;">Automatización · Marketing Digital · Diseño · Desarrollo Web</p>
+            <h3 style="color: var(--cian-brillo); font-size:1.3rem; margin: 0; padding: 0; border: none;">Servicios Freelance</h3>
+            <p style="margin-top:3px; font-size:0.88rem; margin-bottom: 0;">Automatización · Marketing Digital · Diseño · Desarrollo Web</p>
           </div>
         </a>
       </div>
@@ -264,7 +281,7 @@
       }
     }
 
-    // Al hacer clic en la foto pequeña, vuelve al inicio de la página
+    // Al hacer clic en la foto pequeña, vuelve al inicio de la página sin redireccionar
     img.addEventListener('click', () => {
       if (img.classList.contains('sticky-small')) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
