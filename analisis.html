@@ -48,6 +48,11 @@
     .nota-box { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; margin-top: 2rem; border-left: 5px solid var(--azul-boton); }
     .nota-text { font-size: 13px; color: var(--cian-brillo); line-height: 1.6; text-align: justify; }
     .footer { font-size: 12px; color: #aaa; text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #333; }
+    
+    /* ══ BOTÓN VOLVER ARRIBA ══ */
+    .scroll-top-btn { position: fixed; bottom: 25px; right: 25px; width: 45px; height: 45px; background: var(--rosa-principal); color: #fff; border: 2px solid var(--rosa-oscuro); border-radius: 50%; font-size: 18px; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 80, 133, 0.5); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s ease; z-index: 999; }
+    .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .scroll-top-btn:hover { background: var(--rosa-oscuro); box-shadow: 0 6px 20px rgba(239, 80, 133, 0.7); transform: translateY(-3px); }
   </style>
 </head>
 <body>
@@ -64,7 +69,6 @@
       <span class="badge">Cédula 13076310</span>
     </div>
 
-    <!-- MÓDULO 1 -->
     <details class="module-details" id="mod-1">
       <summary class="module-summary">
         Módulo 1: Conocimientos Técnicos y Herramientas <i class="fas fa-chevron-down"></i>
@@ -143,7 +147,6 @@
       </div>
     </details>
 
-    <!-- MÓDULO 2 -->
     <details class="module-details" id="mod-2">
       <summary class="module-summary">
         Módulo 2: Razonamiento Lógico y Analítico <i class="fas fa-chevron-down"></i>
@@ -222,7 +225,6 @@
       </div>
     </details>
 
-    <!-- MÓDULO 3 -->
     <details class="module-details" id="mod-3">
       <summary class="module-summary">
         Módulo 3: Perfil Conductual y Personalidad <i class="fas fa-chevron-down"></i>
@@ -301,7 +303,6 @@
       </div>
     </details>
 
-    <!-- MÓDULO 4 -->
     <details class="module-details" id="mod-4">
       <summary class="module-summary">
         Módulo 4: Situacional y Toma de Decisiones <i class="fas fa-chevron-down"></i>
@@ -413,6 +414,18 @@
       <div class="bar-label"><strong>Autonomía en Debugging y Problem Solving</strong><span>Nivel Experto</span></div>
       <div class="bar-track"><div class="bar-fill navy" style="width:95%"></div></div>
     </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Pensamiento Analítico y Data-Driven</strong><span>Avanzado</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:96%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Adaptabilidad a Ecosistemas IA</strong><span>Nivel Máximo</span></div>
+      <div class="bar-track"><div class="bar-fill navy" style="width:100%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Toma de Decisiones en Crisis</strong><span>Muy Alta</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+    </div>
 
     <div class="stitle">Perfilado HR · Resumen de Valor para la Organización</div>
 
@@ -421,8 +434,30 @@
       <div class="profile-title">Arquitecto de Automatización e Integrador Digital</div>
       <div class="profile-desc">
         El candidato manifiesta un perfil neuro-conductual anclado en la eficiencia, el pragmatismo tecnológico y la objetividad de los datos (Data-Driven). Destaca su profunda aversión a la burocracia, la "jerga corporativa vacía" y los procesos ineficientes, supliendo estos cuellos de botella con automatización (Scripts) y herramientas de IA de vanguardia.
-        <br><br>
-        <strong>Ventaja para RRHH/Gerencia:</strong> No requiere micro-gestión. Es un perfil "Plug-and-Play" capaz de asumir un sistema caótico, aislar fallos lógicos, depurar el entorno operativo y entregar un ecosistema escalable. Altamente recomendado para roles donde la intersección entre tecnología, marketing y programación dictamine el éxito de la empresa.
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Gestión Operativa</div>
+      <div class="profile-title">Metodología de Resolución de Problemas</div>
+      <div class="profile-desc">
+        Aborda los errores y caídas de sistema desde una perspectiva clínica (identificar logs, aislar variables, aplicar parche, documentar causa raíz). Este rasgo minimiza la recurrencia de fallos críticos y fomenta una cultura de mejora continua sin pérdida de tiempo en justificaciones.
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Toma de Decisiones</div>
+      <div class="profile-title">Priorización Basada en Criticidad</div>
+      <div class="profile-desc">
+        Demuestra un excelente manejo del "triage" operativo. Ante múltiples urgencias, clasifica instintivamente entre problemas bloqueantes (caídas de servidor, fugas de presupuesto) y tareas secundarias (diseño, reportes de rutina), garantizando la continuidad del negocio bajo escenarios de alta presión.
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Curva de Aprendizaje</div>
+      <div class="profile-title">Adopción Tecnológica Acelerada</div>
+      <div class="profile-desc">
+        Exhibe una dependencia nula de capacitaciones formales o micro-management para adoptar nuevas plataformas. Ante un CRM desconocido o una IA emergente, aplica ingeniería inversa y se apoya directamente en la documentación oficial (APIs, manuales técnicos), lo que lo hace un perfil altamente adaptable y "Plug-and-Play".
       </div>
     </div>
 
@@ -433,19 +468,22 @@
     <div class="footer">Alexis Enrique Pérez Escalante · Cédula 13076310 · alexis_enrique97@outlook.com · +52 993 174 1910</div>
   </div>
 
+  <button id="scrollTopBtn" class="scroll-top-btn" title="Volver arriba">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Lógica de estado de módulos (Local Storage)
       const detailsElements = document.querySelectorAll("details.module-details");
       const storageKey = "analisis_modules_state";
       const expirationTime = 60 * 60 * 1000; // 1 hora en milisegundos
 
-      // Cargar estado guardado
       const savedData = localStorage.getItem(storageKey);
       if (savedData) {
         const { timestamp, states } = JSON.parse(savedData);
         const now = new Date().getTime();
 
-        // Verificar si ha pasado menos de una hora
         if (now - timestamp < expirationTime) {
           detailsElements.forEach((details, index) => {
             if (states[index]) {
@@ -455,12 +493,10 @@
             }
           });
         } else {
-          // Si expiró, limpiar memoria
           localStorage.removeItem(storageKey);
         }
       }
 
-      // Función para guardar el estado en localStorage
       const saveState = () => {
         const states = Array.from(detailsElements).map(d => d.hasAttribute("open"));
         const data = {
@@ -470,9 +506,23 @@
         localStorage.setItem(storageKey, JSON.stringify(data));
       };
 
-      // Escuchar cuando el usuario abre o cierra un módulo
       detailsElements.forEach(details => {
         details.addEventListener("toggle", saveState);
+      });
+
+      // Lógica del botón Volver Arriba
+      const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          scrollTopBtn.classList.add("visible");
+        } else {
+          scrollTopBtn.classList.remove("visible");
+        }
+      });
+
+      scrollTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
     });
   </script>
