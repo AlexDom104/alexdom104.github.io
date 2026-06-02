@@ -112,7 +112,7 @@
       font-weight: bold;
     }
 
-    /* Contenedor de botones (Añadido) */
+    /* Contenedor de botones */
     #spotify-btn-container {
       display: flex;
       flex-direction: column;
@@ -301,22 +301,27 @@
   <div class="container">
     <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
 
-    <h1 id="album-title"><i class="fas fa-compact-disc"></i> Caminos de Melodía</h1>
+    <h1 id="album-title"><i class="fas fa-compact-disc"></i> Sencillos</h1>
 
     <div class="album-gallery">
       <div class="album selected" onclick="selectAlbum(0)">
+        <!-- Imagen por defecto para Sencillos (usando tu logo general) -->
+        <img src="https://i.imgur.com/dSIZrFm.png" alt="Sencillos" style="background:#111;">
+        <div class="album-label">Sencillos</div>
+      </div>
+      <div class="album" onclick="selectAlbum(1)">
         <img src="https://i.imgur.com/VsaobqC.jpeg" alt="Caminos de Melodía">
         <div class="album-label">Caminos de Melodía</div>
       </div>
-      <div class="album" onclick="selectAlbum(1)">
+      <div class="album" onclick="selectAlbum(2)">
         <img src="https://imgur.com/v9NQlEy.jpeg" alt="Sombras del Camino">
         <div class="album-label">Sombras del Camino</div>
       </div>
-      <div class="album" onclick="selectAlbum(2)">
+      <div class="album" onclick="selectAlbum(3)">
         <img src="https://imgur.com/uxScrDR.png" alt="El Corazón Se Eleva">
         <div class="album-label">El Corazón Se Eleva</div>
       </div>
-      <div class="album" onclick="selectAlbum(3)">
+      <div class="album" onclick="selectAlbum(4)">
         <img src="https://imgur.com/36GpRad.png" alt="Mirando Atrás">
         <div class="album-label" id="album4-label">Mirando Atrás</div>
       </div>
@@ -335,6 +340,14 @@
   </a>
 
   <script>
+    // 0. SENCILLOS
+    const sencillos = [
+      { title: "Tierra Viva", url: "https://www.youtube.com/embed/7Bef-u9i26A?autoplay=1" },
+      { title: "Orbita", url: "" },
+      { title: "Todo estará bien", url: "" }
+    ];
+
+    // 1. CAMINOS DE MELODÍA
     const caminosDeMelodia = [
       { title: "Luces del Camino", url: "https://www.youtube.com/embed/dELrc_EeqeE?autoplay=1" },
       { title: "Tan Hermosa para Mi", url: "https://www.youtube.com/embed/P1lPXweu0Eg?autoplay=1" },
@@ -358,6 +371,7 @@
       { title: "Sueños y Estrellas", url: "https://www.youtube.com/embed/HYz8WfV5O0A?autoplay=1" }
     ];
 
+    // 2. SOMBRAS DEL CAMINO
     const sombrasDelCamino = [
       { title: "Alexdom", url: "https://youtube.com/embed/bYSwJGzjCfg?autoplay=1" },
       { title: "Buenos Días Mundo", url: "https://youtube.com/embed/XDDJWmp4DKY?autoplay=1" },
@@ -411,6 +425,7 @@
       { title: "El Verdadero Reguetón", url: "https://youtube.com/embed/cYEjuWomzCI?autoplay=1" }
     ];
 
+    // 3. EL CORAZÓN SE ELEVA
     const elCorazonSeEleva = [
       { title: "Deja Que el Viento Nos Lleve", url: "https://www.youtube.com/embed/_hhSXnzKLaE?autoplay=1" },
       { title: "Dime Lo Que Quieres", url: "https://www.youtube.com/embed/58zHdJMv2W4?autoplay=1" },
@@ -464,18 +479,70 @@
       { title: "Un regalo", url: "https://www.youtube.com/embed/ZN7CTi-Sq14?autoplay=1" }
     ];
 
-    // 4to álbum - agrega tus canciones aquí
-    const album4 = [
-      { title: "Desperté", url: "https://www.youtube.com/embed/64N-UY-5j0E?autoplay=1" }
+    // 4. MIRANDO ATRÁS
+    const mirandoAtras = [
+      { title: "Aquel momento", url: "https://www.youtube.com/embed/H96TitvOUhw?autoplay=1" },
+      { title: "Cansado de mirar", url: "https://www.youtube.com/embed/gST_Qpkz93M?autoplay=1" },
+      { title: "Rutina", url: "https://www.youtube.com/embed/rUR74zpk3nk?autoplay=1" },
+      { title: "Fin de semana", url: "https://www.youtube.com/embed/3FWI_u6kqXs?autoplay=1" },
+      { title: "Recuerdo hablar", url: "https://www.youtube.com/embed/tKle-o3zrAU?autoplay=1" },
+      { title: "Ganartelo", url: "https://www.youtube.com/embed/Gqqe7dBAeYw?autoplay=1" },
+      { title: "Otra Historia", url: "https://www.youtube.com/embed/4g4ymQlr5mw?autoplay=1" },
+      { title: "Una Mirada", url: "https://www.youtube.com/embed/7W7NukoixVY?autoplay=1" },
+      { title: "Inevitable", url: "https://www.youtube.com/embed/JiuVTIgfSPo?autoplay=1" },
+      { title: "Gigantes", url: "https://www.youtube.com/embed/cZhA4QY9NFc?autoplay=1" },
+      { title: "Asfalto Caliente", url: "https://www.youtube.com/embed/d8YHEAIm3XU?autoplay=1" },
+      { title: "Desperté", url: "https://www.youtube.com/embed/64N-UY-5j0E?autoplay=1" },
+      { title: "Luz de la tele", url: "" },
+      { title: "Ecos en mi mente", url: "" },
+      { title: "Aquel momento - Remix", url: "" },
+      { title: "Cansado de mirar - Remix", url: "" },
+      { title: "Rutina - Remix", url: "" },
+      { title: "Fin de semana - Remix", url: "" },
+      { title: "Recuerdo hablar - Remix", url: "" },
+      { title: "Ganartelo - Remix", url: "" },
+      { title: "Otra historia - Remix", url: "" },
+      { title: "Una Mirada - Remix", url: "" },
+      { title: "Inevitable - Remix", url: "" },
+      { title: "Gigantes - Remix", url: "" },
+      { title: "Asfalto Caliente - Remix", url: "" },
+      { title: "Desperté - Remix", url: "" },
+      { title: "Quiero salir - Remix", url: "" },
+      { title: "Lo sabrias - Remix", url: "" },
+      { title: "Despierto en la oscuridad - Remix", url: "" },
+      { title: "Quiero Olvidarte - Remix", url: "" },
+      { title: "Todo estará bien - Remix", url: "" },
+      { title: "Siempre por ti - Remix", url: "" },
+      { title: "Estrella Fugaz - Remix", url: "" },
+      { title: "Bajo Cielos Rosados - Remix", url: "" },
+      { title: "Sueños y Estrellas - Remix", url: "" },
+      { title: "Deja que el viento nos lleve - Remix", url: "" },
+      { title: "Afortunado - Remix", url: "" },
+      { title: "Al Borde - Remix", url: "" },
+      { title: "Ahora o nunca - Remix", url: "" },
+      { title: "Tejados - Remix", url: "" },
+      { title: "Grandes Esperanzas - Remix", url: "" },
+      { title: "Evangelio de los Caídos - Remix", url: "" },
+      { title: "Estoy listo para ir - Remix", url: "" },
+      { title: "Dejalo Ir - Remix", url: "" },
+      { title: "Mona Lisa - Remix", url: "" },
+      { title: "Caída Libre - Remix", url: "" },
+      { title: "Cansado de solo mirar - Remix", url: "" },
+      { title: "Eres muy lindo - Remix", url: "" },
+      { title: "Luces del camino - Remix", url: "" },
+      { title: "Aviones en la noche - Remix", url: "" }
     ];
 
-    const albums = [caminosDeMelodia, sombrasDelCamino, elCorazonSeEleva, album4];
-    const albumNames = ["Caminos de Melodía", "Sombras del Camino", "El Corazón Se Eleva", "Mirando Atrás"];
+    const albums = [sencillos, caminosDeMelodia, sombrasDelCamino, elCorazonSeEleva, mirandoAtras];
+    const albumNames = ["Sencillos", "Caminos de Melodía", "Sombras del Camino", "El Corazón Se Eleva", "Mirando Atrás"];
+    
+    // Lista de enlaces a Spotify correspondientes al array superior
     const albumSpotify = [
-      "https://open.spotify.com/intl-es/album/1D8m5LtybUBxlm2hYqupfQ?si=CE9aqWALSNuIUNREXis95w",
-      "https://open.spotify.com/intl-es/album/2w15CKYIfnzrWN50c9S5pX?si=55buwkhjRAeKXx4JEh2EFw",
-      "https://open.spotify.com/intl-es/album/47zQFnrFUocqeFwZLSWkus?si=JdZ5mBDtSeWhfT6SZzNtFQ",
-      null
+      null, // Sencillos
+      "https://open.spotify.com/intl-es/album/1D8m5LtybUBxlm2hYqupfQ?si=CE9aqWALSNuIUNREXis95w", // Caminos
+      "https://open.spotify.com/intl-es/album/2w15CKYIfnzrWN50c9S5pX?si=55buwkhjRAeKXx4JEh2EFw", // Sombras
+      "https://open.spotify.com/intl-es/album/47zQFnrFUocqeFwZLSWkus?si=JdZ5mBDtSeWhfT6SZzNtFQ", // Corazon
+      "https://open.spotify.com/intl-es/album/57ts3sT3i5ZIYWsFVi09a9?si=P44I9MMvTxW1iefzQ7GnsA"  // Mirando Atras
     ];
 
     let currentPlayer = null;
@@ -494,11 +561,22 @@
       tracks.forEach((track, index) => {
         const div = document.createElement("div");
         div.className = "track";
+        
+        // Verifica si la pista tiene URL para habilitar el botón de reproducir
+        let actionHtml = '';
+        if (track.url && track.url.trim() !== "") {
+          actionHtml = `<button onclick="playTrack(${index}, ${albumIndex})"><i class="fas fa-play"></i> Reproducir</button>`;
+        } else {
+          actionHtml = `<span style="font-size:0.8rem; color:#888; font-style:italic; padding:6px 14px;">Próximamente</span>`;
+        }
+
         div.innerHTML = `
           <div class="track-header">
-            <span class="track-number">${index + 1}</span>
-            <span class="track-title">${track.title}</span>
-            <button onclick="playTrack(${index}, ${albumIndex})"><i class="fas fa-play"></i> Reproducir</button>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span class="track-number">${index + 1}</span>
+              <span class="track-title">${track.title}</span>
+            </div>
+            ${actionHtml}
           </div>
           <div class="player-container" id="player-${albumIndex}-${index}"></div>
         `;
@@ -561,7 +639,7 @@
       renderTracks(index);
     }
 
-    // Inicializamos con el primer álbum
+    // Inicializamos con Sencillos (ahora es el índice 0)
     selectAlbum(0);
   </script>
 </body>
