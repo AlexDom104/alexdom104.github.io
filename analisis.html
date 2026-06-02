@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análisis Psicométrico | Alexis Pérez</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* ══ VARIABLES DE TEMA (Estilo Sobre Mí) ══ */
+    :root {
+      --rosa-principal: #ef5085;
+      --rosa-oscuro: #8b1a44;
+      --cian-brillo: #70ddd8;
+      --fondo-sitio: #0d1117; /* Fondo general oscuro */
+      --contraste-fondo: #161b22; /* Fondo de las tarjetas */
+      --azul-boton: #1a4a7a;
+      --texto-principal: #f0f6fc;
+      --texto-secundario: #8b949e;
+      --borde-tenue: #30363d;
+    }
+
+    body {
+      background-color: var(--fondo-sitio);
+      color: var(--texto-principal);
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    /* ══ BOTÓN VOLVER ══ */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cian-brillo);
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 25px;
+      transition: 0.3s;
+    }
+    .back-link:hover {
+      color: var(--rosa-principal);
+      transform: translateX(-5px);
+    }
+
+    /* ══ CABECERA ══ */
+    .header {
+      border-bottom: 2px solid var(--rosa-principal);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .htitle { font-size: 28px; font-weight: bold; color: var(--rosa-principal); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+    .hsub { font-size: 14px; color: var(--texto-secundario); margin-top: 4px; }
+    .badge { background: var(--rosa-principal); color: #fff; font-size: 12px; font-weight: bold; padding: 6px 14px; border-radius: 20px; box-shadow: 0 0 15px var(--rosa-oscuro); }
+
+    /* ══ TÍTULOS DE SECCIÓN ══ */
+    .stitle { font-size: 16px; font-weight: bold; color: var(--cian-brillo); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--borde-tenue); padding-bottom: 8px; margin: 2.5rem 0 1.5rem; }
+
+    /* ══ BLOQUES DE PREGUNTAS ══ */
+    .qblock {
+      background: var(--contraste-fondo);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      border-left: 5px solid var(--azul-boton);
+      box-shadow: 4px 4px 0px var(--rosa-oscuro);
+    }
+    .qnum { font-size: 13px; color: var(--cian-brillo); font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .qtext { font-size: 16px; color: var(--texto-principal); font-weight: 500; margin-bottom: 1rem; }
+    .opt { font-size: 14px; color: var(--texto-secundario); padding: 6px 0; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+    .opt.sel { color: var(--texto-principal); font-weight: bold; }
+    
+    .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--texto-secundario); flex-shrink: 0; transition: 0.3s; }
+    .dot.filled { background: var(--rosa-principal); border-color: var(--rosa-principal); box-shadow: 0 0 10px var(--rosa-principal); }
+
+    /* ══ RESULTADOS (Métricas) ══ */
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 2rem; }
+    .metric { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--borde-tenue); text-align: center; }
+    .metric-label { font-size: 12px; color: var(--texto-secundario); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
+    .metric-val { font-size: 28px; font-weight: bold; color: var(--cian-brillo); text-shadow: 0 0 10px rgba(112,221,216,0.3); }
+    .metric-val span { font-size: 16px; color: var(--texto-secundario); font-weight: normal; text-shadow: none; }
+
+    /* ══ BARRAS DE PROGRESO ══ */
+    .bar-wrap { margin-bottom: 1.5rem; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--texto-secundario); margin-bottom: 6px; }
+    .bar-label strong { color: var(--texto-principal); font-weight: 500; }
+    .bar-track { height: 10px; background: var(--fondo-sitio); border-radius: 5px; overflow: hidden; border: 1px solid var(--borde-tenue); }
+    .bar-fill { height: 100%; border-radius: 5px; background: var(--rosa-principal); box-shadow: 0 0 15px var(--rosa-oscuro); }
+    .bar-fill.navy { background: var(--cian-brillo); box-shadow: 0 0 15px rgba(112,221,216,0.4); }
+
+    /* ══ TARJETAS DE ANÁLISIS DE PERFIL ══ */
+    .profile-card {
+      background: var(--contraste-fondo);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      border-left: 5px solid var(--rosa-principal);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .profile-tag { font-size: 12px; font-weight: bold; color: var(--cian-brillo); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .profile-title { font-size: 18px; font-weight: bold; color: var(--texto-principal); margin-bottom: 8px; }
+    .profile-desc { font-size: 14px; color: var(--texto-secundario); line-height: 1.6; }
+
+    /* ══ NOTA FINAL ══ */
+    .nota-box { background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.3); border-radius: 12px; padding: 1.2rem; margin-top: 2rem; }
+    .nota-text { font-size: 13px; color: var(--cian-brillo); line-height: 1.6; text-align: justify; }
+    
+    .footer { font-size: 12px; color: var(--texto-secundario); text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--borde-tenue); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <a href="sobremi.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a Sobre Mí</a>
+
+    <div class="header">
+      <div>
+        <div class="htitle">Evaluación psicométrica básica</div>
+        <div class="hsub">Alexis Enrique Pérez Escalante · Lic. en Mercadotecnia · Junio 2026</div>
+        <div class="hsub" style="margin-top:4px;">Aplicada por: Claude (Anthropic) · Sonnet 4.6</div>
+      </div>
+      <span class="badge">Cédula 13076310</span>
+    </div>
+
+    <div class="stitle">Sección 1 — Conocimientos técnicos</div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 1 · Conocimiento técnico</div>
+      <div class="qtext">¿Qué métrica de Facebook Ads indica mejor el costo real por prospecto calificado?</div>
+      <div class="opt"><span class="dot"></span>CTR (Click-Through Rate)</div>
+      <div class="opt"><span class="dot"></span>CPM (Costo por mil impresiones)</div>
+      <div class="opt sel"><span class="dot filled"></span>CPL real vs. leads validados en CRM</div>
+      <div class="opt"><span class="dot"></span>Alcance total de la campaña</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 2 · Conocimiento técnico</div>
+      <div class="qtext">En una estrategia de contenido para redes sociales, ¿qué debe definirse primero?</div>
+      <div class="opt"><span class="dot"></span>El calendario de publicaciones</div>
+      <div class="opt"><span class="dot"></span>Los formatos visuales y plantillas</div>
+      <div class="opt sel"><span class="dot filled"></span>El objetivo de negocio y el perfil de audiencia</div>
+      <div class="opt"><span class="dot"></span>El presupuesto de pauta</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 3 · Conocimiento técnico</div>
+      <div class="qtext">¿Cuál es la ventaja principal de automatizar un CRM con Google Apps Script?</div>
+      <div class="opt"><span class="dot"></span>Reemplaza completamente al equipo de ventas</div>
+      <div class="opt sel"><span class="dot filled"></span>Sincroniza datos entre plataformas sin intervención manual, reduciendo errores</div>
+      <div class="opt"><span class="dot"></span>Genera contenido visual automáticamente</div>
+      <div class="opt"><span class="dot"></span>Aumenta el alcance orgánico en redes sociales</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 4 · Conocimiento técnico</div>
+      <div class="qtext">Al gestionar contenido para varias marcas simultáneamente, ¿qué herramienta o práctica es más crítica?</div>
+      <div class="opt"><span class="dot"></span>Usar la misma plantilla visual para todas</div>
+      <div class="opt"><span class="dot"></span>Publicar el mismo contenido en todas las plataformas</div>
+      <div class="opt sel"><span class="dot filled"></span>Mantener un archivo de control diario por marca con registro de publicaciones</div>
+      <div class="opt"><span class="dot"></span>Delegar la revisión al cliente final</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 5 · Conocimiento técnico</div>
+      <div class="qtext">¿Qué diferencia a un lead Meta de un lead real en una campaña de formularios?</div>
+      <div class="opt"><span class="dot"></span>El lead Meta tiene mayor intención de compra</div>
+      <div class="opt"><span class="dot"></span>No hay diferencia, son el mismo dato</div>
+      <div class="opt sel"><span class="dot filled"></span>El lead Meta incluye tráfico inválido; el lead real es el prospecto validado en CRM</div>
+      <div class="opt"><span class="dot"></span>El lead real proviene solo de campañas orgánicas</div>
+    </div>
+
+    <div class="stitle">Sección 2 — Perfil conductual</div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 6 · Gestión de prioridades</div>
+      <div class="qtext">Cuando tienes varias tareas urgentes al mismo tiempo, ¿cómo decides qué atacar primero?</div>
+      <div class="opt"><span class="dot"></span>Por impacto: lo que mueve más resultados va primero</div>
+      <div class="opt sel"><span class="dot filled"></span>Por deadline: lo que vence antes, primero</div>
+      <div class="opt"><span class="dot"></span>Por esfuerzo: empiezo por lo más rápido para despejar</div>
+      <div class="opt"><span class="dot"></span>Depende del cliente o jefe que más presione</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 7 · Relación con el error</div>
+      <div class="qtext">¿Cómo describes tu relación con los errores en el trabajo?</div>
+      <div class="opt"><span class="dot"></span>Los documento para no repetirlos</div>
+      <div class="opt"><span class="dot"></span>Los asumo, los corrijo y sigo</div>
+      <div class="opt"><span class="dot"></span>Me afectan un rato pero los supero solo</div>
+      <div class="opt sel"><span class="dot filled"></span>Los analizo hasta entender exactamente qué falló</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 8 · Manejo de conflictos</div>
+      <div class="qtext">Si un cliente o jefe te pide algo que sabes que no va a funcionar, ¿qué haces?</div>
+      <div class="opt"><span class="dot"></span>Lo digo directo con argumentos y datos</div>
+      <div class="opt"><span class="dot"></span>Lo hago pero dejo constancia de mi opinión</div>
+      <div class="opt sel"><span class="dot filled"></span>Propongo una alternativa antes de negarme</div>
+      <div class="opt"><span class="dot"></span>Depende de qué tan seguros estén ellos</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 9 · Estilo de trabajo</div>
+      <div class="qtext">¿Cómo prefieres recibir instrucciones de un proyecto nuevo?</div>
+      <div class="opt"><span class="dot"></span>Reunión de seguimiento diario con el equipo</div>
+      <div class="opt sel"><span class="dot filled"></span>Brief escrito claro con objetivo, plazo y recursos disponibles</div>
+      <div class="opt"><span class="dot"></span>Libertad total para interpretar el objetivo</div>
+      <div class="opt"><span class="dot"></span>Ejemplos de trabajos previos similares</div>
+    </div>
+
+    <div class="qblock">
+      <div class="qnum">Pregunta 10 · Adaptabilidad</div>
+      <div class="qtext">Cuando una herramienta o plataforma que usas cambia su interfaz o deja de funcionar, ¿qué haces?</div>
+      <div class="opt"><span class="dot"></span>Espero a que alguien del equipo la domine primero</div>
+      <div class="opt"><span class="dot"></span>Busco un tutorial en YouTube</div>
+      <div class="opt sel"><span class="dot filled"></span>La exploro directamente hasta entenderla, busco documentación si me atasco</div>
+      <div class="opt"><span class="dot"></span>Propongo cambiarla por otra que ya conozco</div>
+    </div>
+
+    <div class="stitle">Resultados</div>
+
+    <div class="results-grid">
+      <div class="metric">
+        <div class="metric-label">Conocimiento técnico</div>
+        <div class="metric-val">5<span>/5</span></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Perfil conductual</div>
+        <div class="metric-val">5<span>/5</span></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Puntaje global</div>
+        <div class="metric-val">100<span>%</span></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Aplicado por</div>
+        <div class="metric-val" style="font-size:18px;">Claude AI</div>
+      </div>
+    </div>
+
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Orientación a resultados</strong><span>Alta</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Pensamiento analítico</strong><span>Muy alta</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Gestión de conflictos</strong><span>Alta</span></div>
+      <div class="bar-track"><div class="bar-fill navy" style="width:85%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Autonomía y adaptabilidad</strong><span>Muy alta</span></div>
+      <div class="bar-track"><div class="bar-fill navy" style="width:93%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Conocimiento de herramientas digitales</strong><span>Avanzado</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+    </div>
+
+    <div class="stitle">Análisis de perfil</div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Gestión del tiempo</div>
+      <div class="profile-title">Orientado al compromiso y al plazo</div>
+      <div class="profile-desc">Prioriza por deadline, lo que indica confiabilidad y cumplimiento de entregas. Perfil adecuado para entornos con múltiples proyectos simultáneos y clientes con fechas definidas.</div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Relación con el error</div>
+      <div class="profile-title">Analítico-correctivo</div>
+      <div class="profile-desc">Ante un error, busca entender la causa raíz antes de continuar. Esto reduce la recurrencia de fallas y genera aprendizaje real. Característica valiosa en roles de gestión de campañas y automatización donde un error puede escalar.</div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Manejo de conflictos</div>
+      <div class="profile-title">Propositivo antes que confrontacional</div>
+      <div class="profile-desc">No se niega de frente ni cede sin opinar: propone alternativas. Perfil que facilita la colaboración sin sacrificar criterio técnico. Funciona bien con clientes que valoran la comunicación directa y constructiva.</div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-tag">Estilo operativo</div>
+      <div class="profile-title">Estructurado y autodidacta</div>
+      <div class="profile-desc">Prefiere instrucciones claras por escrito y explora nuevas herramientas de forma independiente. Alto nivel de autonomía sin requerir supervisión constante. Perfil compatible con trabajo remoto y equipos pequeños o distribuidos.</div>
+    </div>
+
+    <div class="nota-box">
+      <div class="nota-text">Esta evaluación fue diseñada y aplicada por Claude (Anthropic, Sonnet 4.6) con base en el perfil profesional documentado de Alexis Enrique Pérez Escalante. Las preguntas de conocimiento técnico fueron calibradas según su experiencia real en Meta Ads, CRM, gestión de contenido y automatización. El resultado refleja coherencia entre las respuestas y la trayectoria documentada en su portafolio y CV.</div>
+    </div>
+
+    <div class="footer">Alexis Enrique Pérez Escalante · Cédula 13076310 · alexis_enrique97@outlook.com · +52 993 174 1910</div>
+  </div>
+</body>
+</html>
