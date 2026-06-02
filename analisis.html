@@ -7,28 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* ══ VARIABLES DE TEMA (Estilo Sobre Mí) ══ */
-    :root {
-      --rosa-principal: #ef5085;
-      --rosa-oscuro: #8b1a44;
-      --cian-brillo: #70ddd8;
-      --fondo-sitio: #0d1117; /* Fondo general oscuro */
-      --contraste-fondo: #161b22; /* Fondo de las tarjetas */
-      --azul-boton: #1a4a7a;
-      --texto-principal: #f0f6fc;
-      --texto-secundario: #8b949e;
-      --borde-tenue: #30363d;
-    }
-
-    body {
-      background-color: var(--fondo-sitio);
-      color: var(--texto-principal);
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-    }
-
+    /* ══ HEREDA ESTILOS GLOBALES DE STYLES.CSS ══ */
     .container {
       max-width: 800px;
       margin: 0 auto;
@@ -63,11 +42,11 @@
       gap: 15px;
     }
     .htitle { font-size: 28px; font-weight: bold; color: var(--rosa-principal); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
-    .hsub { font-size: 14px; color: var(--texto-secundario); margin-top: 4px; }
+    .hsub { font-size: 14px; color: #aaa; margin-top: 4px; }
     .badge { background: var(--rosa-principal); color: #fff; font-size: 12px; font-weight: bold; padding: 6px 14px; border-radius: 20px; box-shadow: 0 0 15px var(--rosa-oscuro); }
 
     /* ══ TÍTULOS DE SECCIÓN ══ */
-    .stitle { font-size: 16px; font-weight: bold; color: var(--cian-brillo); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--borde-tenue); padding-bottom: 8px; margin: 2.5rem 0 1.5rem; }
+    .stitle { font-size: 16px; font-weight: bold; color: var(--cian-brillo); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 8px; margin: 2.5rem 0 1.5rem; }
 
     /* ══ BLOQUES DE PREGUNTAS ══ */
     .qblock {
@@ -76,28 +55,28 @@
       padding: 1.5rem;
       margin-bottom: 1.25rem;
       border-left: 5px solid var(--azul-boton);
-      box-shadow: 4px 4px 0px var(--rosa-oscuro);
+      box-shadow: 5px 5px 0px var(--rosa-oscuro);
     }
     .qnum { font-size: 13px; color: var(--cian-brillo); font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
-    .qtext { font-size: 16px; color: var(--texto-principal); font-weight: 500; margin-bottom: 1rem; }
-    .opt { font-size: 14px; color: var(--texto-secundario); padding: 6px 0; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-    .opt.sel { color: var(--texto-principal); font-weight: bold; }
+    .qtext { font-size: 16px; font-weight: 500; margin-bottom: 1rem; color: #fff; }
+    .opt { font-size: 14px; color: #aaa; padding: 6px 0; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+    .opt.sel { color: #fff; font-weight: bold; }
     
-    .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--texto-secundario); flex-shrink: 0; transition: 0.3s; }
-    .dot.filled { background: var(--rosa-principal); border-color: var(--rosa-principal); box-shadow: 0 0 10px var(--rosa-principal); }
+    .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #aaa; flex-shrink: 0; transition: 0.3s; }
+    .dot.filled { background: var(--rosa-principal); border-color: var(--rosa-principal); box-shadow: 0 0 10px var(--rosa-oscuro); }
 
     /* ══ RESULTADOS (Métricas) ══ */
     .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 2rem; }
-    .metric { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--borde-tenue); text-align: center; }
-    .metric-label { font-size: 12px; color: var(--texto-secundario); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
+    .metric { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; border: 1px solid #333; text-align: center; }
+    .metric-label { font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
     .metric-val { font-size: 28px; font-weight: bold; color: var(--cian-brillo); text-shadow: 0 0 10px rgba(112,221,216,0.3); }
-    .metric-val span { font-size: 16px; color: var(--texto-secundario); font-weight: normal; text-shadow: none; }
+    .metric-val span { font-size: 16px; color: #aaa; font-weight: normal; text-shadow: none; }
 
     /* ══ BARRAS DE PROGRESO ══ */
     .bar-wrap { margin-bottom: 1.5rem; }
-    .bar-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--texto-secundario); margin-bottom: 6px; }
-    .bar-label strong { color: var(--texto-principal); font-weight: 500; }
-    .bar-track { height: 10px; background: var(--fondo-sitio); border-radius: 5px; overflow: hidden; border: 1px solid var(--borde-tenue); }
+    .bar-label { display: flex; justify-content: space-between; font-size: 14px; color: #aaa; margin-bottom: 6px; }
+    .bar-label strong { color: #fff; font-weight: 500; }
+    .bar-track { height: 10px; background: #222; border-radius: 5px; overflow: hidden; border: 1px solid #333; }
     .bar-fill { height: 100%; border-radius: 5px; background: var(--rosa-principal); box-shadow: 0 0 15px var(--rosa-oscuro); }
     .bar-fill.navy { background: var(--cian-brillo); box-shadow: 0 0 15px rgba(112,221,216,0.4); }
 
@@ -108,22 +87,23 @@
       padding: 1.5rem;
       margin-bottom: 1.25rem;
       border-left: 5px solid var(--rosa-principal);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 5px 5px 0px var(--rosa-oscuro);
     }
     .profile-tag { font-size: 12px; font-weight: bold; color: var(--cian-brillo); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
-    .profile-title { font-size: 18px; font-weight: bold; color: var(--texto-principal); margin-bottom: 8px; }
-    .profile-desc { font-size: 14px; color: var(--texto-secundario); line-height: 1.6; }
+    .profile-title { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 8px; }
+    .profile-desc { font-size: 14px; color: #ddd; line-height: 1.6; }
 
     /* ══ NOTA FINAL ══ */
-    .nota-box { background: rgba(112,221,216,0.05); border: 1px solid rgba(112,221,216,0.3); border-radius: 12px; padding: 1.2rem; margin-top: 2rem; }
+    .nota-box { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; margin-top: 2rem; border-left: 5px solid var(--azul-boton); }
     .nota-text { font-size: 13px; color: var(--cian-brillo); line-height: 1.6; text-align: justify; }
     
-    .footer { font-size: 12px; color: var(--texto-secundario); text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--borde-tenue); }
+    .footer { font-size: 12px; color: #aaa; text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #333; }
   </style>
 </head>
 <body>
   <div class="container">
     
+    <!-- Botón para regresar al perfil principal -->
     <a href="sobremi.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a Sobre Mí</a>
 
     <div class="header">
