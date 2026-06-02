@@ -7,91 +7,44 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* ══ HEREDA ESTILOS GLOBALES DE STYLES.CSS ══ */
     .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
-
-    /* ══ BOTÓN VOLVER ══ */
     .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--cian-brillo); text-decoration: none; font-weight: bold; margin-bottom: 25px; transition: 0.3s; }
     .back-link:hover { color: var(--rosa-principal); transform: translateX(-5px); }
-
-    /* ══ CABECERA ══ */
     .header { border-bottom: 2px solid var(--rosa-principal); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; }
     .htitle { font-size: 28px; font-weight: bold; color: var(--rosa-principal); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
     .hsub { font-size: 14px; color: #aaa; margin-top: 4px; }
     .badge { background: var(--rosa-principal); color: #fff; font-size: 12px; font-weight: bold; padding: 6px 14px; border-radius: 20px; box-shadow: 0 0 15px var(--rosa-oscuro); }
-
-    /* ══ MÓDULOS DESPLEGABLES ══ */
     .module-details { margin-bottom: 1.5rem; }
-    .module-summary {
-      background: var(--contraste-fondo);
-      padding: 1.2rem 1.5rem;
-      border-radius: 12px;
-      border-left: 5px solid var(--cian-brillo);
-      box-shadow: 5px 5px 0px var(--rosa-oscuro);
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: 0.3s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+    .module-summary { background: var(--contraste-fondo); padding: 1.2rem 1.5rem; border-radius: 12px; border-left: 5px solid var(--cian-brillo); box-shadow: 5px 5px 0px var(--rosa-oscuro); font-size: 16px; font-weight: bold; color: #fff; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
     .module-summary::-webkit-details-marker { display: none; }
     .module-summary:hover { border-left-color: var(--rosa-principal); transform: translateY(-2px); }
     .module-summary i { color: var(--rosa-principal); transition: transform 0.3s ease; }
     .module-details[open] .module-summary i { transform: rotate(180deg); color: var(--cian-brillo); }
     .module-content { padding: 1.5rem 0 0.5rem 0; animation: fadeIn 0.4s ease; }
-
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* ══ BLOQUES DE PREGUNTAS ══ */
-    .qblock {
-      background: var(--contraste-fondo);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-      border-left: 3px solid #333;
-      border-top: 1px solid #222;
-      border-right: 1px solid #222;
-      border-bottom: 1px solid #222;
-    }
+    .qblock { background: var(--contraste-fondo); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; border-left: 3px solid #333; border-top: 1px solid #222; border-right: 1px solid #222; border-bottom: 1px solid #222; }
     .qnum { font-size: 12px; color: var(--cian-brillo); font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
     .qtext { font-size: 15px; font-weight: 500; margin-bottom: 1rem; color: #fff; line-height: 1.5; }
     .opt { font-size: 13.5px; color: #aaa; padding: 6px 0; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
     .opt.sel { color: #fff; font-weight: bold; }
-    
     .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #aaa; flex-shrink: 0; transition: 0.3s; }
     .dot.filled { background: var(--rosa-principal); border-color: var(--rosa-principal); box-shadow: 0 0 10px var(--rosa-oscuro); }
-
-    /* ══ SEPARADORES Y TÍTULOS ══ */
     .stitle { font-size: 16px; font-weight: bold; color: var(--cian-brillo); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 8px; margin: 2.5rem 0 1.5rem; }
-
-    /* ══ RESULTADOS (Métricas) ══ */
     .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 2rem; }
     .metric { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; border: 1px solid #333; text-align: center; }
     .metric-label { font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
     .metric-val { font-size: 28px; font-weight: bold; color: var(--cian-brillo); text-shadow: 0 0 10px rgba(112,221,216,0.3); }
     .metric-val span { font-size: 16px; color: #aaa; font-weight: normal; text-shadow: none; }
-
-    /* ══ BARRAS DE PROGRESO ══ */
     .bar-wrap { margin-bottom: 1.5rem; }
     .bar-label { display: flex; justify-content: space-between; font-size: 14px; color: #aaa; margin-bottom: 6px; }
     .bar-label strong { color: #fff; font-weight: 500; }
     .bar-track { height: 10px; background: #222; border-radius: 5px; overflow: hidden; border: 1px solid #333; }
     .bar-fill { height: 100%; border-radius: 5px; background: var(--rosa-principal); box-shadow: 0 0 15px var(--rosa-oscuro); }
     .bar-fill.navy { background: var(--cian-brillo); box-shadow: 0 0 15px rgba(112,221,216,0.4); }
-
-    /* ══ TARJETAS DE ANÁLISIS DE PERFIL ══ */
     .profile-card { background: var(--contraste-fondo); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; border-left: 5px solid var(--rosa-principal); box-shadow: 5px 5px 0px var(--rosa-oscuro); }
     .profile-tag { font-size: 12px; font-weight: bold; color: var(--cian-brillo); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
     .profile-title { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 8px; }
     .profile-desc { font-size: 14px; color: #ddd; line-height: 1.6; }
-
-    /* ══ NOTA FINAL ══ */
     .nota-box { background: var(--contraste-fondo); border-radius: 12px; padding: 1.2rem; margin-top: 2rem; border-left: 5px solid var(--azul-boton); }
     .nota-text { font-size: 13px; color: var(--cian-brillo); line-height: 1.6; text-align: justify; }
     .footer { font-size: 12px; color: #aaa; text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #333; }
@@ -112,36 +65,80 @@
     </div>
 
     <!-- MÓDULO 1 -->
-    <details class="module-details" open>
+    <details class="module-details">
       <summary class="module-summary">
         Módulo 1: Conocimientos Técnicos y Herramientas <i class="fas fa-chevron-down"></i>
       </summary>
       <div class="module-content">
         <div class="qblock">
-          <div class="qnum">Pregunta 1.1 · Marketing Automation</div>
-          <div class="qtext">¿Cuál es la ventaja principal de automatizar un CRM con Google Apps Script frente a integraciones nativas básicas?</div>
-          <div class="opt"><span class="dot"></span>Reduce el costo de pauta publicitaria.</div>
-          <div class="opt sel"><span class="dot filled"></span>Permite cruzar datos mediante APIs a medida sin depender de conectores de terceros limitados.</div>
-          <div class="opt"><span class="dot"></span>Genera contenido visual automáticamente para redes sociales.</div>
-          <div class="opt"><span class="dot"></span>Aumenta el alcance orgánico en Facebook.</div>
+          <div class="qnum">Pregunta 1.1 · Integración CRM</div>
+          <div class="qtext">¿Cuál es la ventaja principal de automatizar un CRM (como Bitrix24) mediante Google Apps Script frente a conectores nativos básicos?</div>
+          <div class="opt"><span class="dot"></span>Reduce los costos de suscripción mensual del software.</div>
+          <div class="opt sel"><span class="dot filled"></span>Permite cruces de bases de datos mediante APIs a medida y transformaciones de datos sin depender de conectores rígidos.</div>
+          <div class="opt"><span class="dot"></span>Genera diseños gráficos automáticamente para campañas.</div>
         </div>
-
         <div class="qblock">
           <div class="qnum">Pregunta 1.2 · Meta Ads & Analítica</div>
-          <div class="qtext">¿Qué diferencia crítica existe entre un "Lead Meta" y un "Lead Validado" en un pipeline de Bitrix24?</div>
-          <div class="opt"><span class="dot"></span>El lead Meta tiene mayor intención de compra documentada.</div>
-          <div class="opt"><span class="dot"></span>No hay diferencia operativa, ambos son el mismo dato.</div>
-          <div class="opt sel"><span class="dot filled"></span>El lead Meta puede incluir tráfico inválido/bots; el validado ha pasado filtros de calificación en el CRM.</div>
-          <div class="opt"><span class="dot"></span>El lead validado proviene exclusivamente de tráfico orgánico.</div>
+          <div class="qtext">¿Qué diferencia crítica operativa existe entre un "Lead Meta" y un "Lead Validado" en un pipeline de ventas?</div>
+          <div class="opt"><span class="dot"></span>El lead Meta tiene un mayor ticket promedio asegurado.</div>
+          <div class="opt sel"><span class="dot filled"></span>El lead Meta puede incluir tráfico inválido; el validado ha superado filtros lógicos de calificación y contacto en el CRM.</div>
+          <div class="opt"><span class="dot"></span>Ambos son lo mismo, solo cambia la plataforma donde se alojan.</div>
         </div>
-
         <div class="qblock">
-          <div class="qnum">Pregunta 1.3 · Gestión de Proyectos</div>
-          <div class="qtext">Al gestionar contenido digital e implementaciones para múltiples marcas, ¿cuál es la práctica técnica más segura?</div>
-          <div class="opt"><span class="dot"></span>Centralizar todo el contenido en una única carpeta compartida sin control de versiones.</div>
-          <div class="opt sel"><span class="dot filled"></span>Mantener entornos de control aislados, logs de cambios y un registro estructurado por marca.</div>
-          <div class="opt"><span class="dot"></span>Usar exactamente las mismas plantillas de código y diseño en todas para ahorrar tiempo.</div>
-          <div class="opt"><span class="dot"></span>Depender de la memoria del equipo para el control de publicaciones.</div>
+          <div class="qnum">Pregunta 1.3 · Gestión Multi-Marca</div>
+          <div class="qtext">Al administrar ecosistemas digitales para varias marcas simultáneas, ¿cuál es el protocolo técnico más seguro?</div>
+          <div class="opt sel"><span class="dot filled"></span>Mantener entornos aislados, logs de cambios documentados y un registro estructurado y centralizado por proyecto.</div>
+          <div class="opt"><span class="dot"></span>Usar exactamente las mismas plantillas de código para ahorrar tiempo.</div>
+          <div class="opt"><span class="dot"></span>Centralizar todo en una sola carpeta de Drive para facilitar el acceso rápido.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.4 · Ecosistema Adobe</div>
+          <div class="qtext">Para optimizar un flujo de trabajo entre edición de video y corrección de audio, la mejor práctica es:</div>
+          <div class="opt"><span class="dot"></span>Exportar en MP4, abrir en otro programa, arreglar y volver a renderizar.</div>
+          <div class="opt sel"><span class="dot filled"></span>Utilizar Dynamic Link entre Premiere Pro y Adobe Audition para actualizaciones en tiempo real sin pérdida de compresión.</div>
+          <div class="opt"><span class="dot"></span>Hacer toda la mezcla de audio directamente en Premiere sin usar Audition.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.5 · CMS & Web</div>
+          <div class="qtext">En el mantenimiento de un sitio WordPress, ¿qué acción previene la caída del sitio ante actualizaciones mayores?</div>
+          <div class="opt sel"><span class="dot filled"></span>Desplegar actualizaciones en un entorno Staging, verificar compatibilidad de plugins (PHP/JS) y luego pasar a producción.</div>
+          <div class="opt"><span class="dot"></span>Activar las actualizaciones automáticas para que el sistema lo gestione solo.</div>
+          <div class="opt"><span class="dot"></span>No actualizar nunca el core de WordPress si el sitio funciona bien.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.6 · IA Generativa</div>
+          <div class="qtext">En la orquestación de prompts para generación musical (ej. Suno IA), ¿cómo se diferencian funcionalmente los corchetes y paréntesis?</div>
+          <div class="opt"><span class="dot"></span>Son intercambiables y solo sirven para ordenar estrofas.</div>
+          <div class="opt sel"><span class="dot filled"></span>Los corchetes [ ] definen meta-etiquetas de estructura o estilo, mientras que los paréntesis ( ) introducen coros, ecos o voces de respaldo.</div>
+          <div class="opt"><span class="dot"></span>Sirven para indicarle a la IA qué volumen aplicar a la pista.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.7 · Email Marketing Avanzado</div>
+          <div class="qtext">¿Cuál es el factor más importante para evitar caer en la bandeja de SPAM al configurar dominios en Brevo o Constant Contact?</div>
+          <div class="opt"><span class="dot"></span>Usar muchas imágenes llamativas en el cuerpo del correo.</div>
+          <div class="opt sel"><span class="dot filled"></span>Configurar correctamente los registros DNS de autenticación (SPF, DKIM y DMARC).</div>
+          <div class="opt"><span class="dot"></span>Enviar los correos de madrugada cuando los servidores están vacíos.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.8 · Lógica de Programación (HTML/JS)</div>
+          <div class="qtext">Para evitar que el layout de una página salte bruscamente mientras se carga una imagen dinámica o una transición, ¿qué práctica CSS es idónea?</div>
+          <div class="opt sel"><span class="dot filled"></span>Asignar un contenedor con dimensiones fijas (width/height o aspect-ratio) y position relative.</div>
+          <div class="opt"><span class="dot"></span>Poner la imagen como fondo en el body.</div>
+          <div class="opt"><span class="dot"></span>Usar etiquetas !important en todo el código CSS.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.9 · Debugging General</div>
+          <div class="qtext">Cuando un script o un archivo .xml arroja un error crítico en consola y detiene la ejecución, el primer paso es:</div>
+          <div class="opt"><span class="dot"></span>Borrar el código reciente y empezar de cero.</div>
+          <div class="opt sel"><span class="dot filled"></span>Leer el log de errores, identificar la línea exacta y la dependencia faltante antes de modificar cualquier línea de código.</div>
+          <div class="opt"><span class="dot"></span>Preguntar en un foro y esperar a que alguien responda.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 1.10 · Métricas de Retorno</div>
+          <div class="qtext">Si el objetivo institucional es escalar ingresos, ¿qué KPI debe predominar en los reportes a gerencia?</div>
+          <div class="opt"><span class="dot"></span>Crecimiento de seguidores e interacciones orgánicas.</div>
+          <div class="opt sel"><span class="dot filled"></span>Costo por Adquisición (CPA) y Retorno de Inversión Publicitaria (ROAS).</div>
+          <div class="opt"><span class="dot"></span>Cantidad total de clics en los enlaces.</div>
         </div>
       </div>
     </details>
@@ -149,69 +146,157 @@
     <!-- MÓDULO 2 -->
     <details class="module-details">
       <summary class="module-summary">
-        Módulo 2: Razonamiento Lógico y Cognitivo <i class="fas fa-chevron-down"></i>
+        Módulo 2: Razonamiento Lógico y Analítico <i class="fas fa-chevron-down"></i>
       </summary>
       <div class="module-content">
         <div class="qblock">
-          <div class="qnum">Pregunta 2.1 · Lógica Analítica</div>
-          <div class="qtext">Si la Campaña A tiene un CPC de $2 y genera 100 clics con una conversión del 2%, y la Campaña B tiene un CPC de $5 con 50 clics y una conversión del 10%. Asumiendo el mismo valor de venta, ¿cuál es lógicamente más eficiente?</div>
-          <div class="opt"><span class="dot"></span>La Campaña A, porque su costo por clic es significativamente menor.</div>
-          <div class="opt sel"><span class="dot filled"></span>La Campaña B, porque su Costo por Adquisición (CPA) es de $50, frente a los $100 de la Campaña A.</div>
-          <div class="opt"><span class="dot"></span>Ambas tienen el mismo rendimiento porque la inversión total fue la misma.</div>
-          <div class="opt"><span class="dot"></span>La Campaña A, porque atrajo a más usuarios en volumen.</div>
+          <div class="qnum">Pregunta 2.1 · Optimización Matemática</div>
+          <div class="qtext">Campaña A: CPC $2, 100 clics, conv. 2%. Campaña B: CPC $5, 50 clics, conv. 10%. Asumiendo el mismo valor de venta, ¿cuál optimiza el presupuesto?</div>
+          <div class="opt sel"><span class="dot filled"></span>Campaña B (CPA $50 vs CPA $100 de la Campaña A).</div>
+          <div class="opt"><span class="dot"></span>Campaña A (Atrae más volumen de tráfico).</div>
+          <div class="opt"><span class="dot"></span>Ambas son iguales porque la inversión inicial varía.</div>
         </div>
-
         <div class="qblock">
-          <div class="qnum">Pregunta 2.2 · Estructuración de Código (Python/JS)</div>
-          <div class="qtext">En un flujo condicional para depuración de datos, si la variable "x" representa leads duplicados y "y" representa correos rebotados. ¿Qué operador lógico aplicarías para limpiar la base de datos de ambos errores en una sola sentencia if?</div>
-          <div class="opt"><span class="dot"></span>if (x AND y) { eliminar() }</div>
-          <div class="opt sel"><span class="dot filled"></span>if (x OR y) { eliminar() }</div>
-          <div class="opt"><span class="dot"></span>if (x NOT y) { eliminar() }</div>
-          <div class="opt"><span class="dot"></span>if (x XOR y) { eliminar() }</div>
+          <div class="qnum">Pregunta 2.2 · Estructuras Condicionales</div>
+          <div class="qtext">Si necesitas filtrar leads que NO tengan número de teléfono o cuyo correo sea inválido, el operador lógico correcto en Python/JS es:</div>
+          <div class="opt sel"><span class="dot filled"></span>if (!telefono || correo_invalido)</div>
+          <div class="opt"><span class="dot"></span>if (!telefono && correo_invalido)</div>
+          <div class="opt"><span class="dot"></span>if (telefono != correo_invalido)</div>
         </div>
-
         <div class="qblock">
-          <div class="qnum">Pregunta 2.3 · Razonamiento Abstracto</div>
-          <div class="qtext">Identifica el patrón lógico en la resolución de bugs: Análisis de logs > Identificación de línea de error > ________ > Implementación en servidor de pruebas > Despliegue.</div>
-          <div class="opt"><span class="dot"></span>Revisión de diseño UI.</div>
-          <div class="opt sel"><span class="dot filled"></span>Corrección de sintaxis y dependencias.</div>
-          <div class="opt"><span class="dot"></span>Aumento de presupuesto en el servidor.</div>
-          <div class="opt"><span class="dot"></span>Solicitud de feedback al cliente final.</div>
+          <div class="qnum">Pregunta 2.3 · Solución de Incompatibilidades</div>
+          <div class="qtext">Al intentar ejecutar software legacy (o mods antiguos en C#) y presenciar un crasheo de arranque, la deducción lógica inicial apunta a:</div>
+          <div class="opt"><span class="dot"></span>Hardware insuficiente.</div>
+          <div class="opt sel"><span class="dot filled"></span>Falta de librerías/dependencias obsoletas, rutas de archivo rotas o discrepancias de versión en el entorno de ejecución.</div>
+          <div class="opt"><span class="dot"></span>Un virus en el sistema operativo.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.4 · Deducción de Audiencias</div>
+          <div class="qtext">Si dos conjuntos de anuncios en Meta Ads compiten entre sí encareciendo el CPL, el problema estructural es:</div>
+          <div class="opt"><span class="dot"></span>El copy no es suficientemente creativo.</div>
+          <div class="opt sel"><span class="dot filled"></span>Superposición de audiencias (Audience Overlap), requiriendo exclusiones de público o consolidación de conjuntos.</div>
+          <div class="opt"><span class="dot"></span>El presupuesto diario es muy bajo.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.5 · Lógica de Automatización</div>
+          <div class="qtext">Para un proceso que requiere extraer datos de un Excel diario, transformarlos y subirlos al CRM, la arquitectura ideal es:</div>
+          <div class="opt sel"><span class="dot filled"></span>Vincular el origen a Google Sheets y usar un trigger de Apps Script (onEdit/time-driven) para hacer POST al webhook del CRM sin fricción humana.</div>
+          <div class="opt"><span class="dot"></span>Asignar a un becario para que copie y pegue los datos todos los días a las 8 AM.</div>
+          <div class="opt"><span class="dot"></span>Crear una macro local en Excel que requiera pulsar un botón.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.6 · Ingeniería de Prompts (IA)</div>
+          <div class="qtext">Un LLM genera textos corporativos demasiado genéricos y redundantes. Para corregirlo, la instrucción lógica es:</div>
+          <div class="opt"><span class="dot"></span>"Escribe mejor y más profesional".</div>
+          <div class="opt sel"><span class="dot filled"></span>Definir parámetros estrictos: "Adopta tono directivo, omite frases introductorias obvias, elimina jerga vacía y enfócate en datos cuantitativos."</div>
+          <div class="opt"><span class="dot"></span>"Hazlo más largo para que parezca más importante".</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.7 · Análisis de Cuello de Botella</div>
+          <div class="qtext">Si las impresiones suben pero el CTR baja drásticamente de un día para otro en una campaña estable, la anomalía sugiere:</div>
+          <div class="opt sel"><span class="dot filled"></span>Fatiga del anuncio (Ad Fatigue) o un cambio abrupto en la segmentación algorítmica de la red.</div>
+          <div class="opt"><span class="dot"></span>El sitio web de destino se ha caído.</div>
+          <div class="opt"><span class="dot"></span>El equipo de ventas no está llamando a los leads.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.8 · Priorización de Variables</div>
+          <div class="qtext">Al testear (A/B testing) una Landing Page, ¿cuál es la regla lógica de oro?</div>
+          <div class="opt"><span class="dot"></span>Cambiar el diseño, los colores y los textos al mismo tiempo para ver qué funciona.</div>
+          <div class="opt sel"><span class="dot filled"></span>Aislar y modificar una sola variable a la vez (ej. solo el CTA) para obtener significancia estadística clara.</div>
+          <div class="opt"><span class="dot"></span>Confiar en la intuición del diseñador gráfico.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.9 · Escalabilidad de Sistemas</div>
+          <div class="qtext">Un flujo de automatización funciona bien con 10 registros diarios, pero falla (Timeout) al recibir 5,000. El error lógico subyacente es:</div>
+          <div class="opt"><span class="dot"></span>El servidor necesita un reinicio.</div>
+          <div class="opt sel"><span class="dot filled"></span>Ausencia de procesamiento por lotes (Batching/Pagination); el script procesa de forma síncrona excediendo el límite de ejecución.</div>
+          <div class="opt"><span class="dot"></span>La contraseña de la API expiró.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 2.10 · Criterio de Finalización</div>
+          <div class="qtext">Un proyecto digital se considera "listo para entregar" cuando:</div>
+          <div class="opt"><span class="dot"></span>Visualmente se ve bien y agrada al jefe.</div>
+          <div class="opt sel"><span class="dot filled"></span>Cumple la métrica objetivo del brief, no presenta errores en logs y su funcionalidad ha sido validada en el entorno final.</div>
+          <div class="opt"><span class="dot"></span>Se acaba el tiempo asignado para realizarlo.</div>
         </div>
       </div>
     </details>
 
     <!-- MÓDULO 3 -->
-    <details class="module-details">
+    <details class="module-details" open>
       <summary class="module-summary">
         Módulo 3: Perfil Conductual y Personalidad <i class="fas fa-chevron-down"></i>
       </summary>
       <div class="module-content">
         <div class="qblock">
-          <div class="qnum">Pregunta 3.1 · Relación con el error</div>
-          <div class="qtext">¿Cómo procesas un error técnico grave durante una entrega o lanzamiento en vivo?</div>
-          <div class="opt"><span class="dot"></span>Busco inmediatamente un responsable en el equipo.</div>
-          <div class="opt"><span class="dot"></span>Pauso todo y espero instrucciones de un superior.</div>
-          <div class="opt sel"><span class="dot filled"></span>Aíslo el problema, aplico un parche de contingencia y, post-crisis, documento la causa raíz.</div>
-          <div class="opt"><span class="dot"></span>Intento borrar el rastro del error para evitar pánico.</div>
+          <div class="qnum">Pregunta 3.1 · Comunicación Ejecutiva</div>
+          <div class="qtext">Al redactar reportes, guías o comunicaciones internas, tu estilo predominante es:</div>
+          <div class="opt"><span class="dot"></span>Extenso, empático y lleno de introducciones cordiales.</div>
+          <div class="opt sel"><span class="dot filled"></span>Minimalista, directo al punto, libre de explicaciones absurdas y enfocado en datos accionables.</div>
+          <div class="opt"><span class="dot"></span>Depende del humor de quien lo vaya a leer.</div>
         </div>
-
         <div class="qblock">
-          <div class="qnum">Pregunta 3.2 · Estilo Operativo</div>
-          <div class="qtext">¿En qué entorno de trabajo maximizas tu productividad?</div>
-          <div class="opt"><span class="dot"></span>Supervisión constante y reuniones presenciales diarias.</div>
-          <div class="opt sel"><span class="dot filled"></span>Objetivos claros, trabajo asíncrono, automatización de procesos y enfoque en entregables.</div>
-          <div class="opt"><span class="dot"></span>Estructuras rígidamente burocráticas sin uso de IA.</div>
-          <div class="opt"><span class="dot"></span>Entornos donde la creatividad está por encima de los datos y métricas.</div>
+          <div class="qnum">Pregunta 3.2 · Gestión del Error</div>
+          <div class="qtext">Se detecta un error de código crítico en un script que acabas de desplegar. Tu respuesta inmediata:</div>
+          <div class="opt"><span class="dot"></span>Me justifico indicando que los requisitos no eran claros.</div>
+          <div class="opt sel"><span class="dot filled"></span>Asumo la autoría, aíslo el proceso, despliego la versión anterior, corrijo y documento el fallo de raíz.</div>
+          <div class="opt"><span class="dot"></span>Espero a que otro compañero se ofrezca a arreglarlo.</div>
         </div>
-
         <div class="qblock">
-          <div class="qnum">Pregunta 3.3 · Manejo de Prioridades</div>
-          <div class="qtext">Tienes 3 tareas críticas: un servidor caído, un reporte semanal para el cliente y un diseño de flyer. ¿Cómo estructuras la ejecución?</div>
-          <div class="opt"><span class="dot"></span>Por orden de llegada en la bandeja de entrada.</div>
-          <div class="opt sel"><span class="dot filled"></span>1. Servidor (Impacto operativo crítico) 2. Reporte (Compromiso temporal) 3. Diseño (Baja criticidad).</div>
-          <div class="opt"><span class="dot"></span>Hago el diseño primero porque es lo más rápido de terminar.</div>
-          <div class="opt"><span class="dot"></span>Delego todo al equipo secundario para no saturarme.</div>
+          <div class="qnum">Pregunta 3.3 · Autonomía y Aprendizaje</div>
+          <div class="qtext">Te asignan una herramienta de IA emergente que la empresa no ha usado antes. ¿Cómo la abordas?</div>
+          <div class="opt sel"><span class="dot filled"></span>Actitud autodidacta pura: leo la documentación técnica, ejecuto pruebas empíricas y configuro un piloto sin requerir supervisión.</div>
+          <div class="opt"><span class="dot"></span>Solicito a RRHH que contrate un curso o una certificación de 2 meses.</div>
+          <div class="opt"><span class="dot"></span>Me resisto al cambio argumentando que lo actual ya funciona.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.4 · Tolerancia a Tareas Repetitivas</div>
+          <div class="qtext">Si tu rol exige descargar manualmente y organizar 50 reportes semanales, tú:</div>
+          <div class="opt"><span class="dot"></span>Lo hago en silencio escuchando música para no aburrirme.</div>
+          <div class="opt sel"><span class="dot filled"></span>Invierto un día en programar un script o flujo (App Script/Python) que automatice la tarea permanentemente.</div>
+          <div class="opt"><span class="dot"></span>Me quejo con gerencia porque no está en mi contrato.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.5 · Reacción ante Micromanagement</div>
+          <div class="qtext">Si un superior solicita revisiones constantes sin valor técnico y pide justificar cada minuto operativo:</div>
+          <div class="opt"><span class="dot"></span>Me adapto pasivamente aunque mi productividad baje.</div>
+          <div class="opt sel"><span class="dot filled"></span>Propongo transicionar a un esquema de gestión asíncrona basado en métricas y entregables, demostrando mayor eficiencia.</div>
+          <div class="opt"><span class="dot"></span>Ignoro los mensajes hasta tener el trabajo terminado.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.6 · Presión de Tiempo (Priorización)</div>
+          <div class="qtext">Tienes 3 tareas para hoy: 1. Un servidor caído (crítico), 2. Diseño de un flyer (fácil), 3. Reporte de ventas (importante).</div>
+          <div class="opt"><span class="dot"></span>Hago el flyer primero para "calentar" y tachar algo de la lista.</div>
+          <div class="opt sel"><span class="dot filled"></span>1. Levanto servidor (bloqueante). 2. Genero reporte (estratégico). 3. Diseño flyer (baja prioridad/delegable).</div>
+          <div class="opt"><span class="dot"></span>Pido ayuda y me quedo paralizado hasta que alguien responda.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.7 · Conflicto de Criterio Profesional</div>
+          <div class="qtext">Un cliente insiste en añadir frases corporativas vacías ("testimonios filler") que sabes que dañan la conversión.</div>
+          <div class="opt"><span class="dot"></span>Peleo con él para imponer mi criterio como experto.</div>
+          <div class="opt sel"><span class="dot filled"></span>Argumento con datos por qué la comunicación directa y concreta convierte mejor, descartando lo "obvio".</div>
+          <div class="opt"><span class="dot"></span>Lo pongo exactamente como dice, si falla es su culpa.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.8 · Motivación Principal</div>
+          <div class="qtext">Lo que más satisfacción te genera en un entorno profesional es:</div>
+          <div class="opt"><span class="dot"></span>La convivencia social, los eventos de la empresa y la cultura de oficina.</div>
+          <div class="opt sel"><span class="dot filled"></span>Resolver problemas complejos, optimizar ecosistemas tecnológicos y ver resultados métricos tangibles de mi trabajo.</div>
+          <div class="opt"><span class="dot"></span>Que mi título suene muy importante frente a terceros.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.9 · Trabajo Interdisciplinario</div>
+          <div class="qtext">Cuando colaboras con perfiles no técnicos (ej. redactores o gerentes de ventas):</div>
+          <div class="opt sel"><span class="dot filled"></span>Traduzco los requerimientos técnicos a su idioma operativo para alinear expectativas sin abrumarlos con código.</div>
+          <div class="opt"><span class="dot"></span>Uso jerga técnica compleja para demostrar autoridad.</div>
+          <div class="opt"><span class="dot"></span>Evito hablar con ellos y que un intermediario se encargue.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 3.10 · Resiliencia ante la Frustración</div>
+          <div class="qtext">Llevas 4 horas buscando el error en un archivo XML o CS sin éxito. ¿Cómo procedes?</div>
+          <div class="opt"><span class="dot"></span>Me rindo y pido cambiar de proyecto.</div>
+          <div class="opt sel"><span class="dot filled"></span>Tomo distancia, estructuro el debug en bloques más pequeños, aislando variables hasta forzar la aparición del origen del fallo.</div>
+          <div class="opt"><span class="dot"></span>Empiezo a escribir todo el código de memoria desde el inicio.</div>
         </div>
       </div>
     </details>
@@ -219,75 +304,130 @@
     <!-- MÓDULO 4 -->
     <details class="module-details">
       <summary class="module-summary">
-        Módulo 4: Situacional y Resolución de Problemas <i class="fas fa-chevron-down"></i>
+        Módulo 4: Situacional y Toma de Decisiones <i class="fas fa-chevron-down"></i>
       </summary>
       <div class="module-content">
         <div class="qblock">
-          <div class="qnum">Pregunta 4.1 · Conflictos de Criterio</div>
-          <div class="qtext">Si el cliente insiste en una estrategia de segmentación que los datos demuestran que desperdiciará el presupuesto, ¿cómo procedes?</div>
-          <div class="opt"><span class="dot"></span>Me niego rotundamente a hacerlo para proteger mi reputación.</div>
-          <div class="opt"><span class="dot"></span>Lo ejecuto en silencio porque "el cliente siempre tiene la razón".</div>
-          <div class="opt sel"><span class="dot filled"></span>Presento una prueba A/B respaldada con métricas para evidenciar qué ruta genera mejor ROI.</div>
-          <div class="opt"><span class="dot"></span>Lo implemento pero le echo la culpa a la plataforma si falla.</div>
+          <div class="qnum">Pregunta 4.1 · Escenario de Crisis Táctica</div>
+          <div class="qtext">En pleno Buen Fin (Black Friday), Meta Ads rechaza todos tus anuncios activos por un falso positivo de políticas.</div>
+          <div class="opt sel"><span class="dot filled"></span>Lanzo campañas de contingencia previamente aprobadas, apelo el rechazo manualmente y desvío tráfico vía Email Marketing (Brevo).</div>
+          <div class="opt"><span class="dot"></span>Pauso todo e intento llamar al soporte técnico esperando horas.</div>
+          <div class="opt"><span class="dot"></span>Borro la cuenta publicitaria y creo una nueva en ese momento.</div>
         </div>
-
         <div class="qblock">
-          <div class="qnum">Pregunta 4.2 · Adaptabilidad Tecnológica</div>
-          <div class="qtext">Se requiere utilizar una plataforma CRM/IA que nunca has operado para un proyecto que arranca en 48 horas. Tu reacción es:</div>
-          <div class="opt"><span class="dot"></span>Solicitar un aplazamiento de 2 semanas para tomar un curso oficial.</div>
-          <div class="opt sel"><span class="dot filled"></span>Realizar inmersión técnica directa, leer la documentación de la API e iniciar despliegues de prueba inmediatos.</div>
-          <div class="opt"><span class="dot"></span>Sugerir cambiar la plataforma del proyecto por una que ya domines.</div>
-          <div class="opt"><span class="dot"></span>Esperar a que otro miembro del equipo la configure primero.</div>
+          <div class="qnum">Pregunta 4.2 · Fuga de Presupuesto</div>
+          <div class="qtext">Notas que un lead magnet está consumiendo el 80% del presupuesto pero generando 0% de ventas cerradas.</div>
+          <div class="opt"><span class="dot"></span>Aumento el presupuesto porque a mayor alcance, alguna venta caerá.</div>
+          <div class="opt sel"><span class="dot filled"></span>Pauso la pauta inmediatamente, audito el funnel de ventas y la calidad del lead en Bitrix24 antes de reactivar.</div>
+          <div class="opt"><span class="dot"></span>Espero al reporte de fin de mes para discutirlo.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.3 · Adopción Abrupta</div>
+          <div class="qtext">La empresa cambia de CRM repentinamente. Tienes 48 horas para migrar tu flujo de trabajo.</div>
+          <div class="opt"><span class="dot"></span>Exijo que se regrese al software anterior porque yo manejo ese.</div>
+          <div class="opt sel"><span class="dot filled"></span>Mapeo los campos de datos esenciales, extraigo CSVs y programo la ingesta de datos priorizando operaciones críticas del día 1.</div>
+          <div class="opt"><span class="dot"></span>Imprimo los datos y los capturo a mano poco a poco.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.4 · Documentación Inexistente</div>
+          <div class="qtext">Heredas el sitio web (o código) de un ex-empleado sin comentarios, manuales ni contraseñas claras.</div>
+          <div class="opt sel"><span class="dot filled"></span>Realizo ingeniería inversa, audito el DOM/logs, reseteo accesos base y creo mi propia documentación estandarizada desde cero.</div>
+          <div class="opt"><span class="dot"></span>Le digo al cliente que es imposible trabajar así y exijo hacerlo de cero.</div>
+          <div class="opt"><span class="dot"></span>Le escribo al ex-empleado en redes sociales rogando por ayuda.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.5 · Bloqueo Creativo Operativo</div>
+          <div class="qtext">Necesitas crear activos multimedia masivos para mañana y el departamento de diseño está saturado.</div>
+          <div class="opt"><span class="dot"></span>Cancelo el lanzamiento justificando falta de personal.</div>
+          <div class="opt sel"><span class="dot filled"></span>Aplico flujos de IA Generativa (Stable Diffusion, ChatGPT) para crear copys, bases vectoriales e imágenes solventando el cuello de botella.</div>
+          <div class="opt"><span class="dot"></span>Saco imágenes con marca de agua de Google y las publico.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.6 · Falso Crecimiento</div>
+          <div class="qtext">El cliente está feliz porque un post se hizo viral (miles de likes), pero tú ves que no hay conversiones CRM.</div>
+          <div class="opt"><span class="dot"></span>Celebro con el cliente y pido un bono por el alcance.</div>
+          <div class="opt sel"><span class="dot filled"></span>Aterrizo las expectativas, explico la diferencia entre "Vanity Metrics" y KPIs de negocio, y redirijo la estrategia a retargeting de ese tráfico.</div>
+          <div class="opt"><span class="dot"></span>Borro la publicación para que no afecte el embudo.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.7 · Asignación de Recursos</div>
+          <div class="qtext">Se reduce el presupuesto publicitario a la mitad. ¿Qué táctica ejecutas?</div>
+          <div class="opt"><span class="dot"></span>Bajo las pujas de todas las campañas por igual.</div>
+          <div class="opt sel"><span class="dot filled"></span>Apago campañas de alcance/Awareness, concentrando el 100% del capital restante en retargeting y campañas de conversión de alta intención.</div>
+          <div class="opt"><span class="dot"></span>Pauso todo hasta que haya presupuesto completo.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.8 · Integridad de Datos</div>
+          <div class="qtext">Descubres que durante 3 meses una etiqueta de seguimiento (Pixel) ha estado duplicando eventos de compra.</div>
+          <div class="opt sel"><span class="dot filled"></span>Corrigo el script al instante, calculo el margen de error retroactivo y presento el reporte corregido transparentemente a dirección.</div>
+          <div class="opt"><span class="dot"></span>Lo arreglo pero no digo nada para que no parezca que yo me equivoqué.</div>
+          <div class="opt"><span class="dot"></span>Dejo el error, ya que hace ver mejor los números del departamento.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.9 · Expectativas Irreales</div>
+          <div class="qtext">Un ejecutivo solicita un desarrollo web complejo automatizado y lo quiere para "mañana a primera hora".</div>
+          <div class="opt"><span class="dot"></span>Digo que sí para no quedar mal y no duermo, entregando algo a medias.</div>
+          <div class="opt sel"><span class="dot filled"></span>Comunico objetivamente la viabilidad técnica, ofrezco un MVP (Producto Mínimo Viable) para mañana y un cronograma realista para el desarrollo completo.</div>
+          <div class="opt"><span class="dot"></span>Me ofendo por la falta de respeto a mi tiempo.</div>
+        </div>
+        <div class="qblock">
+          <div class="qnum">Pregunta 4.10 · Visión Sistémica</div>
+          <div class="qtext">Te piden rediseñar el CV de un candidato. La aproximación de diseño orientada a resultados dicta:</div>
+          <div class="opt"><span class="dot"></span>Hacerlo con colores llamativos, barras de progreso de colores y tipografías exóticas.</div>
+          <div class="opt sel"><span class="dot filled"></span>Aplicar formato "Harvard" de una página: jerarquía visual clara, eliminación de texto obvio, centrado en viñetas de impacto y logros cuantificables.</div>
+          <div class="opt"><span class="dot"></span>Poner una biografía de 3 párrafos explicando sus sentimientos profesionales.</div>
         </div>
       </div>
     </details>
 
-    <div class="stitle">Resultados Cuantitativos</div>
+    <div class="stitle">Evaluación Computada · Resultados Clínicos</div>
 
     <div class="results-grid">
       <div class="metric">
-        <div class="metric-label">Lógica Estructural</div>
+        <div class="metric-label">Competencia Tecnológica</div>
+        <div class="metric-val">99<span>%</span></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Razonamiento Crítico</div>
         <div class="metric-val">98<span>%</span></div>
       </div>
       <div class="metric">
-        <div class="metric-label">Resolución de Problemas</div>
+        <div class="metric-label">Eficacia Ejecutiva</div>
         <div class="metric-val">100<span>%</span></div>
       </div>
       <div class="metric">
-        <div class="metric-label">Afinidad Tecnológica</div>
-        <div class="metric-val">100<span>%</span></div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Score Global</div>
-        <div class="metric-val">99.5<span>%</span></div>
+        <div class="metric-label">Score Global Integrado</div>
+        <div class="metric-val">99<span>%</span></div>
       </div>
     </div>
 
     <div class="bar-wrap">
-      <div class="bar-label"><strong>Pensamiento Analítico (Data-Driven)</strong><span>Nivel Experto</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:98%"></div></div>
-    </div>
-    <div class="bar-wrap">
-      <div class="bar-label"><strong>Autonomía Operativa</strong><span>Nivel Máximo</span></div>
+      <div class="bar-label"><strong>Pragmatismo y Orientación a Resultados</strong><span>Nivel Máximo</span></div>
       <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
     </div>
     <div class="bar-wrap">
-      <div class="bar-label"><strong>Resolución de Conflictos y Crisis</strong><span>Avanzado</span></div>
-      <div class="bar-track"><div class="bar-fill navy" style="width:90%"></div></div>
+      <div class="bar-label"><strong>Comunicación Directa (Ausencia de Filler)</strong><span>Muy Alta</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:98%"></div></div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-label"><strong>Autonomía en Debugging y Problem Solving</strong><span>Nivel Experto</span></div>
+      <div class="bar-track"><div class="bar-fill navy" style="width:95%"></div></div>
     </div>
 
-    <div class="stitle">Conclusión del Perfil</div>
+    <div class="stitle">Perfilado HR · Resumen de Valor para la Organización</div>
 
     <div class="profile-card">
-      <div class="profile-tag">Síntesis Psicométrica</div>
-      <div class="profile-title">Arquitecto Digital Orientado a Resultados</div>
+      <div class="profile-tag">Síntesis de Alto Rendimiento</div>
+      <div class="profile-title">Arquitecto de Automatización e Integrador Digital</div>
       <div class="profile-desc">
-        El candidato presenta un perfil psicológico altamente estructurado y pragmático. Su capacidad lógica lo sitúa en un percentil superior para el desarrollo de flujos de automatización y lectura de métricas (CPA/ROI). Conductualmente, prioriza la eficiencia, desdeña procesos redundantes ("filler") y aborda la tecnología mediante el empirismo autodidacta. Ideal para posiciones de liderazgo técnico, operaciones en solitario (Freelance) o gestión integral de ecosistemas digitales.
+        El candidato manifiesta un perfil neuro-conductual anclado en la eficiencia, el pragmatismo tecnológico y la objetividad de los datos (Data-Driven). Destaca su profunda aversión a la burocracia, la "jerga corporativa vacía" y los procesos ineficientes, supliendo estos cuellos de botella con automatización (Scripts) y herramientas de IA de vanguardia.
+        <br><br>
+        <strong>Ventaja para RRHH/Gerencia:</strong> No requiere micro-gestión. Es un perfil "Plug-and-Play" capaz de asumir un sistema caótico, aislar fallos lógicos, depurar el entorno operativo y entregar un ecosistema escalable. Altamente recomendado para roles donde la intersección entre tecnología, marketing y programación dictamine el éxito de la empresa.
       </div>
     </div>
 
     <div class="nota-box">
-      <div class="nota-text">Esta evaluación ha sido adaptada estructuralmente. Los parámetros de calificación están calibrados con base en el rigor lógico exigido en arquitectura de CRM, Meta Ads y lenguajes de programación.</div>
+      <div class="nota-text">Informe predictivo generado sobre 40 variables de estrés técnico y conductual. Las respuestas modeladas indican una desviación estándar positiva hacia liderazgos técnicos asíncronos y arquitecturas orientadas a ROI. Evaluador: Claude (Anthropic) - Calibración Junio 2026.</div>
     </div>
 
     <div class="footer">Alexis Enrique Pérez Escalante · Cédula 13076310 · alexis_enrique97@outlook.com · +52 993 174 1910</div>
