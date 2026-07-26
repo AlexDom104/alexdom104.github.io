@@ -297,13 +297,7 @@
 
     .link-card:hover .link-arrow { color: var(--cian-brillo); transform: translateX(3px); }
 
-
-    /* ══════════════════════════════════════════════════════════
-       📦 ICONOS — ver biblioteca completa en styles.css
-       Todas las URLs están documentadas ahí como variables --ic-*
-       ══════════════════════════════════════════════════════════ */
-
-    /* ══ COLORES PLATAFORMA ══ */
+    /* ══ COLORES PLATAFORMA (fallback si una imagen no carga) ══ */
     .ic-twitch    { background: #6441a5; }
     .ic-youtube   { background: #ff0000; }
     .ic-tiktok    { background: #111; border: 1px solid #333; }
@@ -503,7 +497,7 @@
     <!-- Avatar que vuela al hacer scroll -->
     <div class="avatar-wrap" id="avatar-wrap">
       <img
-        src="https://i.imgur.com/dSIZrFm.png"
+        src="Images/Profile 1.png"
         alt="AlexDom104"
         class="avatar-img"
         id="avatar-img"
@@ -538,7 +532,7 @@
       <div class="drawer-body">
         <div class="drawer-inner">
           <a href="https://twitch.tv/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-twitch"><img src="https://i.imgur.com/wwogLnL.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-twitch"><img src="Images/Twitch.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Twitch</div>
               <div class="link-handle">twitch.tv/alexdom104</div>
@@ -546,7 +540,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://youtube.com/@alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-youtube"><img src="https://i.imgur.com/BN0ZTK7.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-youtube"><img src="Images/Youtube.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">YouTube</div>
               <div class="link-handle">@alexdom104</div>
@@ -554,7 +548,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://tiktok.com/@alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-tiktok"><img src="https://i.imgur.com/H4xT9h1.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-tiktok"><img src="Images/TikTok.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">TikTok</div>
               <div class="link-handle">@alexdom104</div>
@@ -562,7 +556,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://kick.com/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-kick"><img src="https://i.imgur.com/EAAvJak.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-kick"><img src="Images/KICK.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Kick</div>
               <div class="link-handle">kick.com/alexdom104</div>
@@ -570,7 +564,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://trovo.live/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-trovo"><img src="https://i.imgur.com/zfqX2cK.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-trovo"><img src="Images/Trovo.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Trovo</div>
               <div class="link-handle">trovo.live/alexdom104</div>
@@ -578,7 +572,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://dlive.tv/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-dlive"><img src="https://i.imgur.com/7qTTLuR.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-dlive"><img src="Images/Dlive.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">DLive</div>
               <div class="link-handle">dlive.tv/alexdom104</div>
@@ -600,7 +594,7 @@
       <div class="drawer-body">
         <div class="drawer-inner">
           <a href="https://instagram.com/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-instagram"><img src="Imagenes/Instagram.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-instagram"><img src="Images/Instagram.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Instagram</div>
               <div class="link-handle">@alexdom104</div>
@@ -608,7 +602,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://x.com/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-x"><img src="Imagenes/X.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-x"><img src="Images/X.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">X / Twitter</div>
               <div class="link-handle">@alexdom104</div>
@@ -616,7 +610,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://facebook.com/alexdom104of" target="_blank" class="link-card">
-            <div class="link-icon ic-facebook"><img src="Imagenes/Facebook.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-facebook"><img src="Images/Facebook.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Facebook</div>
               <div class="link-handle">AlexDom104of</div>
@@ -624,7 +618,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://discord.gg/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-discord"><img src="Imagenes/Discord.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-discord"><img src="Images/Discord.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Discord</div>
               <div class="link-handle">Servidor AlexDom104</div>
@@ -646,7 +640,7 @@
       <div class="drawer-body">
         <div class="drawer-inner">
           <a href="https://open.spotify.com/intl-es/artist/7kD3un8373bNUjDK2dQYKt?si=Rf3eR0GJQxupK2gAIQxPoA" target="_blank" class="link-card">
-            <div class="link-icon" style="background:#1db954;"><img src="https://i.imgur.com/rA5pTLb.png" alt="" loading="lazy"></div>
+            <div class="link-icon" style="background:#1db954;"><img src="Images/Spotify.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Spotify</div>
               <div class="link-handle">AlexDom104</div>
@@ -654,7 +648,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://music.apple.com/mx/artist/alexdom104/1771783840" target="_blank" class="link-card">
-            <div class="link-icon" style="background:linear-gradient(135deg,#fc3c44,#ff2d55);"><img src="https://i.imgur.com/JcCuef7.png" alt="" loading="lazy"></div>
+            <div class="link-icon" style="background:linear-gradient(135deg,#fc3c44,#ff2d55);"><img src="Images/Apple Music.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Apple Music</div>
               <div class="link-handle">AlexDom104</div>
@@ -662,7 +656,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://music.amazon.com/artists/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon" style="background:#00a8e1;"><img src="https://i.imgur.com/ll7NsR7.png" alt="" loading="lazy"></div>
+            <div class="link-icon" style="background:#00a8e1;"><img src="Images/amazon music.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Amazon Music</div>
               <div class="link-handle">AlexDom104</div>
@@ -670,7 +664,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://music.youtube.com/channel/UCANqZo-6QJBdv3mSHog1pzw?si=pY-l6Yw8OHNZdCw1" target="_blank" class="link-card">
-            <div class="link-icon" style="background:#ff0000;"><img src="https://i.imgur.com/UQgIqjF.png" alt="" loading="lazy"></div>
+            <div class="link-icon" style="background:#ff0000;"><img src="Images/youtube Music.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">YouTube Music</div>
               <div class="link-handle">AlexDom104</div>
@@ -678,7 +672,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://www.deezer.com/es/artist/284377331" target="_blank" class="link-card">
-            <div class="link-icon" style="background:#a238ff;"><img src="https://i.imgur.com/8DaFQKt.png" alt="" loading="lazy"></div>
+            <div class="link-icon" style="background:#a238ff;"><img src="Images/Deezer.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Deezer</div>
               <div class="link-handle">AlexDom104</div>
@@ -694,7 +688,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://soundcloud.com/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon" style="background:#ff5500;"><img src="https://i.imgur.com/M3otwiX.png" alt="" loading="lazy"></div>
+            <div class="link-icon" style="background:#ff5500;"><img src="Images/Soundcloud.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">SoundCloud</div>
               <div class="link-handle">AlexDom104</div>
@@ -724,7 +718,7 @@
       <div class="drawer-body">
         <div class="drawer-inner">
           <a href="https://patreon.com/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-patreon"><img src="https://i.imgur.com/7NNQ7bR.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-patreon"><img src="Images/Patreon.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Patreon</div>
               <div class="link-handle">patreon.com/alexdom104</div>
@@ -732,7 +726,7 @@
             <i class="fas fa-chevron-right link-arrow"></i>
           </a>
           <a href="https://ko-fi.com/alexdom104" target="_blank" class="link-card">
-            <div class="link-icon ic-kofi"><img src="https://i.imgur.com/grxxffG.png" alt="" loading="lazy"></div>
+            <div class="link-icon ic-kofi"><img src="Images/Ko-fi.png" alt="" loading="lazy"></div>
             <div class="link-info">
               <div class="link-name">Ko-fi</div>
               <div class="link-handle">ko-fi.com/alexdom104</div>
@@ -780,7 +774,7 @@
           <!-- Contenido desbloqueado -->
           <div class="picante-unlocked" id="picante-unlocked">
             <a href="https://fansly.com/alexdom104" target="_blank" class="link-card">
-              <div class="link-icon ic-fansly"><img src="https://i.imgur.com/j7qThLB.png" alt="" loading="lazy"></div>
+              <div class="link-icon ic-fansly"><img src="Images/Fansly.png" alt="" loading="lazy"></div>
               <div class="link-info">
                 <div class="link-name">Fansly</div>
                 <div class="link-handle">fansly.com/alexdom104</div>
@@ -788,7 +782,7 @@
               <i class="fas fa-chevron-right link-arrow"></i>
             </a>
             <a href="https://onlyfans.com/alexdom104" target="_blank" class="link-card">
-              <div class="link-icon ic-onlyfans"><img src="https://i.imgur.com/aSHfV9e.png" alt="" loading="lazy"></div>
+              <div class="link-icon ic-onlyfans"><img src="Images/OnlyFans.png" alt="" loading="lazy"></div>
               <div class="link-info">
                 <div class="link-name">OnlyFans</div>
                 <div class="link-handle">onlyfans.com/alexdom104</div>
@@ -818,7 +812,7 @@
       <div class="modal-body">
         <div class="contact-opts">
           <a href="https://wa.me/529930000000" target="_blank" class="contact-opt">
-            <div class="contact-opt-icon ic-whatsapp"><img src="https://i.imgur.com/dpBlNxE.png" alt="" loading="lazy"></div>
+            <div class="contact-opt-icon ic-whatsapp"><img src="Images/Whatsapp.png" alt="" loading="lazy"></div>
             <div>
               <div class="contact-opt-label">WhatsApp</div>
               <div class="contact-opt-sub">Respuesta rápida</div>
@@ -826,7 +820,7 @@
             <i class="fas fa-chevron-right contact-opt-arrow"></i>
           </a>
           <a href="https://t.me/alexdom104" target="_blank" class="contact-opt">
-            <div class="contact-opt-icon ic-telegram"><i class="fab fa-telegram"></i></div>
+            <div class="contact-opt-icon ic-telegram"><img src="Images/Telegram.png" alt="" loading="lazy"></div>
             <div>
               <div class="contact-opt-label">Telegram</div>
               <div class="contact-opt-sub">@alexdom104</div>
@@ -834,7 +828,7 @@
             <i class="fas fa-chevron-right contact-opt-arrow"></i>
           </a>
           <a href="https://discord.gg/alexdom104" target="_blank" class="contact-opt">
-            <div class="contact-opt-icon ic-discord"><img src="https://i.imgur.com/t49dIAR.png" alt="" loading="lazy"></div>
+            <div class="contact-opt-icon ic-discord"><img src="Images/Discord.png" alt="" loading="lazy"></div>
             <div>
               <div class="contact-opt-label">Discord</div>
               <div class="contact-opt-sub">Servidor AlexDom104</div>
@@ -842,7 +836,7 @@
             <i class="fas fa-chevron-right contact-opt-arrow"></i>
           </a>
           <div class="contact-opt" onclick="copiarCorreo()">
-            <div class="contact-opt-icon ic-email"><i class="fas fa-envelope"></i></div>
+            <div class="contact-opt-icon ic-email"><img src="Images/Email.png" alt="" loading="lazy"></div>
             <div>
               <div class="contact-opt-label">Correo</div>
               <div class="contact-opt-sub">alexis_enrique97@outlook.com</div>
@@ -866,13 +860,12 @@
   <div id="toast">✓ Correo copiado</div>
 
   <script>
-    // ══ AVATAR SCROLL — igual que sobremi.html ══════════════════
+    // ══ AVATAR SCROLL ══════════════════════════════════════════
     const avatarWrap = document.getElementById('avatar-wrap');
     const heroEl     = document.getElementById('hero');
 
     function checkAvatarScroll() {
       const heroBottom = heroEl.getBoundingClientRect().bottom;
-      // Se hace pequeño cuando el hero sale de pantalla
       if (heroBottom < 60) {
         avatarWrap.classList.add('sticky-small');
       } else {
@@ -881,6 +874,7 @@
     }
 
     window.addEventListener('scroll', checkAvatarScroll, { passive: true });
+    checkAvatarScroll(); // estado correcto si la página carga ya con scroll
 
     // ══ ZONA PICANTE — caché de edad ════════════════════════════
     const EDAD_KEY = 'alexdom104_mayor18';
@@ -917,14 +911,11 @@
       }
     }
 
-    // Al abrir el cajón picante, resetear vista si no está desbloqueado
-    const _origToggle = toggleDrawer;
+    // ══ CAJONES (acordeón) ══════════════════════════════════════
     function toggleDrawer(id) {
       if (id === 'drawer-picante') {
         const locked   = document.getElementById('picante-locked');
         const unlocked = document.getElementById('picante-unlocked');
-        // Si el contenido está desbloqueado, abrir directo
-        // Si no, asegurarse de que el gate esté visible y el unlocked oculto
         if (locked && unlocked && unlocked.style.display !== 'block') {
           locked.style.display = 'block';
           locked.style.opacity = '1';
