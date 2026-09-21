@@ -3,380 +3,569 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Builder Visual & Medidor de Píxeles</title>
+<title>Master Layout - Aprende HTML/CSS Visualmente</title>
 <style>
   :root { 
-    --bg-color: #1e1e2f; 
-    --panel-bg: #2a2a40; 
-    --text-color: #e0e0e0; 
-    --accent: #4A90E2; 
-    --accent-hover: #357ABD;
+    --bg-dark: #0f0f13; 
+    --panel-bg: #1e1e24; 
+    --text-main: #e0e0e0; 
+    --text-muted: #888;
+    --accent: #007acc; 
+    --accent-hover: #005f9e;
+    --border-color: #333;
+    --guide-color: #ff007f;
   }
   
+  * { box-sizing: border-box; }
   body, html { 
     margin: 0; padding: 0; height: 100%; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background-color: var(--bg-color); color: var(--text-color); 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    background-color: var(--bg-dark); color: var(--text-main); 
     display: flex; flex-direction: column; overflow: hidden;
   }
 
-  /* Header */
+  /* --- HEADER & VIEWPORTS --- */
   header { 
-    background: #151522; padding: 15px 20px; 
-    display: flex; justify-content: space-between; align-items: center; 
-    border-bottom: 1px solid #333; z-index: 10;
+    background: #111; padding: 10px 20px; border-bottom: 1px solid var(--border-color);
+    display: flex; justify-content: space-between; align-items: center; z-index: 10;
   }
-  header h1 { margin: 0; font-size: 18px; color: var(--accent); }
+  .header-title h1 { margin: 0; font-size: 16px; color: #fff; }
+  .header-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); }
   
-  /* Layout principal */
-  .workspace { display: flex; flex: 1; overflow: hidden; }
-  
-  /* Paneles laterales */
-  .sidebar { width: 250px; background: var(--panel-bg); padding: 15px; border-right: 1px solid #333; overflow-y: auto; }
-  .properties { width: 280px; background: var(--panel-bg); padding: 15px; border-left: 1px solid #333; overflow-y: auto; }
-  
-  /* Lienzo (Canvas) */
-  .canvas-container { 
-    flex: 1; position: relative; background: #12121c; 
-    overflow: auto; 
-    /* Cuadrícula de fondo para medir visualmente */
-    background-image: radial-gradient(#444 1px, transparent 0); 
-    background-size: 20px 20px; 
+  .viewports button {
+    background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
+    padding: 6px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; transition: 0.2s;
   }
-  #canvas { width: 100%; height: 100%; position: relative; }
+  .viewports button.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* --- LAYOUT PRINCIPAL --- */
+  .workspace { display: flex; flex: 1; height: calc(100vh - 50px); }
   
-  /* Panel de Código */
-  .code-panel { 
-    height: 150px; background: #0a0a0f; border-top: 1px solid #333; 
-    display: flex; flex-direction: column;
+  /* --- BARRA IZQUIERDA (Herramientas) --- */
+  .sidebar { 
+    width: 240px; background: var(--panel-bg); padding: 15px; 
+    border-right: 1px solid var(--border-color); overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
   }
-  .code-panel-header { padding: 5px 15px; background: #151522; font-size: 12px; font-weight: bold; }
-  #code-output { 
-    flex: 1; padding: 15px; color: #43b581; font-family: monospace; 
-    font-size: 13px; overflow-y: auto; white-space: pre-wrap; margin: 0;
+  .sidebar h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 0 0 10px 0; }
+  
+  .tool-btn { 
+    background: #2a2a32; color: #fff; border: 1px solid #3a3a42; padding: 10px; 
+    border-radius: 6px; cursor: pointer; text-align: left; font-size: 13px; display: flex; align-items: center; gap: 8px;
+    transition: 0.2s;
+  }
+  .tool-btn:hover { background: #3a3a45; border-color: var(--accent); }
+  
+  .tips-box {
+    background: rgba(0, 122, 204, 0.1); border-left: 3px solid var(--accent);
+    padding: 10px; margin-top: auto; font-size: 11px; color: #bbb; line-height: 1.5;
   }
 
-  /* Botones e Inputs de la UI */
-  button.btn-add { 
-    background: var(--accent); color: white; border: none; 
-    padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; 
-    margin-bottom: 10px; font-weight: 600; transition: 0.2s;
+  /* --- LIENZO CENTRAL (Canvas) --- */
+  .canvas-wrapper { 
+    flex: 1; display: flex; justify-content: center; align-items: center; 
+    background-image: radial-gradient(#333 1px, transparent 0); background-size: 20px 20px;
+    overflow: auto; padding: 20px;
   }
-  button.btn-add:hover { background: var(--accent-hover); }
   
-  .prop-group { margin-bottom: 12px; }
-  .prop-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; }
-  .prop-group input { 
-    width: 100%; padding: 8px; border-radius: 4px; 
-    border: 1px solid #444; background: #151522; color: white; box-sizing: border-box;
+  #canvas { 
+    background: #ffffff; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: width 0.3s, height 0.3s; overflow: hidden;
   }
+  /* Estilos de viewports */
+  #canvas.desktop { width: 100%; height: 100%; min-height: 600px; }
+  #canvas.tablet { width: 768px; height: 1024px; border-radius: 12px; }
+  #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 10px solid #222; }
 
-  /* Elementos creados en el lienzo */
+  /* --- ELEMENTOS EN EL LIENZO --- */
   .canvas-element { 
-    position: absolute; display: flex; align-items: center; justify-content: center;
-    box-sizing: border-box; cursor: grab; color: #000;
+    position: absolute; box-sizing: border-box; cursor: grab; user-select: none;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
   }
-  .canvas-element.selected { outline: 2px dashed var(--accent); outline-offset: 2px; }
+  .canvas-element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 100 !important; }
   .canvas-element:active { cursor: grabbing; }
   
-  /* Tirador para redimensionar */
   .resizer { 
-    width: 12px; height: 12px; background: var(--accent); 
-    position: absolute; right: -6px; bottom: -6px; 
-    border-radius: 50%; cursor: nwse-resize; z-index: 10; display: none;
+    width: 10px; height: 10px; background: var(--accent); position: absolute; right: 0; bottom: 0; 
+    cursor: nwse-resize; display: none; z-index: 10;
   }
   .canvas-element.selected .resizer { display: block; }
   
-  .medidas-tooltip {
-    position: absolute; top: -25px; left: 0; background: var(--accent);
-    color: white; padding: 2px 6px; font-size: 10px; border-radius: 3px;
-    white-space: nowrap; pointer-events: none; display: none;
+  /* Indicadores de Medida/Distancia */
+  .measure-tag {
+    position: absolute; background: var(--accent); color: white; padding: 2px 6px; 
+    font-size: 10px; border-radius: 3px; top: -22px; left: 0; white-space: nowrap; pointer-events: none;
   }
-  .canvas-element.selected .medidas-tooltip { display: block; }
+  .guide-line { position: absolute; background: var(--guide-color); z-index: 99; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+  .guide-line.vertical { width: 1px; }
+  .guide-line.horizontal { height: 1px; }
+  .guide-label { background: var(--guide-color); color: #fff; font-size: 10px; padding: 2px 4px; border-radius: 2px; }
+
+  /* --- BARRA DERECHA (Pestañas y Editor) --- */
+  .right-panel { 
+    width: 320px; background: var(--panel-bg); border-left: 1px solid var(--border-color); 
+    display: flex; flex-direction: column;
+  }
+  
+  .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: #15151a; }
+  .tab-btn { 
+    flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); 
+    cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent;
+  }
+  .tab-btn.active { color: #fff; border-bottom: 2px solid var(--accent); }
+  
+  .tab-content { flex: 1; padding: 15px; overflow-y: auto; display: none; }
+  .tab-content.active { display: block; }
+  
+  /* Estilos de Inputs en Propiedades */
+  .prop-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .prop-group { flex: 1; display: flex; flex-direction: column; }
+  .prop-group label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .prop-group input, .prop-group select { 
+    width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #333; 
+    background: #111; color: white; font-family: monospace; font-size: 12px;
+  }
+  
+  /* Código Generado */
+  pre { margin: 0; font-family: 'Courier New', Courier, monospace; font-size: 12px; line-height: 1.4; color: #a6e22e; white-space: pre-wrap; }
+  .html-code { color: #e6db74; }
+  .css-code { color: #66d9ef; }
+
 </style>
 </head>
 <body>
 
   <header>
-    <h1>Medidor Visual & Exportador a HTML/CSS</h1>
-    <div style="font-size: 13px; color: #aaa;">Herramienta gratuita para medir y maquetar sin saber código</div>
+    <div class="header-title">
+      <h1>Master Layout 🛠️</h1>
+      <p>Aprende estructura y distancias CSS</p>
+    </div>
+    <div class="viewports" id="viewport-controls">
+      <button class="active" onclick="setViewport('desktop')">💻 Escritorio</button>
+      <button onclick="setViewport('tablet')">📱 Tablet</button>
+      <button onclick="setViewport('mobile')">📱 Móvil</button>
+    </div>
   </header>
 
   <div class="workspace">
-    <!-- BARRA IZQUIERDA: Herramientas -->
+    <!-- BARRA IZQUIERDA -->
     <div class="sidebar">
-      <h3 style="margin-top: 0; font-size: 14px; color: #aaa;">Agregar Elementos</h3>
-      <button class="btn-add" onclick="addElement('container')">+ Contenedor (Div)</button>
-      <button class="btn-add" onclick="addElement('text')">+ Cuadro de Texto</button>
-      <button class="btn-add" onclick="addElement('button')">+ Botón</button>
-      <button class="btn-add" onclick="addElement('input')">+ Input (Campo de texto)</button>
-      <button class="btn-add" style="background:#555;" onclick="clearCanvas()">🗑️ Limpiar todo</button>
+      <h3>Elementos Simples</h3>
+      <button class="tool-btn" onclick="addElement('div')">🔲 Contenedor Div</button>
+      <button class="tool-btn" onclick="addElement('text')">📝 Párrafo de Texto</button>
+      <button class="tool-btn" onclick="addElement('button')">🖱️ Botón</button>
       
-      <div style="margin-top: 20px; font-size: 12px; color: #888; line-height: 1.5;">
-        <strong>Instrucciones:</strong><br>
-        1. Agrega elementos desde este menú.<br>
-        2. Arrástralos libremente por el lienzo.<br>
-        3. Usa la esquina inferior derecha del elemento para cambiar su tamaño.<br>
-        4. El código HTML/CSS exacto se genera automáticamente abajo.
+      <h3 style="margin-top: 15px;">Estructuras (Aprende Flexbox)</h3>
+      <button class="tool-btn" onclick="addElement('flex-row')">📦 Contenedor Doble (Flex)</button>
+      <button class="tool-btn" onclick="addElement('card')">🖼️ Tarjeta (Card)</button>
+
+      <div class="tips-box">
+        <strong>💡 Tip para Novatos:</strong><br><br>
+        En la web real, no posicionamos todo con coordenadas absolutas (X/Y) porque las pantallas cambian de tamaño.<br><br>
+        Agrega un <b>Contenedor Doble</b> y revisa la pestaña CSS para ver cómo <code>display: flex</code> acomoda las cosas automáticamente.
       </div>
     </div>
 
-    <!-- CENTRO: Lienzo Interactivo -->
-    <div class="canvas-container" id="canvas-container">
-      <div id="canvas"></div>
-    </div>
-
-    <!-- BARRA DERECHA: Propiedades del elemento seleccionado -->
-    <div class="properties" id="properties-panel">
-      <h3 style="margin-top: 0; font-size: 14px; color: #aaa;">Propiedades (Selecciona algo)</h3>
-      <div id="props-content" style="display: none;">
-        <div class="prop-group">
-          <label>Ancho (px)</label>
-          <input type="number" id="prop-w" oninput="updateSelectedElement()">
-        </div>
-        <div class="prop-group">
-          <label>Alto (px)</label>
-          <input type="number" id="prop-h" oninput="updateSelectedElement()">
-        </div>
-        <div class="prop-group">
-          <label>Posición X (Izquierda)</label>
-          <input type="number" id="prop-x" oninput="updateSelectedElement()">
-        </div>
-        <div class="prop-group">
-          <label>Posición Y (Arriba)</label>
-          <input type="number" id="prop-y" oninput="updateSelectedElement()">
-        </div>
-        <div class="prop-group">
-          <label>Color de fondo (HEX, Ej: #ff0000)</label>
-          <input type="text" id="prop-bg" oninput="updateSelectedElement()">
-        </div>
-        <div class="prop-group">
-          <label>Texto del elemento</label>
-          <input type="text" id="prop-text" oninput="updateSelectedElement()">
-        </div>
+    <!-- LIENZO CENTRAL -->
+    <div class="canvas-wrapper">
+      <div id="canvas" class="desktop">
+        <!-- Guías dinámicas se renderizan aquí -->
       </div>
     </div>
-  </div>
 
-  <!-- PANEL INFERIOR: Código generado -->
-  <div class="code-panel">
-    <div class="code-panel-header">Código HTML/CSS Generado en Tiempo Real</div>
-    <pre id="code-output">&lt;!-- Agrega elementos para ver el código aquí --&gt;</pre>
+    <!-- BARRA DERECHA -->
+    <div class="right-panel">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('props')">🎨 Estilos</button>
+        <button class="tab-btn" onclick="switchTab('html')">📄 HTML</button>
+        <button class="tab-btn" onclick="switchTab('css')">✨ CSS</button>
+      </div>
+
+      <!-- Tab 1: Propiedades -->
+      <div id="tab-props" class="tab-content active">
+        <div id="no-selection" style="color: var(--text-muted); font-size: 13px; text-align: center; margin-top: 50px;">
+          Selecciona un elemento en el lienzo para editarlo. <br><br> (Presiona 'Suprimir' para borrarlo).
+        </div>
+        
+        <div id="props-form" style="display: none;">
+          <h3 style="margin-top:0; font-size: 14px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px;">Posición y Tamaño</h3>
+          <div class="prop-row">
+            <div class="prop-group"><label>X (Left)</label><input type="number" id="prop-x" oninput="updateEl()"></div>
+            <div class="prop-group"><label>Y (Top)</label><input type="number" id="prop-y" oninput="updateEl()"></div>
+          </div>
+          <div class="prop-row">
+            <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateEl()"></div>
+            <div class="prop-group"><label>Alto (H)</label><input type="number" id="prop-h" oninput="updateEl()"></div>
+          </div>
+          
+          <h3 style="margin-top:15px; font-size: 14px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px;">Diseño</h3>
+          <div class="prop-group" style="margin-bottom:10px;">
+            <label>Color de Fondo</label>
+            <input type="color" id="prop-bg" oninput="updateEl()" style="padding: 0; height: 35px;">
+          </div>
+          <div class="prop-group" style="margin-bottom:10px;">
+            <label>Color de Texto</label>
+            <input type="color" id="prop-color" oninput="updateEl()" style="padding: 0; height: 35px;">
+          </div>
+          <div class="prop-row">
+            <div class="prop-group">
+              <label>Bordes Redondos (px)</label>
+              <input type="number" id="prop-radius" oninput="updateEl()">
+            </div>
+          </div>
+          <div class="prop-group" style="margin-bottom:10px;">
+            <label>Contenido / Texto</label>
+            <input type="text" id="prop-text" oninput="updateEl()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: HTML -->
+      <div id="tab-html" class="tab-content">
+        <div style="font-size: 11px; color: #888; margin-bottom: 10px;">Copia este código en tu archivo .html dentro de la etiqueta &lt;body&gt;</div>
+        <pre class="html-code" id="code-html"></pre>
+      </div>
+
+      <!-- Tab 3: CSS -->
+      <div id="tab-css" class="tab-content">
+        <div style="font-size: 11px; color: #888; margin-bottom: 10px;">Copia este código en tu archivo .css o dentro de &lt;style&gt;</div>
+        <pre class="css-code" id="code-css"></pre>
+      </div>
+
+    </div>
   </div>
 
 <script>
+  // --- ESTADO GLOBAL ---
   let elements = [];
-  let selectedElementId = null;
-  let idCounter = 0;
-
+  let selectedId = null;
+  let counter = 1;
   const canvas = document.getElementById('canvas');
-  const codeOutput = document.getElementById('code-output');
-  const propsContent = document.getElementById('props-content');
 
-  // Valores por defecto según el tipo
-  const defaultStyles = {
-    container: { w: 200, h: 200, bg: '#e0e0e0', text: 'Contenedor' },
-    text: { w: 150, h: 50, bg: 'transparent', text: 'Tu texto aquí' },
-    button: { w: 120, h: 40, bg: '#4A90E2', text: 'Haz clic' },
-    input: { w: 200, h: 40, bg: '#ffffff', text: 'Escribe aquí...' }
+  // Plantillas de elementos (Para ayudar al novato)
+  const templates = {
+    'div': { w: 200, h: 150, bg: '#e2e8f0', color: '#334155', text: 'Div Simple', radius: 0 },
+    'text': { w: 250, h: 60, bg: 'transparent', color: '#1e293b', text: 'Texto de prueba. El HTML es genial.', radius: 0 },
+    'button': { w: 140, h: 45, bg: '#2563eb', color: '#ffffff', text: 'Enviar', radius: 6 },
+    'flex-row': { w: 350, h: 120, bg: '#f8fafc', color: '#0f172a', text: '', radius: 8, isFlex: true },
+    'card': { w: 280, h: 320, bg: '#ffffff', color: '#0f172a', text: '', radius: 12, isCard: true }
   };
 
+  // --- FUNCIONES CORE ---
   function addElement(type) {
-    const id = 'el_' + idCounter++;
-    const config = defaultStyles[type];
-    const newEl = {
-      id: id, type: type, x: 50, y: 50, w: config.w, h: config.h, bg: config.bg, text: config.text
-    };
-    elements.push(newEl);
-    renderCanvas();
+    const t = templates[type];
+    const id = `el_${counter++}`;
+    // Centrar en la vista actual
+    const startX = Math.max(50, (canvas.offsetWidth / 2) - (t.w / 2));
+    const startY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
+
+    elements.push({
+      id, type,
+      x: startX, y: startY, w: t.w, h: t.h,
+      bg: t.bg, color: t.color, text: t.text, radius: t.radius,
+      isFlex: t.isFlex || false, isCard: t.isCard || false
+    });
+    
     selectElement(id);
   }
 
-  function clearCanvas() {
-    elements = [];
-    selectedElementId = null;
+  function deleteSelected() {
+    if(!selectedId) return;
+    elements = elements.filter(el => el.id !== selectedId);
+    selectedId = null;
     renderCanvas();
-    updatePropsPanel();
+    updatePropsUI();
   }
 
+  // --- RENDERIZADO VISUAL ---
   function renderCanvas() {
-    canvas.innerHTML = '';
-    elements.forEach(el => {
-      const domEl = document.createElement('div');
-      domEl.id = el.id;
-      domEl.className = `canvas-element ${selectedElementId === el.id ? 'selected' : ''}`;
-      domEl.style.left = el.x + 'px';
-      domEl.style.top = el.y + 'px';
-      domEl.style.width = el.w + 'px';
-      domEl.style.height = el.h + 'px';
-      domEl.style.backgroundColor = el.bg;
-      
-      // Estilos específicos
-      if(el.type === 'button') domEl.style.borderRadius = '5px';
-      if(el.type === 'input') domEl.style.border = '1px solid #ccc';
-      if(el.type === 'container') domEl.style.border = '2px dashed #999';
+    // Limpiar canvas (excepto las guías que dibujaremos después)
+    canvas.innerHTML = ''; 
 
-      domEl.innerHTML = `
-        <div class="medidas-tooltip">${el.w}px × ${el.h}px</div>
-        <span style="pointer-events:none; font-family:sans-serif; font-size:14px; text-align:center;">${el.text}</span>
+    elements.forEach(el => {
+      const node = document.createElement('div');
+      node.id = el.id;
+      node.className = `canvas-element ${selectedId === el.id ? 'selected' : ''}`;
+      node.style.left = `${el.x}px`;
+      node.style.top = `${el.y}px`;
+      node.style.width = `${el.w}px`;
+      node.style.height = `${el.h}px`;
+      node.style.backgroundColor = el.bg;
+      node.style.color = el.color;
+      node.style.borderRadius = `${el.radius}px`;
+      node.style.border = (el.bg === 'transparent') ? '1px dashed #ccc' : (el.type === 'card' || el.type === 'flex-row') ? '1px solid #e2e8f0' : 'none';
+      if(el.isCard) node.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+
+      // Contenido interno según el tipo (Simulación de maquetación)
+      let innerHTML = '';
+      if(el.isFlex) {
+        innerHTML = `
+          <div style="display:flex; width:100%; height:100%; gap:10px; padding:10px;">
+            <div style="flex:1; background:#cbd5e1; border-radius:4px;"></div>
+            <div style="flex:1; background:#cbd5e1; border-radius:4px;"></div>
+          </div>`;
+      } else if (el.isCard) {
+        innerHTML = `
+          <div style="display:flex; flex-direction:column; width:100%; height:100%;">
+            <div style="height:45%; background:#94a3b8; width:100%;"></div>
+            <div style="padding:15px; display:flex; flex-direction:column; gap:10px;">
+              <div style="height:14px; width:70%; background:#cbd5e1; border-radius:2px;"></div>
+              <div style="height:10px; width:100%; background:#e2e8f0; border-radius:2px;"></div>
+              <div style="height:10px; width:90%; background:#e2e8f0; border-radius:2px;"></div>
+              <div style="margin-top:auto; height:30px; width:100%; background:#3b82f6; border-radius:4px;"></div>
+            </div>
+          </div>`;
+      } else {
+        innerHTML = `<span style="padding:10px; text-align:center; font-family:sans-serif;">${el.text}</span>`;
+      }
+
+      node.innerHTML = `
+        ${selectedId === el.id ? `<div class="measure-tag">${Math.round(el.w)}px × ${Math.round(el.h)}px</div>` : ''}
+        ${innerHTML}
         <div class="resizer"></div>
       `;
 
-      // Eventos para arrastrar y seleccionar
-      domEl.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('resizer')) return; // Si toca el resizer, que no arrastre
+      // Eventos
+      node.addEventListener('mousedown', (e) => {
+        if(e.target.classList.contains('resizer')) return; // handled by resizer
         selectElement(el.id);
-        startDrag(e, el.id);
+        startDrag(e, el);
       });
 
-      // Evento para redimensionar
-      const resizer = domEl.querySelector('.resizer');
-      resizer.addEventListener('mousedown', (e) => {
-        e.stopPropagation();
-        selectElement(el.id);
-        startResize(e, el.id);
-      });
+      const resizer = node.querySelector('.resizer');
+      if(resizer) {
+        resizer.addEventListener('mousedown', (e) => {
+          e.stopPropagation();
+          selectElement(el.id);
+          startResize(e, el);
+        });
+      }
 
-      canvas.appendChild(domEl);
+      canvas.appendChild(node);
     });
-    
+
+    if(selectedId) drawGuides();
     generateCode();
   }
 
+  // --- DISTANCIAS A LOS BORDES (El superpoder para aprender) ---
+  function drawGuides() {
+    const el = elements.find(e => e.id === selectedId);
+    if(!el) return;
+
+    const cw = canvas.offsetWidth;
+    const ch = canvas.offsetHeight;
+
+    // Helper para crear líneas
+    const createLine = (cls, css) => {
+      const line = document.createElement('div');
+      line.className = `guide-line ${cls}`;
+      Object.assign(line.style, css);
+      return line;
+    };
+
+    // Arriba (Top)
+    if(el.y > 0) {
+      const line = createLine('vertical', { top: '0', left: `${el.x + el.w/2}px`, height: `${el.y}px` });
+      line.innerHTML = `<span class="guide-label">Top: ${Math.round(el.y)}px</span>`;
+      canvas.appendChild(line);
+    }
+    // Izquierda (Left)
+    if(el.x > 0) {
+      const line = createLine('horizontal', { top: `${el.y + el.h/2}px`, left: '0', width: `${el.x}px` });
+      line.innerHTML = `<span class="guide-label">Left: ${Math.round(el.x)}px</span>`;
+      canvas.appendChild(line);
+    }
+    // Derecha (Right)
+    const distRight = cw - (el.x + el.w);
+    if(distRight > 0) {
+      const line = createLine('horizontal', { top: `${el.y + el.h/2}px`, left: `${el.x + el.w}px`, width: `${distRight}px` });
+      line.innerHTML = `<span class="guide-label">Right: ${Math.round(distRight)}px</span>`;
+      canvas.appendChild(line);
+    }
+    // Abajo (Bottom)
+    const distBottom = ch - (el.y + el.h);
+    if(distBottom > 0) {
+      const line = createLine('vertical', { top: `${el.y + el.h}px`, left: `${el.x + el.w/2}px`, height: `${distBottom}px` });
+      line.innerHTML = `<span class="guide-label">Bot: ${Math.round(distBottom)}px</span>`;
+      canvas.appendChild(line);
+    }
+  }
+
+  // --- DRAG & RESIZE ---
+  function startDrag(e, el) {
+    let startX = e.clientX, startY = e.clientY;
+    function onMove(ev) {
+      el.x += ev.clientX - startX;
+      el.y += ev.clientY - startY;
+      // Prevenir salir del canvas por arriba/izquierda para no romper el layout
+      if(el.x < 0) el.x = 0;
+      if(el.y < 0) el.y = 0;
+      startX = ev.clientX; startY = ev.clientY;
+      renderCanvas();
+      updatePropsUI();
+    }
+    function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+
+  function startResize(e, el) {
+    let startX = e.clientX, startY = e.clientY;
+    function onMove(ev) {
+      el.w = Math.max(20, el.w + (ev.clientX - startX));
+      el.h = Math.max(20, el.h + (ev.clientY - startY));
+      startX = ev.clientX; startY = ev.clientY;
+      renderCanvas();
+      updatePropsUI();
+    }
+    function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+
+  // --- UI Y PESTAÑAS ---
   function selectElement(id) {
-    selectedElementId = id;
+    selectedId = id;
     renderCanvas();
-    updatePropsPanel();
+    updatePropsUI();
   }
 
-  // --- Lógica para Arrastrar (Mover) ---
-  function startDrag(e, id) {
-    e.preventDefault();
-    const el = elements.find(item => item.id === id);
-    let startX = e.clientX;
-    let startY = e.clientY;
-
-    function onMouseMove(moveEvent) {
-      const dx = moveEvent.clientX - startX;
-      const dy = moveEvent.clientY - startY;
-      el.x += dx;
-      el.y += dy;
-      startX = moveEvent.clientX;
-      startY = moveEvent.clientY;
-      renderCanvas();
-      updatePropsPanel();
-    }
-
-    function onMouseUp() {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tab}`).classList.add('active');
   }
 
-  // --- Lógica para Redimensionar (Medir) ---
-  function startResize(e, id) {
-    e.preventDefault();
-    const el = elements.find(item => item.id === id);
-    let startX = e.clientX;
-    let startY = e.clientY;
-
-    function onMouseMove(moveEvent) {
-      const dx = moveEvent.clientX - startX;
-      const dy = moveEvent.clientY - startY;
-      el.w = Math.max(20, el.w + dx); // mínimo 20px
-      el.h = Math.max(20, el.h + dy); // mínimo 20px
-      startX = moveEvent.clientX;
-      startY = moveEvent.clientY;
-      renderCanvas();
-      updatePropsPanel();
+  function updatePropsUI() {
+    const emptyMsg = document.getElementById('no-selection');
+    const form = document.getElementById('props-form');
+    
+    if(!selectedId) {
+      emptyMsg.style.display = 'block'; form.style.display = 'none'; return;
     }
-
-    function onMouseUp() {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }
-
-  // --- Panel de Propiedades ---
-  function updatePropsPanel() {
-    if (!selectedElementId) {
-      propsContent.style.display = 'none';
-      return;
-    }
-    propsContent.style.display = 'block';
-    const el = elements.find(item => item.id === selectedElementId);
-    document.getElementById('prop-w').value = el.w;
-    document.getElementById('prop-h').value = el.h;
-    document.getElementById('prop-x').value = el.x;
-    document.getElementById('prop-y').value = el.y;
-    document.getElementById('prop-bg').value = el.bg;
+    
+    emptyMsg.style.display = 'none'; form.style.display = 'block';
+    const el = elements.find(e => e.id === selectedId);
+    
+    document.getElementById('prop-x').value = Math.round(el.x);
+    document.getElementById('prop-y').value = Math.round(el.y);
+    document.getElementById('prop-w').value = Math.round(el.w);
+    document.getElementById('prop-h').value = Math.round(el.h);
+    
+    // El input color no acepta 'transparent' u otros formatos que no sean hex
+    // Para simplificar, si es transparente ponemos un color blanco en el UI
+    document.getElementById('prop-bg').value = el.bg.startsWith('#') ? el.bg : '#ffffff'; 
+    document.getElementById('prop-color').value = el.color.startsWith('#') ? el.color : '#000000';
+    document.getElementById('prop-radius').value = el.radius;
     document.getElementById('prop-text').value = el.text;
   }
 
-  function updateSelectedElement() {
-    if (!selectedElementId) return;
-    const el = elements.find(item => item.id === selectedElementId);
-    el.w = parseInt(document.getElementById('prop-w').value) || 0;
-    el.h = parseInt(document.getElementById('prop-h').value) || 0;
-    el.x = parseInt(document.getElementById('prop-x').value) || 0;
-    el.y = parseInt(document.getElementById('prop-y').value) || 0;
+  function updateEl() {
+    if(!selectedId) return;
+    const el = elements.find(e => e.id === selectedId);
+    
+    el.x = parseFloat(document.getElementById('prop-x').value) || 0;
+    el.y = parseFloat(document.getElementById('prop-y').value) || 0;
+    el.w = parseFloat(document.getElementById('prop-w').value) || 0;
+    el.h = parseFloat(document.getElementById('prop-h').value) || 0;
     el.bg = document.getElementById('prop-bg').value;
+    el.color = document.getElementById('prop-color').value;
+    el.radius = parseFloat(document.getElementById('prop-radius').value) || 0;
     el.text = document.getElementById('prop-text').value;
+    
     renderCanvas();
   }
 
-  // --- Generador de Código HTML/CSS ---
-  function generateCode() {
-    if (elements.length === 0) {
-      codeOutput.textContent = '<!-- Agrega elementos para ver el código aquí -->';
-      return;
-    }
-    
-    let htmlCode = `<div class="mi-diseno" style="position: relative; width: 100%; height: 500px;">\n`;
-    let cssCode = `\n<style>\n`;
-
-    elements.forEach(el => {
-      let tag = 'div';
-      if(el.type === 'button') tag = 'button';
-      if(el.type === 'input') tag = 'input';
-
-      let innerHtml = (el.type === 'input') ? `placeholder="${el.text}"` : `>${el.text}</${tag}>`;
-      if (el.type === 'input') {
-        htmlCode += `  <${tag} id="${el.id}" ${innerHtml} />\n`;
-      } else {
-        htmlCode += `  <${tag} id="${el.id}" class="elemento">${el.text}</${tag}>\n`;
-      }
-
-      cssCode += `  #${el.id} {\n`;
-      cssCode += `    position: absolute;\n`;
-      cssCode += `    left: ${el.x}px;\n`;
-      cssCode += `    top: ${el.y}px;\n`;
-      cssCode += `    width: ${el.w}px;\n`;
-      cssCode += `    height: ${el.h}px;\n`;
-      cssCode += `    background-color: ${el.bg};\n`;
-      if(el.type === 'button') cssCode += `    border: none; border-radius: 5px; color: white; cursor: pointer;\n`;
-      if(el.type === 'input') cssCode += `    border: 1px solid #ccc; padding: 5px; box-sizing: border-box;\n`;
-      cssCode += `  }\n`;
-    });
-
-    htmlCode += `</div>`;
-    cssCode += `</style>`;
-
-    codeOutput.textContent = htmlCode + cssCode;
+  // --- VIEWPORTS ---
+  function setViewport(type) {
+    document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    canvas.className = type; // Cambia la clase a desktop, tablet o mobile
+    setTimeout(() => renderCanvas(), 310); // Re-renderizar después de la animación de CSS
   }
 
-  // Deseleccionar al hacer clic en el fondo del lienzo
-  canvas.addEventListener('mousedown', (e) => {
-    if (e.target === canvas) {
-      selectedElementId = null;
-      renderCanvas();
-      updatePropsPanel();
+  // --- GENERADOR DE CÓDIGO (EDUCATIVO) ---
+  function generateCode() {
+    const htmlPre = document.getElementById('code-html');
+    const cssPre = document.getElementById('code-css');
+    
+    if(elements.length === 0) {
+      htmlPre.textContent = '<!-- Agrega elementos al lienzo -->';
+      cssPre.textContent = '/* Agrega elementos al lienzo */';
+      return;
+    }
+
+    let html = `<div class="contenedor-principal">\n`;
+    let css = `/* Nota: En un entorno real se recomienda Flexbox/Grid \n   en lugar de position: absolute. */\n\n.contenedor-principal {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n}\n\n`;
+
+    elements.forEach(el => {
+      // Etiqueta semántica HTML
+      let tag = 'div';
+      if(el.type === 'text') tag = 'p';
+      if(el.type === 'button') tag = 'button';
+
+      let innerContent = el.text;
+      
+      // Si es flex o card, generamos código interno real para que el alumno aprenda
+      if(el.isFlex) {
+        innerContent = `\n    <div class="caja-hija">Caja 1</div>\n    <div class="caja-hija">Caja 2</div>\n  `;
+        css += `.${el.id} .caja-hija {\n  flex: 1;\n  background: #cbd5e1;\n  border-radius: 4px;\n  padding: 10px;\n}\n\n`;
+      }
+      if(el.isCard) {
+        innerContent = `\n    <img src="imagen.jpg" alt="Foto" class="card-img">\n    <div class="card-body">\n      <h3>Título Tarjeta</h3>\n      <p>Descripción breve para aprender.</p>\n      <button>Acción</button>\n    </div>\n  `;
+        css += `.${el.id} .card-img {\n  width: 100%;\n  height: 150px;\n  object-fit: cover;\n  background: #94a3b8;\n}\n.${el.id} .card-body {\n  padding: 15px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n}\n\n`;
+      }
+
+      html += `  <${tag} class="${el.id}">${innerContent}</${tag}>\n`;
+
+      // CSS Principal
+      css += `.${el.id} {\n`;
+      css += `  position: absolute;\n`;
+      css += `  left: ${Math.round(el.x)}px;\n`;
+      css += `  top: ${Math.round(el.y)}px;\n`;
+      css += `  width: ${Math.round(el.w)}px;\n`;
+      css += `  height: ${Math.round(el.h)}px;\n`;
+      css += `  background-color: ${el.bg};\n`;
+      css += `  color: ${el.color};\n`;
+      if(el.radius > 0) css += `  border-radius: ${el.radius}px;\n`;
+      
+      // Estilos extra según el tipo
+      if(el.type === 'button') css += `  border: none;\n  cursor: pointer;\n  font-weight: bold;\n`;
+      if(el.isFlex) css += `  display: flex;\n  gap: 10px;\n  padding: 10px;\n  box-sizing: border-box;\n`;
+      if(el.isCard) css += `  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n`;
+      if(el.type === 'text') css += `  margin: 0;\n  padding: 10px;\n  box-sizing: border-box;\n`;
+
+      css += `}\n\n`;
+    });
+
+    html += `</div>`;
+
+    htmlPre.textContent = html;
+    cssPre.textContent = css;
+  }
+
+  // --- ATAJOS DE TECLADO ---
+  document.addEventListener('keydown', (e) => {
+    // Evitar que borre si el usuario está escribiendo en un input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+      deleteSelected();
     }
   });
+
+  // Deseleccionar al clickear fondo
+  canvas.addEventListener('mousedown', (e) => {
+    if(e.target === canvas) {
+      selectedId = null;
+      renderCanvas();
+      updatePropsUI();
+    }
+  });
+
+  // Init
+  generateCode();
 
 </script>
 </body>
