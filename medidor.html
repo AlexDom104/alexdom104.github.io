@@ -3,142 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout - Aprende HTML/CSS Visualmente</title>
+<title>Master Layout - Ultimate HTML/CSS Builder</title>
 <style>
   :root { 
-    --bg-dark: #0f0f13; 
-    --panel-bg: #1e1e24; 
-    --text-main: #e0e0e0; 
-    --text-muted: #888;
-    --accent: #007acc; 
-    --accent-hover: #005f9e;
-    --border-color: #333;
-    --guide-color: #ff007f;
+    --bg-dark: #0d0d12; --panel-bg: #1a1a24; --text-main: #e2e8f0; --text-muted: #94a3b8;
+    --accent: #3b82f6; --accent-hover: #2563eb; --border-color: #334155; --guide-color: #ec4899;
   }
-  
   * { box-sizing: border-box; }
-  body, html { 
-    margin: 0; padding: 0; height: 100%; 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-    background-color: var(--bg-dark); color: var(--text-main); 
-    display: flex; flex-direction: column; overflow: hidden;
-  }
+  body, html { margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
 
-  /* --- HEADER & VIEWPORTS --- */
-  header { 
-    background: #111; padding: 10px 20px; border-bottom: 1px solid var(--border-color);
-    display: flex; justify-content: space-between; align-items: center; z-index: 10;
-  }
+  /* HEADER */
+  header { background: #0f172a; padding: 10px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
   .header-title h1 { margin: 0; font-size: 16px; color: #fff; }
   .header-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); }
-  
-  .viewports button {
-    background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);
-    padding: 6px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; transition: 0.2s;
-  }
+  .viewports button { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
   .viewports button.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-  /* --- LAYOUT PRINCIPAL --- */
+  /* LAYOUT */
   .workspace { display: flex; flex: 1; height: calc(100vh - 50px); }
   
-  /* --- BARRA IZQUIERDA (Herramientas) --- */
-  .sidebar { 
-    width: 240px; background: var(--panel-bg); padding: 15px; 
-    border-right: 1px solid var(--border-color); overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-  }
-  .sidebar h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 0 0 10px 0; }
-  
-  .tool-btn { 
-    background: #2a2a32; color: #fff; border: 1px solid #3a3a42; padding: 10px; 
-    border-radius: 6px; cursor: pointer; text-align: left; font-size: 13px; display: flex; align-items: center; gap: 8px;
-    transition: 0.2s;
-  }
-  .tool-btn:hover { background: #3a3a45; border-color: var(--accent); }
-  
-  .tips-box {
-    background: rgba(0, 122, 204, 0.1); border-left: 3px solid var(--accent);
-    padding: 10px; margin-top: auto; font-size: 11px; color: #bbb; line-height: 1.5;
-  }
+  /* SIDEBAR */
+  .sidebar { width: 260px; background: var(--panel-bg); padding: 15px; border-right: 1px solid var(--border-color); overflow-y: auto; }
+  .sidebar-section { margin-bottom: 20px; }
+  .sidebar h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 0 0 10px 0; border-bottom: 1px solid #333; padding-bottom: 5px;}
+  .tool-btn { width: 100%; background: #272736; color: #e2e8f0; border: 1px solid #3f3f5a; padding: 8px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 12px; margin-bottom: 6px; transition: 0.2s; }
+  .tool-btn:hover { background: #323246; border-color: var(--accent); }
 
-  /* --- LIENZO CENTRAL (Canvas) --- */
-  .canvas-wrapper { 
-    flex: 1; display: flex; justify-content: center; align-items: center; 
-    background-image: radial-gradient(#333 1px, transparent 0); background-size: 20px 20px;
-    overflow: auto; padding: 20px;
-  }
-  
-  #canvas { 
-    background: #ffffff; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    transition: width 0.3s, height 0.3s; overflow: hidden;
-  }
+  /* CANVAS */
+  .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#333 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; }
+  #canvas { background: #ffffff; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: width 0.3s, height 0.3s; overflow: hidden; }
   #canvas.desktop { width: 100%; height: 100%; min-height: 600px; }
   #canvas.tablet { width: 768px; height: 1024px; border-radius: 12px; }
-  #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 10px solid #222; }
+  #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 10px solid #1e293b; }
 
-  /* --- ELEMENTOS EN EL LIENZO --- */
-  .canvas-element { 
-    position: absolute; box-sizing: border-box; cursor: grab; user-select: none;
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
-  }
-  .canvas-element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 100 !important; }
+  /* ELEMENTS IN CANVAS */
+  .canvas-element { position: absolute; box-sizing: border-box; cursor: grab; user-select: none; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: box-shadow 0.3s, transform 0.3s, background-color 0.3s; }
+  .canvas-element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 100 !important; animation: none !important; transform: none !important;}
   .canvas-element:active { cursor: grabbing; }
-  
-  .resizer { 
-    width: 10px; height: 10px; background: var(--accent); position: absolute; right: 0; bottom: 0; 
-    cursor: nwse-resize; display: none; z-index: 10;
-  }
+  .resizer { width: 10px; height: 10px; background: var(--accent); position: absolute; right: 0; bottom: 0; cursor: nwse-resize; display: none; z-index: 10; }
   .canvas-element.selected .resizer { display: block; }
   
-  .measure-tag {
-    position: absolute; background: var(--accent); color: white; padding: 2px 6px; 
-    font-size: 10px; border-radius: 3px; top: -22px; left: 0; white-space: nowrap; pointer-events: none;
-  }
+  /* Guides */
+  .measure-tag { position: absolute; background: var(--accent); color: white; padding: 2px 6px; font-size: 10px; border-radius: 3px; top: -22px; left: 0; white-space: nowrap; pointer-events: none; }
   .guide-line { position: absolute; background: var(--guide-color); z-index: 99; pointer-events: none; display: flex; align-items: center; justify-content: center; }
-  .guide-line.vertical { width: 1px; }
-  .guide-line.horizontal { height: 1px; }
+  .guide-line.vertical { width: 1px; } .guide-line.horizontal { height: 1px; }
   .guide-label { background: var(--guide-color); color: #fff; font-size: 10px; padding: 2px 4px; border-radius: 2px; }
 
-  /* --- BARRA DERECHA (Pestañas y Editor) --- */
-  .right-panel { 
-    width: 380px; /* Un poco más ancho para leer bien el código dual */
-    background: var(--panel-bg); border-left: 1px solid var(--border-color); 
-    display: flex; flex-direction: column;
-  }
-  
-  .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: #15151a; }
-  .tab-btn { 
-    flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); 
-    cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent;
-  }
+  /* RIGHT PANEL */
+  .right-panel { width: 380px; background: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: #0f172a; }
+  .tab-btn { flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; }
   .tab-btn.active { color: #fff; border-bottom: 2px solid var(--accent); }
-  
   .tab-content { flex: 1; padding: 15px; overflow-y: auto; display: none; }
   .tab-content.active { display: block; }
   
-  /* Inputs en Propiedades */
-  .prop-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .prop-section { margin-bottom: 15px; background: #222230; padding: 10px; border-radius: 6px; border: 1px solid #334155; }
+  .prop-section h4 { margin: 0 0 10px 0; font-size: 11px; color: #cbd5e1; text-transform: uppercase; }
+  .prop-row { display: flex; gap: 10px; margin-bottom: 8px; }
   .prop-group { flex: 1; display: flex; flex-direction: column; }
-  .prop-group label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-  .prop-group input { 
-    width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #333; 
-    background: #111; color: white; font-family: monospace; font-size: 12px;
-  }
+  .prop-group label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .prop-group input, .prop-group select { width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #334155; background: #0f172a; color: white; font-family: monospace; font-size: 11px; }
   
-  /* Código Generado (Doble Vista) */
-  .code-section { margin-bottom: 20px; background: #111; border-radius: 6px; border: 1px solid #333; overflow: hidden; }
-  .code-header { background: #222; padding: 6px 12px; font-size: 11px; font-weight: bold; color: #ccc; border-bottom: 1px solid #333; display: flex; justify-content: space-between;}
-  pre { margin: 0; padding: 12px; font-family: 'Courier New', Courier, monospace; font-size: 11px; line-height: 1.4; white-space: pre-wrap; overflow-x: auto; max-height: 250px; overflow-y: auto;}
-  .html-code { color: #e6db74; }
-  .css-code { color: #66d9ef; }
+  .code-section { margin-bottom: 20px; background: #0f172a; border-radius: 6px; border: 1px solid #334155; overflow: hidden; }
+  .code-header { background: #1e293b; padding: 6px 12px; font-size: 11px; font-weight: bold; color: #cbd5e1; border-bottom: 1px solid #334155;}
+  pre { margin: 0; padding: 12px; font-family: 'Courier New', Courier, monospace; font-size: 11px; line-height: 1.4; white-space: pre-wrap; max-height: 250px; overflow-y: auto;}
+  .html-code { color: #e6db74; } .css-code { color: #66d9ef; }
 
+  /* CLASES DE ANIMACIÓN PARA EL PREVIEW EN VIVO */
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  
+  .anim-spin { animation: spin 4s linear infinite; }
+  .anim-bounce { animation: bounce 2s ease-in-out infinite; }
+  .anim-pulse { animation: pulse 2s ease-in-out infinite; }
+  
+  .hover-scale:hover { transform: scale(1.08) !important; }
+  .hover-color:hover { filter: brightness(1.3); }
+
+  .shadow-soft { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  .shadow-hard { box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+
+  /* Dropdown Preview CSS */
+  .preview-dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; border-radius: 4px; flex-direction: column; }
+  .canvas-element:hover .preview-dropdown-content { display: flex; }
 </style>
 </head>
 <body>
 
   <header>
     <div class="header-title">
-      <h1>Master Layout 🛠️</h1>
-      <p>Aprende estructura y distancias CSS</p>
+      <h1>Master Layout 🚀</h1><p>Constructor Visual Completo (HTML/CSS/Animaciones)</p>
     </div>
     <div class="viewports" id="viewport-controls">
       <button class="active" onclick="setViewport('desktop')">💻 Escritorio</button>
@@ -150,19 +105,33 @@
   <div class="workspace">
     <!-- BARRA IZQUIERDA -->
     <div class="sidebar">
-      <h3>Elementos Simples</h3>
-      <button class="tool-btn" onclick="addElement('div')">🔲 Contenedor Div</button>
-      <button class="tool-btn" onclick="addElement('text')">📝 Párrafo de Texto</button>
-      <button class="tool-btn" onclick="addElement('button')">🖱️ Botón</button>
       
-      <h3 style="margin-top: 15px;">Estructuras (Aprende Flexbox)</h3>
-      <button class="tool-btn" onclick="addElement('flex-row')">📦 Contenedor Doble (Flex)</button>
-      <button class="tool-btn" onclick="addElement('card')">🖼️ Tarjeta (Card)</button>
-
-      <div class="tips-box">
-        <strong>💡 Tip para Novatos:</strong><br><br>
-        Usa las pestañas de HTML y CSS de la derecha. Ahora puedes ver el código de toda la página, O copiar el código de un solo elemento aislado.
+      <div class="sidebar-section">
+        <h3>Basicos</h3>
+        <button class="tool-btn" onclick="addElement('div')">🔲 Contenedor Div</button>
+        <button class="tool-btn" onclick="addElement('text')">📝 Párrafo</button>
+        <button class="tool-btn" onclick="addElement('image')">🖼️ Imagen</button>
       </div>
+
+      <div class="sidebar-section">
+        <h3>Formularios</h3>
+        <button class="tool-btn" onclick="addElement('button')">🖱️ Botón</button>
+        <button class="tool-btn" onclick="addElement('input')">✍️ Input de Texto</button>
+        <button class="tool-btn" onclick="addElement('select')">🔽 Select (Lista)</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Estructuras (Modernas)</h3>
+        <button class="tool-btn" onclick="addElement('flex-row')">📦 Contenedor Flex</button>
+        <button class="tool-btn" onclick="addElement('grid-box')">🧮 CSS Grid (Cuadrícula)</button>
+        <button class="tool-btn" onclick="addElement('card')">🃏 Tarjeta (Card)</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Componentes UI</h3>
+        <button class="tool-btn" onclick="addElement('dropdown-menu')">🪄 Menú Desplegable (Hover)</button>
+      </div>
+
     </div>
 
     <!-- LIENZO CENTRAL -->
@@ -173,7 +142,7 @@
     <!-- BARRA DERECHA -->
     <div class="right-panel">
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('props')">🎨 Estilos</button>
+        <button class="tab-btn active" onclick="switchTab('props')">🎨 Diseño & Efectos</button>
         <button class="tab-btn" onclick="switchTab('html')">📄 HTML</button>
         <button class="tab-btn" onclick="switchTab('css')">✨ CSS</button>
       </div>
@@ -181,104 +150,112 @@
       <!-- Tab 1: Propiedades -->
       <div id="tab-props" class="tab-content active">
         <div id="no-selection" style="color: var(--text-muted); font-size: 13px; text-align: center; margin-top: 50px;">
-          Selecciona un elemento en el lienzo para editarlo. <br><br> (Presiona 'Suprimir' para borrarlo).
+          Selecciona un elemento en el lienzo.<br><br>(Suprimir para borrar).
         </div>
         
         <div id="props-form" style="display: none;">
-          <h3 style="margin-top:0; font-size: 14px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px;">Posición y Tamaño</h3>
-          <div class="prop-row">
-            <div class="prop-group"><label>X (Left)</label><input type="number" id="prop-x" oninput="updateEl()"></div>
-            <div class="prop-group"><label>Y (Top)</label><input type="number" id="prop-y" oninput="updateEl()"></div>
-          </div>
-          <div class="prop-row">
-            <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateEl()"></div>
-            <div class="prop-group"><label>Alto (H)</label><input type="number" id="prop-h" oninput="updateEl()"></div>
-          </div>
           
-          <h3 style="margin-top:15px; font-size: 14px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px;">Diseño</h3>
-          <div class="prop-group" style="margin-bottom:10px;">
-            <label>Color de Fondo</label>
-            <input type="color" id="prop-bg" oninput="updateEl()" style="padding: 0; height: 35px;">
-          </div>
-          <div class="prop-group" style="margin-bottom:10px;">
-            <label>Color de Texto</label>
-            <input type="color" id="prop-color" oninput="updateEl()" style="padding: 0; height: 35px;">
-          </div>
-          <div class="prop-row">
-            <div class="prop-group">
-              <label>Bordes Redondos (px)</label>
-              <input type="number" id="prop-radius" oninput="updateEl()">
+          <div class="prop-section">
+            <h4>Posición y Tamaño</h4>
+            <div class="prop-row">
+              <div class="prop-group"><label>X (Left)</label><input type="number" id="prop-x" oninput="updateEl()"></div>
+              <div class="prop-group"><label>Y (Top)</label><input type="number" id="prop-y" oninput="updateEl()"></div>
+            </div>
+            <div class="prop-row">
+              <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateEl()"></div>
+              <div class="prop-group"><label>Alto (H)</label><input type="number" id="prop-h" oninput="updateEl()"></div>
             </div>
           </div>
-          <div class="prop-group" style="margin-bottom:10px;">
-            <label>Contenido / Texto</label>
-            <input type="text" id="prop-text" oninput="updateEl()">
+
+          <div class="prop-section">
+            <h4>Apariencia</h4>
+            <div class="prop-row">
+              <div class="prop-group"><label>Fondo</label><input type="color" id="prop-bg" oninput="updateEl()"></div>
+              <div class="prop-group"><label>Texto</label><input type="color" id="prop-color" oninput="updateEl()"></div>
+            </div>
+            <div class="prop-group" style="margin-bottom:8px;"><label>Bordes (px)</label><input type="number" id="prop-radius" oninput="updateEl()"></div>
+            <div class="prop-group"><label>Contenido</label><input type="text" id="prop-text" oninput="updateEl()"></div>
           </div>
+
+          <!-- NUEVO: SECCIÓN DE EFECTOS -->
+          <div class="prop-section">
+            <h4>Interactividad y Efectos</h4>
+            <div class="prop-group" style="margin-bottom:8px;">
+              <label>Sombra (Box-Shadow)</label>
+              <select id="prop-shadow" oninput="updateEl()">
+                <option value="none">Ninguna</option>
+                <option value="shadow-soft">Suave</option>
+                <option value="shadow-hard">Fuerte / Flotante</option>
+              </select>
+            </div>
+            <div class="prop-group" style="margin-bottom:8px;">
+              <label>Efecto al pasar el ratón (:hover)</label>
+              <select id="prop-hover" oninput="updateEl()">
+                <option value="none">Ninguno</option>
+                <option value="hover-scale">Agrandar (Scale)</option>
+                <option value="hover-color">Brillar</option>
+              </select>
+            </div>
+            <div class="prop-group">
+              <label>Animación Infinita (@keyframes)</label>
+              <select id="prop-anim" oninput="updateEl()">
+                <option value="none">Ninguna</option>
+                <option value="anim-spin">Girar (Rotación 360)</option>
+                <option value="anim-bounce">Flotar (Arriba/Abajo)</option>
+                <option value="anim-pulse">Palpitar (Pulse)</option>
+              </select>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Tab 2: HTML -->
+      <!-- Tab 2 & 3: (Iguales, manejados por JS) -->
       <div id="tab-html" class="tab-content">
-        <div class="code-section">
-          <div class="code-header"><span>🌍 HTML Global (Toda la página)</span></div>
-          <pre class="html-code" id="code-html-global"></pre>
-        </div>
-        <div class="code-section">
-          <div class="code-header"><span style="color:#00e676;">🎯 HTML del Elemento Aislado</span></div>
-          <pre class="html-code" id="code-html-single"></pre>
-        </div>
+        <div class="code-section"><div class="code-header">🌍 HTML Global</div><pre class="html-code" id="code-html-global"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:#00e676;">🎯 Elemento Aislado</div><pre class="html-code" id="code-html-single"></pre></div>
       </div>
 
-      <!-- Tab 3: CSS -->
       <div id="tab-css" class="tab-content">
-        <div class="code-section">
-          <div class="code-header"><span>🌍 CSS Global (Toda la página)</span></div>
-          <pre class="css-code" id="code-css-global"></pre>
-        </div>
-        <div class="code-section">
-          <div class="code-header"><span style="color:#00e676;">🎯 CSS del Elemento Aislado</span></div>
-          <pre class="css-code" id="code-css-single"></pre>
-        </div>
+        <div class="code-section"><div class="code-header">🌍 CSS Global</div><pre class="css-code" id="code-css-global"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:#00e676;">🎯 Elemento Aislado</div><pre class="css-code" id="code-css-single"></pre></div>
       </div>
 
     </div>
   </div>
 
 <script>
-  let elements = [];
-  let selectedId = null;
-  let counter = 1;
-  const canvas = document.getElementById('canvas');
+  let elements = []; let selectedId = null; let counter = 1; const canvas = document.getElementById('canvas');
 
+  // Catálogo masivo de componentes
   const templates = {
-    'div': { w: 200, h: 150, bg: '#e2e8f0', color: '#334155', text: 'Div Simple', radius: 0 },
-    'text': { w: 250, h: 60, bg: 'transparent', color: '#1e293b', text: 'Texto de prueba. El HTML es genial.', radius: 0 },
-    'button': { w: 140, h: 45, bg: '#2563eb', color: '#ffffff', text: 'Enviar', radius: 6 },
-    'flex-row': { w: 350, h: 120, bg: '#f8fafc', color: '#0f172a', text: '', radius: 8, isFlex: true },
-    'card': { w: 280, h: 320, bg: '#ffffff', color: '#0f172a', text: '', radius: 12, isCard: true }
+    'div': { w: 200, h: 150, bg: '#f1f5f9', color: '#0f172a', text: 'Caja Simple', radius: 0 },
+    'text': { w: 250, h: 60, bg: 'transparent', color: '#1e293b', text: 'El diseño web es fascinante.', radius: 0 },
+    'image': { w: 200, h: 150, bg: '#cbd5e1', color: '#000000', text: 'Imagen Placeholder', radius: 8, isSpecial: 'image' },
+    
+    'button': { w: 140, h: 45, bg: '#3b82f6', color: '#ffffff', text: 'Hacer Clic', radius: 6, isSpecial: 'button' },
+    'input': { w: 220, h: 40, bg: '#ffffff', color: '#0f172a', text: 'Escribe tu nombre...', radius: 4, isSpecial: 'input' },
+    'select': { w: 200, h: 40, bg: '#ffffff', color: '#0f172a', text: 'Elige una opción', radius: 4, isSpecial: 'select' },
+    
+    'flex-row': { w: 350, h: 120, bg: '#f8fafc', color: '#0f172a', text: '', radius: 8, isSpecial: 'flex' },
+    'grid-box': { w: 300, h: 300, bg: '#e2e8f0', color: '#0f172a', text: '', radius: 8, isSpecial: 'grid' },
+    'card': { w: 280, h: 320, bg: '#ffffff', color: '#0f172a', text: '', radius: 12, shadow: 'shadow-soft', isSpecial: 'card' },
+    
+    'dropdown-menu': { w: 150, h: 45, bg: '#10b981', color: '#ffffff', text: 'Menú ▼', radius: 6, isSpecial: 'dropdown' }
   };
 
   function addElement(type) {
-    const t = templates[type];
-    const id = `el_${counter++}`;
+    const t = templates[type]; const id = `el_${counter++}`;
     const startX = Math.max(50, (canvas.offsetWidth / 2) - (t.w / 2));
     const startY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
 
     elements.push({
       id, type, x: startX, y: startY, w: t.w, h: t.h,
       bg: t.bg, color: t.color, text: t.text, radius: t.radius,
-      isFlex: t.isFlex || false, isCard: t.isCard || false
+      isSpecial: t.isSpecial || null,
+      shadow: t.shadow || 'none', hover: 'none', anim: 'none'
     });
-    
     selectElement(id);
-  }
-
-  function deleteSelected() {
-    if(!selectedId) return;
-    elements = elements.filter(el => el.id !== selectedId);
-    selectedId = null;
-    renderCanvas();
-    updatePropsUI();
   }
 
   function renderCanvas() {
@@ -286,36 +263,45 @@
     elements.forEach(el => {
       const node = document.createElement('div');
       node.id = el.id;
-      node.className = `canvas-element ${selectedId === el.id ? 'selected' : ''}`;
-      node.style.left = `${el.x}px`;
-      node.style.top = `${el.y}px`;
-      node.style.width = `${el.w}px`;
-      node.style.height = `${el.h}px`;
-      node.style.backgroundColor = el.bg;
-      node.style.color = el.color;
-      node.style.borderRadius = `${el.radius}px`;
-      node.style.border = (el.bg === 'transparent') ? '1px dashed #ccc' : (el.type === 'card' || el.type === 'flex-row') ? '1px solid #e2e8f0' : 'none';
-      if(el.isCard) node.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+      
+      // Aplicar clases de efectos para previsualización
+      node.className = `canvas-element ${selectedId === el.id ? 'selected' : ''} ${el.shadow !== 'none' ? el.shadow : ''} ${el.hover !== 'none' ? el.hover : ''} ${el.anim !== 'none' ? el.anim : ''}`;
+      
+      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
+      node.style.backgroundColor = el.bg; node.style.color = el.color; node.style.borderRadius = `${el.radius}px`;
+      if(el.bg === 'transparent') node.style.border = '1px dashed #ccc';
 
       let innerHTML = '';
-      if(el.isFlex) {
-        innerHTML = `<div style="display:flex; width:100%; height:100%; gap:10px; padding:10px;"><div style="flex:1; background:#cbd5e1; border-radius:4px;"></div><div style="flex:1; background:#cbd5e1; border-radius:4px;"></div></div>`;
-      } else if (el.isCard) {
-        innerHTML = `<div style="display:flex; flex-direction:column; width:100%; height:100%;"><div style="height:45%; background:#94a3b8; width:100%;"></div><div style="padding:15px; display:flex; flex-direction:column; gap:10px;"><div style="height:14px; width:70%; background:#cbd5e1; border-radius:2px;"></div><div style="height:10px; width:100%; background:#e2e8f0; border-radius:2px;"></div><div style="margin-top:auto; height:30px; width:100%; background:#3b82f6; border-radius:4px;"></div></div></div>`;
+      
+      // Renderizado Especial por tipo
+      if(el.isSpecial === 'image') {
+        innerHTML = `<img src="https://via.placeholder.com/${Math.round(el.w)}x${Math.round(el.h)}?text=Foto" style="width:100%; height:100%; object-fit:cover; border-radius:${el.radius}px; pointer-events:none;">`;
+      } else if (el.isSpecial === 'input') {
+        innerHTML = `<input type="text" placeholder="${el.text}" style="width:100%; height:100%; border:1px solid #ccc; border-radius:${el.radius}px; padding:10px; pointer-events:none; background:${el.bg}; color:${el.color};">`;
+      } else if (el.isSpecial === 'select') {
+        innerHTML = `<select style="width:100%; height:100%; border:1px solid #ccc; border-radius:${el.radius}px; padding:5px; pointer-events:none; background:${el.bg}; color:${el.color};"><option>${el.text}</option></select>`;
+      } else if (el.isSpecial === 'button') {
+        innerHTML = `<button style="width:100%; height:100%; border:none; background:transparent; color:inherit; font-weight:bold; pointer-events:none;">${el.text}</button>`;
+      } else if (el.isSpecial === 'flex') {
+        innerHTML = `<div style="display:flex; width:100%; height:100%; gap:10px; padding:10px;"><div style="flex:1; background:rgba(0,0,0,0.1); border-radius:4px;"></div><div style="flex:1; background:rgba(0,0,0,0.1); border-radius:4px;"></div></div>`;
+      } else if (el.isSpecial === 'grid') {
+        innerHTML = `<div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:10px; padding:10px; width:100%; height:100%;"><div style="background:#cbd5e1; border-radius:4px;"></div><div style="background:#cbd5e1; border-radius:4px;"></div><div style="background:#cbd5e1; border-radius:4px;"></div><div style="background:#cbd5e1; border-radius:4px;"></div></div>`;
+      } else if (el.isSpecial === 'card') {
+        innerHTML = `<div style="display:flex; flex-direction:column; width:100%; height:100%;"><div style="height:45%; background:#94a3b8; width:100%;"></div><div style="padding:15px; display:flex; flex-direction:column; gap:10px;"><div style="height:14px; width:70%; background:#cbd5e1;"></div><div style="margin-top:auto; height:30px; width:100%; background:${el.color}; border-radius:4px;"></div></div></div>`;
+      } else if (el.isSpecial === 'dropdown') {
+        node.style.cursor = 'pointer'; node.style.fontWeight = 'bold';
+        innerHTML = `${el.text}<div class="preview-dropdown-content"><div style="padding:10px; border-bottom:1px solid #eee; color:#333; font-size:12px;">Submenú 1</div><div style="padding:10px; color:#333; font-size:12px;">Submenú 2</div></div>`;
       } else {
-        innerHTML = `<span style="padding:10px; text-align:center; font-family:sans-serif;">${el.text}</span>`;
+        innerHTML = `<span style="padding:10px; text-align:center;">${el.text}</span>`;
       }
 
       node.innerHTML = `${selectedId === el.id ? `<div class="measure-tag">${Math.round(el.w)}px × ${Math.round(el.h)}px</div>` : ''}${innerHTML}<div class="resizer"></div>`;
-
-      node.addEventListener('mousedown', (e) => {
-        if(e.target.classList.contains('resizer')) return;
-        selectElement(el.id);
-        startDrag(e, el);
-      });
-
+      
+      // Prevenir drag si tocas el resizer
+      node.addEventListener('mousedown', (e) => { if(e.target.classList.contains('resizer')) return; selectElement(el.id); startDrag(e, el); });
       const resizer = node.querySelector('.resizer');
       if(resizer) resizer.addEventListener('mousedown', (e) => { e.stopPropagation(); selectElement(el.id); startResize(e, el); });
+      
       canvas.appendChild(node);
     });
 
@@ -323,166 +309,146 @@
     generateCode();
   }
 
-  function drawGuides() {
-    const el = elements.find(e => e.id === selectedId);
-    if(!el) return;
-    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-    const createLine = (cls, css) => { const line = document.createElement('div'); line.className = `guide-line ${cls}`; Object.assign(line.style, css); return line; };
-
-    if(el.y > 0) { const line = createLine('vertical', { top: '0', left: `${el.x + el.w/2}px`, height: `${el.y}px` }); line.innerHTML = `<span class="guide-label">Top: ${Math.round(el.y)}px</span>`; canvas.appendChild(line); }
-    if(el.x > 0) { const line = createLine('horizontal', { top: `${el.y + el.h/2}px`, left: '0', width: `${el.x}px` }); line.innerHTML = `<span class="guide-label">Left: ${Math.round(el.x)}px</span>`; canvas.appendChild(line); }
-    const distRight = cw - (el.x + el.w);
-    if(distRight > 0) { const line = createLine('horizontal', { top: `${el.y + el.h/2}px`, left: `${el.x + el.w}px`, width: `${distRight}px` }); line.innerHTML = `<span class="guide-label">Right: ${Math.round(distRight)}px</span>`; canvas.appendChild(line); }
-    const distBottom = ch - (el.y + el.h);
-    if(distBottom > 0) { const line = createLine('vertical', { top: `${el.y + el.h}px`, left: `${el.x + el.w/2}px`, height: `${distBottom}px` }); line.innerHTML = `<span class="guide-label">Bot: ${Math.round(distBottom)}px</span>`; canvas.appendChild(line); }
-  }
-
+  // --- ARRASTRAR Y REDIMENSIONAR (Simplificado) ---
   function startDrag(e, el) {
-    let startX = e.clientX, startY = e.clientY;
-    function onMove(ev) { el.x += ev.clientX - startX; el.y += ev.clientY - startY; if(el.x < 0) el.x = 0; if(el.y < 0) el.y = 0; startX = ev.clientX; startY = ev.clientY; renderCanvas(); updatePropsUI(); }
-    function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
-    document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp);
+    let sX = e.clientX, sY = e.clientY;
+    function move(ev) { el.x += ev.clientX - sX; el.y += ev.clientY - sY; if(el.x<0) el.x=0; if(el.y<0) el.y=0; sX = ev.clientX; sY = ev.clientY; renderCanvas(); updatePropsUI(); }
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); }
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
-
   function startResize(e, el) {
-    let startX = e.clientX, startY = e.clientY;
-    function onMove(ev) { el.w = Math.max(20, el.w + (ev.clientX - startX)); el.h = Math.max(20, el.h + (ev.clientY - startY)); startX = ev.clientX; startY = ev.clientY; renderCanvas(); updatePropsUI(); }
-    function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
-    document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp);
+    let sX = e.clientX, sY = e.clientY;
+    function move(ev) { el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY)); sX = ev.clientX; sY = ev.clientY; renderCanvas(); updatePropsUI(); }
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); }
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
 
+  // --- GUÍAS VISUALES ---
+  function drawGuides() {
+    const el = elements.find(e => e.id === selectedId); if(!el) return;
+    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+    const line = (cls, css, txt) => { const l = document.createElement('div'); l.className=`guide-line ${cls}`; Object.assign(l.style, css); l.innerHTML=`<span class="guide-label">${txt}</span>`; canvas.appendChild(l); };
+    if(el.y > 0) line('vertical', { top: 0, left: `${el.x+el.w/2}px`, height: `${el.y}px` }, `Top: ${Math.round(el.y)}px`);
+    if(el.x > 0) line('horizontal', { top: `${el.y+el.h/2}px`, left: 0, width: `${el.x}px` }, `Left: ${Math.round(el.x)}px`);
+    if(cw-(el.x+el.w)>0) line('horizontal', { top: `${el.y+el.h/2}px`, left: `${el.x+el.w}px`, width: `${cw-(el.x+el.w)}px` }, `Right: ${Math.round(cw-(el.x+el.w))}px`);
+    if(ch-(el.y+el.h)>0) line('vertical', { top: `${el.y+el.h}px`, left: `${el.x+el.w/2}px`, height: `${ch-(el.y+el.h)}px` }, `Bot: ${Math.round(ch-(el.y+el.h))}px`);
+  }
+
+  // --- UI CONTROLS ---
   function selectElement(id) { selectedId = id; renderCanvas(); updatePropsUI(); }
-
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById(`tab-${tab}`).classList.add('active');
-  }
+  function deleteSelected() { if(!selectedId) return; elements = elements.filter(el => el.id !== selectedId); selectedId = null; renderCanvas(); updatePropsUI(); }
+  function switchTab(tab) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${tab}`).classList.add('active'); }
+  function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; setTimeout(() => renderCanvas(), 310); }
 
   function updatePropsUI() {
-    const emptyMsg = document.getElementById('no-selection'), form = document.getElementById('props-form');
-    if(!selectedId) { emptyMsg.style.display = 'block'; form.style.display = 'none'; return; }
-    emptyMsg.style.display = 'none'; form.style.display = 'block';
+    if(!selectedId) { document.getElementById('no-selection').style.display='block'; document.getElementById('props-form').style.display='none'; return; }
+    document.getElementById('no-selection').style.display='none'; document.getElementById('props-form').style.display='block';
     const el = elements.find(e => e.id === selectedId);
-    document.getElementById('prop-x').value = Math.round(el.x); document.getElementById('prop-y').value = Math.round(el.y);
-    document.getElementById('prop-w').value = Math.round(el.w); document.getElementById('prop-h').value = Math.round(el.h);
+    ['x','y','w','h','radius'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p]));
     document.getElementById('prop-bg').value = el.bg.startsWith('#') ? el.bg : '#ffffff'; 
     document.getElementById('prop-color').value = el.color.startsWith('#') ? el.color : '#000000';
-    document.getElementById('prop-radius').value = el.radius; document.getElementById('prop-text').value = el.text;
+    ['text','shadow','hover','anim'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
   }
 
   function updateEl() {
-    if(!selectedId) return;
-    const el = elements.find(e => e.id === selectedId);
-    el.x = parseFloat(document.getElementById('prop-x').value) || 0; el.y = parseFloat(document.getElementById('prop-y').value) || 0;
-    el.w = parseFloat(document.getElementById('prop-w').value) || 0; el.h = parseFloat(document.getElementById('prop-h').value) || 0;
-    el.bg = document.getElementById('prop-bg').value; el.color = document.getElementById('prop-color').value;
-    el.radius = parseFloat(document.getElementById('prop-radius').value) || 0; el.text = document.getElementById('prop-text').value;
+    if(!selectedId) return; const el = elements.find(e => e.id === selectedId);
+    ['x','y','w','h','radius'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
+    ['bg','color','text','shadow','hover','anim'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
     renderCanvas();
   }
 
-  function setViewport(type) {
-    document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    canvas.className = type; 
-    setTimeout(() => renderCanvas(), 310);
-  }
-
-  // Helper para generar el contenido HTML de un elemento
-  function getElementData(el) {
-    let tag = 'div';
+  // --- EXPORTADOR A HTML/CSS (LA MAGIA DE APRENDIZAJE) ---
+  function getElementCode(el) {
+    let tag = 'div', innerHTML = el.text, css = '', animKeyframes = '';
+    
+    // Configuración según el tipo
     if(el.type === 'text') tag = 'p';
-    if(el.type === 'button') tag = 'button';
+    if(el.isSpecial === 'button') tag = 'button';
+    if(el.isSpecial === 'image') { tag = 'img'; innerHTML = ''; css += `  object-fit: cover;\n`; }
+    if(el.isSpecial === 'input') { tag = 'input'; innerHTML = ''; css += `  padding: 10px;\n  border: 1px solid #ccc;\n`; }
+    if(el.isSpecial === 'select') { tag = 'select'; innerHTML = `\n    <option>${el.text}</option>\n    <option>Opción 2</option>\n  `; css += `  padding: 10px;\n  border: 1px solid #ccc;\n`; }
     
-    let innerContent = el.text;
-    let extraCss = "";
-    
-    if(el.isFlex) {
-      innerContent = `\n    <div class="caja-hija">Caja 1</div>\n    <div class="caja-hija">Caja 2</div>\n  `;
-      extraCss = `.${el.id} .caja-hija {\n  flex: 1;\n  background: #cbd5e1;\n  border-radius: 4px;\n  padding: 10px;\n}\n`;
+    if(el.isSpecial === 'flex') {
+      innerHTML = `\n    <div class="hijo"></div>\n    <div class="hijo"></div>\n  `;
+      css += `  display: flex;\n  gap: 15px;\n  padding: 15px;\n}\n.MI_CLASE .hijo {\n  flex: 1;\n  background: rgba(0,0,0,0.1);\n  border-radius: 4px;\n`;
     }
-    if(el.isCard) {
-      innerContent = `\n    <img src="imagen.jpg" alt="Foto" class="card-img">\n    <div class="card-body">\n      <h3>Título Tarjeta</h3>\n      <p>Descripción breve para aprender.</p>\n      <button>Acción</button>\n    </div>\n  `;
-      extraCss = `.${el.id} .card-img {\n  width: 100%;\n  height: 150px;\n  object-fit: cover;\n  background: #94a3b8;\n}\n.${el.id} .card-body {\n  padding: 15px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n}\n`;
+    if(el.isSpecial === 'grid') {
+      innerHTML = `\n    <div class="celda"></div>\n    <div class="celda"></div>\n    <div class="celda"></div>\n    <div class="celda"></div>\n  `;
+      css += `  display: grid;\n  grid-template-columns: 1fr 1fr; /* 2 columnas */\n  grid-template-rows: 1fr 1fr; /* 2 filas */\n  gap: 10px;\n  padding: 10px;\n}\n.MI_CLASE .celda {\n  background: #cbd5e1;\n  border-radius: 4px;\n`;
     }
+    if(el.isSpecial === 'card') {
+      innerHTML = `\n    <img src="foto.jpg" alt="Foto">\n    <div class="card-content">\n      <h3>Título</h3>\n      <button>Leer más</button>\n    </div>\n  `;
+      css += `  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n.MI_CLASE img {\n  height: 150px;\n  object-fit: cover;\n  background: #cbd5e1;\n}\n.MI_CLASE .card-content {\n  padding: 15px;\n`;
+    }
+    if(el.isSpecial === 'dropdown') {
+      innerHTML = `\n    <span>${el.text}</span>\n    <div class="menu-oculto">\n      <a href="#">Link 1</a>\n      <a href="#">Link 2</a>\n    </div>\n  `;
+      css += `  position: relative; /* Clave para el submenu */\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.MI_CLASE .menu-oculto {\n  display: none; /* Oculto por defecto */\n  position: absolute;\n  top: 100%; left: 0;\n  background: #fff;\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n  min-width: 150px;\n  border-radius: 4px;\n  flex-direction: column;\n}\n.MI_CLASE:hover .menu-oculto {\n  display: flex; /* Se muestra al hacer hover */\n}\n.MI_CLASE .menu-oculto a {\n  padding: 12px;\n  color: #333;\n  text-decoration: none;\n  border-bottom: 1px solid #eee;\n`;
+    }
+
+    // Efectos CSS (Sombras, Hover, Animaciones)
+    if(el.shadow === 'shadow-soft') css += `  box-shadow: 0 4px 10px rgba(0,0,0,0.1);\n`;
+    if(el.shadow === 'shadow-hard') css += `  box-shadow: 0 15px 30px rgba(0,0,0,0.3);\n`;
     
-    return { tag, innerContent, extraCss };
+    if(el.hover === 'hover-scale') css += `  transition: transform 0.3s ease;\n}\n.MI_CLASE:hover {\n  transform: scale(1.05);\n`;
+    if(el.hover === 'hover-color') css += `  transition: filter 0.3s ease;\n}\n.MI_CLASE:hover {\n  filter: brightness(1.2);\n`;
+
+    if(el.anim === 'anim-spin') { css += `  animation: girar 3s linear infinite;\n`; animKeyframes = `\n@keyframes girar {\n  100% { transform: rotate(360deg); }\n}`; }
+    if(el.anim === 'anim-bounce') { css += `  animation: flotar 2s ease-in-out infinite;\n`; animKeyframes = `\n@keyframes flotar {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-15px); }\n}`; }
+    if(el.anim === 'anim-pulse') { css += `  animation: latir 1.5s ease-in-out infinite;\n`; animKeyframes = `\n@keyframes latir {\n  0%, 100% { transform: scale(1); }\n  50% { transform: scale(1.05); }\n}`; }
+
+    return { tag, innerHTML, css, animKeyframes };
   }
 
   function generateCode() {
-    // Referencias al DOM
-    const htmlGlobal = document.getElementById('code-html-global');
-    const cssGlobal = document.getElementById('code-css-global');
-    const htmlSingle = document.getElementById('code-html-single');
-    const cssSingle = document.getElementById('code-css-single');
-    
-    if(elements.length === 0) {
-      htmlGlobal.textContent = cssGlobal.textContent = '<!-- Agrega elementos al lienzo -->';
-      htmlSingle.textContent = cssSingle.textContent = '<!-- Selecciona un elemento -->';
-      return;
-    }
-
-    // --- 1. GENERACIÓN GLOBAL ---
-    let htmlG = `<div class="contenedor-principal">\n`;
-    let cssG = `/* Layout Global */\n.contenedor-principal {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n}\n\n`;
+    if(elements.length === 0) return;
+    let htmlG = `<div class="pantalla">\n`, cssG = `.pantalla { position: relative; width: 100%; min-height: 100vh; }\n\n`;
 
     elements.forEach(el => {
-      const data = getElementData(el);
-      htmlG += `  <${data.tag} class="${el.id}">${data.innerContent}</${data.tag}>\n`;
+      const data = getElementCode(el);
+      // Props comunes para el tag (src en imagenes, placeholders en inputs)
+      let extraAttrs = "";
+      if (el.isSpecial === 'image') extraAttrs = ' src="imagen.jpg" alt="Foto"';
+      if (el.isSpecial === 'input') extraAttrs = ` placeholder="${el.text}"`;
+
+      htmlG += `  <${data.tag} class="${el.id}"${extraAttrs}>${data.innerHTML}</${data.tag}>\n`;
       
-      cssG += `.${el.id} {\n  position: absolute;\n  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n  background-color: ${el.bg};\n  color: ${el.color};\n`;
-      if(el.radius > 0) cssG += `  border-radius: ${el.radius}px;\n`;
-      if(el.type === 'button') cssG += `  border: none;\n  cursor: pointer;\n  font-weight: bold;\n`;
-      if(el.isFlex) cssG += `  display: flex;\n  gap: 10px;\n  padding: 10px;\n  box-sizing: border-box;\n`;
-      if(el.isCard) cssG += `  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n`;
-      if(el.type === 'text') cssG += `  margin: 0;\n  padding: 10px;\n  box-sizing: border-box;\n`;
-      cssG += `}\n\n${data.extraCss}\n`;
+      let cssBlock = `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n  background-color: ${el.bg}; color: ${el.color};\n  border-radius: ${el.radius}px;\n`;
+      if(el.isSpecial === 'button') cssBlock += `  border: none; cursor: pointer; font-weight: bold;\n`;
+      if(el.type === 'text') cssBlock += `  margin: 0;\n`;
+      
+      cssBlock += data.css.replace(/MI_CLASE/g, el.id);
+      cssBlock += `}\n${data.animKeyframes}\n`;
+      cssG += cssBlock;
     });
     htmlG += `</div>`;
-    
-    htmlGlobal.textContent = htmlG;
-    cssGlobal.textContent = cssG;
 
-    // --- 2. GENERACIÓN AISLADA (ELEMENTO SELECCIONADO) ---
-    if(!selectedId) {
-      htmlSingle.textContent = '<!-- Selecciona un elemento para ver su código aislado -->';
-      cssSingle.textContent = '/* Selecciona un elemento para ver su código aislado */';
-    } else {
+    document.getElementById('code-html-global').textContent = htmlG;
+    document.getElementById('code-css-global').textContent = cssG;
+
+    // Aislado
+    if(selectedId) {
       const el = elements.find(e => e.id === selectedId);
-      const data = getElementData(el);
+      const data = getElementCode(el);
+      let extraAttrs = "";
+      if (el.isSpecial === 'image') extraAttrs = ' src="imagen.jpg" alt="Foto"';
+      if (el.isSpecial === 'input') extraAttrs = ` placeholder="${el.text}"`;
       
-      // HTML aislado (le cambiamos la clase a algo más genérico como "mi-componente")
-      htmlSingle.textContent = `<!-- Copia esto donde lo necesites -->\n<${data.tag} class="mi-componente">${data.innerContent}</${data.tag}>`;
+      document.getElementById('code-html-single').textContent = `<${data.tag} class="mi-componente"${extraAttrs}>${data.innerHTML}</${data.tag}>`;
       
-      // CSS aislado
-      let cssS = `/* Si usas Flex/Grid para maquetar en tu proyecto real,\npuedes borrar position, left y top. */\n`;
-      cssS += `.mi-componente {\n  position: absolute; /* ¡Ojo aquí! */\n  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n  background-color: ${el.bg};\n  color: ${el.color};\n`;
-      if(el.radius > 0) cssS += `  border-radius: ${el.radius}px;\n`;
-      if(el.type === 'button') cssS += `  border: none;\n  cursor: pointer;\n  font-weight: bold;\n`;
-      if(el.isFlex) cssS += `  display: flex;\n  gap: 10px;\n  padding: 10px;\n  box-sizing: border-box;\n`;
-      if(el.isCard) cssS += `  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n`;
-      if(el.type === 'text') cssS += `  margin: 0;\n  padding: 10px;\n  box-sizing: border-box;\n`;
-      cssS += `}\n\n`;
+      let cssS = `/* Quita position, left y top si usas Flex/Grid en tu proyecto */\n.mi-componente {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n  background-color: ${el.bg}; color: ${el.color};\n  border-radius: ${el.radius}px;\n`;
+      if(el.isSpecial === 'button') cssS += `  border: none; cursor: pointer; font-weight: bold;\n`;
       
-      // Si el elemento tiene CSS extra (hijos de la card o flex), reemplazar el ID por la nueva clase
-      if(data.extraCss) {
-        cssS += data.extraCss.replace(new RegExp(`\\.${el.id}`, 'g'), '.mi-componente');
-      }
-      
-      cssSingle.textContent = cssS;
+      cssS += data.css.replace(/MI_CLASE/g, 'mi-componente');
+      cssS += `}\n${data.animKeyframes}`;
+      document.getElementById('code-css-single').textContent = cssS;
+    } else {
+      document.getElementById('code-html-single').textContent = '<!-- Selecciona un elemento -->';
+      document.getElementById('code-css-single').textContent = '/* Selecciona un elemento */';
     }
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    if (e.key === 'Delete' || e.key === 'Backspace') deleteSelected();
-  });
-
-  canvas.addEventListener('mousedown', (e) => {
-    if(e.target === canvas) { selectedId = null; renderCanvas(); updatePropsUI(); }
-  });
-
+  document.addEventListener('keydown', (e) => { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && (e.key === 'Delete' || e.key === 'Backspace')) deleteSelected(); });
+  canvas.addEventListener('mousedown', (e) => { if(e.target === canvas) { selectedId = null; renderCanvas(); updatePropsUI(); } });
   generateCode();
 </script>
 </body>
