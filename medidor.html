@@ -1,211 +1,429 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-const MIN_WIDTH = 80;
-const MIN_HEIGHT = 80;
+const MIN_DIMENSION = 20;
+
+const DEFAULT_ELEMENTS = {
+  container: { w: 200, h: 200, bg: '#2d3748', radius: 8, text: '' },
+  button: { w: 120, h: 48, bg: '#3b82f6', radius: 6, text: 'Click Me' },
+  input: { w: 250, h: 40, bg: '#1f2937', radius: 4, text: 'Placeholder...' },
+  popup: { w: 300, h: 150, bg: '#4b5563', radius: 12, text: 'Popup Content' },
+};
+
+const PRESETS = [
+  { id: 'free', name: 'Freeform', w: '100%', h: '100%' },
+  { id: 'desktop', name: 'Desktop', w: 1024, h: 768 },
+  { id: 'tablet', name: 'Tablet', w: 768, h: 1024 },
+  { id: 'mobile', name: 'Mobile', w: 375, h: 667 },
+];
+
+const Icons = {
+  Monitor: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
+  Smartphone: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
+  Tablet: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
+  Maximize: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>,
+  Square: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>,
+  Type: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>,
+  HandPoint: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>,
+  Layers: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>,
+  Code: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+  X: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+};
 
 export default function App() {
-  const [containers, setContainers] = useState([]);
-  const [activeAction, setActiveAction] = useState(null); 
-  // activeAction schema: { type: 'drag'|'resize', id, startX, startY, initX, initY, initW, initH }
+  const [elements, setElements] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [activeAction, setActiveAction] = useState(null);
+  const [canvasPreset, setCanvasPreset] = useState(PRESETS[0]);
+  const [showCode, setShowCode] = useState(false);
+  
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (!activeAction) return;
 
     const handleMouseMove = (e) => {
-      // Prevent text selection while dragging/resizing
-      e.preventDefault(); 
-      
+      e.preventDefault();
       const dx = e.clientX - activeAction.startX;
       const dy = e.clientY - activeAction.startY;
 
-      setContainers(prev => prev.map(c => {
-        if (c.id !== activeAction.id) return c;
+      setElements(prev => prev.map(el => {
+        if (el.id !== activeAction.id) return el;
 
         if (activeAction.type === 'drag') {
           return {
-            ...c,
-            // Prevent dragging out of the top/left bounds
-            x: Math.max(0, activeAction.initX + dx),
-            y: Math.max(0, activeAction.initY + dy)
+            ...el,
+            x: Math.round(activeAction.initX + dx),
+            y: Math.round(activeAction.initY + dy)
           };
         } else if (activeAction.type === 'resize') {
           return {
-            ...c,
-            // Enforce minimum dimensions
-            w: Math.max(MIN_WIDTH, activeAction.initW + dx),
-            h: Math.max(MIN_HEIGHT, activeAction.initH + dy)
+            ...el,
+            w: Math.max(MIN_DIMENSION, Math.round(activeAction.initW + dx)),
+            h: Math.max(MIN_DIMENSION, Math.round(activeAction.initH + dy))
           };
         }
-        return c;
+        return el;
       }));
     };
 
-    const handleMouseUp = () => {
-      setActiveAction(null);
-    };
+    const handleMouseUp = () => setActiveAction(null);
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
-
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [activeAction]);
 
-  const addContainer = () => {
-    const newId = Math.random().toString(36).substring(2, 9);
-    setContainers(prev => [
-      ...prev,
-      {
-        id: newId,
-        x: 50 + (prev.length * 20), // Slight offset for new boxes
-        y: 50 + (prev.length * 20),
-        w: 200,
-        h: 150
-      }
-    ]);
+  const addElement = (type) => {
+    const newId = `el_${Math.random().toString(36).substr(2, 6)}`;
+    const def = DEFAULT_ELEMENTS[type];
+    const offset = elements.length * 20;
+    
+    setElements([...elements, {
+      id: newId,
+      type,
+      x: 50 + offset,
+      y: 50 + offset,
+      w: def.w,
+      h: def.h,
+      bg: def.bg,
+      radius: def.radius,
+      text: def.text
+    }]);
+    setSelectedId(newId);
   };
 
-  const removeContainer = (idToRemove) => {
-    setContainers(prev => prev.filter(c => c.id !== idToRemove));
+  const removeElement = (id) => {
+    setElements(elements.filter(e => e.id !== id));
+    if (selectedId === id) setSelectedId(null);
   };
+
+  const updateSelected = (key, value) => {
+    setElements(prev => prev.map(el => 
+      el.id === selectedId ? { ...el, [key]: value } : el
+    ));
+  };
+
+  const selectedElement = elements.find(e => e.id === selectedId);
 
   const generateLiveCode = () => {
-    if (containers.length === 0) {
-      return `<!-- Añade un contenedor para ver el código -->\n<div class="workspace">\n</div>`;
-    }
+    if (elements.length === 0) return { html: '<!-- El lienzo está vacío -->', css: '/* Sin estilos aún */' };
 
-    let code = `<div class="workspace" style="position: relative; width: 100%; height: 100vh;">\n`;
-    containers.forEach((c, index) => {
-      code += `  <div \n    class="box-${index + 1}"\n    style="position: absolute; left: ${c.x}px; top: ${c.y}px; width: ${c.w}px; height: ${c.h}px; border: 2px dashed #4A90E2; background: rgba(74, 144, 226, 0.1);">\n  </div>\n`;
+    let html = `<div class="canvas-wrapper">\n`;
+    let css = `.canvas-wrapper {\n  position: relative;\n  width: ${typeof canvasPreset.w === 'number' ? canvasPreset.w + 'px' : canvasPreset.w};\n  height: ${typeof canvasPreset.h === 'number' ? canvasPreset.h + 'px' : canvasPreset.h};\n}\n\n`;
+
+    elements.forEach((el, index) => {
+      const className = `${el.type}-${index + 1}`;
+      
+      let innerHTML = '';
+      let tag = 'div';
+      if (el.type === 'button') { tag = 'button'; innerHTML = el.text; }
+      else if (el.type === 'input') { tag = 'input'; html += `  <${tag} class="${className}" placeholder="${el.text}" />\n`; }
+      else if (el.type === 'popup') { innerHTML = el.text; }
+      
+      if (el.type !== 'input') {
+        html += `  <${tag} class="${className}">${innerHTML}</${tag}>\n`;
+      }
+
+      css += `.${className} {\n`;
+      css += `  position: absolute;\n`;
+      css += `  left: ${el.x}px;\n`;
+      css += `  top: ${el.y}px;\n`;
+      css += `  width: ${el.w}px;\n`;
+      css += `  height: ${el.h}px;\n`;
+      css += `  background-color: ${el.bg};\n`;
+      css += `  border-radius: ${el.radius}px;\n`;
+      if (el.type === 'button' || el.type === 'popup') {
+        css += `  color: #ffffff;\n`;
+        css += `  display: flex;\n`;
+        css += `  align-items: center;\n`;
+        css += `  justify-content: center;\n`;
+        css += `  border: none;\n`;
+      }
+      if (el.type === 'input') {
+        css += `  color: #ffffff;\n  padding: 0 10px;\n  border: 1px solid #4b5563;\n`;
+      }
+      css += `}\n\n`;
     });
-    code += `</div>`;
-    return code;
+
+    html += `</div>`;
+    return { html, css };
   };
 
+  const { html: htmlCode, css: cssCode } = generateLiveCode();
+
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-neutral-900 text-white font-sans selection:bg-blue-500 selection:text-white">
+    <div className="flex flex-col h-screen w-screen bg-neutral-950 text-neutral-200 font-sans overflow-hidden select-none">
       
-      {/* Sidebar Panel */}
-      <div className="w-80 flex flex-col bg-neutral-800 border-r border-neutral-700 shadow-xl z-10 flex-shrink-0">
-        <div className="p-5 border-b border-neutral-700 flex justify-between items-center bg-neutral-800/50">
-          <h1 className="text-lg font-bold text-neutral-100 tracking-wide">Measure Tool</h1>
-          <button 
-            onClick={addContainer}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 transition-colors shadow-lg shadow-blue-500/20"
-            title="Añadir Contenedor"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          </button>
+      {/* Top Navbar */}
+      <header className="h-14 border-b border-neutral-800 bg-neutral-900 flex items-center justify-between px-4 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="bg-indigo-600 p-1.5 rounded-lg text-white">
+            <Icons.Maximize />
+          </div>
+          <div>
+            <h1 className="font-bold text-sm tracking-wide text-white">Visual Layout Builder</h1>
+            <p className="text-[10px] text-neutral-400">Diseña y mide píxeles sin ser experto en HTML/CSS</p>
+          </div>
         </div>
 
-        <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-4">
-          <div>
-            <h2 className="text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wider">Live HTML/CSS</h2>
-            <div className="bg-neutral-950 p-4 rounded-lg border border-neutral-700/50 overflow-x-auto">
-              <pre className="text-xs font-mono text-green-400">
-                <code>{generateLiveCode()}</code>
-              </pre>
-            </div>
+        <div className="flex items-center bg-neutral-950 p-1 rounded-lg border border-neutral-800">
+          {PRESETS.map(preset => (
+            <button
+              key={preset.id}
+              onClick={() => setCanvasPreset(preset)}
+              className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                canvasPreset.id === preset.id 
+                  ? 'bg-neutral-800 text-white shadow-sm' 
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900/50'
+              }`}
+            >
+              {preset.id === 'desktop' && <Icons.Monitor />}
+              {preset.id === 'tablet' && <Icons.Tablet />}
+              {preset.id === 'mobile' && <Icons.Smartphone />}
+              {preset.id === 'free' && <Icons.Maximize />}
+              <span className="hidden sm:inline">{preset.name}</span>
+            </button>
+          ))}
+        </div>
+
+        <button 
+          onClick={() => setShowCode(!showCode)}
+          className={`flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors border ${
+            showCode ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-neutral-800 border-neutral-700 hover:bg-neutral-700'
+          }`}
+        >
+          <Icons.Code />
+          {showCode ? 'Ocultar Código' : 'Ver Código'}
+        </button>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        
+        {/* Left Toolbar */}
+        <aside className="w-16 sm:w-56 border-r border-neutral-800 bg-neutral-900 flex flex-col items-center sm:items-stretch py-4 shrink-0 z-20">
+          <div className="px-4 pb-2 hidden sm:block text-xs font-semibold text-neutral-500 uppercase tracking-wider">Elementos</div>
+          <div className="flex flex-col gap-2 px-2 sm:px-3">
+            <ToolButton icon={<Icons.Square />} label="Contenedor" onClick={() => addElement('container')} />
+            <ToolButton icon={<Icons.Type />} label="Input Texto" onClick={() => addElement('input')} />
+            <ToolButton icon={<Icons.HandPoint />} label="Botón" onClick={() => addElement('button')} />
+            <ToolButton icon={<Icons.Layers />} label="Popup/Modal" onClick={() => addElement('popup')} />
+          </div>
+        </aside>
+
+        {}
+        <main 
+          className="flex-1 bg-neutral-950 overflow-auto flex items-center justify-center relative p-8"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setSelectedId(null); // Click background to deselect
+          }}
+        >
+          {/* Canvas Wrapper */}
+          <div 
+            ref={canvasRef}
+            className="bg-neutral-900 relative shadow-2xl transition-all duration-300 ring-1 ring-neutral-800"
+            style={{
+              width: canvasPreset.w,
+              height: canvasPreset.h,
+              backgroundImage: 'radial-gradient(#3f3f46 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+              overflow: 'hidden' // Clip elements outside preset bounds
+            }}
+          >
+            {elements.map((el) => (
+              <div
+                key={el.id}
+                onMouseDown={(e) => {
+                  if (e.button !== 0) return;
+                  e.stopPropagation();
+                  setSelectedId(el.id);
+                  setActiveAction({
+                    type: 'drag', id: el.id,
+                    startX: e.clientX, startY: e.clientY,
+                    initX: el.x, initY: el.y, initW: el.w, initH: el.h
+                  });
+                }}
+                className={`absolute group box-border
+                  ${selectedId === el.id ? 'ring-2 ring-indigo-500 z-50' : 'hover:ring-1 hover:ring-neutral-500 z-10'}
+                `}
+                style={{
+                  left: el.x, top: el.y, width: el.w, height: el.h,
+                  backgroundColor: el.bg, borderRadius: el.radius,
+                  cursor: activeAction?.id === el.id && activeAction.type === 'drag' ? 'grabbing' : 'grab'
+                }}
+              >
+                {/* Visual rendering based on type */}
+                <div className="w-full h-full flex items-center justify-center text-sm overflow-hidden p-2" style={{ color: '#fff' }}>
+                  {el.type === 'button' && <span className="font-semibold pointer-events-none">{el.text}</span>}
+                  {el.type === 'popup' && <span className="text-center pointer-events-none">{el.text}</span>}
+                  {el.type === 'input' && <span className="text-neutral-400 whitespace-nowrap pointer-events-none">{el.text}</span>}
+                </div>
+
+                {/* Overlays on Select */}
+                {selectedId === el.id && (
+                  <>
+                    {/* Delete button */}
+                    <button
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onClick={() => removeElement(el.id)}
+                      className="absolute -top-3 -right-3 w-6 h-6 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer z-50"
+                    >
+                      <Icons.X />
+                    </button>
+                    
+                    {/* Dimension tooltip */}
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-mono px-2 py-1 rounded shadow pointer-events-none whitespace-nowrap">
+                      {el.w} × {el.h} px
+                    </div>
+                    {/* Distance Indicators (X, Y lines conceptually) */}
+                    <div className="absolute top-1/2 -left-12 text-[10px] text-indigo-400 font-mono w-10 text-right">{el.x}px</div>
+                    <div className="absolute -top-6 left-2 text-[10px] text-indigo-400 font-mono">{el.y}px</div>
+
+                    {/* Resize Handle */}
+                    <div
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        if (e.button !== 0) return;
+                        setActiveAction({
+                          type: 'resize', id: el.id,
+                          startX: e.clientX, startY: e.clientY,
+                          initX: el.x, initY: el.y, initW: el.w, initH: el.h
+                        });
+                      }}
+                      className="absolute right-0 bottom-0 w-4 h-4 cursor-nwse-resize bg-indigo-500 rounded-tl-md shadow-sm z-50"
+                    />
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </main>
+
+        {}
+        <aside className="w-64 border-l border-neutral-800 bg-neutral-900 flex flex-col shrink-0 z-20 overflow-y-auto">
+          <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-neutral-950/50">
+            <h2 className="text-sm font-bold text-neutral-200">Propiedades</h2>
           </div>
           
-          <div className="text-xs text-neutral-500 leading-relaxed bg-neutral-900/50 p-3 rounded-lg border border-neutral-800">
-            <p><strong>Guía:</strong></p>
-            <ul className="list-disc pl-4 mt-1 space-y-1">
-              <li>Haz clic en el botón <strong>+</strong> para añadir cajas.</li>
-              <li>Arrastra desde cualquier parte del contenedor para moverlo.</li>
-              <li>Arrastra la esquina inferior derecha para redimensionar.</li>
-              <li>Las medidas en píxeles y el código se actualizan en tiempo real.</li>
-            </ul>
+          <div className="p-4 flex-1">
+            {selectedElement ? (
+              <div className="space-y-5">
+                {/* Posición y Tamaño */}
+                <div className="space-y-3">
+                  <h3 className="text-xs font-semibold text-neutral-500 uppercase">Posición y Tamaño (px)</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <PropInput label="X (Left)" value={selectedElement.x} onChange={(v) => updateSelected('x', Number(v))} />
+                    <PropInput label="Y (Top)" value={selectedElement.y} onChange={(v) => updateSelected('y', Number(v))} />
+                    <PropInput label="Width" value={selectedElement.w} onChange={(v) => updateSelected('w', Number(v))} />
+                    <PropInput label="Height" value={selectedElement.h} onChange={(v) => updateSelected('h', Number(v))} />
+                  </div>
+                </div>
+
+                <hr className="border-neutral-800" />
+
+                {/* Estilos */}
+                <div className="space-y-3">
+                  <h3 className="text-xs font-semibold text-neutral-500 uppercase">Apariencia</h3>
+                  
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-neutral-400">Color de Fondo</label>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="color" 
+                        value={selectedElement.bg} 
+                        onChange={(e) => updateSelected('bg', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer bg-neutral-800 border-none outline-none"
+                      />
+                      <input 
+                        type="text" 
+                        value={selectedElement.bg}
+                        onChange={(e) => updateSelected('bg', e.target.value)}
+                        className="flex-1 bg-neutral-950 border border-neutral-800 rounded px-2 py-1.5 text-xs text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <PropInput label="Border Radius (px)" value={selectedElement.radius} onChange={(v) => updateSelected('radius', Number(v))} />
+                </div>
+
+                {/* Contenido Texto (si aplica) */}
+                {['button', 'input', 'popup'].includes(selectedElement.type) && (
+                  <>
+                    <hr className="border-neutral-800" />
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-neutral-400 uppercase font-semibold">Texto / Contenido</label>
+                      <input 
+                        type="text" 
+                        value={selectedElement.text || ''}
+                        onChange={(e) => updateSelected('text', e.target.value)}
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded px-2 py-2 text-sm text-white"
+                      />
+                    </div>
+                  </>
+                )}
+
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center text-neutral-500 gap-3 mt-10">
+                <Icons.HandPoint />
+                <p className="text-sm">Selecciona un elemento en el lienzo para editar sus propiedades exactas.</p>
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
+
+      {}
+      {showCode && (
+        <div className="h-64 border-t border-neutral-800 bg-neutral-950 flex flex-col shrink-0 animate-in slide-in-from-bottom-10 z-30">
+          <div className="flex bg-neutral-900 border-b border-neutral-800 text-sm">
+            <div className="px-4 py-2 border-b-2 border-indigo-500 text-indigo-400 font-semibold bg-neutral-800/50">HTML & CSS (Exportable)</div>
+            <div className="flex-1"></div>
+            <button onClick={() => setShowCode(false)} className="px-4 py-2 text-neutral-400 hover:text-white">Cerrar</button>
+          </div>
+          <div className="flex flex-1 overflow-hidden">
+            <div className="w-1/2 p-4 overflow-auto border-r border-neutral-800">
+              <h3 className="text-xs font-mono text-neutral-500 mb-2">index.html</h3>
+              <pre className="text-xs font-mono text-green-400 select-all"><code>{htmlCode}</code></pre>
+            </div>
+            <div className="w-1/2 p-4 overflow-auto bg-neutral-900/50">
+              <h3 className="text-xs font-mono text-neutral-500 mb-2">styles.css</h3>
+              <pre className="text-xs font-mono text-blue-400 select-all"><code>{cssCode}</code></pre>
+            </div>
           </div>
         </div>
+      )}
+
+    </div>
+  );
+}
+
+function ToolButton({ icon, label, onClick }) {
+  return (
+    <button 
+      onClick={onClick}
+      className="flex flex-col sm:flex-row items-center gap-0 sm:gap-3 p-2 sm:px-3 sm:py-2.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors w-full group"
+    >
+      <div className="text-neutral-500 group-hover:text-indigo-400 transition-colors">
+        {icon}
       </div>
+      <span className="text-[10px] sm:text-xs font-medium mt-1 sm:mt-0 text-center sm:text-left">{label}</span>
+    </button>
+  );
+}
 
-      {/* Workspace / Canvas */}
-      <div 
-        className="flex-1 relative overflow-auto bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-neutral-900"
-        style={{ cursor: activeAction ? (activeAction.type === 'drag' ? 'grabbing' : 'nwse-resize') : 'default' }}
-      >
-        {containers.map((c) => (
-          <div
-            key={c.id}
-            onMouseDown={(e) => {
-              // Ensure we left-clicked
-              if (e.button !== 0) return;
-              setActiveAction({
-                type: 'drag',
-                id: c.id,
-                startX: e.clientX,
-                startY: e.clientY,
-                initX: c.x,
-                initY: c.y,
-                initW: c.w,
-                initH: c.h
-              });
-            }}
-            style={{
-              position: 'absolute',
-              left: `${c.x}px`,
-              top: `${c.y}px`,
-              width: `${c.w}px`,
-              height: `${c.h}px`,
-            }}
-            className={`
-              group border-2 border-dashed border-blue-500 bg-blue-500/10 
-              backdrop-blur-[1px] hover:bg-blue-500/20 hover:border-blue-400 
-              transition-colors duration-200 shadow-sm
-              ${activeAction?.id === c.id ? 'z-50 shadow-blue-500/20 shadow-xl' : 'z-10'}
-            `}
-          >
-            {/* Delete button (shows on hover) */}
-            <button
-              onMouseDown={(e) => e.stopPropagation()} // Prevent dragging when clicking delete
-              onClick={() => removeContainer(c.id)}
-              className="absolute -top-3 -right-3 w-6 h-6 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20 cursor-pointer"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
-
-            {/* Internal Measurements Overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none p-2">
-              <div className="bg-neutral-900/80 backdrop-blur-md px-3 py-1.5 rounded-md border border-neutral-700/50 flex flex-col items-center gap-1 shadow-md">
-                <span className="text-white font-mono text-sm font-bold flex items-center gap-2">
-                  <span className="text-neutral-400 text-xs">W:</span> {Math.round(c.w)}px 
-                  <span className="text-neutral-600">|</span> 
-                  <span className="text-neutral-400 text-xs">H:</span> {Math.round(c.h)}px
-                </span>
-                <span className="text-blue-300 font-mono text-xs flex items-center gap-2">
-                  <span className="text-blue-500/70">Top:</span> {Math.round(c.y)}px 
-                  <span className="text-blue-500/50">-</span> 
-                  <span className="text-blue-500/70">Left:</span> {Math.round(c.x)}px
-                </span>
-              </div>
-            </div>
-
-            {/* Custom Resize Handle (Bottom Right) */}
-            <div
-              onMouseDown={(e) => {
-                e.stopPropagation(); // Stop event from bubbling to the drag handler
-                if (e.button !== 0) return;
-                setActiveAction({
-                  type: 'resize',
-                  id: c.id,
-                  startX: e.clientX,
-                  startY: e.clientY,
-                  initX: c.x,
-                  initY: c.y,
-                  initW: c.w,
-                  initH: c.h
-                });
-              }}
-              className="absolute right-0 bottom-0 w-6 h-6 cursor-nwse-resize flex items-end justify-end p-1 hover:bg-blue-400/30 transition-colors z-20"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v6h-6"/><path d="M21 3v6h-6"/><path d="M3 15v6h6"/><path d="M3 3v6h6"/></svg>
-            </div>
-          </div>
-        ))}
-      </div>
+function PropInput({ label, value, onChange }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-[10px] text-neutral-400">{label}</label>
+      <input 
+        type="number" 
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-neutral-950 border border-neutral-800 rounded px-2 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors font-mono"
+      />
     </div>
   );
 }
