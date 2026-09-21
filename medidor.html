@@ -3,88 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout - Pro Web Builder</title>
+<title>Master Layout Pro - Ultimate Engine</title>
 <style>
   :root { 
-    --bg-dark: #121212; --panel-bg: #1e1e1e; --panel-light: #2d2d2d;
-    --text-main: #e0e0e0; --text-muted: #888;
-    --accent: #43b581; --accent-hover: #3ca374; --accent-blue: #007acc;
-    --border-color: #333; --guide-color: #ff007f;
+    --bg-app: #121212; --bg-panel: #1e1e1e; --bg-light: #2a2a2a;
+    --text-main: #f0f0f0; --text-muted: #888;
+    --accent: #6366f1; --accent-hover: #4f46e5;
+    --border: #333; --guide: #ef4444;
   }
   * { box-sizing: border-box; }
-  body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
+  body, html { margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif; background: var(--bg-app); color: var(--text-main); overflow: hidden; }
 
   /* HEADER */
-  header { background: #181818; padding: 10px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-  .header-title h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; letter-spacing: 0.5px;}
-  .header-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--accent); }
-  .top-actions button { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-  .top-actions button:hover { background: #006bb3; }
-  .viewports button { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.2s; }
-  .viewports button.active { background: var(--panel-light); color: white; border-color: #555; }
+  header { background: #161616; padding: 10px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  .logo h1 { margin: 0; font-size: 16px; font-weight: 700; background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .logo p { margin: 2px 0 0 0; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .top-btn { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  .top-btn:hover { background: var(--accent-hover); }
+  .viewports button { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 5px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  .viewports button.active { background: var(--bg-light); color: white; border-color: #555; }
 
   /* LAYOUT */
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
   
-  /* SIDEBAR LEFT (Herramientas) */
-  .sidebar { width: 260px; background: var(--panel-bg); border-right: 1px solid var(--border-color); overflow-y: auto; display: flex; flex-direction: column; }
-  .sidebar-inner { padding: 15px; }
+  /* SIDEBAR (CATÁLOGO DINÁMICO) */
+  .sidebar { width: 280px; background: var(--bg-panel); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
   .sidebar::-webkit-scrollbar { width: 6px; } .sidebar::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-  .sidebar-section { margin-bottom: 15px; }
-  .sidebar h3 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin: 0 0 8px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
-  .tool-btn { width: 100%; background: #252525; color: #ccc; border: 1px solid #333; padding: 7px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 12px; margin-bottom: 5px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
+  .cat-section { padding: 15px 15px 0 15px; }
+  .cat-title { font-size: 10px; text-transform: uppercase; color: #a3a3a3; margin: 0 0 10px 0; border-bottom: 1px solid #333; padding-bottom: 5px; font-weight: 700; letter-spacing: 0.5px;}
+  .tool-btn { width: 100%; background: #252525; color: #d4d4d4; border: 1px solid #333; padding: 8px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 11px; margin-bottom: 6px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
   .tool-btn:hover { background: #333; border-color: var(--accent); color: #fff; }
-  .tool-btn span.tag { font-size: 9px; background: #111; padding: 2px 5px; border-radius: 3px; color: #888; border: 1px solid #222; }
+  .tool-tag { font-size: 9px; background: #111; padding: 2px 5px; border-radius: 3px; color: #737373; border: 1px solid #222; }
 
-  /* CANVAS */
+  /* CANVAS (MOTOR FÍSICO) */
   .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#333 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; position: relative; }
-  #canvas { background: #ffffff; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: width 0.3s, height 0.3s; overflow: hidden; }
+  #canvas { position: relative; box-shadow: 0 10px 50px rgba(0,0,0,0.9); transition: width 0.3s, height 0.3s; }
   #canvas.desktop { width: 100%; height: 100%; min-height: 800px; }
   #canvas.tablet { width: 768px; height: 1024px; border-radius: 4px; }
   #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 12px solid #111; }
+  .canvas-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; transition: background 0.3s, opacity 0.3s; }
 
-  /* ELEMENTS IN CANVAS */
-  .canvas-element { position: absolute; box-sizing: border-box; cursor: grab; user-select: none; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: box-shadow 0.2s, background-color 0.2s; }
-  .canvas-element.selected { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .canvas-element:active { cursor: grabbing; }
-  .resizer { width: 10px; height: 10px; background: var(--accent); position: absolute; right: 0; bottom: 0; cursor: nwse-resize; display: none; z-index: 9999; }
-  .canvas-element.selected .resizer { display: block; }
+  /* ELEMENTOS EN LIENZO */
+  .element { position: absolute; box-sizing: border-box; cursor: grab; display: flex; align-items: center; justify-content: center; overflow: hidden; user-select: none; }
+  .element.selected { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .element:active { cursor: grabbing; }
+  .resizer { width: 12px; height: 12px; background: var(--accent); position: absolute; right: -2px; bottom: -2px; cursor: nwse-resize; display: none; z-index: 9999; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
+  .element.selected .resizer { display: block; }
   
   /* RIGHT PANEL */
-  .right-panel { width: 320px; background: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
-  .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: #181818; }
-  .tab-btn { flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 11px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; }
-  .tab-btn.active { color: #fff; border-bottom: 2px solid var(--accent); background: var(--panel-bg); }
+  .right-panel { width: 340px; background: var(--bg-panel); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: #161616; }
+  .tab-btn { flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 10px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; }
+  .tab-btn.active { color: #fff; border-bottom: 2px solid var(--accent); background: var(--bg-panel); }
   .tab-content { flex: 1; overflow-y: auto; display: none; }
   .tab-content.active { display: block; }
-  
-  /* CAPAS (LAYERS) STYLES */
-  #tab-layers { padding: 0; background: #1a1a1a; display: none; flex-direction: column; }
+
+  /* CAPAS */
+  #tab-layers { background: #1a1a1a; display: none; flex-direction: column; }
   #tab-layers.active { display: flex; }
-  .layers-header { padding: 10px 15px; background: #222; border-bottom: 1px solid #333; font-size: 11px; font-weight: bold; color: #aaa; text-transform: uppercase; display: flex; justify-content: space-between;}
-  .layer-list { flex: 1; overflow-y: auto; padding: 5px; }
-  .layer-item { display: flex; align-items: center; background: #252525; padding: 8px; margin-bottom: 4px; border-radius: 4px; border: 1px solid #333; cursor: pointer; font-size: 12px; transition: 0.1s; }
-  .layer-item:hover { background: #2d2d2d; }
-  .layer-item.active { background: #304038; border-color: var(--accent); color: #fff; }
-  .layer-item.hidden-layer { opacity: 0.5; }
-  .layer-name { flex: 1; margin-left: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .layer-actions { display: flex; gap: 5px; }
-  .layer-btn { background: #111; color: #888; border: 1px solid #333; width: 22px; height: 22px; border-radius: 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+  .layers-header { padding: 10px 15px; background: #222; border-bottom: 1px solid #333; font-size: 10px; font-weight: bold; color: #888; text-transform: uppercase; }
+  .layer-list { flex: 1; overflow-y: auto; padding: 10px; }
+  .layer-item { display: flex; align-items: center; background: #252525; padding: 8px; margin-bottom: 6px; border-radius: 4px; border: 1px solid #333; cursor: pointer; font-size: 11px; }
+  .layer-item.active { background: #2c2e43; border-color: var(--accent); color: #fff; }
+  .layer-item.hidden { opacity: 0.4; }
+  .layer-name { flex: 1; margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .layer-actions { display: flex; gap: 4px; }
+  .layer-btn { background: #111; color: #aaa; border: 1px solid #333; width: 22px; height: 22px; border-radius: 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .layer-btn:hover { background: #444; color: #fff; }
 
-  /* PROPS & CSS TAB STYLES */
+  /* PROPIEDADES (UI) */
   .props-container { padding: 15px; }
-  .prop-section { margin-bottom: 12px; background: #222; padding: 12px; border-radius: 4px; border: 1px solid #333; }
-  .prop-section h4 { margin: 0 0 10px 0; font-size: 10px; color: #aaa; text-transform: uppercase; }
-  .prop-row { display: flex; gap: 10px; margin-bottom: 8px; }
+  .prop-section { margin-bottom: 15px; background: #222; padding: 12px; border-radius: 6px; border: 1px solid #333; }
+  .prop-section h4 { margin: 0 0 12px 0; font-size: 10px; color: #a3a3a3; text-transform: uppercase; letter-spacing: 0.5px;}
+  .prop-row { display: flex; gap: 10px; margin-bottom: 10px; }
   .prop-group { flex: 1; display: flex; flex-direction: column; }
-  .prop-group label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
-  .prop-group input, .prop-group select { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid #444; background: #111; color: white; font-family: monospace; font-size: 11px; }
-  .prop-group input[type="color"] { padding: 0 2px; height: 26px; cursor: pointer; }
+  .prop-group label { font-size: 9px; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+  .prop-group input, .prop-group select { width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #444; background: #111; color: white; font-family: monospace; font-size: 11px; outline: none;}
+  .prop-group input:focus { border-color: var(--accent); }
+  .prop-group input[type="color"] { padding: 0; height: 26px; cursor: pointer; border: none; }
   
-  .code-section { margin: 15px; background: #111; border-radius: 4px; border: 1px solid #333; overflow: hidden; }
-  .code-header { background: #181818; padding: 8px 12px; font-size: 10px; font-weight: bold; color: #aaa; border-bottom: 1px solid #333; text-transform: uppercase;}
-  pre { margin: 0; padding: 12px; font-family: 'Courier New', Courier, monospace; font-size: 11px; line-height: 1.4; white-space: pre-wrap; max-height: 250px; overflow-y: auto;}
+  /* CÓDIGO */
+  .code-section { margin: 15px; background: #111; border-radius: 6px; border: 1px solid #333; overflow: hidden; }
+  .code-header { background: #1a1a1a; padding: 8px 12px; font-size: 10px; font-weight: bold; color: #888; border-bottom: 1px solid #333; text-transform: uppercase;}
+  pre { margin: 0; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; max-height: 250px; overflow-y: auto;}
   .html-code { color: #e6db74; } .css-code { color: #66d9ef; }
 
 </style>
@@ -92,9 +93,9 @@
 <body>
 
   <header>
-    <div class="header-title">
-      <h1>Master Layout Builder</h1>
-      <p>Estación de Trabajo Profesional HTML/CSS</p>
+    <div class="logo">
+      <h1>Master Layout Pro</h1>
+      <p>Estación de Desarrollo HTML5/CSS3</p>
     </div>
     <div class="viewports" id="viewport-controls">
       <button class="active" onclick="setViewport('desktop')">Escritorio</button>
@@ -102,523 +103,490 @@
       <button onclick="setViewport('mobile')">Móvil</button>
     </div>
     <div class="top-actions">
-      <button onclick="downloadProject()">⬇ Descargar Proyecto HTML/CSS</button>
+      <button class="top-btn" onclick="downloadProject()">⬇ Exportar Proyecto ZIP</button>
     </div>
   </header>
 
   <div class="workspace">
-    <!-- PANEL IZQUIERDO: HERRAMIENTAS -->
-    <div class="sidebar">
-      <div class="sidebar-inner">
-        
-        <div class="sidebar-section">
-          <h3>Estructura & Layout</h3>
-          <button class="tool-btn" onclick="addElement('header')">Encabezado (Nav) <span class="tag">header</span></button>
-          <button class="tool-btn" onclick="addElement('section')">Sección (100% W) <span class="tag">section</span></button>
-          <button class="tool-btn" onclick="addElement('footer')">Pie de Página <span class="tag">footer</span></button>
-          <button class="tool-btn" onclick="addElement('div')">Caja / Contenedor <span class="tag">div</span></button>
-        </div>
+    <!-- PANEL IZQUIERDO: CATÁLOGO DINÁMICO -->
+    <div class="sidebar" id="sidebar"></div>
 
-        <div class="sidebar-section">
-          <h3>Formas Avanzadas (CSS)</h3>
-          <button class="tool-btn" onclick="addElement('circle')">Círculo Perfecto <span class="tag">radius</span></button>
-          <button class="tool-btn" onclick="addElement('pill')">Píldora / Botón <span class="tag">radius</span></button>
-          <button class="tool-btn" onclick="addElement('triangle')">Triángulo <span class="tag">clip-path</span></button>
-          <button class="tool-btn" onclick="addElement('hexagon')">Hexágono <span class="tag">clip-path</span></button>
-        </div>
-
-        <div class="sidebar-section">
-          <h3>UI & Glassmorfismo</h3>
-          <button class="tool-btn" onclick="addElement('glass-card')">Tarjeta de Cristal <span class="tag">backdrop</span></button>
-          <button class="tool-btn" onclick="addElement('gradient-box')">Caja con Degradado <span class="tag">linear</span></button>
-          <button class="tool-btn" onclick="addElement('popup')">Modal Central <span class="tag">dialog</span></button>
-        </div>
-
-        <div class="sidebar-section">
-          <h3>Elementos Clásicos</h3>
-          <button class="tool-btn" onclick="addElement('text')">Bloque de Texto <span class="tag">p/h1</span></button>
-          <button class="tool-btn" onclick="addElement('image')">Imagen <span class="tag">img</span></button>
-          <button class="tool-btn" onclick="addElement('button')">Botón <span class="tag">button</span></button>
-          <button class="tool-btn" onclick="addElement('input')">Input Texto <span class="tag">input</span></button>
-        </div>
-
+    <!-- CANVAS -->
+    <div class="canvas-wrapper" id="canvas-wrapper">
+      <div id="canvas" class="desktop">
+        <div class="canvas-bg" id="canvas-bg"></div>
       </div>
     </div>
 
-    <!-- CANVAS CENTRAL -->
-    <div class="canvas-wrapper">
-      <div id="canvas" class="desktop"></div>
-    </div>
-
-    <!-- PANEL DERECHO: CAPAS Y PROPIEDADES -->
+    <!-- PANEL DERECHO: CAPAS & PROPS -->
     <div class="right-panel">
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('layers')">Capas</button>
-        <button class="tab-btn" onclick="switchTab('props')">Diseño</button>
+        <button class="tab-btn active" onclick="switchTab('props')">Diseño</button>
+        <button class="tab-btn" onclick="switchTab('layers')">Capas</button>
         <button class="tab-btn" onclick="switchTab('html')">HTML</button>
         <button class="tab-btn" onclick="switchTab('css')">CSS</button>
       </div>
 
-      <!-- TAB 1: CAPAS (Layers) -->
-      <div id="tab-layers" class="tab-content active">
-        <div class="layers-header">
-          <span>Orden de Capas (Z-Index)</span>
-        </div>
-        <div class="layer-list" id="layers-list">
-          <!-- Las capas se renderizan aquí -->
-          <div style="color: #666; font-size: 11px; text-align: center; margin-top: 20px;">Lienzo vacío. Agrega elementos.</div>
-        </div>
-      </div>
-
-      <!-- TAB 2: DISEÑO Y EFECTOS -->
-      <div id="tab-props" class="tab-content">
+      <!-- DISEÑO -->
+      <div id="tab-props" class="tab-content active">
         <div class="props-container">
-          <div id="no-selection" style="color: #666; font-size: 11px; text-align: center; margin-top: 20px;">
-            Selecciona una capa para editar sus propiedades.
-          </div>
           
-          <div id="props-form" style="display: none;">
+          <!-- PROPIEDADES DEL LIENZO (Mostrado si no hay selección) -->
+          <div id="canvas-props" style="display: block;">
+            <div style="text-align: center; margin-bottom: 15px; font-size: 11px; color: var(--accent);">⚙️ Propiedades del Lienzo</div>
+            <div class="prop-section">
+              <h4>Fondo Global</h4>
+              <div class="prop-group" style="margin-bottom:10px;">
+                <label>Color (HEX)</label>
+                <input type="color" id="canvas-color" value="#ffffff" oninput="updateCanvas()">
+              </div>
+              <div class="prop-group">
+                <label>Opacidad del Lienzo (%)</label>
+                <input type="number" id="canvas-opacity" value="100" min="0" max="100" oninput="updateCanvas()">
+              </div>
+            </div>
+          </div>
+
+          <!-- PROPIEDADES DE CAPA (Mostrado si hay selección) -->
+          <div id="layer-props" style="display: none;">
             
             <div class="prop-section">
-              <h4>Geometría</h4>
+              <h4>Layout / Tamaño</h4>
               <div class="prop-row">
-                <div class="prop-group"><label>X (Left px)</label><input type="number" id="prop-x" oninput="updateEl()"></div>
-                <div class="prop-group"><label>Y (Top px)</label><input type="number" id="prop-y" oninput="updateEl()"></div>
+                <div class="prop-group"><label>X (Left)</label><input type="number" id="prop-x" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Y (Top)</label><input type="number" id="prop-y" oninput="updateElUI()"></div>
               </div>
               <div class="prop-row">
-                <div class="prop-group"><label>Ancho (px)</label><input type="number" id="prop-w" oninput="updateEl()"></div>
-                <div class="prop-group"><label>Alto (px)</label><input type="number" id="prop-h" oninput="updateEl()"></div>
-              </div>
-              <div class="prop-row">
-                <div class="prop-group"><label>Rotación (Grados)</label><input type="number" id="prop-rotate" oninput="updateEl()" placeholder="Ej: 45"></div>
-                <div class="prop-group"><label>Borde (Radius px)</label><input type="number" id="prop-radius" oninput="updateEl()"></div>
+                <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Alto (H)</label><input type="number" id="prop-h" oninput="updateElUI()"></div>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Estilo y Relleno</h4>
-              <div class="prop-group" style="margin-bottom:8px;">
-                <label>Fondo (Color / Gradient CSS)</label>
-                <!-- Usamos un input text para permitir gradients, con un color picker auxiliar -->
-                <div style="display:flex; gap:5px;">
-                  <input type="color" id="prop-bg-color" oninput="syncColorToBg()" style="width: 30px;">
-                  <input type="text" id="prop-bg" oninput="updateEl()" placeholder="#ffffff o linear-gradient(...)">
+              <h4>Estética / Tipografía</h4>
+              <div class="prop-row">
+                <div class="prop-group"><label>Color Fondo</label><input type="text" id="prop-bg" oninput="updateElUI()" placeholder="#Hex o gradient"></div>
+                <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateElUI()"></div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group"><label>Opacidad (%)</label><input type="number" id="prop-opacity" min="0" max="100" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Bordes (px)</label><input type="number" id="prop-radius" oninput="updateElUI()"></div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group"><label>Fuente (px)</label><input type="number" id="prop-fontsize" oninput="updateElUI()"></div>
+                <div class="prop-group">
+                  <label>Alineación</label>
+                  <select id="prop-align" oninput="updateElUI()">
+                    <option value="center">Centro</option>
+                    <option value="left">Izquierda</option>
+                    <option value="right">Derecha</option>
+                  </select>
                 </div>
               </div>
-              <div class="prop-row">
-                <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateEl()"></div>
-                <div class="prop-group"><label>Opacidad (0 a 1)</label><input type="number" step="0.1" min="0" max="1" id="prop-opacity" oninput="updateEl()"></div>
-              </div>
-              <div class="prop-group" style="margin-top:8px;">
-                <label>Texto / Contenido</label>
-                <input type="text" id="prop-text" oninput="updateEl()">
+              <div class="prop-group">
+                <label>Contenido HTML/Texto</label>
+                <input type="text" id="prop-text" oninput="updateElUI()">
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Filtros y Renderizado Avanzado</h4>
-              <div class="prop-group" style="margin-bottom:8px;">
-                <label>Sombra Paralela</label>
-                <select id="prop-shadow" oninput="updateEl()">
-                  <option value="none">Ninguna</option>
-                  <option value="shadow-soft">Suave (UI)</option>
-                  <option value="shadow-hard">Fuerte (Flotante)</option>
-                </select>
+              <h4>Filtros, Formas y Mezclas (Pro)</h4>
+              <div class="prop-row">
+                <div class="prop-group"><label>Rotación (deg)</label><input type="number" id="prop-rotate" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Escala (Zoom)</label><input type="number" step="0.1" id="prop-scale" oninput="updateElUI()"></div>
               </div>
-              <div class="prop-group" style="margin-bottom:8px;">
-                <label>Máscara Vectorial (Clip-Path)</label>
-                <select id="prop-clip" oninput="updateEl()">
-                  <option value="none">Normal (Cuadrado)</option>
+              <div class="prop-group" style="margin-bottom:10px;">
+                <label>Clip-Path (Máscara Vectorial)</label>
+                <select id="prop-clip" oninput="updateElUI()">
+                  <option value="none">Rectángulo (Ninguno)</option>
+                  <option value="circle(50% at 50% 50%)">Círculo Perfecto</option>
                   <option value="polygon(50% 0%, 0% 100%, 100% 100%)">Triángulo</option>
-                  <option value="polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)">Hexágono</option>
-                  <option value="polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)">Trapecio</option>
+                  <option value="polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)">Pentágono</option>
+                  <option value="polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)">Estrella</option>
+                  <option value="polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%)">Octágono</option>
                 </select>
               </div>
-              <div class="prop-row">
-                <div class="prop-group">
-                  <label>Filtro (Background)</label>
-                  <select id="prop-glass" oninput="updateEl()">
-                    <option value="none">Ninguno</option>
-                    <option value="blur(10px)">Cristal (Blur 10px)</option>
-                  </select>
-                </div>
-                <div class="prop-group">
-                  <label>Filtro (Elemento)</label>
-                  <select id="prop-filter" oninput="updateEl()">
-                    <option value="none">Ninguno</option>
-                    <option value="grayscale(100%)">Blanco y Negro</option>
-                    <option value="sepia(100%)">Sepia</option>
-                    <option value="blur(3px)">Desenfocar</option>
-                  </select>
-                </div>
+              <div class="prop-group" style="margin-bottom:10px;">
+                <label>Mix-Blend-Mode (Fusión)</label>
+                <select id="prop-blend" oninput="updateElUI()">
+                  <option value="normal">Normal</option>
+                  <option value="multiply">Multiplicar (Oscurecer)</option>
+                  <option value="screen">Trama (Aclarar)</option>
+                  <option value="overlay">Superponer (Contraste)</option>
+                  <option value="difference">Diferencia (Negativo)</option>
+                </select>
+              </div>
+              <div class="prop-group">
+                <label>Efectos de Caja (Glass/Shadow)</label>
+                <select id="prop-effect" oninput="updateElUI()">
+                  <option value="none">Ninguno</option>
+                  <option value="shadow">Sombra Flotante</option>
+                  <option value="glass">Glassmorfismo (Blur)</option>
+                </select>
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
-      <!-- TAB 3: HTML -->
-      <div id="tab-html" class="tab-content">
-        <div class="code-section">
-          <div class="code-header">Toda la Estructura</div>
-          <pre class="html-code" id="code-html-global"></pre>
-        </div>
-        <div class="code-section">
-          <div class="code-header" style="color:var(--accent);">Solo Capa Seleccionada</div>
-          <pre class="html-code" id="code-html-single"></pre>
-        </div>
+      <!-- CAPAS -->
+      <div id="tab-layers" class="tab-content">
+        <div class="layers-header">Orden del DOM (Z-Index)</div>
+        <div class="layer-list" id="layers-list"></div>
       </div>
 
-      <!-- TAB 4: CSS -->
+      <!-- HTML & CSS -->
+      <div id="tab-html" class="tab-content">
+        <div class="code-section"><div class="code-header">Toda la Estructura</div><pre class="html-code" id="code-html-global"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Seleccionada</div><pre class="html-code" id="code-html-single"></pre></div>
+      </div>
       <div id="tab-css" class="tab-content">
-        <div class="code-section">
-          <div class="code-header">Hoja de Estilos Completa</div>
-          <pre class="css-code" id="code-css-global"></pre>
-        </div>
-        <div class="code-section">
-          <div class="code-header" style="color:var(--accent);">Solo Capa Seleccionada</div>
-          <pre class="css-code" id="code-css-single"></pre>
-        </div>
+        <div class="code-section"><div class="code-header">Estilos Globales</div><pre class="css-code" id="code-css-global"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Seleccionada</div><pre class="css-code" id="code-css-single"></pre></div>
       </div>
 
     </div>
   </div>
 
 <script>
-  // ESTADO GLOBAL: Cada elemento es una "Capa".
-  let elements = []; 
-  let selectedId = null; 
-  let counter = 1; 
+  // ESTADO GLOBAL
+  let elements = []; let selectedId = null; let counter = 1; 
   const canvas = document.getElementById('canvas');
+  const canvasBg = document.getElementById('canvas-bg');
+  
+  // DICCIONARIO MASIVO DE COMPONENTES (CATEGORIZADO)
+  const catalogue = [
+    { cat: 'Layout Semántico', items: [
+      { id: 'header', n: 'Header', t: 'header', w: 1000, h: 60, bg: '#18181b', c: '#fff', text: 'Encabezado', fullW: true },
+      { id: 'main', n: 'Main', t: 'main', w: 1000, h: 400, bg: '#f4f4f5', c: '#000', text: '', fullW: true },
+      { id: 'footer', n: 'Footer', t: 'footer', w: 1000, h: 80, bg: '#18181b', c: '#a3a3a3', text: '© 2026', fullW: true },
+      { id: 'aside', n: 'Sidebar', t: 'aside', w: 250, h: 400, bg: '#e5e5e5', c: '#000', text: 'Barra lateral' },
+      { id: 'div', n: 'Contenedor', t: 'div', w: 200, h: 200, bg: '#e4e4e7', c: '#000', text: 'Caja' }
+    ]},
+    { cat: 'Tipografía', items: [
+      { id: 'h1', n: 'Título H1', t: 'h1', w: 300, h: 50, bg: 'transparent', c: '#000', text: 'Título Principal', fs: 32 },
+      { id: 'p', n: 'Párrafo', t: 'p', w: 300, h: 80, bg: 'transparent', c: '#333', text: 'Texto de ejemplo para web.', fs: 16 },
+      { id: 'quote', n: 'Blockquote', t: 'blockquote', w: 350, h: 60, bg: '#f3f4f6', c: '#4b5563', text: 'La simplicidad es la máxima sofisticación.', r: 4 }
+    ]},
+    { cat: 'Multimedia', items: [
+      { id: 'img', n: 'Imagen', t: 'img', w: 300, h: 200, bg: '#cbd5e1', c: '#000', text: '', r: 8, attrs: 'src="https://via.placeholder.com/300" alt="img"' },
+      { id: 'video', n: 'Video Player', t: 'video', w: 400, h: 225, bg: '#000', c: '#fff', text: '', r: 8, attrs: 'controls' },
+      { id: 'iframe', n: 'Embed (Mapa)', t: 'iframe', w: 400, h: 250, bg: '#e2e8f0', c: '#000', text: '', r: 4, attrs: 'src="https://example.com"' }
+    ]},
+    { cat: 'Inputs Básicos', items: [
+      { id: 'text', n: 'Input Texto', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', text: '', r: 4, attrs: 'type="text" placeholder="Escribe..."' },
+      { id: 'email', n: 'Input Email', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', text: '', r: 4, attrs: 'type="email" placeholder="correo@ejemplo.com"' },
+      { id: 'password', n: 'Input Clave', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', text: '', r: 4, attrs: 'type="password" placeholder="Contraseña"' },
+      { id: 'btn', n: 'Botón Submit', t: 'button', w: 140, h: 45, bg: '#4f46e5', c: '#fff', text: 'Enviar', r: 6 }
+    ]},
+    { cat: 'Inputs Avanzados', items: [
+      { id: 'date', n: 'Selector Fecha', t: 'input', w: 200, h: 45, bg: '#fff', c: '#000', text: '', r: 4, attrs: 'type="date"' },
+      { id: 'color', n: 'Selector Color', t: 'input', w: 100, h: 45, bg: '#fff', c: '#000', text: '', r: 4, attrs: 'type="color"' },
+      { id: 'range', n: 'Barra Slider', t: 'input', w: 200, h: 20, bg: 'transparent', c: '#000', text: '', r: 0, attrs: 'type="range"' },
+      { id: 'file', n: 'Subir Archivo', t: 'input', w: 250, h: 45, bg: '#f8fafc', c: '#000', text: '', r: 4, attrs: 'type="file"' },
+      { id: 'check', n: 'Checkbox', t: 'label', w: 150, h: 30, bg: 'transparent', c: '#000', text: 'Opción 1', attrs: 'check' }
+    ]},
+    { cat: 'Formas (Clip-Path)', items: [
+      { id: 'circle', n: 'Círculo', t: 'div', w: 150, h: 150, bg: '#ef4444', c: '#fff', text: '', clip: 'circle(50% at 50% 50%)' },
+      { id: 'triangle', n: 'Triángulo', t: 'div', w: 150, h: 150, bg: '#eab308', c: '#fff', text: '', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
+      { id: 'star', n: 'Estrella', t: 'div', w: 150, h: 150, bg: '#8b5cf6', c: '#fff', text: '', clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }
+    ]},
+    { cat: 'UI Especiales', items: [
+      { id: 'card', n: 'Tarjeta UI', t: 'div', w: 300, h: 350, bg: '#ffffff', c: '#000', text: 'Card', r: 12, effect: 'shadow' },
+      { id: 'glass', n: 'Panel Glass', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.2)', c: '#000', text: 'Efecto Cristal', r: 16, effect: 'glass' },
+      { id: 'progress', n: 'Barra Progreso', t: 'progress', w: 250, h: 20, bg: '#e5e5e5', c: '#4f46e5', text: '70', r: 10, attrs: 'value="70" max="100"' }
+    ]}
+  ];
 
-  // DICCIONARIO DE FORMAS Y COMPONENTES
-  const templates = {
-    // Básicos
-    'div': { n: 'Caja', w: 200, h: 200, bg: '#e4e4e7', c: '#000', t: 'Contenedor', r: 4 },
-    'text': { n: 'Texto', w: 300, h: 50, bg: 'transparent', c: '#333', t: 'Texto de prueba', r: 0 },
-    'image': { n: 'Imagen', w: 250, h: 180, bg: '#ccc', c: '#000', t: '', r: 8, type: 'img' },
-    'button': { n: 'Botón', w: 140, h: 45, bg: '#43b581', c: '#fff', t: 'Aceptar', r: 6, type: 'btn' },
-    'input': { n: 'Input', w: 220, h: 45, bg: '#fff', c: '#000', t: 'Escribe aquí...', r: 4, type: 'input' },
-    
-    // Layout
-    'header': { n: 'Header Nav', w: 1000, h: 60, bg: '#18181b', c: '#fff', t: 'LOGO', r: 0, type: 'header' },
-    'section': { n: 'Sección', w: 1000, h: 400, bg: '#f4f4f5', c: '#000', t: '', r: 0, type: 'section' },
-    'footer': { n: 'Footer', w: 1000, h: 80, bg: '#18181b', c: '#888', t: '© 2026', r: 0, type: 'footer' },
-    
-    // Formas Modernas (Vector/Clip-Path/Radius)
-    'circle': { n: 'Círculo', w: 150, h: 150, bg: '#007acc', c: '#fff', t: '', r: 500 /* hack p/ círculo */ },
-    'pill': { n: 'Píldora', w: 200, h: 50, bg: '#ff3366', c: '#fff', t: 'Píldora', r: 50 },
-    'triangle': { n: 'Triángulo', w: 150, h: 150, bg: '#facc15', c: '#000', t: '', r: 0, clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
-    'hexagon': { n: 'Hexágono', w: 150, h: 150, bg: '#a855f7', c: '#fff', t: '', r: 0, clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
-    
-    // UI Avanzada
-    'glass-card': { n: 'Glass Card', w: 280, h: 320, bg: 'rgba(255, 255, 255, 0.2)', c: '#000', t: 'Cristal', r: 16, glass: 'blur(10px)', shadow: 'shadow-soft' },
-    'gradient-box': { n: 'Gradient', w: 250, h: 250, bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', c: '#fff', t: 'Gradient', r: 12 },
-    'popup': { n: 'Modal', w: 400, h: 250, bg: '#ffffff', c: '#000', t: 'Alerta', r: 8, shadow: 'shadow-hard', type: 'popup' }
-  };
+  // INICIALIZACIÓN: Crear el menú lateral automáticamente
+  function buildSidebar() {
+    const sb = document.getElementById('sidebar');
+    catalogue.forEach(cat => {
+      let html = `<div class="cat-section"><h3 class="cat-title">${cat.cat}</h3>`;
+      cat.items.forEach(item => {
+        html += `<button class="tool-btn" onclick="addElement('${item.id}')">${item.n} <span class="tool-tag">${item.t}</span></button>`;
+      });
+      html += `</div>`;
+      sb.innerHTML += html;
+    });
+  }
+  buildSidebar();
 
-  // 1. AÑADIR ELEMENTO (Crear nueva capa)
+  // 1. AÑADIR ELEMENTO
   function addElement(tKey) {
-    const t = templates[tKey]; 
-    const id = `Capa_${counter++}`;
-    
-    let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2));
-    let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
-    let sW = t.w;
-    
-    if (['header', 'footer', 'section'].includes(t.type)) { sX = 0; sW = canvas.offsetWidth; if (t.type === 'header') sY = 0; }
+    // Buscar la plantilla en el catálogo
+    let temp = null;
+    catalogue.forEach(c => { const found = c.items.find(i => i.id === tKey); if(found) temp = found; });
+    if(!temp) return;
 
-    elements.push({ 
-      id: id, name: `${t.n} ${counter-1}`, type: t.type || 'div',
-      x: sX, y: sY, w: sW, h: t.h, 
-      bg: t.bg, color: t.c, text: t.t, radius: t.r, 
-      rotation: 0, opacity: 1, 
-      clip: t.clip || 'none', glass: t.glass || 'none', filter: 'none', shadow: t.shadow || 'none',
-      hidden: false 
+    const id = `el_${counter++}`;
+    let sX = Math.max(0, (canvas.offsetWidth / 2) - (temp.w / 2));
+    let sY = Math.max(50, (canvas.offsetHeight / 2) - (temp.h / 2));
+    let sW = temp.w;
+    
+    if (temp.fullW) { sX = 0; sW = canvas.offsetWidth; if (temp.t === 'header') sY = 0; }
+
+    const newEl = { 
+      id, name: `${temp.n} ${counter-1}`, tag: temp.t, attrs: temp.attrs || '',
+      x: sX, y: sY, w: sW, h: temp.h, 
+      bg: temp.bg, color: temp.c, text: temp.text, radius: temp.r || 0, 
+      fs: temp.fs || 14, align: 'center', opacity: 100, rotate: 0, scale: 1, 
+      clip: temp.clip || 'none', blend: 'normal', effect: temp.effect || 'none', hidden: false 
+    };
+    
+    elements.push(newEl);
+    
+    // Crear el NODO físico en el DOM
+    const node = document.createElement('div');
+    node.id = id;
+    node.className = 'element';
+    node.innerHTML = `<div class="inner-content" style="width:100%; height:100%; pointer-events:none;"></div><div class="resizer"></div>`;
+    
+    // Asignar eventos de drag/resize al nodo recién creado
+    node.addEventListener('mousedown', (e) => { 
+      if(e.target.classList.contains('resizer')) return; 
+      selectElement(id); startDrag(e, newEl, node); 
+    });
+    const resizer = node.querySelector('.resizer');
+    resizer.addEventListener('mousedown', (e) => { 
+      e.stopPropagation(); selectElement(id); startResize(e, newEl, node); 
     });
     
+    canvas.appendChild(node);
+    
+    applyStylesToNode(newEl, node); // Aplicar estilo visual
     selectElement(id);
+    renderLayers();
+    generateCode();
   }
 
-  // 2. RENDER PRINCIPAL (Lienzo)
-  function renderCanvas() {
-    canvas.innerHTML = ''; 
+  // 2. APLICADOR DE ESTILOS (El motor gráfico)
+  // Separa la lógica de "crear" de "estilar" para no matar el DOM al arrastrar.
+  function applyStylesToNode(el, node) {
+    if(el.hidden) { node.style.display = 'none'; return; }
+    node.style.display = 'flex';
     
-    // El orden de renderizado depende del índice del array (z-index natural de HTML)
-    elements.forEach((el, index) => {
-      if (el.hidden) return; // Si la capa está oculta, no renderizar
-      
-      const node = document.createElement('div');
-      node.id = el.id;
-      node.className = `canvas-element ${selectedId === el.id ? 'selected' : ''} ${el.shadow !== 'none' && el.type !== 'popup' ? el.shadow : ''}`;
-      
-      // Aplicar estilos geométricos y visuales
-      node.style.zIndex = index + 1; // Z-index real basado en posición de capa
-      if (el.type === 'popup') node.style.zIndex = 1000;
-      
-      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; 
-      node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
-      node.style.background = el.bg; node.style.color = el.color; 
-      
-      // Manejo de radius (el input manda %)
-      node.style.borderRadius = el.radius > 100 ? `${el.radius}px` : `${el.radius}px`; 
-      if (el.radius > 100 && el.w === el.h) node.style.borderRadius = '50%'; // hack visual para circulos
-      
-      if (el.bg === 'transparent') node.style.border = '1px dashed #aaa';
-
-      // Efectos Profesionales
-      node.style.transform = `rotate(${el.rotation}deg)`;
-      node.style.opacity = el.opacity;
-      if (el.clip !== 'none') node.style.clipPath = el.clip;
-      if (el.glass !== 'none') { node.style.backdropFilter = el.glass; node.style.webkitBackdropFilter = el.glass; }
-      if (el.filter !== 'none') node.style.filter = el.filter;
-
-      // Renderizado interno de HTML
-      let innerHTML = '';
-      if(el.type === 'img') innerHTML = `<img src="https://via.placeholder.com/${Math.round(el.w)}x${Math.round(el.h)}?text=Foto" style="width:100%; height:100%; object-fit:cover; pointer-events:none;">`;
-      else if (el.type === 'input') innerHTML = `<input type="text" placeholder="${el.text}" style="width:100%; height:100%; border:1px solid #ccc; background:transparent; color:inherit; padding:10px; pointer-events:none; outline:none;">`;
-      else if (el.type === 'btn') innerHTML = `<button style="width:100%; height:100%; border:none; background:transparent; color:inherit; font-weight:bold; font-size:14px; pointer-events:none;">${el.text}</button>`;
-      else if (el.type === 'header') innerHTML = `<div style="width:100%; padding:0 20px; display:flex; justify-content:space-between; align-items:center; font-weight:bold;"><span>${el.text}</span><span>Menú</span></div>`;
-      else if (el.type === 'popup') innerHTML = `<div style="width:100%; height:100%; display:flex; flex-direction:column; box-shadow: 0 0 0 999px rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.3);"><div style="padding:15px; border-bottom:1px solid #eee; font-weight:bold;">${el.text}</div><div style="padding:15px; flex:1;">Contenido Modal</div></div>`;
-      else innerHTML = `<span style="padding:15px; text-align:center;">${el.text}</span>`;
-
-      // Etiqueta de medida al redimensionar/seleccionar
-      node.innerHTML = `${selectedId === el.id ? `<div style="position:absolute; top:-25px; left:0; background:var(--accent); color:#fff; font-size:10px; padding:2px 5px; border-radius:3px; white-space:nowrap; transform: rotate(${-el.rotation}deg);">${Math.round(el.w)}x${Math.round(el.h)}</div>` : ''}${innerHTML}<div class="resizer"></div>`;
-      
-      // Eventos Drag & Resize
-      node.addEventListener('mousedown', (e) => { if(e.target.classList.contains('resizer')) return; selectElement(el.id); startDrag(e, el); });
-      const resizer = node.querySelector('.resizer');
-      if(resizer) resizer.addEventListener('mousedown', (e) => { e.stopPropagation(); selectElement(el.id); startResize(e, el); });
-      
-      canvas.appendChild(node);
-    });
-
-    renderLayersPanel(); // Actualizar panel de capas
-    updatePropsUI();     // Actualizar panel derecho
-    generateCode();      // Generar código en tiempo real
-  }
-
-  // 3. RENDER DE PANEL DE CAPAS (Estilo Photoshop)
-  function renderLayersPanel() {
-    const list = document.getElementById('layers-list');
-    list.innerHTML = '';
+    const zIdx = elements.findIndex(e => e.id === el.id) + 1;
+    node.style.zIndex = zIdx;
     
-    if (elements.length === 0) {
-      list.innerHTML = '<div style="color:#666; font-size:11px; text-align:center; margin-top:20px;">Lienzo vacío</div>';
-      return;
+    node.style.left = `${el.x}px`; node.style.top = `${el.y}px`;
+    node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
+    
+    // Transformaciones
+    node.style.transform = `rotate(${el.rotate}deg) scale(${el.scale})`;
+    node.style.opacity = el.opacity / 100;
+    node.style.mixBlendMode = el.blend;
+    node.style.clipPath = el.clip;
+    
+    // Estética básica
+    node.style.background = el.bg;
+    node.style.color = el.color;
+    node.style.borderRadius = `${el.radius}px`;
+    node.style.fontSize = `${el.fs}px`;
+    node.style.justifyContent = el.align === 'left' ? 'flex-start' : (el.align === 'right' ? 'flex-end' : 'center');
+    if(el.bg === 'transparent' && el.tag !== 'img') node.style.border = '1px dashed #666'; else node.style.border = 'none';
+
+    // Efectos de Caja
+    node.style.boxShadow = 'none'; node.style.backdropFilter = 'none';
+    if(el.effect === 'shadow') node.style.boxShadow = '0 20px 40px rgba(0,0,0,0.4)';
+    if(el.effect === 'glass') { node.style.backdropFilter = 'blur(12px)'; node.style.webkitBackdropFilter = 'blur(12px)'; node.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)'; }
+
+    // Render HTML interno simulado
+    const inner = node.querySelector('.inner-content');
+    if(el.tag === 'img') inner.innerHTML = `<img src="https://via.placeholder.com/${Math.round(el.w)}x${Math.round(el.h)}?text=Img" style="width:100%; height:100%; object-fit:cover; border-radius:${el.radius}px;">`;
+    else if(['input','textarea','select'].includes(el.tag) || (el.tag === 'button' && !el.attrs.includes('check'))) {
+      let t = el.tag; if(t==='input' && el.attrs==='type="range"') t='range'; if(t==='input' && el.attrs==='type="color"') t='color';
+      inner.innerHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; border:1px solid #ccc; background:${el.bg}; border-radius:${el.radius}px;">Form: ${t}</div>`;
     }
+    else if(el.attrs.includes('check')) inner.innerHTML = `<div style="display:flex; align-items:center; gap:5px; height:100%; padding:0 10px;"><input type="checkbox" checked> ${el.text}</div>`;
+    else if(el.tag === 'progress') inner.innerHTML = `<progress value="70" max="100" style="width:100%; height:100%;"></progress>`;
+    else inner.innerHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:${el.align}; padding:0 15px;">${el.text}</div>`;
+  }
 
-    // Recorremos en reversa para que la capa más alta (último en el array) salga arriba en la lista
+  // 3. MOTOR FÍSICO OPTIMIZADO (Drag & Drop Directo)
+  function startDrag(e, el, node) {
+    e.preventDefault();
+    let sX = e.clientX, sY = e.clientY;
+    function move(ev) {
+      el.x += ev.clientX - sX; el.y += ev.clientY - sY;
+      sX = ev.clientX; sY = ev.clientY;
+      // Actualización directa al DOM sin recargar
+      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`;
+      updatePropsUI();
+    }
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); }
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  }
+
+  function startResize(e, el, node) {
+    e.preventDefault();
+    let sX = e.clientX, sY = e.clientY;
+    function move(ev) {
+      el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY));
+      sX = ev.clientX; sY = ev.clientY;
+      node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
+      const img = node.querySelector('img'); if(img) img.src = `https://via.placeholder.com/${Math.round(el.w)}x${Math.round(el.h)}?text=Img`;
+      updatePropsUI();
+    }
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); }
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  }
+
+  // 4. CONTROL DE LIENZO Y SELECCIÓN
+  function updateCanvas() {
+    const color = document.getElementById('canvas-color').value;
+    const op = document.getElementById('canvas-opacity').value / 100;
+    canvasBg.style.background = color;
+    canvasBg.style.opacity = op;
+    generateCode();
+  }
+
+  function selectElement(id) { 
+    selectedId = id; 
+    document.querySelectorAll('.element').forEach(n => n.classList.remove('selected'));
+    if(id) document.getElementById(id).classList.add('selected');
+    updatePropsUI(); 
+    renderLayers();
+  }
+
+  canvas.addEventListener('mousedown', (e) => { 
+    if(e.target === canvas || e.target === canvasBg) selectElement(null); 
+  });
+
+  // 5. INTERFAZ: PROPIEDADES Y CAPAS
+  function updatePropsUI() {
+    if(!selectedId) { 
+      document.getElementById('canvas-props').style.display='block'; 
+      document.getElementById('layer-props').style.display='none'; 
+      return; 
+    }
+    document.getElementById('canvas-props').style.display='none'; 
+    document.getElementById('layer-props').style.display='block';
+    
+    const el = elements.find(e => e.id === selectedId);
+    ['x','y','w','h','radius','rotate','scale','fontsize','opacity'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p]));
+    document.getElementById('prop-bg').value = el.bg; document.getElementById('prop-color').value = el.color.startsWith('#')?el.color:'#ffffff';
+    ['text','align','clip','blend','effect'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
+  }
+
+  function updateElUI() {
+    if(!selectedId) return; const el = elements.find(e => e.id === selectedId);
+    ['x','y','w','h','radius','rotate','fontsize'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
+    el.scale = parseFloat(document.getElementById('prop-scale').value) || 1; el.opacity = parseFloat(document.getElementById('prop-opacity').value) || 100;
+    ['bg','color','text','align','clip','blend','effect'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
+    
+    const node = document.getElementById(selectedId);
+    applyStylesToNode(el, node);
+    generateCode();
+  }
+
+  function renderLayers() {
+    const list = document.getElementById('layers-list'); list.innerHTML = '';
     for (let i = elements.length - 1; i >= 0; i--) {
       const el = elements[i];
       const div = document.createElement('div');
-      div.className = `layer-item ${selectedId === el.id ? 'active' : ''} ${el.hidden ? 'hidden-layer' : ''}`;
-      
-      div.innerHTML = `
-        <span onclick="toggleVisibility('${el.id}', event)" style="cursor:pointer;">${el.hidden ? '👁️‍🗨️' : '👁️'}</span>
-        <span class="layer-name" onclick="selectElement('${el.id}')">${el.name}</span>
-        <div class="layer-actions">
-          <button class="layer-btn" onclick="moveLayer('${el.id}', 1, event)" title="Subir Capa">↑</button>
-          <button class="layer-btn" onclick="moveLayer('${el.id}', -1, event)" title="Bajar Capa">↓</button>
-          <button class="layer-btn" onclick="deleteElement('${el.id}', event)" title="Borrar" style="color:#ff4444;">×</button>
-        </div>
-      `;
+      div.className = `layer-item ${selectedId === el.id ? 'active' : ''} ${el.hidden ? 'hidden' : ''}`;
+      div.innerHTML = `<span onclick="toggleVis('${el.id}', event)" style="cursor:pointer; margin-right:5px;">${el.hidden ? '👁️‍🗨️' : '👁️'}</span><span class="layer-name" onclick="selectElement('${el.id}')">${el.name}</span><div class="layer-actions"><button class="layer-btn" onclick="moveLyr('${el.id}', 1, event)">↑</button><button class="layer-btn" onclick="moveLyr('${el.id}', -1, event)">↓</button><button class="layer-btn" onclick="deleteLyr('${el.id}', event)" style="color:#ef4444;">×</button></div>`;
       list.appendChild(div);
     }
   }
 
-  // LÓGICA DE CAPAS
-  function toggleVisibility(id, e) {
-    e.stopPropagation();
-    const el = elements.find(x => x.id === id);
-    if(el) el.hidden = !el.hidden;
-    renderCanvas();
-  }
+  function toggleVis(id, e) { e.stopPropagation(); const el = elements.find(x => x.id === id); if(el) el.hidden = !el.hidden; applyStylesToNode(el, document.getElementById(id)); renderLayers(); }
+  function moveLyr(id, dir, e) { e.stopPropagation(); const idx = elements.findIndex(x => x.id === id); if(idx === -1) return; const nIdx = idx + dir; if(nIdx < 0 || nIdx >= elements.length) return; const temp = elements[idx]; elements[idx] = elements[nIdx]; elements[nIdx] = temp; elements.forEach(el => applyStylesToNode(el, document.getElementById(el.id))); renderLayers(); generateCode(); }
+  function deleteLyr(id, e) { if(e) e.stopPropagation(); elements = elements.filter(x => x.id !== id); const node = document.getElementById(id); if(node) node.remove(); if(selectedId === id) selectElement(null); else renderLayers(); generateCode(); }
 
-  function moveLayer(id, dir, e) {
-    e.stopPropagation();
-    const idx = elements.findIndex(x => x.id === id);
-    if (idx === -1) return;
-    
-    const newIdx = idx + dir;
-    // Evitar salir del array
-    if (newIdx < 0 || newIdx >= elements.length) return;
-    
-    // Swap en el array
-    const temp = elements[idx];
-    elements[idx] = elements[newIdx];
-    elements[newIdx] = temp;
-    
-    renderCanvas();
-  }
-
-  function deleteElement(id, e) {
-    if(e) e.stopPropagation();
-    elements = elements.filter(x => x.id !== id);
-    if (selectedId === id) selectedId = null;
-    renderCanvas();
-  }
-
-  // DRAG & RESIZE (Core functionality)
-  function startDrag(e, el) { 
-    let sX = e.clientX, sY = e.clientY; 
-    function move(ev) { el.x += ev.clientX - sX; el.y += ev.clientY - sY; sX=ev.clientX; sY=ev.clientY; renderCanvas(); } 
-    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); } 
-    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up); 
-  }
-  function startResize(e, el) { 
-    let sX = e.clientX, sY = e.clientY; 
-    function move(ev) { el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY)); sX=ev.clientX; sY=ev.clientY; renderCanvas(); } 
-    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); } 
-    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up); 
-  }
-
-  // UI Y PROPIEDADES
-  function selectElement(id) { selectedId = id; renderCanvas(); }
   function switchTab(t) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
-  function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; setTimeout(() => renderCanvas(), 310); }
+  function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; }
 
-  function updatePropsUI() {
-    if(!selectedId) { document.getElementById('no-selection').style.display='block'; document.getElementById('props-form').style.display='none'; return; }
-    document.getElementById('no-selection').style.display='none'; document.getElementById('props-form').style.display='block';
+  // 6. EXPORTADOR MAESTRO DE HTML/CSS
+  function getElementCode(el, idx) {
+    let tag = el.tag, html = el.text, css = '';
     
-    const el = elements.find(e => e.id === selectedId);
-    if(!el) return;
-
-    ['x','y','w','h','radius','rotation'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p] || 0));
-    document.getElementById('prop-bg').value = el.bg;
-    
-    // Auxiliar para el selector de color si el bg es un HEX válido
-    if(el.bg.startsWith('#') && el.bg.length === 7) {
-      document.getElementById('prop-bg-color').value = el.bg;
+    // Tratamiento de Semántica
+    if(tag === 'img') { html = ''; css += `  object-fit: cover;\n`; }
+    else if(['input','textarea'].includes(tag)) { html = ''; css += `  padding: 10px; border: 1px solid #ccc; outline: none; resize: none;\n`; }
+    else if(tag === 'select') { html = `\n  <option>${el.text}</option>\n`; css += `  padding: 10px; border: 1px solid #ccc;\n`; }
+    else if(tag === 'button') { css += `  border: none; cursor: pointer; font-weight: bold;\n`; }
+    else if(tag === 'progress') { html = ''; }
+    else if(tag === 'blockquote') { css += `  margin: 0; padding: 20px; border-left: 4px solid ${el.color}; font-style: italic; display: flex; align-items: center;\n`; }
+    else if(el.attrs.includes('check')) { html = `\n  <input type="checkbox"> ${el.text}\n`; css += `  display: flex; align-items: center; gap: 8px; cursor: pointer;\n`; }
+    else if(tag === 'div' || tag === 'header' || tag === 'footer' || tag === 'section') {
+      css += `  display: flex; align-items: center; justify-content: ${el.align === 'left' ? 'flex-start' : (el.align === 'right' ? 'flex-end' : 'center')};\n`;
+      if (tag === 'header') html = `\n  <div class="logo">${el.text}</div>\n  <nav><a href="#">Link</a></nav>\n`;
     }
-    
-    document.getElementById('prop-color').value = el.color.startsWith('#') ? el.color : '#000000';
-    document.getElementById('prop-opacity').value = el.opacity;
-    ['text','shadow','clip','glass','filter'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
-  }
 
-  // Sincroniza el color picker auxiliar con el input de texto del Background
-  function syncColorToBg() {
-    const color = document.getElementById('prop-bg-color').value;
-    document.getElementById('prop-bg').value = color;
-    updateEl();
-  }
-
-  function updateEl() {
-    if(!selectedId) return; 
-    const el = elements.find(e => e.id === selectedId);
-    
-    ['x','y','w','h','radius','rotation'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
-    ['bg','color','text','shadow','clip','glass','filter'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
-    el.opacity = parseFloat(document.getElementById('prop-opacity').value) || 1;
-    
-    renderCanvas();
-  }
-
-  // EXPORTADOR HTML/CSS AVANZADO
-  function getElementCode(el) {
-    let tag = 'div', html = el.text, css = '';
-    
-    if(el.type === 'header') { tag = 'header'; html = `\n  <div class="logo">${el.text}</div>\n  <nav><a href="#">Inicio</a></nav>\n`; css += `  display: flex; justify-content: space-between; align-items: center; padding: 0 40px;\n}\n.MI_CLASE nav a { color: inherit; text-decoration: none; font-weight: normal; }`; }
-    else if(el.type === 'footer') { tag = 'footer'; html = `\n  <p>${el.text}</p>\n`; css += `  display: flex; justify-content: center; align-items: center;\n`; }
-    else if(el.type === 'section') { tag = 'section'; }
-    else if(el.type === 'img') { tag = 'img'; html = ''; css += `  object-fit: cover;\n`; }
-    else if(el.type === 'btn') { tag = 'button'; css += `  border: none; cursor: pointer; font-weight: bold;\n`; }
-    else if(el.type === 'input') { tag = 'input'; html = ''; css += `  padding: 10px; border: 1px solid #ccc; outline: none;\n`; }
-    else if(el.type === 'popup') { tag = 'dialog'; html = `\n  <h3>${el.text}</h3>\n  <p>Contenido modal</p>\n`; css += `  position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); border: none; padding: 20px; box-shadow: 0 0 0 100vw rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.3) !important; z-index: 9999;\n`; }
-
-    // Procesar Geometría Especial (Clip-Path & Radius)
+    // Estilos Geométricos
     if(el.clip !== 'none') css += `  clip-path: ${el.clip};\n`;
-    if(el.radius > 100 && el.w === el.h) css += `  border-radius: 50%;\n`; 
-    else if(el.radius > 0) css += `  border-radius: ${el.radius}px;\n`;
+    if(el.radius > 0) css += `  border-radius: ${el.radius}px;\n`;
+    if(el.fs !== 14) css += `  font-size: ${el.fs}px;\n`;
     
-    // Procesar Renderizado (Opacidad, Rotación, Filtros)
-    let transformRules = [];
-    if(el.rotation !== 0) transformRules.push(`rotate(${el.rotation}deg)`);
-    if(transformRules.length > 0 && el.type !== 'popup') css += `  transform: ${transformRules.join(' ')};\n`;
+    // Filtros y Mezclas
+    let tRule = [];
+    if(el.rotate !== 0) tRule.push(`rotate(${el.rotate}deg)`);
+    if(el.scale !== 1) tRule.push(`scale(${el.scale})`);
+    if(tRule.length > 0) css += `  transform: ${tRule.join(' ')};\n`;
     
-    if(el.opacity < 1) css += `  opacity: ${el.opacity};\n`;
-    if(el.glass !== 'none') css += `  backdrop-filter: ${el.glass};\n  -webkit-backdrop-filter: ${el.glass};\n`;
-    if(el.filter !== 'none') css += `  filter: ${el.filter};\n`;
-    if(el.shadow === 'shadow-soft') css += `  box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n`;
-    if(el.shadow === 'shadow-hard' && el.type !== 'popup') css += `  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n`;
+    if(el.opacity < 100) css += `  opacity: ${el.opacity / 100};\n`;
+    if(el.blend !== 'normal') css += `  mix-blend-mode: ${el.blend};\n`;
+    if(el.effect === 'shadow') css += `  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n`;
+    if(el.effect === 'glass') css += `  backdrop-filter: blur(12px);\n  -webkit-backdrop-filter: blur(12px);\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n`;
 
     return { tag, html, css };
   }
 
   function generateCode() {
-    if(elements.length === 0) return;
-    
-    let htmlG = `<div class="workspace-layout">\n`;
-    let cssG = `/* Reset */\n* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }\n.workspace-layout { position: relative; width: 100%; min-height: 100vh; overflow-x: hidden; }\n\n`;
+    let canvasBgColor = document.getElementById('canvas-color').value;
+    let canvasOp = document.getElementById('canvas-opacity').value / 100;
 
-    // Para el código global, sí respetamos el z-index (orden del array)
+    let htmlG = `<div class="web-layout">\n`;
+    let cssG = `/* Reset CSS */\n* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }\n\n.web-layout {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  overflow-x: hidden;\n  background-color: ${canvasBgColor};\n  /* Nota: La opacidad del lienzo se aplica usando rgba o pseudo-elemento en producción */\n}\n\n`;
+
     elements.forEach((el, index) => {
-      if(el.hidden) return; // No exportar capas ocultas
+      if(el.hidden) return; 
+      const data = getElementCode(el, index);
       
-      const data = getElementCode(el);
-      let attrs = "";
-      if (el.type === 'img') attrs = ' src="imagen.jpg" alt="img"';
-      if (el.type === 'input') attrs = ` placeholder="${el.text}"`;
-
+      let attrs = el.attrs ? ` ${el.attrs}` : '';
+      if(el.tag === 'img') attrs += ' src="imagen.jpg"';
       htmlG += `  <!-- ${el.name} -->\n  <${data.tag} class="${el.id}"${attrs}>${data.html}</${data.tag}>\n`;
       
-      let widthRule = `width: ${Math.round(el.w)}px;`;
-      if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) widthRule = `width: 100%;`;
+      let wRule = `width: ${Math.round(el.w)}px;`;
+      if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) wRule = `width: 100%;`;
 
-      let cssBlock = `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${index + 1};\n  ${widthRule} height: ${Math.round(el.h)}px;\n  background: ${el.bg}; color: ${el.color};\n`;
-      
-      cssBlock += data.css.replace(/MI_CLASE/g, el.id);
-      cssBlock += `}\n\n`;
+      let cssBlock = `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${index + 1};\n  ${wRule} height: ${Math.round(el.h)}px;\n  background: ${el.bg}; color: ${el.color};\n`;
+      cssBlock += data.css + `}\n\n`;
       cssG += cssBlock;
     });
     htmlG += `</div>`;
 
-    document.getElementById('code-html-global').textContent = htmlG; 
-    document.getElementById('code-css-global').textContent = cssG;
+    document.getElementById('code-html-global').textContent = htmlG; document.getElementById('code-css-global').textContent = cssG;
 
-    // Código Aislado
     if(selectedId) {
-      const el = elements.find(e => e.id === selectedId); 
-      const data = getElementCode(el);
-      let attrs = ""; 
-      if (el.type === 'img') attrs = ' src="imagen.jpg"'; 
-      if (el.type === 'input') attrs = ` placeholder="${el.text}"`;
-      
-      document.getElementById('code-html-single').textContent = `<${data.tag} class="mi-componente"${attrs}>${data.html}</${data.tag}>`;
-      
-      let cssS = `/* Estilo aislado de: ${el.name} */\n.mi-componente {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n  background: ${el.bg}; color: ${el.color};\n`;
-      cssS += data.css.replace(/MI_CLASE/g, 'mi-componente') + `}\n`;
+      const el = elements.find(e => e.id === selectedId); const data = getElementCode(el, 0);
+      let attrs = el.attrs ? ` ${el.attrs}` : ''; if(el.tag === 'img') attrs += ' src="imagen.jpg"';
+      document.getElementById('code-html-single').textContent = `<${data.tag} class="mi-clase"${attrs}>${data.html}</${data.tag}>`;
+      let cssS = `/* Estilo aislado de: ${el.name} */\n.mi-clase {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n  background: ${el.bg}; color: ${el.color};\n`;
+      cssS += data.css + `}\n`;
       document.getElementById('code-css-single').textContent = cssS;
     } else {
-      document.getElementById('code-html-single').textContent = '<!-- Selecciona una capa -->'; 
-      document.getElementById('code-css-single').textContent = '/* Selecciona una capa */';
+      document.getElementById('code-html-single').textContent = '<!-- Selecciona una capa -->'; document.getElementById('code-css-single').textContent = '/* Selecciona una capa */';
     }
   }
 
   function downloadProject() {
-    if(elements.length === 0) return alert("Agrega capas primero.");
-    const fullHtml = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Exportación Master Layout</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
-    downloadFile('index.html', fullHtml); 
+    if(elements.length === 0) return alert("Agrega elementos primero.");
+    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Layout Export</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
+    downloadFile('index.html', html); 
     setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
   }
   function downloadFile(f, t) { const a = document.createElement('a'); a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(t); a.download = f; a.style.display = 'none'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
 
-  // Atajos de teclado (Borrar con Suprimir)
   document.addEventListener('keydown', (e) => { 
     if (!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) && (e.key === 'Delete' || e.key === 'Backspace')) {
-      if(selectedId) deleteElement(selectedId);
+      if(selectedId) { deleteLyr(selectedId); }
     }
   });
 
-  // Deseleccionar al dar clic en el fondo
-  canvas.addEventListener('mousedown', (e) => { 
-    if(e.target === canvas) { selectedId = null; renderCanvas(); } 
-  });
-
-  // Init
-  generateCode();
 </script>
 </body>
 </html>
