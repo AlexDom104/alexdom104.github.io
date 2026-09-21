@@ -3,47 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout Pro - Ultimate Engine V3</title>
+<title>Master Layout Pro - Enterprise Engine V4</title>
 <style>
   :root { 
     --bg-app: #0f111a; --bg-panel: #1a1d27; --bg-light: #282c3a;
     --text-main: #f8fafc; --text-muted: #94a3b8;
     --accent: #10b981; --accent-hover: #059669; --accent-blue: #3b82f6;
-    --border: #334155; 
+    --border: #334155; --bg-input: #0b0d14;
   }
   * { box-sizing: border-box; }
   body, html { margin: 0; padding: 0; height: 100%; font-family: system-ui, -apple-system, sans-serif; background: var(--bg-app); color: var(--text-main); overflow: hidden; }
 
-  /* HEADER */
+  /* HEADER & TOOLBAR */
   header { background: #0b0d14; padding: 10px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
   .logo h1 { margin: 0; font-size: 16px; font-weight: 800; background: linear-gradient(90deg, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .logo p { margin: 0; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
   
-  .controls-center { display: flex; gap: 10px; background: #1a1d27; padding: 5px; border-radius: 6px; border: 1px solid var(--border); }
-  .controls-center button { background: transparent; border: none; color: var(--text-muted); padding: 5px 12px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; transition: 0.2s;}
-  .controls-center button.active { background: var(--border); color: #fff; }
-  
+  .controls-center { display: flex; gap: 5px; background: #1a1d27; padding: 5px; border-radius: 6px; border: 1px solid var(--border); align-items: center;}
+  .controls-center button { background: transparent; border: none; color: var(--text-muted); padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; transition: 0.2s;}
+  .controls-center button.active, .controls-center button:hover { background: var(--border); color: #fff; }
+  .controls-center .divider { width: 1px; height: 15px; background: var(--border); margin: 0 5px; }
+
+  .viewports button { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 5px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  .viewports button.active { background: var(--bg-light); color: white; border-color: #555; }
   .top-actions button { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.2s; }
   .top-actions button:hover { background: #2563eb; }
   
-  /* LAYOUT */
+  /* LAYOUT MAIN */
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
   
-  /* SIDEBAR CON BUSCADOR */
-  .sidebar { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  /* SIDEBAR (CATÁLOGO) */
+  .sidebar { width: 280px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
   .search-box { padding: 15px; border-bottom: 1px solid var(--border); background: #14171f; }
-  .search-box input { width: 100%; padding: 10px; background: #0f111a; border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 12px; outline: none; }
+  .search-box input { width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 12px; outline: none; }
   .search-box input:focus { border-color: var(--accent); }
-  
   .catalog-scroll { flex: 1; overflow-y: auto; }
   .catalog-scroll::-webkit-scrollbar { width: 5px; } .catalog-scroll::-webkit-scrollbar-thumb { background: #475569; }
   .cat-section { padding: 15px 15px 0 15px; }
-  .cat-title { font-size: 10px; text-transform: uppercase; color: #cbd5e1; margin: 0 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: 700; letter-spacing: 0.5px;}
+  .cat-title { font-size: 10px; text-transform: uppercase; color: #cbd5e1; margin: 0 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: 700;}
   .tool-btn { width: 100%; background: #1e293b; color: #cbd5e1; border: 1px solid var(--border); padding: 8px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 11px; margin-bottom: 6px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
   .tool-btn:hover { background: #334155; border-color: var(--accent); color: #fff; }
   .tool-tag { font-size: 9px; background: #0f172a; padding: 2px 5px; border-radius: 3px; color: #94a3b8; }
 
-  /* CANVAS ENGINE */
+  /* CANVAS (MOTOR FÍSICO) */
   .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#334155 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; position: relative; }
   #canvas { position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.9); transition: width 0.3s, height 0.3s; perspective: 1500px; }
   #canvas.desktop { width: 100%; height: 100%; min-height: 800px; }
@@ -51,7 +52,7 @@
   #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 12px solid #0f172a; }
   .canvas-bg { position: absolute; inset: 0; z-index: 0; transition: background 0.3s, opacity 0.3s; }
 
-  /* ELEMENTS IN CANVAS */
+  /* ELEMENTOS EN LIENZO */
   .element { position: absolute; box-sizing: border-box; display: flex; overflow: visible; }
   
   body.edit-mode .element { cursor: grab; }
@@ -74,27 +75,41 @@
   .tab-content { flex: 1; overflow-y: auto; display: none; }
   .tab-content.active { display: block; }
 
-  /* CONTROLES DE ALINEACIÓN (ESTILO OBS) */
-  .obs-controls { display: flex; justify-content: space-between; background: #0f172a; padding: 8px; border-radius: 6px; border: 1px solid #334155; margin-bottom: 15px;}
+  /* PROPIEDADES UI */
+  .props-container { padding: 15px; }
+  
+  /* Botones de Reset y Alineación */
+  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+  .action-grid button { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: 0.2s; text-transform: uppercase; font-weight: bold;}
+  .action-grid button:hover { background: #334155; color: #fff; border-color: var(--accent); }
+  
+  .obs-controls { display: flex; justify-content: space-between; background: var(--bg-input); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px;}
   .obs-controls button { flex: 1; background: transparent; color: #cbd5e1; border: none; font-size: 16px; cursor: pointer; padding: 5px; border-radius: 4px; transition: 0.2s; }
   .obs-controls button:hover { background: #334155; color: #fff; }
 
-  /* PROPIEDADES UI */
-  .props-container { padding: 15px; }
   .prop-section { margin-bottom: 15px; background: #1e293b; padding: 12px; border-radius: 6px; border: 1px solid var(--border); }
   .prop-section h4 { margin: 0 0 12px 0; font-size: 10px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px;}
   .prop-row { display: flex; gap: 10px; margin-bottom: 10px; }
   .prop-group { flex: 1; display: flex; flex-direction: column; }
   .prop-group label { font-size: 9px; color: #94a3b8; margin-bottom: 4px; text-transform: uppercase; }
-  .prop-group input, .prop-group select, .prop-group textarea { width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: white; font-family: monospace; font-size: 11px; outline: none;}
+  .prop-group input, .prop-group select, .prop-group textarea { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #475569; background: var(--bg-input); color: white; font-family: monospace; font-size: 11px; outline: none;}
   .prop-group input:focus, .prop-group textarea:focus { border-color: var(--accent); }
-  .prop-group input[type="color"] { padding: 0; height: 26px; cursor: pointer; border: none; }
+  .prop-group input[type="color"] { padding: 0; height: 30px; cursor: pointer; border: none; }
   
   /* CÓDIGO */
-  .code-section { margin: 15px; background: #0f172a; border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
+  .code-section { margin: 15px; background: var(--bg-input); border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
   .code-header { background: #0b0d14; padding: 8px 12px; font-size: 10px; font-weight: bold; color: #94a3b8; border-bottom: 1px solid var(--border); text-transform: uppercase;}
   pre { margin: 0; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; max-height: 300px; overflow-y: auto;}
   .html-code { color: #e6db74; } .css-code { color: #66d9ef; }
+
+  /* MODO PREVIEW STYLES (Ocultar UI para ver limpio) */
+  body.preview-mode header { display: none; }
+  body.preview-mode .sidebar { display: none; }
+  body.preview-mode .right-panel { display: none; }
+  body.preview-mode .canvas-wrapper { padding: 0; }
+  body.preview-mode #canvas { box-shadow: none; border: none; border-radius: 0; }
+  .btn-exit-preview { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999999; background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+  body.preview-mode .btn-exit-preview { display: block; }
 
 </style>
 <style id="dynamic-css"></style>
@@ -103,29 +118,37 @@
 
   <header>
     <div class="logo">
-      <h1>Master Layout Pro</h1>
-      <p>La Herramienta Web Definitiva</p>
+      <h1>Master Layout Pro V4</h1>
+      <p>Núcleo Empresarial & Atajos Web</p>
     </div>
+    
+    <!-- BARRA DE HERRAMIENTAS CENTRAL (HISTORIAL Y MODOS) -->
     <div class="controls-center">
-      <button class="active" id="btn-edit" onclick="setMode('edit')">🛠️ Modo Edición</button>
-      <button id="btn-interact" onclick="setMode('interact')">🖱️ Probar Interactividad</button>
+      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶ Deshacer</button>
+      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷ Rehacer</button>
+      <div class="divider"></div>
+      <button class="active" id="btn-edit" onclick="setMode('edit')" title="Construir Layout">🛠️ Edición</button>
+      <button id="btn-interact" onclick="setMode('interact')" title="Probar :hover y clics">🖱️ Interactuar</button>
+      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview Real</button>
     </div>
+
     <div class="viewports" id="viewport-controls">
       <button class="active" onclick="setViewport('desktop')">PC</button>
       <button onclick="setViewport('tablet')">Tablet</button>
       <button onclick="setViewport('mobile')">Móvil</button>
     </div>
     <div class="top-actions">
-      <button onclick="downloadProject()">⬇ Exportar Proyecto ZIP</button>
+      <button onclick="downloadProject()">⬇ Exportar ZIP</button>
     </div>
   </header>
 
+  <button class="btn-exit-preview" onclick="setMode('edit')">Salir del Modo Preview (Esc)</button>
+
   <div class="workspace">
-    
-    <!-- SIDEBAR (BUSCADOR Y CATÁLOGO) -->
+    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="search-box">
-        <input type="text" id="cat-search" placeholder="🔍 Buscar elemento (ej. 'slider', 'card')..." oninput="filterSidebar()">
+        <input type="text" id="cat-search" placeholder="🔍 Buscar elemento (ej. 'slider', 'modal')..." oninput="filterSidebar()">
       </div>
       <div class="catalog-scroll" id="sidebar-content"></div>
     </div>
@@ -140,39 +163,54 @@
     <!-- PANEL DERECHO -->
     <div class="right-panel">
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('props')">Diseño & OBS</button>
+        <button class="tab-btn active" onclick="switchTab('props')">Diseño</button>
         <button class="tab-btn" onclick="switchTab('html')">HTML</button>
         <button class="tab-btn" onclick="switchTab('css')">CSS</button>
       </div>
 
-      <!-- TAB: PROPIEDADES -->
+      <!-- PROPIEDADES -->
       <div id="tab-props" class="tab-content active">
         <div class="props-container">
           
           <div id="canvas-props" style="display: block;">
-            <div style="text-align: center; margin-bottom: 15px; font-size: 11px; color: var(--accent);">⚙️ Lienzo (Clic al fondo)</div>
+            <div style="text-align: center; margin-bottom: 15px; font-size: 11px; color: var(--accent);">⚙️ Lienzo Global</div>
             <div class="prop-section">
-              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo (Lienzo)</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()"></div>
+              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()"></div>
               <div class="prop-group"><label>Opacidad Lienzo (%)</label><input type="number" id="canvas-opacity" value="5" min="0" max="100" oninput="updateCanvas()"></div>
+            </div>
+            <div style="color: #64748b; font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">
+              <strong>Atajos de Teclado:</strong><br>
+              Ctrl + Z : Deshacer<br>
+              Ctrl + Y : Rehacer<br>
+              Ctrl + C : Copiar<br>
+              Ctrl + V : Pegar<br>
+              Supr : Borrar Elemento
             </div>
           </div>
 
           <div id="layer-props" style="display: none;">
             
-            <!-- ALINEACIÓN ESTILO OBS -->
+            <!-- CONTROLES OBS / PHOTOSHOP -->
+            <div class="action-grid">
+              <button onclick="resetTransforms()" title="Quita rotaciones y escalas">🔄 Reset Transform</button>
+              <button onclick="resetSize()" title="Devuelve al tamaño original">📐 Reset Tamaño</button>
+              <button onclick="duplicateElement()" title="Duplicar (Ctrl+C / Ctrl+V)">📑 Duplicar Capa</button>
+              <button onclick="deleteElement()" style="color:#ef4444; border-color:#7f1d1d;">🗑️ Borrar (Supr)</button>
+            </div>
+
             <div class="obs-controls">
-              <button onclick="obsAlign('centerH')" title="Centrar Horizontalmente">↔</button>
-              <button onclick="obsAlign('centerV')" title="Centrar Verticalmente">↕</button>
-              <button onclick="obsAlign('stretchW')" title="Estirar al 100% del Ancho">⇹</button>
-              <button onclick="obsAlign('stretchH')" title="Estirar al 100% del Alto">⇕</button>
-              <button onclick="obsAlign('fit')" title="Llenar Lienzo Completo">🔲</button>
+              <button onclick="obsAlign('centerH')" title="Centrar Horizontal">↔</button>
+              <button onclick="obsAlign('centerV')" title="Centrar Vertical">↕</button>
+              <button onclick="obsAlign('stretchW')" title="Ancho 100%">⇹</button>
+              <button onclick="obsAlign('stretchH')" title="Alto 100%">⇕</button>
+              <button onclick="obsAlign('fit')" title="Llenar Pantalla">🔲</button>
             </div>
 
             <div class="prop-section">
-              <h4>Dimensiones & Posición</h4>
+              <h4>Posición y Tamaño</h4>
               <div class="prop-row">
-                <div class="prop-group"><label>X (Left)</label><input type="number" id="prop-x" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Y (Top)</label><input type="number" id="prop-y" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>X</label><input type="number" id="prop-x" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Y</label><input type="number" id="prop-y" oninput="updateElUI()"></div>
               </div>
               <div class="prop-row">
                 <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateElUI()"></div>
@@ -181,56 +219,48 @@
             </div>
 
             <div class="prop-section">
-              <h4>Apariencia & Texto</h4>
-              <div class="prop-group" style="margin-bottom:10px;"><label>Fondo (Color / Gradient / Imagen URL)</label><input type="text" id="prop-bg" oninput="updateElUI()"></div>
+              <h4>Estética</h4>
+              <div class="prop-group" style="margin-bottom:10px;"><label>Fondo (HEX o Gradient)</label><input type="text" id="prop-bg" oninput="updateElUI()"></div>
               <div class="prop-row">
                 <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateElUI()"></div>
                 <div class="prop-group"><label>Bordes (px)</label><input type="number" id="prop-radius" oninput="updateElUI()"></div>
               </div>
+            </div>
+
+            <!-- EDITOR HTML PROFUNDO -->
+            <div class="prop-section">
+              <h4>Estructura Interna (Anidamiento HTML)</h4>
               <div class="prop-group">
-                <label>HTML Interno / Contenido</label>
-                <textarea id="prop-text" oninput="updateElUI()" rows="3"></textarea>
+                <label>Aquí puedes agregar Submenús o contenido extra</label>
+                <textarea id="prop-text" oninput="updateElUI()" rows="6" style="font-family: monospace; color:#e6db74; white-space: pre;"></textarea>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Transformaciones 3D & Estilos</h4>
+              <h4>Transformaciones 3D & Motor Lógico</h4>
               <div class="prop-row">
-                <div class="prop-group"><label>Rotación Z (2D)</label><input type="number" id="prop-rotZ" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Rotación Y (3D)</label><input type="number" id="prop-rotY" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Rot. Y (3D)</label><input type="number" id="prop-rotY" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Rot. Z</label><input type="number" id="prop-rotZ" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Escala</label><input type="number" step="0.1" id="prop-scale" oninput="updateElUI()"></div>
               </div>
               
-              <div class="prop-group" style="margin-top:10px;">
-                <label>Estilo Visual Especial</label>
+              <div class="prop-group" style="margin-top:10px; margin-bottom:10px;">
+                <label>Estilo de Renderizado</label>
                 <select id="prop-style" oninput="updateElUI()">
                   <option value="none">Normal</option>
-                  <option value="neumorphism">Neumorfismo (Relieve)</option>
-                  <option value="glass">Glassmorfismo (Cristal Blur)</option>
-                  <option value="cyberpunk">Cyberpunk (Glitch & Neón)</option>
-                  <option value="skeleton">Skeleton Loader (Cargando)</option>
+                  <option value="shadow">Sombra Paralela</option>
+                  <option value="neumorphism">Neumorfismo (Soft UI)</option>
+                  <option value="glass">Glassmorfismo (Cristal)</option>
                 </select>
               </div>
-            </div>
 
-            <div class="prop-section">
-              <h4>Interactividad & Funciones</h4>
-              <div class="prop-group" style="margin-bottom:10px;">
-                <label>Lógica Funcional (CSS Puro)</label>
+              <div class="prop-group">
+                <label>Comportamiento Funcional CSS</label>
                 <select id="prop-func" oninput="updateElUI()">
                   <option value="none">Ninguno (Estático)</option>
-                  <option value="hover-flip">Tarjeta Flip 3D (Hover)</option>
                   <option value="hover-dropdown">Menú Desplegable (Hover)</option>
-                  <option value="tooltip">Tooltip (Globo Hover)</option>
-                  <option value="css-carousel">Carrusel Automático</option>
-                </select>
-              </div>
-              <div class="prop-group">
-                <label>Animación Continua</label>
-                <select id="prop-anim" oninput="updateElUI()">
-                  <option value="none">Ninguna</option>
-                  <option value="float">Flotar Suave (Float)</option>
-                  <option value="pulse">Latir (Pulse)</option>
-                  <option value="spin">Rotar 3D Infinito</option>
+                  <option value="hover-flip">Tarjeta 3D Flip (Hover)</option>
+                  <option value="tooltip">Globo de Tooltip (Hover)</option>
                 </select>
               </div>
             </div>
@@ -239,135 +269,246 @@
         </div>
       </div>
 
-      <!-- TAB: HTML & CSS -->
+      <!-- HTML & CSS -->
       <div id="tab-html" class="tab-content">
-        <div class="code-section"><div class="code-header">Toda la Estructura</div><pre class="html-code" id="code-html-global"></pre></div>
-        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Seleccionada</div><pre class="html-code" id="code-html-single"></pre></div>
+        <div class="code-section"><div class="code-header">Layout Global</div><pre class="html-code" id="code-html-global"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:var(--accent);">Componente Aislado</div><pre class="html-code" id="code-html-single"></pre></div>
       </div>
       <div id="tab-css" class="tab-content">
         <div class="code-section"><div class="code-header">Estilos Globales</div><pre class="css-code" id="code-css-global"></pre></div>
-        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Seleccionada</div><pre class="css-code" id="code-css-single"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:var(--accent);">Componente Aislado</div><pre class="css-code" id="code-css-single"></pre></div>
       </div>
 
     </div>
   </div>
 
 <script>
-  // ESTADO GLOBAL
-  let elements = []; let selectedId = null; let counter = 1; 
+  // --- ESTADO GLOBAL Y SISTEMA DE HISTORIAL (TIME TRAVEL) ---
+  let elements = []; 
+  let selectedId = null; 
+  let counter = 1; 
+  
+  let historyStack = [];
+  let historyIndex = -1;
+  let clipboard = null;
+
   const canvas = document.getElementById('canvas');
   const canvasBg = document.getElementById('canvas-bg');
   const dynamicCss = document.getElementById('dynamic-css');
   
-  // CATÁLOGO MASIVO (MÁS DE 40 ELEMENTOS)
+  // Guardar estado actual en el historial
+  function saveState() {
+    const state = JSON.stringify(elements);
+    // Si estamos en medio del historial y hacemos un cambio, borramos el "futuro"
+    if (historyIndex < historyStack.length - 1) {
+      historyStack = historyStack.slice(0, historyIndex + 1);
+    }
+    historyStack.push(state);
+    historyIndex++;
+    // Limitar historial a 30 pasos para no saturar memoria
+    if(historyStack.length > 30) { historyStack.shift(); historyIndex--; }
+  }
+
+  // Deshacer (Undo)
+  function undo() {
+    if (historyIndex > 0) {
+      historyIndex--;
+      elements = JSON.parse(historyStack[historyIndex]);
+      rebuildDOMFromState();
+    }
+  }
+
+  // Rehacer (Redo)
+  function redo() {
+    if (historyIndex < historyStack.length - 1) {
+      historyIndex++;
+      elements = JSON.parse(historyStack[historyIndex]);
+      rebuildDOMFromState();
+    }
+  }
+
+  // Reconstruir todo el lienzo a partir del estado (Usado por Undo/Redo)
+  function rebuildDOMFromState() {
+    // Mantener la selección si el elemento sigue existiendo
+    const prevSelected = selectedId;
+    canvas.querySelectorAll('.element').forEach(n => n.remove());
+    
+    elements.forEach(el => {
+      const node = document.createElement('div');
+      node.id = el.id; node.className = 'element';
+      node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
+      
+      node.addEventListener('mousedown', (e) => { 
+        if(document.body.classList.contains('interact-mode')) return;
+        if(e.target.classList.contains('resizer')) return; 
+        selectElement(el.id); startDrag(e, el, node); 
+      });
+      const resizer = node.querySelector('.resizer');
+      resizer.addEventListener('mousedown', (e) => { 
+        if(document.body.classList.contains('interact-mode')) return;
+        e.stopPropagation(); selectElement(el.id); startResize(e, el, node); 
+      });
+      
+      canvas.appendChild(node);
+    });
+
+    applyStylesAndCompile();
+    if(elements.find(e => e.id === prevSelected)) selectElement(prevSelected);
+    else selectElement(null);
+  }
+
+  // --- ATAJOS DE TECLADO Y PORTAPAPELES (COPY/PASTE) ---
+  document.addEventListener('keydown', (e) => {
+    // Si estamos escribiendo en un input, no disparamos atajos de lienzo
+    if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+    
+    // Modo Preview Escape
+    if (e.key === 'Escape' && document.body.classList.contains('preview-mode')) {
+      setMode('edit');
+    }
+
+    if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
+    if (e.ctrlKey && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
+    
+    if (e.ctrlKey && e.key.toLowerCase() === 'c') {
+      e.preventDefault();
+      if(selectedId) {
+        const el = elements.find(x => x.id === selectedId);
+        clipboard = JSON.parse(JSON.stringify(el)); // Clonación profunda
+        console.log("Copiado al portapapeles");
+      }
+    }
+    
+    if (e.ctrlKey && e.key.toLowerCase() === 'v') {
+      e.preventDefault();
+      if(clipboard) {
+        duplicateElement(clipboard);
+      }
+    }
+
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+      if(selectedId && document.body.classList.contains('edit-mode')) deleteElement();
+    }
+  });
+
+  function duplicateElement(sourceData = null) {
+    const source = sourceData || elements.find(e => e.id === selectedId);
+    if(!source) return;
+    
+    let newEl = JSON.parse(JSON.stringify(source));
+    newEl.id = `el_${counter++}`;
+    newEl.x += 20; // Offset para que no caiga exactamente encima
+    newEl.y += 20;
+    
+    elements.push(newEl);
+    
+    const node = document.createElement('div');
+    node.id = newEl.id; node.className = 'element';
+    node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
+    
+    node.addEventListener('mousedown', (e) => { 
+      if(document.body.classList.contains('interact-mode')) return;
+      if(e.target.classList.contains('resizer')) return; 
+      selectElement(newEl.id); startDrag(e, newEl, node); 
+    });
+    const resizer = node.querySelector('.resizer');
+    resizer.addEventListener('mousedown', (e) => { 
+      if(document.body.classList.contains('interact-mode')) return;
+      e.stopPropagation(); selectElement(newEl.id); startResize(e, newEl, node); 
+    });
+    
+    canvas.appendChild(node);
+    applyStylesAndCompile();
+    selectElement(newEl.id);
+    saveState();
+  }
+
+  function deleteElement() {
+    if(!selectedId) return;
+    elements = elements.filter(x => x.id !== selectedId); 
+    document.getElementById(selectedId).remove(); 
+    selectElement(null); 
+    applyStylesAndCompile();
+    saveState();
+  }
+
+
+  // --- CATÁLOGO DE COMPONENTES ---
   const catalogue = [
-    { cat: 'Secciones / Estructura', items: [
-      { id: 'hero', n: 'Hero Section', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', c: '#fff', fullW: true, txt: '<div style="text-align:center; max-width:600px; margin:auto;"><h1 style="font-size:48px; margin-bottom:20px;">Bienvenido al Futuro</h1><p style="font-size:18px; margin-bottom:30px; color:#cbd5e1;">Construye interfaces web increíbles sin escribir una línea de código.</p><button style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer;">Comenzar Ahora</button></div>' },
-      { id: 'navbar', n: 'Navbar Completo', t: 'nav', w: 1000, h: 70, bg: '#ffffff', c: '#000', fullW: true, txt: '<div style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:0 40px;"><div style="font-weight:900; font-size:24px; color:#3b82f6;">LOGO</div><div style="display:flex; gap:20px; font-weight:600;"><a href="#" style="text-decoration:none; color:#475569;">Inicio</a><a href="#" style="text-decoration:none; color:#475569;">Servicios</a><a href="#" style="text-decoration:none; color:#475569;">Contacto</a></div><button style="padding:10px 20px; background:#0f172a; color:#fff; border:none; border-radius:6px; font-weight:bold;">Login</button></div>' },
-      { id: 'footer', n: 'Footer Moderno', t: 'footer', w: 1000, h: 200, bg: '#0f172a', c: '#94a3b8', fullW: true, txt: '<div style="display:flex; justify-content:space-around; width:100%; padding:40px;"><div style="max-width:200px;"><h3 style="color:#fff;">Nosotros</h3><p style="font-size:14px;">La mejor herramienta web.</p></div><div><h3 style="color:#fff;">Enlaces</h3><ul style="list-style:none; padding:0; font-size:14px; line-height:2;"><li>Ayuda</li><li>Términos</li></ul></div></div>' },
-      { id: 'sidebar', n: 'Sidebar Admin', t: 'aside', w: 250, h: 800, bg: '#ffffff', c: '#1e293b', txt: '<div style="padding:30px; height:100%; border-right:1px solid #e2e8f0;"><h2 style="margin-bottom:40px; color:#3b82f6;">Dashboard</h2><ul style="list-style:none; padding:0; font-size:16px; font-weight:600; line-height:3;"><li style="color:#10b981;">🏠 Inicio</li><li>📊 Estadísticas</li><li>⚙️ Configuración</li></ul></div>' },
-      { id: 'grid-3', n: 'Grid 3 Columnas', t: 'div', w: 900, h: 300, bg: 'transparent', c: '#000', func: 'grid3', txt: '<div style="background:#e2e8f0;">Col 1</div><div style="background:#cbd5e1;">Col 2</div><div style="background:#94a3b8;">Col 3</div>' }
+    { cat: 'Layouts', items: [
+      { id: 'div', n: 'Caja Libre', t: 'div', w: 200, h: 200, bg: '#e2e8f0', c: '#0f172a', txt: 'Caja', baseW: 200, baseH: 200 },
+      { id: 'header', n: 'Nav Header', t: 'header', w: 1000, h: 60, bg: '#1e293b', c: '#fff', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 20px; align-items:center;"><b>LOGO</b><nav>Menu</nav></div>', baseW: 1000, baseH: 60 }
     ]},
-    { cat: 'Componentes Avanzados', items: [
-      { id: 'pricing', n: 'Tabla Precios', t: 'div', w: 320, h: 450, bg: '#ffffff', c: '#0f172a', r: 16, style: 'shadow', txt: '<div style="padding:40px; text-align:center;"><h3 style="color:#64748b; text-transform:uppercase; font-size:14px; letter-spacing:2px;">Plan PRO</h3><div style="font-size:48px; font-weight:900; margin:20px 0;">$29<span style="font-size:16px; color:#94a3b8;">/mes</span></div><ul style="list-style:none; padding:0; line-height:2.5; margin-bottom:30px; color:#475569;"><li>✔️ Todo Ilimitado</li><li>✔️ Soporte 24/7</li><li>✔️ Exportación VIP</li></ul><button style="width:100%; padding:15px; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:bold; font-size:16px;">Contratar</button></div>' },
-      { id: 'carousel', n: 'Carrusel CSS (3 Slides)', t: 'div', w: 600, h: 300, bg: '#ffffff', c: '#000', func: 'css-carousel', txt: '<!-- Carrusel CSS Puro -->\n<div class="slides">\n  <div class="slide" style="background:#3b82f6; color:white;">SLIDE 1</div>\n  <div class="slide" style="background:#10b981; color:white;">SLIDE 2</div>\n  <div class="slide" style="background:#f43f5e; color:white;">SLIDE 3</div>\n</div>' },
-      { id: 'modal-login', n: 'Login Modal', t: 'div', w: 350, h: 420, bg: '#ffffff', c: '#0f172a', r: 16, style: 'shadow', txt: '<div style="padding:30px;"><h2 style="margin-bottom:10px;">Inicia Sesión</h2><p style="color:#64748b; margin-bottom:30px; font-size:14px;">Bienvenido de nuevo</p><input type="email" placeholder="Correo electrónico" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #cbd5e1; border-radius:6px; outline:none;"><input type="password" placeholder="Contraseña" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #cbd5e1; border-radius:6px; outline:none;"><button style="width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:6px; font-weight:bold;">Ingresar</button></div>' },
-      { id: 'profile', n: 'Perfil Card', t: 'div', w: 300, h: 350, bg: '#ffffff', c: '#0f172a', r: 12, style: 'shadow', txt: '<div style="display:flex; flex-direction:column; align-items:center; padding:30px;"><img src="https://via.placeholder.com/100" style="width:100px; height:100px; border-radius:50%; margin-bottom:15px;"><h3 style="margin:0;">John Doe</h3><p style="color:#64748b; margin:5px 0 20px 0;">Frontend Dev</p><div style="display:flex; gap:10px;"><button style="padding:8px 20px; background:#3b82f6; color:white; border:none; border-radius:20px; font-weight:bold;">Seguir</button><button style="padding:8px 20px; background:#f1f5f9; color:#0f172a; border:none; border-radius:20px; font-weight:bold;">Mensaje</button></div></div>' }
+    { cat: 'UI Avanzada', items: [
+      { id: 'dropdown', n: 'Menú Desplegable', t: 'div', w: 160, h: 50, bg: '#3b82f6', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Opciones ▼\n<ul class="sub">\n  <li><a href="#">Perfil</a></li>\n  <li><a href="#">Ajustes</a></li>\n  <li><a href="#">Salir</a></li>\n</ul>', baseW: 160, baseH: 50 },
+      { id: 'flipcard', n: 'Tarjeta 3D Flip', t: 'div', w: 250, h: 350, bg: 'transparent', c: '#ffffff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">FRENTE</div>\n<div class="back" style="background:#f43f5e; border-radius:12px;">REVERSO</div>', baseW: 250, baseH: 350 },
+      { id: 'tabs', n: 'Pestañas (Tabs)', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<!-- Pestañas CSS Puro -->\n<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Tab 1</label>\n  <label for="t2">Tab 2</label>\n</div>\n<div class="tab-content c1">Contenido 1</div>\n<div class="tab-content c2">Contenido 2</div>', baseW: 400, baseH: 250 },
     ]},
-    { cat: 'Estilos Extremos (Render)', items: [
-      { id: 'cyberpunk', n: 'Botón Cyberpunk', t: 'button', w: 220, h: 65, bg: '#facc15', c: '#000', style: 'cyberpunk', txt: 'CYBERPUNK_BTN' },
-      { id: 'skeleton', n: 'Skeleton Loader', t: 'div', w: 300, h: 200, bg: '#e2e8f0', c: '#000', r: 8, style: 'skeleton', txt: '' },
-      { id: 'glass-card', n: 'Glassmorfismo Card', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.15)', c: '#fff', r: 16, style: 'glass', txt: '<div style="padding:20px; font-size:18px; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.5);">Tarjeta de Cristal</div>' },
-      { id: 'neumorph', n: 'Boton Neumorfismo', t: 'button', w: 150, h: 150, bg: '#e0e5ec', c: '#4b5563', r: 75, style: 'neumorphism', txt: 'PULSAR' },
-      { id: 'glowing', n: 'Botón Glowing', t: 'button', w: 180, h: 50, bg: '#10b981', c: '#fff', r: 25, style: 'neon', txt: 'BRILLANTE' }
-    ]},
-    { cat: 'Interactividad (Sin JS)', items: [
-      { id: 'dropdown', n: 'Menú Desplegable', t: 'div', w: 160, h: 50, bg: '#0f172a', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Hover Me ▼\n<ul class="sub">\n<li><a href="#">Opcion 1</a></li>\n<li><a href="#">Opcion 2</a></li>\n</ul>' },
-      { id: 'flipcard', n: 'Tarjeta 3D Flip', t: 'div', w: 250, h: 300, bg: 'transparent', c: '#ffffff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">Pasa el Ratón</div>\n<div class="back" style="background:#10b981; border-radius:12px;">Sorpresa 3D</div>' },
-      { id: 'tabs', n: 'Pestañas (Tabs)', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n<label for="t1">Diseño</label>\n<label for="t2">Código</label>\n</div>\n<div class="tab-content c1">Panel de Diseño.</div>\n<div class="tab-content c2">Panel de Código.</div>' },
-      { id: 'tooltip', n: 'Tooltip Flotante', t: 'span', w: 120, h: 40, bg: '#e2e8f0', c: '#000', r: 4, func: 'tooltip', txt: 'Info' },
-      { id: 'toggle', n: 'Switch Toggle', t: 'label', w: 60, h: 32, bg: 'transparent', c: '#10b981', func: 'toggle', txt: '<input type="checkbox"><span class="slider"></span>' }
-    ]},
-    { cat: 'Inputs & Formularios', items: [
-      { id: 'searchbar', n: 'Barra Búsqueda', t: 'div', w: 400, h: 50, bg: '#ffffff', c: '#000', r: 25, style: 'shadow', txt: '<div style="display:flex; width:100%; height:100%; padding:5px 5px 5px 20px;"><input type="text" placeholder="Buscar en la web..." style="flex:1; border:none; outline:none; font-size:16px;"><button style="width:100px; background:#3b82f6; color:white; border:none; border-radius:20px; font-weight:bold;">Buscar</button></div>' },
-      { id: 'floating-label', n: 'Input Animado', t: 'div', w: 250, h: 55, bg: '#fff', c: '#000', func: 'float-label', txt: '<input type="text" id="fl1" required>\n<label for="fl1">Nombre de Usuario</label>' },
-      { id: 'checkbox', n: 'Checkbox Estilizado', t: 'label', w: 150, h: 30, bg: 'transparent', c: '#fff', txt: '<div style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; accent-color:#10b981;" checked> Aceptar</div>' },
-      { id: 'range', n: 'Slider Moderno', t: 'input', w: 200, h: 10, bg: '#e2e8f0', c: '#3b82f6', r: 5, attrs: 'type="range"' }
-    ]},
-    { cat: 'Datos & Status', items: [
-      { id: 'progress', n: 'Barra Progreso', t: 'progress', w: 300, h: 15, bg: '#e2e8f0', c: '#10b981', r: 15, attrs: 'value="65" max="100"' },
-      { id: 'badge-success', n: 'Badge Éxito', t: 'span', w: 90, h: 28, bg: '#dcfce7', c: '#166534', r: 14, txt: '<strong style="font-size:12px;">Completado</strong>' },
-      { id: 'badge-danger', n: 'Badge Error', t: 'span', w: 90, h: 28, bg: '#fee2e2', c: '#991b1b', r: 14, txt: '<strong style="font-size:12px;">Fallido</strong>' },
-      { id: 'table', n: 'Tabla Datos', t: 'table', w: 400, h: 200, bg: '#fff', c: '#000', r: 8, style: 'shadow', txt: '<thead style="background:#f8fafc; text-align:left;"><tr><th style="padding:15px; border-bottom:1px solid #e2e8f0;">User</th><th style="padding:15px; border-bottom:1px solid #e2e8f0;">Rol</th></tr></thead><tbody><tr><td style="padding:15px; border-bottom:1px solid #e2e8f0;">Admin</td><td style="padding:15px; border-bottom:1px solid #e2e8f0;">Dios</td></tr><tr><td style="padding:15px;">Guest</td><td style="padding:15px;">Lector</td></tr></tbody>' }
-    ]},
-    { cat: 'Formas Puras (Clip-Path)', items: [
-      { id: 'circle', n: 'Círculo Perfecto', t: 'div', w: 150, h: 150, bg: '#ef4444', c: '#fff', txt: '', clip: 'circle(50% at 50% 50%)' },
-      { id: 'triangle', n: 'Triángulo', t: 'div', w: 150, h: 150, bg: '#eab308', c: '#fff', txt: '', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
-      { id: 'hexagon', n: 'Hexágono', t: 'div', w: 150, h: 150, bg: '#8b5cf6', c: '#fff', txt: '', clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' }
+    { cat: 'Estilos Visuales', items: [
+      { id: 'glass', n: 'Panel Glass', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.1)', c: '#fff', r: 16, style: 'glass', txt: 'Cristal', baseW: 300, baseH: 200 },
+      { id: 'neumorph', n: 'Boton Neumorfismo', t: 'button', w: 150, h: 60, bg: '#e0e5ec', c: '#4b5563', r: 30, style: 'neumorphism', txt: 'Presionar', baseW: 150, baseH: 60 }
     ]}
   ];
 
-  // INICIALIZACIÓN SIDEBAR
   function buildSidebar() {
     const sb = document.getElementById('sidebar-content');
     sb.innerHTML = '';
     catalogue.forEach(cat => {
-      let html = `<div class="cat-section" data-cat="${cat.cat.toLowerCase()}"><h3 class="cat-title">${cat.cat}</h3>`;
-      cat.items.forEach(i => { html += `<button class="tool-btn" data-name="${i.n.toLowerCase()} ${i.id.toLowerCase()}" onclick="addElement('${i.id}')">${i.n} <span class="tool-tag">+</span></button>`; });
+      let html = `<div class="cat-section"><h3 class="cat-title">${cat.cat}</h3>`;
+      cat.items.forEach(i => { html += `<button class="tool-btn" data-name="${i.n.toLowerCase()}" onclick="addElement('${i.id}')">${i.n} <span class="tool-tag">+</span></button>`; });
       sb.innerHTML += html + `</div>`;
     });
   }
   buildSidebar();
 
-  // BUSCADOR EN TIEMPO REAL
   function filterSidebar() {
     const query = document.getElementById('cat-search').value.toLowerCase();
-    const sections = document.querySelectorAll('.cat-section');
-    sections.forEach(sec => {
-      let hasVisible = false;
-      const btns = sec.querySelectorAll('.tool-btn');
-      btns.forEach(btn => {
-        if (btn.getAttribute('data-name').includes(query)) {
-          btn.style.display = 'flex';
-          hasVisible = true;
-        } else {
-          btn.style.display = 'none';
-        }
+    document.querySelectorAll('.cat-section').forEach(sec => {
+      let has = false;
+      sec.querySelectorAll('.tool-btn').forEach(btn => {
+        if (btn.getAttribute('data-name').includes(query)) { btn.style.display = 'flex'; has = true; } 
+        else btn.style.display = 'none';
       });
-      sec.style.display = hasVisible ? 'block' : 'none';
+      sec.style.display = has ? 'block' : 'none';
     });
   }
 
-  // ALINEACIÓN ESTILO OBS
+  // --- RESET & ALINEACIÓN (OBS STYLE) ---
+  function resetTransforms() {
+    if(!selectedId) return;
+    const el = elements.find(e => e.id === selectedId);
+    el.rotY = 0; el.rotZ = 0; el.scale = 1;
+    updatePropsUI(); updateElUI(); saveState();
+  }
+
+  function resetSize() {
+    if(!selectedId) return;
+    const el = elements.find(e => e.id === selectedId);
+    if(el.baseW && el.baseH) { el.w = el.baseW; el.h = el.baseH; }
+    updatePropsUI(); updateElUI(); saveState();
+  }
+
   function obsAlign(action) {
     if(!selectedId) return;
     const el = elements.find(e => e.id === selectedId);
-    const cw = canvas.offsetWidth;
-    const ch = canvas.offsetHeight;
-    
+    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
     if(action === 'centerH') el.x = (cw - el.w) / 2;
     if(action === 'centerV') el.y = (ch - el.h) / 2;
     if(action === 'stretchW') { el.x = 0; el.w = cw; }
     if(action === 'stretchH') { el.y = 0; el.h = ch; }
     if(action === 'fit') { el.x = 0; el.y = 0; el.w = cw; el.h = ch; }
-    
-    // Forzar actualización al input y al motor
-    document.getElementById('prop-x').value = el.x;
-    document.getElementById('prop-y').value = el.y;
-    document.getElementById('prop-w').value = el.w;
-    document.getElementById('prop-h').value = el.h;
-    updateElUI();
+    updatePropsUI(); updateElUI(); saveState();
   }
 
-  // MODO EDICIÓN VS INTERACTIVO
+  // --- MODOS ---
   function setMode(mode) {
     document.body.className = `${mode}-mode`;
     document.getElementById('btn-edit').className = mode === 'edit' ? 'active' : '';
     document.getElementById('btn-interact').className = mode === 'interact' ? 'active' : '';
-    if(mode === 'interact') selectElement(null); 
+    if(mode !== 'edit') selectElement(null); 
   }
 
-  // 1. AÑADIR CAPA
+  // --- CREAR ELEMENTO ---
   function addElement(tKey) {
     let t = null; catalogue.forEach(c => { const f = c.items.find(i => i.id === tKey); if(f) t = f; });
     if(!t) return;
@@ -375,14 +516,14 @@
     const id = `el_${counter++}`;
     let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2));
     let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
-    if(t.fullW) { sX = 0; sY = (t.t==='header') ? 0 : sY; } // Auto-posicion headers/footers
+    if(t.fullW) { sX = 0; sY = (t.t==='header') ? 0 : sY; } 
 
     const newEl = { 
-      id, name: `${t.n} ${counter-1}`, tag: t.t, attrs: t.attrs || '',
-      x: sX, y: sY, w: t.w, h: t.h, 
+      id, name: `${t.n} ${counter-1}`, tag: t.t,
+      x: sX, y: sY, w: t.w, h: t.h, baseW: t.baseW, baseH: t.baseH,
       bg: t.bg, color: t.c, text: t.txt, radius: t.r || 0, 
-      fs: t.fs || 14, opacity: 100, rotY: 0, rotZ: 0, 
-      style: t.style || 'none', func: t.func || 'none', anim: 'none', clip: t.clip || 'none'
+      opacity: 100, rotY: 0, rotZ: 0, scale: 1,
+      style: t.style || 'none', func: t.func || 'none'
     };
     
     elements.push(newEl);
@@ -406,9 +547,10 @@
     canvas.appendChild(node);
     applyStylesAndCompile(); 
     selectElement(id);
+    saveState();
   }
 
-  // 2. APLICADOR HÍBRIDO (El cerebro)
+  // --- MOTOR COMPILADOR ---
   function applyStylesAndCompile() {
     let globalDynamicCSS = ""; 
 
@@ -417,85 +559,60 @@
       if(!node) return;
       node.style.zIndex = idx + 1;
       
-      // Inline
       node.style.left = `${el.x}px`; node.style.top = `${el.y}px`;
       node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
       
-      // CSS Dinámico
-      let cBlock = `.${el.id} {\n  background: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n  opacity: ${el.opacity/100};\n  transition: all 0.3s ease;\n  transform: rotateZ(${el.rotZ}deg) rotateY(${el.rotY}deg);\n`;
-      if(el.clip !== 'none') cBlock += `  clip-path: ${el.clip};\n`;
+      let cBlock = `.${el.id} {\n  background: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n  opacity: ${el.opacity/100};\n  transition: all 0.3s ease;\n  transform: rotateZ(${el.rotZ}deg) rotateY(${el.rotY}deg) scale(${el.scale});\n`;
       
-      // Estilos Extremos
+      // Estilos Render
       if(el.style === 'shadow') cBlock += `  box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n`;
       else if(el.style === 'neumorphism') cBlock += `  box-shadow: 8px 8px 16px #c5c9d1, -8px -8px 16px #ffffff;\n  display: flex; align-items: center; justify-content: center; font-weight: bold; border:none;\n`;
       else if(el.style === 'glass') cBlock += `  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);\n  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);\n  border: 1px solid rgba(255,255,255,0.18);\n`;
-      else if(el.style === 'neon') cBlock += `  text-shadow: 0 0 5px ${el.bg}, 0 0 20px ${el.bg};\n  box-shadow: 0 0 10px ${el.bg}, inset 0 0 10px ${el.bg};\n  border: 2px solid ${el.bg}; display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 2px; color: ${el.color};\n`;
-      else if(el.style === 'cyberpunk') cBlock += `  background: linear-gradient(45deg, transparent 5%, ${el.bg} 5%);\n  box-shadow: 6px 0px 0px #00e6f6;\n  display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 3px; border: none; outline: transparent; clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 80%);\n`;
-      else if(el.style === 'skeleton') cBlock += `  background: linear-gradient(90deg, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%);\n  background-size: 200% 100%;\n  animation: skeletonLoad 1.5s infinite linear;\n`;
-
-      // Animaciones 
-      if(el.anim === 'float') cBlock += `  animation: animFloat 3s ease-in-out infinite;\n`;
-      if(el.anim === 'pulse') cBlock += `  animation: animPulse 2s infinite;\n`;
-      if(el.anim === 'spin') cBlock += `  animation: animSpin 4s linear infinite;\n`;
 
       cBlock += `}\n`;
 
-      // Lógica Funcional Avanzada
+      // Logica CSS Puro
       if(el.func === 'hover-dropdown') {
         cBlock += `.${el.id} .inner-content { flex-direction: column; position: relative; cursor: pointer; align-items:center; justify-content:center; }\n.${el.id} .sub { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); list-style: none; padding: 0; margin: 5px 0 0 0; border-radius: 4px; overflow: hidden; z-index:50; }\n.${el.id}:hover .sub { display: block; }\n.${el.id} .sub li a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }\n.${el.id} .sub li a:hover { background: #f8fafc; }\n`;
       }
       else if(el.func === 'hover-flip') {
         cBlock += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }\n.${el.id}:hover .inner-content { transform: rotateY(180deg); }\n.${el.id} .front, .${el.id} .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; }\n.${el.id} .back { transform: rotateY(180deg); }\n`;
       }
-      else if(el.func === 'tooltip') {
-        cBlock += `.${el.id} { display:flex; align-items:center; justify-content:center; position: relative; cursor: help; }\n.${el.id}::after { content: "Tooltip Info"; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; }\n.${el.id}:hover::after { opacity: 1; visibility: visible; bottom: 110%; }\n`;
-      }
       else if(el.func === 'css-tabs') {
         cBlock += `.${el.id} .inner-content { flex-direction: column; width: 100%; height: 100%; }\n.${el.id} input[type="radio"] { display: none; }\n.${el.id} .tab-headers { display: flex; border-bottom: 2px solid #e2e8f0; }\n.${el.id} label { padding: 15px 20px; cursor: pointer; color: #64748b; font-weight: bold; transition: 0.2s; }\n.${el.id} .tab-content { display: none; padding: 20px; flex: 1; background: #f8fafc; }\n.${el.id} #t1:checked ~ .tab-headers label[for="t1"], .${el.id} #t2:checked ~ .tab-headers label[for="t2"] { color: #3b82f6; border-bottom: 2px solid #3b82f6; margin-bottom: -2px; }\n.${el.id} #t1:checked ~ .c1 { display: block; }\n.${el.id} #t2:checked ~ .c2 { display: block; }\n`;
       }
-      else if(el.func === 'toggle') {
-        cBlock += `.${el.id} .inner-content { position: relative; display: inline-block; width: 100%; height: 100%; }\n.${el.id} input { opacity: 0; width: 0; height: 0; }\n.${el.id} .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }\n.${el.id} .slider:before { position: absolute; content: ""; height: calc(100% - 8px); width: calc(100% - 8px); max-width: calc(100% / 2); left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }\n.${el.id} input:checked + .slider { background-color: ${el.color}; }\n.${el.id} input:checked + .slider:before { transform: translateX(calc(100% - 4px)); }\n`;
+      else if(el.func === 'tooltip') {
+        cBlock += `.${el.id} { display:flex; align-items:center; justify-content:center; position: relative; cursor: help; }\n.${el.id}::after { content: "Tooltip Info"; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; }\n.${el.id}:hover::after { opacity: 1; visibility: visible; bottom: 110%; }\n`;
       }
-      else if(el.func === 'css-carousel') {
-        cBlock += `.${el.id} .inner-content { width: 100%; height: 100%; overflow: hidden; }\n.${el.id} .slides { display: flex; width: 300%; height: 100%; animation: slideAnim 9s infinite; }\n.${el.id} .slide { width: 33.33%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; }\n`;
-      }
-      else if(el.func === 'grid3') {
-        cBlock += `.${el.id} .inner-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; height: 100%; }\n.${el.id} .inner-content > div { border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }\n`;
-      }
-      else if(el.func === 'float-label') {
-        cBlock += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; }\n.${el.id} input { width: 100%; height: 100%; padding: 20px 15px 5px 15px; border: 1px solid #cbd5e1; border-radius: ${el.radius}px; outline: none; font-size:16px; background:transparent; }\n.${el.id} label { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #94a3b8; transition: 0.2s; pointer-events: none; }\n.${el.id} input:focus ~ label, .${el.id} input:valid ~ label { top: 12px; font-size: 11px; color: ${el.color}; }\n.${el.id} input:focus { border-color: ${el.color}; }\n`;
+      else if(el.func === 'none') {
+        cBlock += `.${el.id} .inner-content { display:flex; align-items:center; justify-content:center; width:100%; height:100%; }\n`;
       }
 
       globalDynamicCSS += cBlock;
 
-      // HTML Interno
+      // Inyectar HTML real para el componente (Editable desde textarea)
       const inner = node.querySelector('.inner-content');
-      // No reescribir inputs o componentes complejos interactivos durante edición si no es necesario, pero sí para inicializar
       inner.innerHTML = el.text;
     });
 
-    globalDynamicCSS += `\n@keyframes animFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }`;
-    globalDynamicCSS += `\n@keyframes animPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }`;
-    globalDynamicCSS += `\n@keyframes animSpin { 100% { transform: rotateY(360deg); } }`;
-    globalDynamicCSS += `\n@keyframes slideAnim { 0%, 25% { transform: translateX(0); } 33%, 58% { transform: translateX(-33.33%); } 66%, 91% { transform: translateX(-66.66%); } 100% { transform: translateX(0); } }`;
-    globalDynamicCSS += `\n@keyframes skeletonLoad { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`;
-
     dynamicCss.textContent = globalDynamicCSS;
-    generateCode(); // Exportador texto
+    generateCode(); // Actualizar tabs de texto HTML/CSS
   }
 
-  // 3. FÍSICA DRAG & RESIZE
+  // --- DRAG & RESIZE ---
   function startDrag(e, el, node) {
     if(document.body.classList.contains('interact-mode')) return;
     e.preventDefault();
     let sX = e.clientX, sY = e.clientY;
+    let moved = false;
     function move(ev) {
+      moved = true;
       el.x += ev.clientX - sX; el.y += ev.clientY - sY;
       sX = ev.clientX; sY = ev.clientY;
       node.style.left = `${el.x}px`; node.style.top = `${el.y}px`;
       updatePropsUI();
     }
-    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); }
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); if(moved) saveState(); }
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
 
@@ -503,21 +620,23 @@
     if(document.body.classList.contains('interact-mode')) return;
     e.preventDefault();
     let sX = e.clientX, sY = e.clientY;
+    let moved = false;
     function move(ev) {
+      moved = true;
       el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY));
       sX = ev.clientX; sY = ev.clientY;
       node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
       updatePropsUI();
     }
-    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); }
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); if(moved) saveState(); }
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
 
-  // 4. UI LIENZO & PANELES
-  // El prompt pidió 5% de opacidad del lienzo por defecto. Esto se llama en el INIT.
+  // --- INIT & GLOBAL UI ---
   function initCanvas() {
     canvasBg.style.background = '#1a1d27';
     canvasBg.style.opacity = '0.05'; 
+    saveState(); // Estado inicial (vacío)
   }
   
   function updateCanvas() {
@@ -539,68 +658,56 @@
 
   function updatePropsUI() {
     if(!selectedId) { 
-      document.getElementById('canvas-props').style.display='block'; 
-      document.getElementById('layer-props').style.display='none'; 
-      return; 
+      document.getElementById('canvas-props').style.display='block'; document.getElementById('layer-props').style.display='none'; return; 
     }
-    document.getElementById('canvas-props').style.display='none'; 
-    document.getElementById('layer-props').style.display='block';
+    document.getElementById('canvas-props').style.display='none'; document.getElementById('layer-props').style.display='block';
     
     const el = elements.find(e => e.id === selectedId);
-    ['x','y','w','h','radius','rotY','rotZ'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p]));
+    ['x','y','w','h','radius','rotY','rotZ','scale'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
     document.getElementById('prop-bg').value = el.bg; document.getElementById('prop-color').value = el.color.startsWith('#')?el.color:'#ffffff';
-    ['text','style','func','anim'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
+    ['text','style','func'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
   }
 
   function updateElUI() {
     if(!selectedId) return; const el = elements.find(e => e.id === selectedId);
-    ['x','y','w','h','radius','rotY','rotZ'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
-    ['bg','color','text','style','func','anim'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
+    ['x','y','w','h','radius','rotY','rotZ','scale'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
+    ['bg','color','text','style','func'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
     applyStylesAndCompile(); 
   }
+
+  // Escuchar cuando el usuario termina de escribir en un input para guardar el estado del historial
+  document.querySelectorAll('#layer-props input, #layer-props textarea, #layer-props select').forEach(input => {
+    input.addEventListener('change', () => { saveState(); });
+  });
 
   function switchTab(t) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
   function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; }
 
-  // 5. EXPORTADOR DEFINITIVO A HTML/CSS
+  // --- EXPORTACIÓN ---
   function generateCode() {
     let canvasBgColor = document.getElementById('canvas-color').value;
     let canvasOp = document.getElementById('canvas-opacity').value / 100;
 
     let htmlG = `<div class="pro-layout">\n`;
-    
-    // TRUCO: Pseudo-elemento para aplicar la opacidad EXACTA del 5% al fondo sin afectar los elementos de arriba
     let cssG = `/* Reset Global */\n* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }\n\n.pro-layout {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  overflow-x: hidden;\n  background-color: transparent;\n  perspective: 1500px;\n}\n.pro-layout::before {\n  content: "";\n  position: absolute;\n  inset: 0;\n  background-color: ${canvasBgColor};\n  opacity: ${canvasOp};\n  z-index: -1;\n}\n\n`;
 
     let stylesRules = dynamicCss.textContent; 
 
     elements.forEach((el, index) => {
-      let attrs = el.attrs ? ` ${el.attrs}` : '';
-      if(el.tag === 'img') attrs += ' src="imagen.jpg"';
-      
-      htmlG += `  <!-- ${el.name} -->\n  <${el.tag} class="${el.id}"${attrs}>\n    <div class="inner-content">\n      ${el.text.replace(/\n/g, '\n      ')}\n    </div>\n  </${el.tag}>\n`;
-      
+      htmlG += `  <!-- ${el.name} -->\n  <${el.tag} class="${el.id}">\n    <div class="inner-content">\n      ${el.text.replace(/\n/g, '\n      ')}\n    </div>\n  </${el.tag}>\n`;
       let wRule = `width: ${Math.round(el.w)}px;`;
       if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) wRule = `width: 100%;`;
-      
-      cssG += `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${index + 1};\n  ${wRule} height: ${Math.round(el.h)}px;\n`;
-      cssG += `}\n\n`;
+      cssG += `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${index + 1};\n  ${wRule} height: ${Math.round(el.h)}px;\n}\n\n`;
     });
     
-    htmlG += `</div>`;
-    cssG += stylesRules; 
+    htmlG += `</div>`; cssG += stylesRules; 
+    document.getElementById('code-html-global').textContent = htmlG; document.getElementById('code-css-global').textContent = cssG;
 
-    document.getElementById('code-html-global').textContent = htmlG; 
-    document.getElementById('code-css-global').textContent = cssG;
-
-    // Componente individual
     if(selectedId) {
       const el = elements.find(e => e.id === selectedId);
       document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente">\n  <div class="inner-content">\n    ${el.text.replace(/\n/g, '\n    ')}\n  </div>\n</${el.tag}>`;
-      
       let singleCSS = `.mi-componente {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n}\n\n`;
-      let regex = new RegExp(`\\.${el.id}(.*?)\\{([\\s\\S]*?)\\}`, 'g');
-      let match;
+      let regex = new RegExp(`\\.${el.id}(.*?)\\{([\\s\\S]*?)\\}`, 'g'); let match;
       while ((match = regex.exec(stylesRules)) !== null) { singleCSS += `.mi-componente${match[1]} {${match[2]}}\n`; }
       document.getElementById('code-css-single').textContent = singleCSS;
     } else {
@@ -610,22 +717,11 @@
 
   function downloadProject() {
     if(elements.length === 0) return alert("El lienzo está vacío.");
-    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
+    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V4</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
     downloadFile('index.html', html); setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
   }
   function downloadFile(f, t) { const a = document.createElement('a'); a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(t); a.download = f; a.style.display = 'none'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
 
-  document.addEventListener('keydown', (e) => { 
-    if (!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) && (e.key === 'Delete' || e.key === 'Backspace')) {
-      if(selectedId && document.body.classList.contains('edit-mode')) { 
-        elements = elements.filter(x => x.id !== selectedId); 
-        document.getElementById(selectedId).remove(); 
-        selectElement(null); applyStylesAndCompile(); 
-      }
-    }
-  });
-
-  // Init Calls
   initCanvas();
   generateCode();
 </script>
