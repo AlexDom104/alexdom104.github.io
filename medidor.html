@@ -1,89 +1,211 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Medidor Dinámico de Píxeles</title>
-<style>
-  body { 
-    font-family: system-ui, -apple-system, sans-serif; 
-    padding: 40px; 
-    background: #1e1e1e; 
-    color: white;
-  }
-  .instrucciones {
-    margin-bottom: 20px;
-    color: #a0a0a0;
-  }
-  .container-resizable {
-    width: 400px;
-    height: 250px;
-    background: #2d2d2d;
-    border: 2px dashed #4A90E2;
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    resize: both; /* Permite redimensionar */
-    overflow: auto;
-    box-sizing: border-box;
-  }
-  #medidas-caja { 
-    font-size: 28px; 
-    font-weight: bold; 
-    color: #4A90E2;
-    margin-bottom: 15px;
-  }
-  input { 
-    padding: 12px; 
-    width: 80%; /* Se adapta al contenedor */
-    border-radius: 4px;
-    border: 1px solid #555;
-    background: #121212;
-    color: white;
-    resize: both; /* Permite redimensionar el input también */
-  }
-  #medidas-input { 
-    margin-top: 10px; 
-    font-size: 14px; 
-    color: #43b581;
-  }
-</style>
-</head>
-<body>
+import React, { useState, useEffect, useCallback } from 'react';
 
-  <div class="instrucciones">
-    Haz clic y arrastra la esquina inferior derecha del contenedor o del input para cambiar su tamaño.
-  </div>
+const MIN_WIDTH = 80;
+const MIN_HEIGHT = 80;
 
-  <div class="container-resizable" id="caja">
-    <div id="medidas-caja">400px × 250px</div>
-    
-    <input type="text" id="inputPrueba" placeholder="Input de prueba (arrastra mi esquina)">
-    <div id="medidas-input">Ancho del input: -- px</div>
-  </div>
+export default function App() {
+  const [containers, setContainers] = useState([]);
+  const [activeAction, setActiveAction] = useState(null); 
+  // activeAction schema: { type: 'drag'|'resize', id, startX, startY, initX, initY, initW, initH }
 
-  <script>
-    const caja = document.getElementById('caja');
-    const medidasCaja = document.getElementById('medidas-caja');
-    const inputPrueba = document.getElementById('inputPrueba');
-    const medidasInput = document.getElementById('medidas-input');
+  useEffect(() => {
+    if (!activeAction) return;
 
-    const observer = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        if(entry.target === caja) {
-            medidasCaja.textContent = `Contenedor: ${caja.offsetWidth}px × ${caja.offsetHeight}px`;
+    const handleMouseMove = (e) => {
+      // Prevent text selection while dragging/resizing
+      e.preventDefault(); 
+      
+      const dx = e.clientX - activeAction.startX;
+      const dy = e.clientY - activeAction.startY;
+
+      setContainers(prev => prev.map(c => {
+        if (c.id !== activeAction.id) return c;
+
+        if (activeAction.type === 'drag') {
+          return {
+            ...c,
+            // Prevent dragging out of the top/left bounds
+            x: Math.max(0, activeAction.initX + dx),
+            y: Math.max(0, activeAction.initY + dy)
+          };
+        } else if (activeAction.type === 'resize') {
+          return {
+            ...c,
+            // Enforce minimum dimensions
+            w: Math.max(MIN_WIDTH, activeAction.initW + dx),
+            h: Math.max(MIN_HEIGHT, activeAction.initH + dy)
+          };
         }
-        if(entry.target === inputPrueba) {
-            medidasInput.textContent = `Input: ${inputPrueba.offsetWidth}px × ${inputPrueba.offsetHeight}px`;
-        }
+        return c;
+      }));
+    };
+
+    const handleMouseUp = () => {
+      setActiveAction(null);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [activeAction]);
+
+  const addContainer = () => {
+    const newId = Math.random().toString(36).substring(2, 9);
+    setContainers(prev => [
+      ...prev,
+      {
+        id: newId,
+        x: 50 + (prev.length * 20), // Slight offset for new boxes
+        y: 50 + (prev.length * 20),
+        w: 200,
+        h: 150
       }
+    ]);
+  };
+
+  const removeContainer = (idToRemove) => {
+    setContainers(prev => prev.filter(c => c.id !== idToRemove));
+  };
+
+  const generateLiveCode = () => {
+    if (containers.length === 0) {
+      return `<!-- Añade un contenedor para ver el código -->\n<div class="workspace">\n</div>`;
+    }
+
+    let code = `<div class="workspace" style="position: relative; width: 100%; height: 100vh;">\n`;
+    containers.forEach((c, index) => {
+      code += `  <div \n    class="box-${index + 1}"\n    style="position: absolute; left: ${c.x}px; top: ${c.y}px; width: ${c.w}px; height: ${c.h}px; border: 2px dashed #4A90E2; background: rgba(74, 144, 226, 0.1);">\n  </div>\n`;
     });
+    code += `</div>`;
+    return code;
+  };
 
-    observer.observe(caja);
-    observer.observe(inputPrueba);
-  </script>
+  return (
+    <div className="flex h-screen w-screen overflow-hidden bg-neutral-900 text-white font-sans selection:bg-blue-500 selection:text-white">
+      
+      {/* Sidebar Panel */}
+      <div className="w-80 flex flex-col bg-neutral-800 border-r border-neutral-700 shadow-xl z-10 flex-shrink-0">
+        <div className="p-5 border-b border-neutral-700 flex justify-between items-center bg-neutral-800/50">
+          <h1 className="text-lg font-bold text-neutral-100 tracking-wide">Measure Tool</h1>
+          <button 
+            onClick={addContainer}
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 transition-colors shadow-lg shadow-blue-500/20"
+            title="Añadir Contenedor"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </button>
+        </div>
 
-</body>
-</html>
+        <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-4">
+          <div>
+            <h2 className="text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wider">Live HTML/CSS</h2>
+            <div className="bg-neutral-950 p-4 rounded-lg border border-neutral-700/50 overflow-x-auto">
+              <pre className="text-xs font-mono text-green-400">
+                <code>{generateLiveCode()}</code>
+              </pre>
+            </div>
+          </div>
+          
+          <div className="text-xs text-neutral-500 leading-relaxed bg-neutral-900/50 p-3 rounded-lg border border-neutral-800">
+            <p><strong>Guía:</strong></p>
+            <ul className="list-disc pl-4 mt-1 space-y-1">
+              <li>Haz clic en el botón <strong>+</strong> para añadir cajas.</li>
+              <li>Arrastra desde cualquier parte del contenedor para moverlo.</li>
+              <li>Arrastra la esquina inferior derecha para redimensionar.</li>
+              <li>Las medidas en píxeles y el código se actualizan en tiempo real.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Workspace / Canvas */}
+      <div 
+        className="flex-1 relative overflow-auto bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-neutral-900"
+        style={{ cursor: activeAction ? (activeAction.type === 'drag' ? 'grabbing' : 'nwse-resize') : 'default' }}
+      >
+        {containers.map((c) => (
+          <div
+            key={c.id}
+            onMouseDown={(e) => {
+              // Ensure we left-clicked
+              if (e.button !== 0) return;
+              setActiveAction({
+                type: 'drag',
+                id: c.id,
+                startX: e.clientX,
+                startY: e.clientY,
+                initX: c.x,
+                initY: c.y,
+                initW: c.w,
+                initH: c.h
+              });
+            }}
+            style={{
+              position: 'absolute',
+              left: `${c.x}px`,
+              top: `${c.y}px`,
+              width: `${c.w}px`,
+              height: `${c.h}px`,
+            }}
+            className={`
+              group border-2 border-dashed border-blue-500 bg-blue-500/10 
+              backdrop-blur-[1px] hover:bg-blue-500/20 hover:border-blue-400 
+              transition-colors duration-200 shadow-sm
+              ${activeAction?.id === c.id ? 'z-50 shadow-blue-500/20 shadow-xl' : 'z-10'}
+            `}
+          >
+            {/* Delete button (shows on hover) */}
+            <button
+              onMouseDown={(e) => e.stopPropagation()} // Prevent dragging when clicking delete
+              onClick={() => removeContainer(c.id)}
+              className="absolute -top-3 -right-3 w-6 h-6 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20 cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            {/* Internal Measurements Overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none p-2">
+              <div className="bg-neutral-900/80 backdrop-blur-md px-3 py-1.5 rounded-md border border-neutral-700/50 flex flex-col items-center gap-1 shadow-md">
+                <span className="text-white font-mono text-sm font-bold flex items-center gap-2">
+                  <span className="text-neutral-400 text-xs">W:</span> {Math.round(c.w)}px 
+                  <span className="text-neutral-600">|</span> 
+                  <span className="text-neutral-400 text-xs">H:</span> {Math.round(c.h)}px
+                </span>
+                <span className="text-blue-300 font-mono text-xs flex items-center gap-2">
+                  <span className="text-blue-500/70">Top:</span> {Math.round(c.y)}px 
+                  <span className="text-blue-500/50">-</span> 
+                  <span className="text-blue-500/70">Left:</span> {Math.round(c.x)}px
+                </span>
+              </div>
+            </div>
+
+            {/* Custom Resize Handle (Bottom Right) */}
+            <div
+              onMouseDown={(e) => {
+                e.stopPropagation(); // Stop event from bubbling to the drag handler
+                if (e.button !== 0) return;
+                setActiveAction({
+                  type: 'resize',
+                  id: c.id,
+                  startX: e.clientX,
+                  startY: e.clientY,
+                  initX: c.x,
+                  initY: c.y,
+                  initW: c.w,
+                  initH: c.h
+                });
+              }}
+              className="absolute right-0 bottom-0 w-6 h-6 cursor-nwse-resize flex items-end justify-end p-1 hover:bg-blue-400/30 transition-colors z-20"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v6h-6"/><path d="M21 3v6h-6"/><path d="M3 15v6h6"/><path d="M3 3v6h6"/></svg>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
