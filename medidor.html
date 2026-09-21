@@ -3,86 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout Builder</title>
+<title>Master Layout - Pro Web Builder</title>
 <style>
   :root { 
-    --bg-dark: #0d0d12; --panel-bg: #1a1a24; --text-main: #e2e8f0; --text-muted: #94a3b8;
-    --accent: #2563eb; --accent-hover: #1d4ed8; --border-color: #334155; --guide-color: #ec4899;
+    --bg-dark: #121212; --panel-bg: #1e1e1e; --panel-light: #2d2d2d;
+    --text-main: #e0e0e0; --text-muted: #888;
+    --accent: #43b581; --accent-hover: #3ca374; --accent-blue: #007acc;
+    --border-color: #333; --guide-color: #ff007f;
   }
   * { box-sizing: border-box; }
-  body, html { margin: 0; padding: 0; height: 100%; font-family: system-ui, -apple-system, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
+  body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
 
   /* HEADER */
-  header { background: #0f172a; padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-  .header-title h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
-  .header-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); }
-  
-  .top-actions button { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-  .top-actions button:hover { background: var(--accent-hover); }
-
-  .viewports button { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.2s; }
-  .viewports button.active { background: #1e293b; color: white; border-color: #475569; }
+  header { background: #181818; padding: 10px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .header-title h1 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; letter-spacing: 0.5px;}
+  .header-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--accent); }
+  .top-actions button { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+  .top-actions button:hover { background: #006bb3; }
+  .viewports button { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+  .viewports button.active { background: var(--panel-light); color: white; border-color: #555; }
 
   /* LAYOUT */
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
   
-  /* SIDEBAR */
-  .sidebar { width: 260px; background: var(--panel-bg); padding: 15px; border-right: 1px solid var(--border-color); overflow-y: auto; }
-  .sidebar-section { margin-bottom: 20px; }
-  .sidebar h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 0 0 10px 0; border-bottom: 1px solid #333; padding-bottom: 5px;}
-  .tool-btn { width: 100%; background: #272736; color: #e2e8f0; border: 1px solid #3f3f5a; padding: 8px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 12px; margin-bottom: 6px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
-  .tool-btn:hover { background: #323246; border-color: var(--accent); }
-  .tool-btn span.tag { font-size: 9px; background: #475569; padding: 2px 6px; border-radius: 3px; color: #f8fafc; }
+  /* SIDEBAR LEFT (Herramientas) */
+  .sidebar { width: 260px; background: var(--panel-bg); border-right: 1px solid var(--border-color); overflow-y: auto; display: flex; flex-direction: column; }
+  .sidebar-inner { padding: 15px; }
+  .sidebar::-webkit-scrollbar { width: 6px; } .sidebar::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+  .sidebar-section { margin-bottom: 15px; }
+  .sidebar h3 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin: 0 0 8px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
+  .tool-btn { width: 100%; background: #252525; color: #ccc; border: 1px solid #333; padding: 7px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 12px; margin-bottom: 5px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
+  .tool-btn:hover { background: #333; border-color: var(--accent); color: #fff; }
+  .tool-btn span.tag { font-size: 9px; background: #111; padding: 2px 5px; border-radius: 3px; color: #888; border: 1px solid #222; }
 
   /* CANVAS */
-  .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#333 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; }
-  #canvas { background: #ffffff; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: width 0.3s, height 0.3s; overflow: hidden; }
+  .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#333 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; position: relative; }
+  #canvas { background: #ffffff; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transition: width 0.3s, height 0.3s; overflow: hidden; }
   #canvas.desktop { width: 100%; height: 100%; min-height: 800px; }
-  #canvas.tablet { width: 768px; height: 1024px; border-radius: 8px; }
-  #canvas.mobile { width: 375px; height: 667px; border-radius: 24px; border: 8px solid #1e293b; }
+  #canvas.tablet { width: 768px; height: 1024px; border-radius: 4px; }
+  #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 12px solid #111; }
 
-  /* ELEMENTS */
-  .canvas-element { position: absolute; box-sizing: border-box; cursor: grab; user-select: none; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: box-shadow 0.3s, transform 0.3s, background-color 0.3s; }
-  .canvas-element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 100 !important; animation: none !important; transform: none !important;}
+  /* ELEMENTS IN CANVAS */
+  .canvas-element { position: absolute; box-sizing: border-box; cursor: grab; user-select: none; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: box-shadow 0.2s, background-color 0.2s; }
+  .canvas-element.selected { outline: 2px solid var(--accent); outline-offset: 1px; }
   .canvas-element:active { cursor: grabbing; }
-  .resizer { width: 10px; height: 10px; background: var(--accent); position: absolute; right: 0; bottom: 0; cursor: nwse-resize; display: none; z-index: 10; }
+  .resizer { width: 10px; height: 10px; background: var(--accent); position: absolute; right: 0; bottom: 0; cursor: nwse-resize; display: none; z-index: 9999; }
   .canvas-element.selected .resizer { display: block; }
   
-  /* Guides */
-  .measure-tag { position: absolute; background: var(--accent); color: white; padding: 2px 6px; font-size: 10px; border-radius: 3px; top: -22px; left: 0; white-space: nowrap; pointer-events: none; }
-  .guide-line { position: absolute; background: var(--guide-color); z-index: 99; pointer-events: none; display: flex; align-items: center; justify-content: center; }
-  .guide-line.vertical { width: 1px; } .guide-line.horizontal { height: 1px; }
-  .guide-label { background: var(--guide-color); color: #fff; font-size: 10px; padding: 2px 4px; border-radius: 2px; }
-
   /* RIGHT PANEL */
-  .right-panel { width: 380px; background: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
-  .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: #0f172a; }
-  .tab-btn { flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; }
-  .tab-btn.active { color: #fff; border-bottom: 2px solid var(--accent); }
-  .tab-content { flex: 1; padding: 15px; overflow-y: auto; display: none; }
+  .right-panel { width: 320px; background: var(--panel-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: #181818; }
+  .tab-btn { flex: 1; padding: 12px 0; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 11px; font-weight: bold; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; }
+  .tab-btn.active { color: #fff; border-bottom: 2px solid var(--accent); background: var(--panel-bg); }
+  .tab-content { flex: 1; overflow-y: auto; display: none; }
   .tab-content.active { display: block; }
   
-  .prop-section { margin-bottom: 15px; background: #222230; padding: 10px; border-radius: 6px; border: 1px solid #334155; }
-  .prop-section h4 { margin: 0 0 10px 0; font-size: 11px; color: #cbd5e1; text-transform: uppercase; }
+  /* CAPAS (LAYERS) STYLES */
+  #tab-layers { padding: 0; background: #1a1a1a; display: none; flex-direction: column; }
+  #tab-layers.active { display: flex; }
+  .layers-header { padding: 10px 15px; background: #222; border-bottom: 1px solid #333; font-size: 11px; font-weight: bold; color: #aaa; text-transform: uppercase; display: flex; justify-content: space-between;}
+  .layer-list { flex: 1; overflow-y: auto; padding: 5px; }
+  .layer-item { display: flex; align-items: center; background: #252525; padding: 8px; margin-bottom: 4px; border-radius: 4px; border: 1px solid #333; cursor: pointer; font-size: 12px; transition: 0.1s; }
+  .layer-item:hover { background: #2d2d2d; }
+  .layer-item.active { background: #304038; border-color: var(--accent); color: #fff; }
+  .layer-item.hidden-layer { opacity: 0.5; }
+  .layer-name { flex: 1; margin-left: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .layer-actions { display: flex; gap: 5px; }
+  .layer-btn { background: #111; color: #888; border: 1px solid #333; width: 22px; height: 22px; border-radius: 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+  .layer-btn:hover { background: #444; color: #fff; }
+
+  /* PROPS & CSS TAB STYLES */
+  .props-container { padding: 15px; }
+  .prop-section { margin-bottom: 12px; background: #222; padding: 12px; border-radius: 4px; border: 1px solid #333; }
+  .prop-section h4 { margin: 0 0 10px 0; font-size: 10px; color: #aaa; text-transform: uppercase; }
   .prop-row { display: flex; gap: 10px; margin-bottom: 8px; }
   .prop-group { flex: 1; display: flex; flex-direction: column; }
   .prop-group label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
-  .prop-group input, .prop-group select { width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #334155; background: #0f172a; color: white; font-family: monospace; font-size: 11px; }
+  .prop-group input, .prop-group select { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid #444; background: #111; color: white; font-family: monospace; font-size: 11px; }
+  .prop-group input[type="color"] { padding: 0 2px; height: 26px; cursor: pointer; }
   
-  .code-section { margin-bottom: 20px; background: #0f172a; border-radius: 6px; border: 1px solid #334155; overflow: hidden; }
-  .code-header { background: #1e293b; padding: 8px 12px; font-size: 11px; font-weight: bold; color: #cbd5e1; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;}
-  pre { margin: 0; padding: 12px; font-family: 'Courier New', Courier, monospace; font-size: 11px; line-height: 1.4; white-space: pre-wrap; max-height: 300px; overflow-y: auto;}
+  .code-section { margin: 15px; background: #111; border-radius: 4px; border: 1px solid #333; overflow: hidden; }
+  .code-header { background: #181818; padding: 8px 12px; font-size: 10px; font-weight: bold; color: #aaa; border-bottom: 1px solid #333; text-transform: uppercase;}
+  pre { margin: 0; padding: 12px; font-family: 'Courier New', Courier, monospace; font-size: 11px; line-height: 1.4; white-space: pre-wrap; max-height: 250px; overflow-y: auto;}
   .html-code { color: #e6db74; } .css-code { color: #66d9ef; }
 
-  /* Efectos Preview */
-  @keyframes spin { 100% { transform: rotate(360deg); } }
-  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-  .anim-spin { animation: spin 4s linear infinite; } .anim-bounce { animation: bounce 2s ease-in-out infinite; } .anim-pulse { animation: pulse 2s ease-in-out infinite; }
-  .hover-scale:hover { transform: scale(1.08) !important; } .hover-color:hover { filter: brightness(1.3); }
-  .shadow-soft { box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .shadow-hard { box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-  .preview-dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; border-radius: 4px; flex-direction: column; }
-  .canvas-element:hover .preview-dropdown-content { display: flex; }
 </style>
 </head>
 <body>
@@ -90,7 +94,7 @@
   <header>
     <div class="header-title">
       <h1>Master Layout Builder</h1>
-      <p>Prototipado Visual y Exportador a HTML/CSS</p>
+      <p>Estación de Trabajo Profesional HTML/CSS</p>
     </div>
     <div class="viewports" id="viewport-controls">
       <button class="active" onclick="setViewport('desktop')">Escritorio</button>
@@ -98,134 +102,181 @@
       <button onclick="setViewport('mobile')">Móvil</button>
     </div>
     <div class="top-actions">
-      <button onclick="downloadProject()">Descargar Proyecto (ZIP simulado)</button>
+      <button onclick="downloadProject()">⬇ Descargar Proyecto HTML/CSS</button>
     </div>
   </header>
 
   <div class="workspace">
+    <!-- PANEL IZQUIERDO: HERRAMIENTAS -->
     <div class="sidebar">
-      
-      <div class="sidebar-section">
-        <h3>Estructura Principal</h3>
-        <button class="tool-btn" onclick="addElement('header')">Encabezado <span class="tag">header</span></button>
-        <button class="tool-btn" onclick="addElement('section')">Sección (Ancho total) <span class="tag">section</span></button>
-        <button class="tool-btn" onclick="addElement('footer')">Pie de Página <span class="tag">footer</span></button>
-      </div>
+      <div class="sidebar-inner">
+        
+        <div class="sidebar-section">
+          <h3>Estructura & Layout</h3>
+          <button class="tool-btn" onclick="addElement('header')">Encabezado (Nav) <span class="tag">header</span></button>
+          <button class="tool-btn" onclick="addElement('section')">Sección (100% W) <span class="tag">section</span></button>
+          <button class="tool-btn" onclick="addElement('footer')">Pie de Página <span class="tag">footer</span></button>
+          <button class="tool-btn" onclick="addElement('div')">Caja / Contenedor <span class="tag">div</span></button>
+        </div>
 
-      <div class="sidebar-section">
-        <h3>Componentes Complejos</h3>
-        <button class="tool-btn" onclick="addElement('popup')">Modal / Popup <span class="tag">dialog</span></button>
-        <button class="tool-btn" onclick="addElement('dropdown')">Menú Desplegable <span class="tag">nav</span></button>
-        <button class="tool-btn" onclick="addElement('card')">Tarjeta de Contenido <span class="tag">div</span></button>
-      </div>
+        <div class="sidebar-section">
+          <h3>Formas Avanzadas (CSS)</h3>
+          <button class="tool-btn" onclick="addElement('circle')">Círculo Perfecto <span class="tag">radius</span></button>
+          <button class="tool-btn" onclick="addElement('pill')">Píldora / Botón <span class="tag">radius</span></button>
+          <button class="tool-btn" onclick="addElement('triangle')">Triángulo <span class="tag">clip-path</span></button>
+          <button class="tool-btn" onclick="addElement('hexagon')">Hexágono <span class="tag">clip-path</span></button>
+        </div>
 
-      <div class="sidebar-section">
-        <h3>Formularios & Datos</h3>
-        <button class="tool-btn" onclick="addElement('input')">Campo de Texto <span class="tag">input</span></button>
-        <button class="tool-btn" onclick="addElement('select')">Lista Opciones <span class="tag">select</span></button>
-        <button class="tool-btn" onclick="addElement('button')">Botón de Acción <span class="tag">button</span></button>
-      </div>
+        <div class="sidebar-section">
+          <h3>UI & Glassmorfismo</h3>
+          <button class="tool-btn" onclick="addElement('glass-card')">Tarjeta de Cristal <span class="tag">backdrop</span></button>
+          <button class="tool-btn" onclick="addElement('gradient-box')">Caja con Degradado <span class="tag">linear</span></button>
+          <button class="tool-btn" onclick="addElement('popup')">Modal Central <span class="tag">dialog</span></button>
+        </div>
 
-      <div class="sidebar-section">
-        <h3>Básicos</h3>
-        <button class="tool-btn" onclick="addElement('div')">Contenedor <span class="tag">div</span></button>
-        <button class="tool-btn" onclick="addElement('text')">Bloque de Texto <span class="tag">p/h1</span></button>
-        <button class="tool-btn" onclick="addElement('image')">Imagen <span class="tag">img</span></button>
-      </div>
+        <div class="sidebar-section">
+          <h3>Elementos Clásicos</h3>
+          <button class="tool-btn" onclick="addElement('text')">Bloque de Texto <span class="tag">p/h1</span></button>
+          <button class="tool-btn" onclick="addElement('image')">Imagen <span class="tag">img</span></button>
+          <button class="tool-btn" onclick="addElement('button')">Botón <span class="tag">button</span></button>
+          <button class="tool-btn" onclick="addElement('input')">Input Texto <span class="tag">input</span></button>
+        </div>
 
+      </div>
     </div>
 
+    <!-- CANVAS CENTRAL -->
     <div class="canvas-wrapper">
       <div id="canvas" class="desktop"></div>
     </div>
 
+    <!-- PANEL DERECHO: CAPAS Y PROPIEDADES -->
     <div class="right-panel">
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('props')">Diseño & Efectos</button>
-        <button class="tab-btn" onclick="switchTab('html')">Ver HTML</button>
-        <button class="tab-btn" onclick="switchTab('css')">Ver CSS</button>
+        <button class="tab-btn active" onclick="switchTab('layers')">Capas</button>
+        <button class="tab-btn" onclick="switchTab('props')">Diseño</button>
+        <button class="tab-btn" onclick="switchTab('html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab('css')">CSS</button>
       </div>
 
-      <!-- PROPIEDADES -->
-      <div id="tab-props" class="tab-content active">
-        <div id="no-selection" style="color: var(--text-muted); font-size: 13px; text-align: center; margin-top: 50px;">
-          Selecciona un elemento en el lienzo para editarlo.<br><br>Utiliza la tecla Suprimir para eliminar.
+      <!-- TAB 1: CAPAS (Layers) -->
+      <div id="tab-layers" class="tab-content active">
+        <div class="layers-header">
+          <span>Orden de Capas (Z-Index)</span>
         </div>
-        
-        <div id="props-form" style="display: none;">
-          <div class="prop-section">
-            <h4>Posición y Tamaño</h4>
-            <div class="prop-row">
-              <div class="prop-group"><label>Eje X (px)</label><input type="number" id="prop-x" oninput="updateEl()"></div>
-              <div class="prop-group"><label>Eje Y (px)</label><input type="number" id="prop-y" oninput="updateEl()"></div>
-            </div>
-            <div class="prop-row">
-              <div class="prop-group"><label>Ancho (px)</label><input type="number" id="prop-w" oninput="updateEl()"></div>
-              <div class="prop-group"><label>Alto (px)</label><input type="number" id="prop-h" oninput="updateEl()"></div>
-            </div>
-          </div>
-
-          <div class="prop-section">
-            <h4>Apariencia</h4>
-            <div class="prop-row">
-              <div class="prop-group"><label>Fondo (HEX)</label><input type="color" id="prop-bg" oninput="updateEl()"></div>
-              <div class="prop-group"><label>Texto (HEX)</label><input type="color" id="prop-color" oninput="updateEl()"></div>
-            </div>
-            <div class="prop-group" style="margin-bottom:8px;"><label>Bordes Redondos (px)</label><input type="number" id="prop-radius" oninput="updateEl()"></div>
-            <div class="prop-group"><label>Contenido / Placeholder</label><input type="text" id="prop-text" oninput="updateEl()"></div>
-          </div>
-
-          <div class="prop-section">
-            <h4>Interactividad y Efectos</h4>
-            <div class="prop-group" style="margin-bottom:8px;">
-              <label>Sombra (Box-Shadow)</label>
-              <select id="prop-shadow" oninput="updateEl()">
-                <option value="none">Ninguna</option>
-                <option value="shadow-soft">Suave (Elegante)</option>
-                <option value="shadow-hard">Fuerte (Modal/Popup)</option>
-              </select>
-            </div>
-            <div class="prop-group" style="margin-bottom:8px;">
-              <label>Efecto Cursor (:hover)</label>
-              <select id="prop-hover" oninput="updateEl()">
-                <option value="none">Ninguno</option>
-                <option value="hover-scale">Agrandar (Escalar)</option>
-                <option value="hover-color">Iluminar (Brillo)</option>
-              </select>
-            </div>
-            <div class="prop-group">
-              <label>Animación (@keyframes)</label>
-              <select id="prop-anim" oninput="updateEl()">
-                <option value="none">Ninguna</option>
-                <option value="anim-bounce">Flotar (Arriba y Abajo)</option>
-                <option value="anim-pulse">Palpitar (Atención)</option>
-                <option value="anim-spin">Girar 360 (Carga)</option>
-              </select>
-            </div>
-          </div>
+        <div class="layer-list" id="layers-list">
+          <!-- Las capas se renderizan aquí -->
+          <div style="color: #666; font-size: 11px; text-align: center; margin-top: 20px;">Lienzo vacío. Agrega elementos.</div>
         </div>
       </div>
 
-      <!-- HTML -->
+      <!-- TAB 2: DISEÑO Y EFECTOS -->
+      <div id="tab-props" class="tab-content">
+        <div class="props-container">
+          <div id="no-selection" style="color: #666; font-size: 11px; text-align: center; margin-top: 20px;">
+            Selecciona una capa para editar sus propiedades.
+          </div>
+          
+          <div id="props-form" style="display: none;">
+            
+            <div class="prop-section">
+              <h4>Geometría</h4>
+              <div class="prop-row">
+                <div class="prop-group"><label>X (Left px)</label><input type="number" id="prop-x" oninput="updateEl()"></div>
+                <div class="prop-group"><label>Y (Top px)</label><input type="number" id="prop-y" oninput="updateEl()"></div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group"><label>Ancho (px)</label><input type="number" id="prop-w" oninput="updateEl()"></div>
+                <div class="prop-group"><label>Alto (px)</label><input type="number" id="prop-h" oninput="updateEl()"></div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group"><label>Rotación (Grados)</label><input type="number" id="prop-rotate" oninput="updateEl()" placeholder="Ej: 45"></div>
+                <div class="prop-group"><label>Borde (Radius px)</label><input type="number" id="prop-radius" oninput="updateEl()"></div>
+              </div>
+            </div>
+
+            <div class="prop-section">
+              <h4>Estilo y Relleno</h4>
+              <div class="prop-group" style="margin-bottom:8px;">
+                <label>Fondo (Color / Gradient CSS)</label>
+                <!-- Usamos un input text para permitir gradients, con un color picker auxiliar -->
+                <div style="display:flex; gap:5px;">
+                  <input type="color" id="prop-bg-color" oninput="syncColorToBg()" style="width: 30px;">
+                  <input type="text" id="prop-bg" oninput="updateEl()" placeholder="#ffffff o linear-gradient(...)">
+                </div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateEl()"></div>
+                <div class="prop-group"><label>Opacidad (0 a 1)</label><input type="number" step="0.1" min="0" max="1" id="prop-opacity" oninput="updateEl()"></div>
+              </div>
+              <div class="prop-group" style="margin-top:8px;">
+                <label>Texto / Contenido</label>
+                <input type="text" id="prop-text" oninput="updateEl()">
+              </div>
+            </div>
+
+            <div class="prop-section">
+              <h4>Filtros y Renderizado Avanzado</h4>
+              <div class="prop-group" style="margin-bottom:8px;">
+                <label>Sombra Paralela</label>
+                <select id="prop-shadow" oninput="updateEl()">
+                  <option value="none">Ninguna</option>
+                  <option value="shadow-soft">Suave (UI)</option>
+                  <option value="shadow-hard">Fuerte (Flotante)</option>
+                </select>
+              </div>
+              <div class="prop-group" style="margin-bottom:8px;">
+                <label>Máscara Vectorial (Clip-Path)</label>
+                <select id="prop-clip" oninput="updateEl()">
+                  <option value="none">Normal (Cuadrado)</option>
+                  <option value="polygon(50% 0%, 0% 100%, 100% 100%)">Triángulo</option>
+                  <option value="polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)">Hexágono</option>
+                  <option value="polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)">Trapecio</option>
+                </select>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group">
+                  <label>Filtro (Background)</label>
+                  <select id="prop-glass" oninput="updateEl()">
+                    <option value="none">Ninguno</option>
+                    <option value="blur(10px)">Cristal (Blur 10px)</option>
+                  </select>
+                </div>
+                <div class="prop-group">
+                  <label>Filtro (Elemento)</label>
+                  <select id="prop-filter" oninput="updateEl()">
+                    <option value="none">Ninguno</option>
+                    <option value="grayscale(100%)">Blanco y Negro</option>
+                    <option value="sepia(100%)">Sepia</option>
+                    <option value="blur(3px)">Desenfocar</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: HTML -->
       <div id="tab-html" class="tab-content">
         <div class="code-section">
-          <div class="code-header">Estructura Global (index.html)</div>
+          <div class="code-header">Toda la Estructura</div>
           <pre class="html-code" id="code-html-global"></pre>
         </div>
         <div class="code-section">
-          <div class="code-header" style="color:#00e676;">Elemento Aislado</div>
+          <div class="code-header" style="color:var(--accent);">Solo Capa Seleccionada</div>
           <pre class="html-code" id="code-html-single"></pre>
         </div>
       </div>
 
-      <!-- CSS -->
+      <!-- TAB 4: CSS -->
       <div id="tab-css" class="tab-content">
         <div class="code-section">
-          <div class="code-header">Estilos Globales (style.css)</div>
+          <div class="code-header">Hoja de Estilos Completa</div>
           <pre class="css-code" id="code-css-global"></pre>
         </div>
         <div class="code-section">
-          <div class="code-header" style="color:#00e676;">Elemento Aislado</div>
+          <div class="code-header" style="color:var(--accent);">Solo Capa Seleccionada</div>
           <pre class="css-code" id="code-css-single"></pre>
         </div>
       </div>
@@ -234,270 +285,339 @@
   </div>
 
 <script>
-  let elements = []; let selectedId = null; let counter = 1; const canvas = document.getElementById('canvas');
+  // ESTADO GLOBAL: Cada elemento es una "Capa".
+  let elements = []; 
+  let selectedId = null; 
+  let counter = 1; 
+  const canvas = document.getElementById('canvas');
 
-  // Catálogo Estructural y Componentes
+  // DICCIONARIO DE FORMAS Y COMPONENTES
   const templates = {
-    // Estructuras
-    'header': { w: 1000, h: 60, bg: '#ffffff', color: '#0f172a', text: 'Logo / Navegación', radius: 0, isSpecial: 'header', shadow: 'shadow-soft' },
-    'section': { w: 1000, h: 400, bg: '#f1f5f9', color: '#0f172a', text: 'Sección de Contenido', radius: 0, isSpecial: 'section' },
-    'footer': { w: 1000, h: 100, bg: '#0f172a', color: '#ffffff', text: '© 2026 Mi Empresa. Todos los derechos reservados.', radius: 0, isSpecial: 'footer' },
-    
-    // Complejos
-    'popup': { w: 400, h: 250, bg: '#ffffff', color: '#0f172a', text: 'Atención', radius: 8, isSpecial: 'popup', shadow: 'shadow-hard' },
-    'dropdown': { w: 150, h: 45, bg: '#2563eb', color: '#ffffff', text: 'Opciones ▼', radius: 4, isSpecial: 'dropdown' },
-    'card': { w: 300, h: 350, bg: '#ffffff', color: '#0f172a', text: '', radius: 12, shadow: 'shadow-soft', isSpecial: 'card' },
-    
-    // Formularios
-    'input': { w: 250, h: 45, bg: '#ffffff', color: '#0f172a', text: 'Introduce tu correo...', radius: 6, isSpecial: 'input' },
-    'select': { w: 250, h: 45, bg: '#ffffff', color: '#0f172a', text: 'Selecciona país', radius: 6, isSpecial: 'select' },
-    'button': { w: 160, h: 45, bg: '#10b981', color: '#ffffff', text: 'Confirmar', radius: 6, isSpecial: 'button' },
-    
     // Básicos
-    'div': { w: 200, h: 200, bg: '#e2e8f0', color: '#0f172a', text: 'Contenedor', radius: 4, isSpecial: null },
-    'text': { w: 300, h: 80, bg: 'transparent', color: '#334155', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', radius: 0, isSpecial: 'text' },
-    'image': { w: 300, h: 200, bg: '#cbd5e1', color: '#000000', text: 'Imagen Placeholder', radius: 8, isSpecial: 'image' }
+    'div': { n: 'Caja', w: 200, h: 200, bg: '#e4e4e7', c: '#000', t: 'Contenedor', r: 4 },
+    'text': { n: 'Texto', w: 300, h: 50, bg: 'transparent', c: '#333', t: 'Texto de prueba', r: 0 },
+    'image': { n: 'Imagen', w: 250, h: 180, bg: '#ccc', c: '#000', t: '', r: 8, type: 'img' },
+    'button': { n: 'Botón', w: 140, h: 45, bg: '#43b581', c: '#fff', t: 'Aceptar', r: 6, type: 'btn' },
+    'input': { n: 'Input', w: 220, h: 45, bg: '#fff', c: '#000', t: 'Escribe aquí...', r: 4, type: 'input' },
+    
+    // Layout
+    'header': { n: 'Header Nav', w: 1000, h: 60, bg: '#18181b', c: '#fff', t: 'LOGO', r: 0, type: 'header' },
+    'section': { n: 'Sección', w: 1000, h: 400, bg: '#f4f4f5', c: '#000', t: '', r: 0, type: 'section' },
+    'footer': { n: 'Footer', w: 1000, h: 80, bg: '#18181b', c: '#888', t: '© 2026', r: 0, type: 'footer' },
+    
+    // Formas Modernas (Vector/Clip-Path/Radius)
+    'circle': { n: 'Círculo', w: 150, h: 150, bg: '#007acc', c: '#fff', t: '', r: 500 /* hack p/ círculo */ },
+    'pill': { n: 'Píldora', w: 200, h: 50, bg: '#ff3366', c: '#fff', t: 'Píldora', r: 50 },
+    'triangle': { n: 'Triángulo', w: 150, h: 150, bg: '#facc15', c: '#000', t: '', r: 0, clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
+    'hexagon': { n: 'Hexágono', w: 150, h: 150, bg: '#a855f7', c: '#fff', t: '', r: 0, clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
+    
+    // UI Avanzada
+    'glass-card': { n: 'Glass Card', w: 280, h: 320, bg: 'rgba(255, 255, 255, 0.2)', c: '#000', t: 'Cristal', r: 16, glass: 'blur(10px)', shadow: 'shadow-soft' },
+    'gradient-box': { n: 'Gradient', w: 250, h: 250, bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', c: '#fff', t: 'Gradient', r: 12 },
+    'popup': { n: 'Modal', w: 400, h: 250, bg: '#ffffff', c: '#000', t: 'Alerta', r: 8, shadow: 'shadow-hard', type: 'popup' }
   };
 
-  function addElement(type) {
-    const t = templates[type]; const id = `el_${counter++}`;
-    let startX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2));
-    let startY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
-    let startW = t.w;
+  // 1. AÑADIR ELEMENTO (Crear nueva capa)
+  function addElement(tKey) {
+    const t = templates[tKey]; 
+    const id = `Capa_${counter++}`;
+    
+    let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2));
+    let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
+    let sW = t.w;
+    
+    if (['header', 'footer', 'section'].includes(t.type)) { sX = 0; sW = canvas.offsetWidth; if (t.type === 'header') sY = 0; }
 
-    // Lógica inteligente para elementos Full Width (Header, Footer, Section)
-    if (['header', 'footer', 'section'].includes(type)) {
-      startX = 0; startW = canvas.offsetWidth;
-      if (type === 'header') startY = 0;
-    }
-
-    elements.push({
-      id, type, x: startX, y: startY, w: startW, h: t.h,
-      bg: t.bg, color: t.color, text: t.text, radius: t.radius,
-      isSpecial: t.isSpecial || null,
-      shadow: t.shadow || 'none', hover: 'none', anim: 'none'
+    elements.push({ 
+      id: id, name: `${t.n} ${counter-1}`, type: t.type || 'div',
+      x: sX, y: sY, w: sW, h: t.h, 
+      bg: t.bg, color: t.c, text: t.t, radius: t.r, 
+      rotation: 0, opacity: 1, 
+      clip: t.clip || 'none', glass: t.glass || 'none', filter: 'none', shadow: t.shadow || 'none',
+      hidden: false 
     });
+    
     selectElement(id);
   }
 
+  // 2. RENDER PRINCIPAL (Lienzo)
   function renderCanvas() {
     canvas.innerHTML = ''; 
-    elements.forEach(el => {
+    
+    // El orden de renderizado depende del índice del array (z-index natural de HTML)
+    elements.forEach((el, index) => {
+      if (el.hidden) return; // Si la capa está oculta, no renderizar
+      
       const node = document.createElement('div');
       node.id = el.id;
-      node.className = `canvas-element ${selectedId === el.id ? 'selected' : ''} ${el.shadow !== 'none' ? el.shadow : ''} ${el.hover !== 'none' ? el.hover : ''} ${el.anim !== 'none' ? el.anim : ''}`;
+      node.className = `canvas-element ${selectedId === el.id ? 'selected' : ''} ${el.shadow !== 'none' && el.type !== 'popup' ? el.shadow : ''}`;
       
-      // Ajuste visual para el popup (simular que está por encima de todo)
-      if (el.isSpecial === 'popup') node.style.zIndex = "50";
+      // Aplicar estilos geométricos y visuales
+      node.style.zIndex = index + 1; // Z-index real basado en posición de capa
+      if (el.type === 'popup') node.style.zIndex = 1000;
       
-      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
-      node.style.backgroundColor = el.bg; node.style.color = el.color; node.style.borderRadius = `${el.radius}px`;
-      if(el.bg === 'transparent') node.style.border = '1px dashed #94a3b8';
+      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; 
+      node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
+      node.style.background = el.bg; node.style.color = el.color; 
+      
+      // Manejo de radius (el input manda %)
+      node.style.borderRadius = el.radius > 100 ? `${el.radius}px` : `${el.radius}px`; 
+      if (el.radius > 100 && el.w === el.h) node.style.borderRadius = '50%'; // hack visual para circulos
+      
+      if (el.bg === 'transparent') node.style.border = '1px dashed #aaa';
 
+      // Efectos Profesionales
+      node.style.transform = `rotate(${el.rotation}deg)`;
+      node.style.opacity = el.opacity;
+      if (el.clip !== 'none') node.style.clipPath = el.clip;
+      if (el.glass !== 'none') { node.style.backdropFilter = el.glass; node.style.webkitBackdropFilter = el.glass; }
+      if (el.filter !== 'none') node.style.filter = el.filter;
+
+      // Renderizado interno de HTML
       let innerHTML = '';
-      
-      if(el.isSpecial === 'image') innerHTML = `<img src="https://via.placeholder.com/${Math.round(el.w)}x${Math.round(el.h)}?text=Foto" style="width:100%; height:100%; object-fit:cover; border-radius:${el.radius}px; pointer-events:none;">`;
-      else if (el.isSpecial === 'input') innerHTML = `<input type="text" placeholder="${el.text}" style="width:100%; height:100%; border:1px solid #cbd5e1; border-radius:${el.radius}px; padding:10px; pointer-events:none; background:${el.bg}; color:${el.color};">`;
-      else if (el.isSpecial === 'select') innerHTML = `<select style="width:100%; height:100%; border:1px solid #cbd5e1; border-radius:${el.radius}px; padding:10px; pointer-events:none; background:${el.bg}; color:${el.color};"><option>${el.text}</option></select>`;
-      else if (el.isSpecial === 'button') innerHTML = `<button style="width:100%; height:100%; border:none; background:transparent; color:inherit; font-weight:600; font-size:14px; pointer-events:none;">${el.text}</button>`;
-      else if (el.isSpecial === 'card') innerHTML = `<div style="display:flex; flex-direction:column; width:100%; height:100%;"><div style="height:150px; background:#e2e8f0; width:100%;"></div><div style="padding:20px; display:flex; flex-direction:column; gap:12px;"><div style="height:16px; width:60%; background:#cbd5e1; border-radius:4px;"></div><div style="height:10px; width:90%; background:#f1f5f9; border-radius:2px;"></div><div style="margin-top:auto; height:35px; width:100%; background:${el.color}; border-radius:6px;"></div></div></div>`;
-      else if (el.isSpecial === 'dropdown') innerHTML = `<span style="pointer-events:none; font-weight:600;">${el.text}</span><div class="preview-dropdown-content"><div style="padding:12px; border-bottom:1px solid #eee; color:#333; font-size:13px;">Perfil</div><div style="padding:12px; color:#333; font-size:13px;">Cerrar Sesión</div></div>`;
-      else if (el.isSpecial === 'header') innerHTML = `<div style="width:100%; padding:0 20px; display:flex; justify-content:space-between; align-items:center; font-weight:bold;"><span>${el.text}</span><span style="font-size:12px; background:rgba(0,0,0,0.1); padding:6px 12px; border-radius:4px;">Menú</span></div>`;
-      else if (el.isSpecial === 'popup') innerHTML = `<div style="width:100%; height:100%; display:flex; flex-direction:column;"><div style="padding:15px; border-bottom:1px solid #eee; font-weight:bold; font-size:16px;">${el.text}</div><div style="padding:15px; flex:1; font-size:14px; color:#475569;">Este es un modal centrado en la pantalla. Ideal para avisos o formularios emergentes.</div><div style="padding:15px; display:flex; justify-content:flex-end;"><button style="padding:8px 16px; background:#ef4444; color:white; border:none; border-radius:4px;">Cerrar</button></div></div>`;
-      else innerHTML = `<span style="padding:15px; text-align:center; font-size:15px;">${el.text}</span>`;
+      if(el.type === 'img') innerHTML = `<img src="https://via.placeholder.com/${Math.round(el.w)}x${Math.round(el.h)}?text=Foto" style="width:100%; height:100%; object-fit:cover; pointer-events:none;">`;
+      else if (el.type === 'input') innerHTML = `<input type="text" placeholder="${el.text}" style="width:100%; height:100%; border:1px solid #ccc; background:transparent; color:inherit; padding:10px; pointer-events:none; outline:none;">`;
+      else if (el.type === 'btn') innerHTML = `<button style="width:100%; height:100%; border:none; background:transparent; color:inherit; font-weight:bold; font-size:14px; pointer-events:none;">${el.text}</button>`;
+      else if (el.type === 'header') innerHTML = `<div style="width:100%; padding:0 20px; display:flex; justify-content:space-between; align-items:center; font-weight:bold;"><span>${el.text}</span><span>Menú</span></div>`;
+      else if (el.type === 'popup') innerHTML = `<div style="width:100%; height:100%; display:flex; flex-direction:column; box-shadow: 0 0 0 999px rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.3);"><div style="padding:15px; border-bottom:1px solid #eee; font-weight:bold;">${el.text}</div><div style="padding:15px; flex:1;">Contenido Modal</div></div>`;
+      else innerHTML = `<span style="padding:15px; text-align:center;">${el.text}</span>`;
 
-      node.innerHTML = `${selectedId === el.id ? `<div class="measure-tag">${Math.round(el.w)}px × ${Math.round(el.h)}px</div>` : ''}${innerHTML}<div class="resizer"></div>`;
+      // Etiqueta de medida al redimensionar/seleccionar
+      node.innerHTML = `${selectedId === el.id ? `<div style="position:absolute; top:-25px; left:0; background:var(--accent); color:#fff; font-size:10px; padding:2px 5px; border-radius:3px; white-space:nowrap; transform: rotate(${-el.rotation}deg);">${Math.round(el.w)}x${Math.round(el.h)}</div>` : ''}${innerHTML}<div class="resizer"></div>`;
       
+      // Eventos Drag & Resize
       node.addEventListener('mousedown', (e) => { if(e.target.classList.contains('resizer')) return; selectElement(el.id); startDrag(e, el); });
       const resizer = node.querySelector('.resizer');
       if(resizer) resizer.addEventListener('mousedown', (e) => { e.stopPropagation(); selectElement(el.id); startResize(e, el); });
       
       canvas.appendChild(node);
     });
-    if(selectedId) drawGuides();
-    generateCode();
+
+    renderLayersPanel(); // Actualizar panel de capas
+    updatePropsUI();     // Actualizar panel derecho
+    generateCode();      // Generar código en tiempo real
   }
 
-  // Interacción básica (Drag & Resize)
-  function startDrag(e, el) {
-    let sX = e.clientX, sY = e.clientY;
-    function move(ev) { el.x += ev.clientX - sX; el.y += ev.clientY - sY; if(el.x<0) el.x=0; if(el.y<0) el.y=0; sX = ev.clientX; sY = ev.clientY; renderCanvas(); updatePropsUI(); }
-    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); }
-    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
-  }
-  function startResize(e, el) {
-    let sX = e.clientX, sY = e.clientY;
-    function move(ev) { el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY)); sX = ev.clientX; sY = ev.clientY; renderCanvas(); updatePropsUI(); }
-    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); }
-    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  // 3. RENDER DE PANEL DE CAPAS (Estilo Photoshop)
+  function renderLayersPanel() {
+    const list = document.getElementById('layers-list');
+    list.innerHTML = '';
+    
+    if (elements.length === 0) {
+      list.innerHTML = '<div style="color:#666; font-size:11px; text-align:center; margin-top:20px;">Lienzo vacío</div>';
+      return;
+    }
+
+    // Recorremos en reversa para que la capa más alta (último en el array) salga arriba en la lista
+    for (let i = elements.length - 1; i >= 0; i--) {
+      const el = elements[i];
+      const div = document.createElement('div');
+      div.className = `layer-item ${selectedId === el.id ? 'active' : ''} ${el.hidden ? 'hidden-layer' : ''}`;
+      
+      div.innerHTML = `
+        <span onclick="toggleVisibility('${el.id}', event)" style="cursor:pointer;">${el.hidden ? '👁️‍🗨️' : '👁️'}</span>
+        <span class="layer-name" onclick="selectElement('${el.id}')">${el.name}</span>
+        <div class="layer-actions">
+          <button class="layer-btn" onclick="moveLayer('${el.id}', 1, event)" title="Subir Capa">↑</button>
+          <button class="layer-btn" onclick="moveLayer('${el.id}', -1, event)" title="Bajar Capa">↓</button>
+          <button class="layer-btn" onclick="deleteElement('${el.id}', event)" title="Borrar" style="color:#ff4444;">×</button>
+        </div>
+      `;
+      list.appendChild(div);
+    }
   }
 
-  function drawGuides() {
-    const el = elements.find(e => e.id === selectedId); if(!el) return;
-    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-    const line = (cls, css, txt) => { const l = document.createElement('div'); l.className=`guide-line ${cls}`; Object.assign(l.style, css); l.innerHTML=`<span class="guide-label">${txt}</span>`; canvas.appendChild(l); };
-    if(el.y > 0) line('vertical', { top: 0, left: `${el.x+el.w/2}px`, height: `${el.y}px` }, `Top: ${Math.round(el.y)}px`);
-    if(el.x > 0) line('horizontal', { top: `${el.y+el.h/2}px`, left: 0, width: `${el.x}px` }, `Left: ${Math.round(el.x)}px`);
-    if(cw-(el.x+el.w)>0) line('horizontal', { top: `${el.y+el.h/2}px`, left: `${el.x+el.w}px`, width: `${cw-(el.x+el.w)}px` }, `Right: ${Math.round(cw-(el.x+el.w))}px`);
-    if(ch-(el.y+el.h)>0) line('vertical', { top: `${el.y+el.h}px`, left: `${el.x+el.w/2}px`, height: `${ch-(el.y+el.h)}px` }, `Bot: ${Math.round(ch-(el.y+el.h))}px`);
+  // LÓGICA DE CAPAS
+  function toggleVisibility(id, e) {
+    e.stopPropagation();
+    const el = elements.find(x => x.id === id);
+    if(el) el.hidden = !el.hidden;
+    renderCanvas();
   }
 
-  function selectElement(id) { selectedId = id; renderCanvas(); updatePropsUI(); }
-  function deleteSelected() { if(!selectedId) return; elements = elements.filter(el => el.id !== selectedId); selectedId = null; renderCanvas(); updatePropsUI(); }
-  function switchTab(tab) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${tab}`).classList.add('active'); }
+  function moveLayer(id, dir, e) {
+    e.stopPropagation();
+    const idx = elements.findIndex(x => x.id === id);
+    if (idx === -1) return;
+    
+    const newIdx = idx + dir;
+    // Evitar salir del array
+    if (newIdx < 0 || newIdx >= elements.length) return;
+    
+    // Swap en el array
+    const temp = elements[idx];
+    elements[idx] = elements[newIdx];
+    elements[newIdx] = temp;
+    
+    renderCanvas();
+  }
+
+  function deleteElement(id, e) {
+    if(e) e.stopPropagation();
+    elements = elements.filter(x => x.id !== id);
+    if (selectedId === id) selectedId = null;
+    renderCanvas();
+  }
+
+  // DRAG & RESIZE (Core functionality)
+  function startDrag(e, el) { 
+    let sX = e.clientX, sY = e.clientY; 
+    function move(ev) { el.x += ev.clientX - sX; el.y += ev.clientY - sY; sX=ev.clientX; sY=ev.clientY; renderCanvas(); } 
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); } 
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up); 
+  }
+  function startResize(e, el) { 
+    let sX = e.clientX, sY = e.clientY; 
+    function move(ev) { el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY)); sX=ev.clientX; sY=ev.clientY; renderCanvas(); } 
+    function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); } 
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up); 
+  }
+
+  // UI Y PROPIEDADES
+  function selectElement(id) { selectedId = id; renderCanvas(); }
+  function switchTab(t) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
   function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; setTimeout(() => renderCanvas(), 310); }
 
   function updatePropsUI() {
     if(!selectedId) { document.getElementById('no-selection').style.display='block'; document.getElementById('props-form').style.display='none'; return; }
     document.getElementById('no-selection').style.display='none'; document.getElementById('props-form').style.display='block';
+    
     const el = elements.find(e => e.id === selectedId);
-    ['x','y','w','h','radius'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p]));
-    document.getElementById('prop-bg').value = el.bg.startsWith('#') ? el.bg : '#ffffff'; 
+    if(!el) return;
+
+    ['x','y','w','h','radius','rotation'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p] || 0));
+    document.getElementById('prop-bg').value = el.bg;
+    
+    // Auxiliar para el selector de color si el bg es un HEX válido
+    if(el.bg.startsWith('#') && el.bg.length === 7) {
+      document.getElementById('prop-bg-color').value = el.bg;
+    }
+    
     document.getElementById('prop-color').value = el.color.startsWith('#') ? el.color : '#000000';
-    ['text','shadow','hover','anim'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
+    document.getElementById('prop-opacity').value = el.opacity;
+    ['text','shadow','clip','glass','filter'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
   }
+
+  // Sincroniza el color picker auxiliar con el input de texto del Background
+  function syncColorToBg() {
+    const color = document.getElementById('prop-bg-color').value;
+    document.getElementById('prop-bg').value = color;
+    updateEl();
+  }
+
   function updateEl() {
-    if(!selectedId) return; const el = elements.find(e => e.id === selectedId);
-    ['x','y','w','h','radius'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
-    ['bg','color','text','shadow','hover','anim'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
+    if(!selectedId) return; 
+    const el = elements.find(e => e.id === selectedId);
+    
+    ['x','y','w','h','radius','rotation'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
+    ['bg','color','text','shadow','clip','glass','filter'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
+    el.opacity = parseFloat(document.getElementById('prop-opacity').value) || 1;
+    
     renderCanvas();
   }
 
-  // --- MOTOR DE GENERACIÓN INTELIGENTE ---
+  // EXPORTADOR HTML/CSS AVANZADO
   function getElementCode(el) {
-    let tag = 'div', innerHTML = el.text, css = '', animKeyframes = '';
+    let tag = 'div', html = el.text, css = '';
     
-    // Semántica HTML
-    if(el.isSpecial === 'header') tag = 'header';
-    if(el.isSpecial === 'footer') tag = 'footer';
-    if(el.isSpecial === 'section') tag = 'section';
-    if(el.isSpecial === 'text') { tag = 'p'; css += `  font-size: 16px;\n  line-height: 1.5;\n`; }
-    if(el.isSpecial === 'button') { tag = 'button'; css += `  border: none;\n  cursor: pointer;\n  font-weight: 600;\n  font-size: 15px;\n`; }
-    if(el.isSpecial === 'image') { tag = 'img'; innerHTML = ''; css += `  object-fit: cover;\n`; }
-    if(el.isSpecial === 'input') { tag = 'input'; innerHTML = ''; css += `  padding: 12px;\n  border: 1px solid #cbd5e1;\n  outline: none;\n`; }
-    if(el.isSpecial === 'select') { tag = 'select'; innerHTML = `\n    <option>${el.text}</option>\n    <option>Siguiente Opción</option>\n  `; css += `  padding: 12px;\n  border: 1px solid #cbd5e1;\n`; }
+    if(el.type === 'header') { tag = 'header'; html = `\n  <div class="logo">${el.text}</div>\n  <nav><a href="#">Inicio</a></nav>\n`; css += `  display: flex; justify-content: space-between; align-items: center; padding: 0 40px;\n}\n.MI_CLASE nav a { color: inherit; text-decoration: none; font-weight: normal; }`; }
+    else if(el.type === 'footer') { tag = 'footer'; html = `\n  <p>${el.text}</p>\n`; css += `  display: flex; justify-content: center; align-items: center;\n`; }
+    else if(el.type === 'section') { tag = 'section'; }
+    else if(el.type === 'img') { tag = 'img'; html = ''; css += `  object-fit: cover;\n`; }
+    else if(el.type === 'btn') { tag = 'button'; css += `  border: none; cursor: pointer; font-weight: bold;\n`; }
+    else if(el.type === 'input') { tag = 'input'; html = ''; css += `  padding: 10px; border: 1px solid #ccc; outline: none;\n`; }
+    else if(el.type === 'popup') { tag = 'dialog'; html = `\n  <h3>${el.text}</h3>\n  <p>Contenido modal</p>\n`; css += `  position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); border: none; padding: 20px; box-shadow: 0 0 0 100vw rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.3) !important; z-index: 9999;\n`; }
+
+    // Procesar Geometría Especial (Clip-Path & Radius)
+    if(el.clip !== 'none') css += `  clip-path: ${el.clip};\n`;
+    if(el.radius > 100 && el.w === el.h) css += `  border-radius: 50%;\n`; 
+    else if(el.radius > 0) css += `  border-radius: ${el.radius}px;\n`;
     
-    // Estructuras Internas
-    if(el.isSpecial === 'header') {
-      innerHTML = `\n    <div class="logo">${el.text}</div>\n    <nav>\n      <a href="#">Inicio</a>\n      <a href="#">Servicios</a>\n      <a href="#">Contacto</a>\n    </nav>\n  `;
-      css += `  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0 40px;\n  box-sizing: border-box;\n}\n.MI_CLASE .logo {\n  font-size: 24px;\n  font-weight: bold;\n}\n.MI_CLASE nav a {\n  margin-left: 20px;\n  text-decoration: none;\n  color: inherit;\n`;
-    }
-    if(el.isSpecial === 'card') {
-      innerHTML = `\n    <img src="imagen.jpg" alt="Portada">\n    <div class="card-body">\n      <h3>Título de Tarjeta</h3>\n      <p>Texto descriptivo para este bloque.</p>\n      <button>Leer más</button>\n    </div>\n  `;
-      css += `  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n.MI_CLASE img {\n  height: 200px;\n  object-fit: cover;\n  background: #e2e8f0;\n}\n.MI_CLASE .card-body {\n  padding: 20px;\n  display: flex;\n  flex-direction: column;\n  gap: 15px;\n}\n.MI_CLASE button {\n  margin-top: auto;\n  padding: 10px;\n  background: #2563eb;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n`;
-    }
-    if(el.isSpecial === 'popup') {
-      innerHTML = `\n    <div class="modal-header">\n      <h2>${el.text}</h2>\n      <button class="close-btn">&times;</button>\n    </div>\n    <div class="modal-body">\n      <p>Contenido principal del modal o formulario.</p>\n    </div>\n    <div class="modal-footer">\n      <button class="btn-primary">Aceptar</button>\n    </div>\n  `;
-      // El CSS del popup incluye un truco de centrado absoluto/fijo muy usado
-      css += `  position: fixed !important; /* Sobreescribe el layout global */\n  top: 50% !important;\n  left: 50% !important;\n  transform: translate(-50%, -50%);\n  z-index: 1000;\n  display: flex;\n  flex-direction: column;\n  /* Sombra gigante para simular el fondo oscuro (Backdrop) */\n  box-shadow: 0 0 0 9999px rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.3) !important;\n}\n.MI_CLASE .modal-header {\n  padding: 20px;\n  border-bottom: 1px solid #e2e8f0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.MI_CLASE .modal-header h2 { margin: 0; font-size: 18px; }\n.MI_CLASE .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; }\n.MI_CLASE .modal-body { padding: 20px; flex: 1; }\n.MI_CLASE .modal-footer { padding: 20px; text-align: right; border-top: 1px solid #e2e8f0; }\n.MI_CLASE .btn-primary { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; }\n.MI_CLASE .btn-primary:hover { filter: brightness(1.1);`;
-    }
-    if(el.isSpecial === 'dropdown') {
-      innerHTML = `\n    <span>${el.text}</span>\n    <ul class="submenu">\n      <li><a href="#">Perfil</a></li>\n      <li><a href="#">Configuración</a></li>\n      <li><a href="#">Salir</a></li>\n    </ul>\n  `;
-      css += `  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n}\n.MI_CLASE .submenu {\n  display: none; /* Oculto por defecto */\n  position: absolute;\n  top: 100%; left: 0;\n  background: #fff;\n  box-shadow: 0 10px 25px rgba(0,0,0,0.1);\n  min-width: 180px;\n  border-radius: 6px;\n  padding: 0;\n  margin: 5px 0 0 0;\n  list-style: none;\n  flex-direction: column;\n  z-index: 50;\n}\n.MI_CLASE:hover .submenu {\n  display: flex; /* Muestra al hacer hover */\n}\n.MI_CLASE .submenu li a {\n  display: block;\n  padding: 12px 20px;\n  color: #334155;\n  text-decoration: none;\n  border-bottom: 1px solid #f1f5f9;\n}\n.MI_CLASE .submenu li a:hover {\n  background: #f8fafc;\n`;
-    }
-
-    // Efectos Visuales
-    if(el.shadow === 'shadow-soft') css += `  box-shadow: 0 4px 15px rgba(0,0,0,0.08);\n`;
-    if(el.shadow === 'shadow-hard' && el.isSpecial !== 'popup') css += `  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n`;
+    // Procesar Renderizado (Opacidad, Rotación, Filtros)
+    let transformRules = [];
+    if(el.rotation !== 0) transformRules.push(`rotate(${el.rotation}deg)`);
+    if(transformRules.length > 0 && el.type !== 'popup') css += `  transform: ${transformRules.join(' ')};\n`;
     
-    if(el.hover === 'hover-scale') css += `  transition: transform 0.3s ease;\n}\n.MI_CLASE:hover {\n  transform: scale(1.05);\n`;
-    if(el.hover === 'hover-color') css += `  transition: filter 0.3s ease;\n}\n.MI_CLASE:hover {\n  filter: brightness(1.2);\n`;
+    if(el.opacity < 1) css += `  opacity: ${el.opacity};\n`;
+    if(el.glass !== 'none') css += `  backdrop-filter: ${el.glass};\n  -webkit-backdrop-filter: ${el.glass};\n`;
+    if(el.filter !== 'none') css += `  filter: ${el.filter};\n`;
+    if(el.shadow === 'shadow-soft') css += `  box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n`;
+    if(el.shadow === 'shadow-hard' && el.type !== 'popup') css += `  box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n`;
 
-    // Animaciones
-    if(el.anim === 'anim-spin') { css += `  animation: girar 3s linear infinite;\n`; animKeyframes = `\n@keyframes girar {\n  100% { transform: rotate(360deg); }\n}`; }
-    if(el.anim === 'anim-bounce') { css += `  animation: flotar 3s ease-in-out infinite;\n`; animKeyframes = `\n@keyframes flotar {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-15px); }\n}`; }
-    if(el.anim === 'anim-pulse') { css += `  animation: latir 2s ease-in-out infinite;\n`; animKeyframes = `\n@keyframes latir {\n  0%, 100% { transform: scale(1); }\n  50% { transform: scale(1.05); }\n}`; }
-
-    return { tag, innerHTML, css, animKeyframes };
+    return { tag, html, css };
   }
 
   function generateCode() {
     if(elements.length === 0) return;
-    let htmlG = `<div class="layout-principal">\n`, cssG = `/* Reset Básico */\n* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n  font-family: system-ui, sans-serif;\n}\n\n.layout-principal {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  background-color: #ffffff;\n}\n\n`;
+    
+    let htmlG = `<div class="workspace-layout">\n`;
+    let cssG = `/* Reset */\n* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }\n.workspace-layout { position: relative; width: 100%; min-height: 100vh; overflow-x: hidden; }\n\n`;
 
-    elements.forEach(el => {
+    // Para el código global, sí respetamos el z-index (orden del array)
+    elements.forEach((el, index) => {
+      if(el.hidden) return; // No exportar capas ocultas
+      
       const data = getElementCode(el);
-      let extraAttrs = "";
-      if (el.isSpecial === 'image') extraAttrs = ' src="imagen.jpg" alt="Imagen Descriptiva"';
-      if (el.isSpecial === 'input') extraAttrs = ` placeholder="${el.text}"`;
+      let attrs = "";
+      if (el.type === 'img') attrs = ' src="imagen.jpg" alt="img"';
+      if (el.type === 'input') attrs = ` placeholder="${el.text}"`;
 
-      htmlG += `  <${data.tag} class="${el.id}"${extraAttrs}>${data.innerHTML}</${data.tag}>\n`;
+      htmlG += `  <!-- ${el.name} -->\n  <${data.tag} class="${el.id}"${attrs}>${data.html}</${data.tag}>\n`;
       
-      // Lógica para exportar Full Width vs Absoluto
       let widthRule = `width: ${Math.round(el.w)}px;`;
-      let positionRule = `position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px;`;
-      
-      // Si el elemento abarca el 100% del canvas (como Headers/Footers), exportamos 100% para que sea responsivo en código real
-      if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) {
-        widthRule = `width: 100%;`;
-      }
+      if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) widthRule = `width: 100%;`;
 
-      let cssBlock = `.${el.id} {\n  ${positionRule}\n  ${widthRule}\n  height: ${Math.round(el.h)}px;\n  background-color: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n`;
+      let cssBlock = `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${index + 1};\n  ${widthRule} height: ${Math.round(el.h)}px;\n  background: ${el.bg}; color: ${el.color};\n`;
       
       cssBlock += data.css.replace(/MI_CLASE/g, el.id);
-      cssBlock += `}\n${data.animKeyframes}\n`;
+      cssBlock += `}\n\n`;
       cssG += cssBlock;
     });
     htmlG += `</div>`;
 
-    document.getElementById('code-html-global').textContent = htmlG;
+    document.getElementById('code-html-global').textContent = htmlG; 
     document.getElementById('code-css-global').textContent = cssG;
 
     // Código Aislado
     if(selectedId) {
-      const el = elements.find(e => e.id === selectedId);
+      const el = elements.find(e => e.id === selectedId); 
       const data = getElementCode(el);
-      let extraAttrs = "";
-      if (el.isSpecial === 'image') extraAttrs = ' src="imagen.jpg" alt="Imagen"';
-      if (el.isSpecial === 'input') extraAttrs = ` placeholder="${el.text}"`;
+      let attrs = ""; 
+      if (el.type === 'img') attrs = ' src="imagen.jpg"'; 
+      if (el.type === 'input') attrs = ` placeholder="${el.text}"`;
       
-      document.getElementById('code-html-single').textContent = `<${data.tag} class="componente-personalizado"${extraAttrs}>${data.innerHTML}</${data.tag}>`;
+      document.getElementById('code-html-single').textContent = `<${data.tag} class="mi-componente"${attrs}>${data.html}</${data.tag}>`;
       
-      let cssS = `/* Estilos del componente. (Puedes borrar position, left y top si usas Flexbox/Grid) */\n.componente-personalizado {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n  background-color: ${el.bg}; color: ${el.color};\n  border-radius: ${el.radius}px;\n`;
-      
-      cssS += data.css.replace(/MI_CLASE/g, 'componente-personalizado');
-      cssS += `}\n${data.animKeyframes}`;
+      let cssS = `/* Estilo aislado de: ${el.name} */\n.mi-componente {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n  background: ${el.bg}; color: ${el.color};\n`;
+      cssS += data.css.replace(/MI_CLASE/g, 'mi-componente') + `}\n`;
       document.getElementById('code-css-single').textContent = cssS;
     } else {
-      document.getElementById('code-html-single').textContent = '<!-- Selecciona un elemento -->';
-      document.getElementById('code-css-single').textContent = '/* Selecciona un elemento */';
+      document.getElementById('code-html-single').textContent = '<!-- Selecciona una capa -->'; 
+      document.getElementById('code-css-single').textContent = '/* Selecciona una capa */';
     }
   }
 
-  // --- FUNCIÓN DE DESCARGA (EXPORTAR PROYECTO) ---
   function downloadProject() {
-    if(elements.length === 0) {
-      alert("Añade al menos un elemento antes de descargar tu proyecto.");
-      return;
+    if(elements.length === 0) return alert("Agrega capas primero.");
+    const fullHtml = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Exportación Master Layout</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
+    downloadFile('index.html', fullHtml); 
+    setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
+  }
+  function downloadFile(f, t) { const a = document.createElement('a'); a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(t); a.download = f; a.style.display = 'none'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+
+  // Atajos de teclado (Borrar con Suprimir)
+  document.addEventListener('keydown', (e) => { 
+    if (!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName) && (e.key === 'Delete' || e.key === 'Backspace')) {
+      if(selectedId) deleteElement(selectedId);
     }
-    
-    const htmlBody = document.getElementById('code-html-global').textContent;
-    const cssContent = document.getElementById('code-css-global').textContent;
-    
-    // Plantilla HTML profesional
-    const fullHtml = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Mi Proyecto Web</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${htmlBody}\n\n</body>\n</html>`;
+  });
 
-    // Descargar HTML
-    downloadFile('index.html', fullHtml);
-    
-    // Descargar CSS (Pequeño retraso para que el navegador permita ambas descargas)
-    setTimeout(() => {
-      downloadFile('style.css', cssContent);
-    }, 500);
-  }
+  // Deseleccionar al dar clic en el fondo
+  canvas.addEventListener('mousedown', (e) => { 
+    if(e.target === canvas) { selectedId = null; renderCanvas(); } 
+  });
 
-  function downloadFile(filename, text) {
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  }
-
-  document.addEventListener('keydown', (e) => { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && (e.key === 'Delete' || e.key === 'Backspace')) deleteSelected(); });
-  canvas.addEventListener('mousedown', (e) => { if(e.target === canvas) { selectedId = null; renderCanvas(); updatePropsUI(); } });
+  // Init
   generateCode();
 </script>
 </body>
