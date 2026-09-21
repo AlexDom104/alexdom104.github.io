@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout Pro - Enterprise Engine V4</title>
+<title>Master Layout Pro - V15 Ultimate</title>
 <style>
   :root { 
     --bg-app: #0f111a; --bg-panel: #1a1d27; --bg-light: #282c3a;
@@ -31,8 +31,8 @@
   /* LAYOUT MAIN */
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
   
-  /* SIDEBAR (CATÁLOGO) */
-  .sidebar { width: 280px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  /* SIDEBAR (CATÁLOGO MASIVO) */
+  .sidebar { width: 290px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
   .search-box { padding: 15px; border-bottom: 1px solid var(--border); background: #14171f; }
   .search-box input { width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 12px; outline: none; }
   .search-box input:focus { border-color: var(--accent); }
@@ -62,7 +62,7 @@
   body.interact-mode .resizer { display: none !important; }
   body.interact-mode .element.selected { outline: none; }
   
-  .element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 99999; }
+  .element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 99999 !important; }
   .resizer { width: 12px; height: 12px; background: var(--accent); position: absolute; right: -6px; bottom: -6px; cursor: nwse-resize; display: none; z-index: 9999; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
   .element.selected .resizer { display: block; }
   .inner-content { width: 100%; height: 100%; display: flex; }
@@ -78,7 +78,6 @@
   /* PROPIEDADES UI */
   .props-container { padding: 15px; }
   
-  /* Botones de Reset y Alineación */
   .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
   .action-grid button { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: 0.2s; text-transform: uppercase; font-weight: bold;}
   .action-grid button:hover { background: #334155; color: #fff; border-color: var(--accent); }
@@ -102,7 +101,7 @@
   pre { margin: 0; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; max-height: 300px; overflow-y: auto;}
   .html-code { color: #e6db74; } .css-code { color: #66d9ef; }
 
-  /* MODO PREVIEW STYLES (Ocultar UI para ver limpio) */
+  /* MODO PREVIEW STYLES */
   body.preview-mode header { display: none; }
   body.preview-mode .sidebar { display: none; }
   body.preview-mode .right-panel { display: none; }
@@ -118,18 +117,17 @@
 
   <header>
     <div class="logo">
-      <h1>Master Layout Pro V4</h1>
-      <p>Núcleo Empresarial & Atajos Web</p>
+      <h1>Master Layout Pro V15</h1>
+      <p>Núcleo Extendido & Catálogo Total</p>
     </div>
     
-    <!-- BARRA DE HERRAMIENTAS CENTRAL (HISTORIAL Y MODOS) -->
     <div class="controls-center">
-      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶ Deshacer</button>
-      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷ Rehacer</button>
+      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶</button>
+      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷</button>
       <div class="divider"></div>
-      <button class="active" id="btn-edit" onclick="setMode('edit')" title="Construir Layout">🛠️ Edición</button>
-      <button id="btn-interact" onclick="setMode('interact')" title="Probar :hover y clics">🖱️ Interactuar</button>
-      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview Real</button>
+      <button class="active" id="btn-edit" onclick="setMode('edit')" title="Construir Layout">🛠️ Modo Edición</button>
+      <button id="btn-interact" onclick="setMode('interact')" title="Probar :hover y clics">🖱️ Modo Interactivo</button>
+      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview Web</button>
     </div>
 
     <div class="viewports" id="viewport-controls">
@@ -138,17 +136,18 @@
       <button onclick="setViewport('mobile')">Móvil</button>
     </div>
     <div class="top-actions">
-      <button onclick="downloadProject()">⬇ Exportar ZIP</button>
+      <button onclick="downloadProject()">⬇ Exportar Proyecto Web</button>
     </div>
   </header>
 
-  <button class="btn-exit-preview" onclick="setMode('edit')">Salir del Modo Preview (Esc)</button>
+  <button class="btn-exit-preview" onclick="setMode('edit')">Salir del Preview (Esc)</button>
 
   <div class="workspace">
-    <!-- SIDEBAR -->
+    
+    <!-- SIDEBAR (BUSCADOR Y CATÁLOGO MASIVO) -->
     <div class="sidebar">
       <div class="search-box">
-        <input type="text" id="cat-search" placeholder="🔍 Buscar elemento (ej. 'slider', 'modal')..." oninput="filterSidebar()">
+        <input type="text" id="cat-search" placeholder="🔍 Buscar elemento (ej. 'cyberpunk', 'glass')..." oninput="filterSidebar()">
       </div>
       <div class="catalog-scroll" id="sidebar-content"></div>
     </div>
@@ -175,27 +174,21 @@
           <div id="canvas-props" style="display: block;">
             <div style="text-align: center; margin-bottom: 15px; font-size: 11px; color: var(--accent);">⚙️ Lienzo Global</div>
             <div class="prop-section">
-              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()"></div>
-              <div class="prop-group"><label>Opacidad Lienzo (%)</label><input type="number" id="canvas-opacity" value="5" min="0" max="100" oninput="updateCanvas()"></div>
+              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()" onchange="saveState()"></div>
+              <div class="prop-group"><label>Opacidad Lienzo (%)</label><input type="number" id="canvas-opacity" value="5" min="0" max="100" oninput="updateCanvas()" onchange="saveState()"></div>
             </div>
             <div style="color: #64748b; font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">
-              <strong>Atajos de Teclado:</strong><br>
-              Ctrl + Z : Deshacer<br>
-              Ctrl + Y : Rehacer<br>
-              Ctrl + C : Copiar<br>
-              Ctrl + V : Pegar<br>
-              Supr : Borrar Elemento
+              <strong>Atajos Pro:</strong><br>Ctrl+Z: Deshacer | Ctrl+Y: Rehacer<br>Ctrl+C: Copiar | Ctrl+V: Pegar<br>Supr: Borrar | Esc: Salir Preview
             </div>
           </div>
 
           <div id="layer-props" style="display: none;">
             
-            <!-- CONTROLES OBS / PHOTOSHOP -->
             <div class="action-grid">
-              <button onclick="resetTransforms()" title="Quita rotaciones y escalas">🔄 Reset Transform</button>
-              <button onclick="resetSize()" title="Devuelve al tamaño original">📐 Reset Tamaño</button>
-              <button onclick="duplicateElement()" title="Duplicar (Ctrl+C / Ctrl+V)">📑 Duplicar Capa</button>
-              <button onclick="deleteElement()" style="color:#ef4444; border-color:#7f1d1d;">🗑️ Borrar (Supr)</button>
+              <button onclick="resetTransforms()">🔄 Reset Transform</button>
+              <button onclick="resetSize()">📐 Reset Tamaño</button>
+              <button onclick="duplicateElement()">📑 Clonar Capa</button>
+              <button onclick="deleteElement()" style="color:#ef4444; border-color:#7f1d1d;">🗑️ Borrar Capa</button>
             </div>
 
             <div class="obs-controls">
@@ -209,58 +202,73 @@
             <div class="prop-section">
               <h4>Posición y Tamaño</h4>
               <div class="prop-row">
-                <div class="prop-group"><label>X</label><input type="number" id="prop-x" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Y</label><input type="number" id="prop-y" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>X</label><input type="number" id="prop-x" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Y</label><input type="number" id="prop-y" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
               <div class="prop-row">
-                <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Alto (H)</label><input type="number" id="prop-h" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Alto (H)</label><input type="number" id="prop-h" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Estética</h4>
-              <div class="prop-group" style="margin-bottom:10px;"><label>Fondo (HEX o Gradient)</label><input type="text" id="prop-bg" oninput="updateElUI()"></div>
+              <h4>Apariencia</h4>
+              <div class="prop-group" style="margin-bottom:10px;"><label>Fondo (HEX o Gradient)</label><input type="text" id="prop-bg" oninput="updateElUI()" onchange="saveState()"></div>
               <div class="prop-row">
-                <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Bordes (px)</label><input type="number" id="prop-radius" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Bordes (px)</label><input type="number" id="prop-radius" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
             </div>
 
-            <!-- EDITOR HTML PROFUNDO -->
             <div class="prop-section">
-              <h4>Estructura Interna (Anidamiento HTML)</h4>
+              <h4>Estructura Interna HTML (Editor Profundo)</h4>
               <div class="prop-group">
-                <label>Aquí puedes agregar Submenús o contenido extra</label>
-                <textarea id="prop-text" oninput="updateElUI()" rows="6" style="font-family: monospace; color:#e6db74; white-space: pre;"></textarea>
+                <textarea id="prop-text" oninput="updateElUI()" onchange="saveState()" rows="6" style="font-family: monospace; color:#e6db74; white-space: pre; font-size:10px;"></textarea>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Transformaciones 3D & Motor Lógico</h4>
+              <h4>Transformaciones & Lógica</h4>
               <div class="prop-row">
-                <div class="prop-group"><label>Rot. Y (3D)</label><input type="number" id="prop-rotY" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Rot. Z</label><input type="number" id="prop-rotZ" oninput="updateElUI()"></div>
-                <div class="prop-group"><label>Escala</label><input type="number" step="0.1" id="prop-scale" oninput="updateElUI()"></div>
+                <div class="prop-group"><label>Rot. Y (3D)</label><input type="number" id="prop-rotY" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Rot. Z</label><input type="number" id="prop-rotZ" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Escala</label><input type="number" step="0.1" id="prop-scale" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
               
               <div class="prop-group" style="margin-top:10px; margin-bottom:10px;">
-                <label>Estilo de Renderizado</label>
-                <select id="prop-style" oninput="updateElUI()">
+                <label>Estilo de Renderizado CSS</label>
+                <select id="prop-style" oninput="updateElUI()" onchange="saveState()">
                   <option value="none">Normal</option>
                   <option value="shadow">Sombra Paralela</option>
                   <option value="neumorphism">Neumorfismo (Soft UI)</option>
                   <option value="glass">Glassmorfismo (Cristal)</option>
+                  <option value="cyberpunk">Cyberpunk (Neón + Glitch)</option>
+                  <option value="skeleton">Skeleton Loader</option>
+                  <option value="neon">Brillo Neón Intenso</option>
                 </select>
               </div>
 
-              <div class="prop-group">
-                <label>Comportamiento Funcional CSS</label>
-                <select id="prop-func" oninput="updateElUI()">
-                  <option value="none">Ninguno (Estático)</option>
+              <div class="prop-group" style="margin-bottom:10px;">
+                <label>Comportamiento Interactivo</label>
+                <select id="prop-func" oninput="updateElUI()" onchange="saveState()">
+                  <option value="none">Estático</option>
                   <option value="hover-dropdown">Menú Desplegable (Hover)</option>
                   <option value="hover-flip">Tarjeta 3D Flip (Hover)</option>
                   <option value="tooltip">Globo de Tooltip (Hover)</option>
+                  <option value="css-tabs">Pestañas Radiales (CSS puro)</option>
+                  <option value="toggle">Interruptor Toggle</option>
+                  <option value="modal-hack">Modal Pop-Up</option>
+                  <option value="css-carousel">Carrusel Infinito</option>
+                </select>
+              </div>
+              
+              <div class="prop-group">
+                <label>Animación Continua (Keyframes)</label>
+                <select id="prop-anim" oninput="updateElUI()" onchange="saveState()">
+                  <option value="none">Ninguna</option>
+                  <option value="float">Flotar (Float)</option>
+                  <option value="pulse">Latir (Pulse)</option>
+                  <option value="spin">Rotar 3D Infinito</option>
                 </select>
               </div>
             </div>
@@ -272,235 +280,163 @@
       <!-- HTML & CSS -->
       <div id="tab-html" class="tab-content">
         <div class="code-section"><div class="code-header">Layout Global</div><pre class="html-code" id="code-html-global"></pre></div>
-        <div class="code-section"><div class="code-header" style="color:var(--accent);">Componente Aislado</div><pre class="html-code" id="code-html-single"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Aislada</div><pre class="html-code" id="code-html-single"></pre></div>
       </div>
       <div id="tab-css" class="tab-content">
         <div class="code-section"><div class="code-header">Estilos Globales</div><pre class="css-code" id="code-css-global"></pre></div>
-        <div class="code-section"><div class="code-header" style="color:var(--accent);">Componente Aislado</div><pre class="css-code" id="code-css-single"></pre></div>
+        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Aislada</div><pre class="css-code" id="code-css-single"></pre></div>
       </div>
 
     </div>
   </div>
 
 <script>
-  // --- ESTADO GLOBAL Y SISTEMA DE HISTORIAL (TIME TRAVEL) ---
-  let elements = []; 
-  let selectedId = null; 
-  let counter = 1; 
+  // --- CORE ENGINE & STATE ---
+  let elements = []; let selectedId = null; let counter = 1; 
+  let historyStack = []; let historyIndex = -1; let clipboard = null;
+  const canvas = document.getElementById('canvas'); const canvasBg = document.getElementById('canvas-bg'); const dynamicCss = document.getElementById('dynamic-css');
   
-  let historyStack = [];
-  let historyIndex = -1;
-  let clipboard = null;
-
-  const canvas = document.getElementById('canvas');
-  const canvasBg = document.getElementById('canvas-bg');
-  const dynamicCss = document.getElementById('dynamic-css');
-  
-  // Guardar estado actual en el historial
   function saveState() {
     const state = JSON.stringify(elements);
-    // Si estamos en medio del historial y hacemos un cambio, borramos el "futuro"
-    if (historyIndex < historyStack.length - 1) {
-      historyStack = historyStack.slice(0, historyIndex + 1);
-    }
-    historyStack.push(state);
-    historyIndex++;
-    // Limitar historial a 30 pasos para no saturar memoria
+    if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex + 1);
+    historyStack.push(state); historyIndex++;
     if(historyStack.length > 30) { historyStack.shift(); historyIndex--; }
   }
-
-  // Deshacer (Undo)
-  function undo() {
-    if (historyIndex > 0) {
-      historyIndex--;
-      elements = JSON.parse(historyStack[historyIndex]);
-      rebuildDOMFromState();
-    }
-  }
-
-  // Rehacer (Redo)
-  function redo() {
-    if (historyIndex < historyStack.length - 1) {
-      historyIndex++;
-      elements = JSON.parse(historyStack[historyIndex]);
-      rebuildDOMFromState();
-    }
-  }
-
-  // Reconstruir todo el lienzo a partir del estado (Usado por Undo/Redo)
-  function rebuildDOMFromState() {
-    // Mantener la selección si el elemento sigue existiendo
+  function undo() { if (historyIndex > 0) { historyIndex--; elements = JSON.parse(historyStack[historyIndex]); rebuildDOM(); } }
+  function redo() { if (historyIndex < historyStack.length - 1) { historyIndex++; elements = JSON.parse(historyStack[historyIndex]); rebuildDOM(); } }
+  
+  function rebuildDOM() {
     const prevSelected = selectedId;
     canvas.querySelectorAll('.element').forEach(n => n.remove());
-    
     elements.forEach(el => {
-      const node = document.createElement('div');
-      node.id = el.id; node.className = 'element';
+      const node = document.createElement('div'); node.id = el.id; node.className = 'element';
       node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
-      
-      node.addEventListener('mousedown', (e) => { 
-        if(document.body.classList.contains('interact-mode')) return;
-        if(e.target.classList.contains('resizer')) return; 
-        selectElement(el.id); startDrag(e, el, node); 
-      });
-      const resizer = node.querySelector('.resizer');
-      resizer.addEventListener('mousedown', (e) => { 
-        if(document.body.classList.contains('interact-mode')) return;
-        e.stopPropagation(); selectElement(el.id); startResize(e, el, node); 
-      });
-      
+      node.addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; if(e.target.classList.contains('resizer')) return; selectElement(el.id); startDrag(e, el, node); });
+      node.querySelector('.resizer').addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; e.stopPropagation(); selectElement(el.id); startResize(e, el, node); });
       canvas.appendChild(node);
     });
-
     applyStylesAndCompile();
-    if(elements.find(e => e.id === prevSelected)) selectElement(prevSelected);
-    else selectElement(null);
+    selectElement(elements.find(e => e.id === prevSelected) ? prevSelected : null);
   }
 
-  // --- ATAJOS DE TECLADO Y PORTAPAPELES (COPY/PASTE) ---
+  // --- SHORTCUTS & ACTIONS ---
   document.addEventListener('keydown', (e) => {
-    // Si estamos escribiendo en un input, no disparamos atajos de lienzo
     if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
-    
-    // Modo Preview Escape
-    if (e.key === 'Escape' && document.body.classList.contains('preview-mode')) {
-      setMode('edit');
-    }
-
+    if (e.key === 'Escape' && document.body.classList.contains('preview-mode')) setMode('edit');
     if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
     if (e.ctrlKey && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
-    
-    if (e.ctrlKey && e.key.toLowerCase() === 'c') {
-      e.preventDefault();
-      if(selectedId) {
-        const el = elements.find(x => x.id === selectedId);
-        clipboard = JSON.parse(JSON.stringify(el)); // Clonación profunda
-        console.log("Copiado al portapapeles");
-      }
-    }
-    
-    if (e.ctrlKey && e.key.toLowerCase() === 'v') {
-      e.preventDefault();
-      if(clipboard) {
-        duplicateElement(clipboard);
-      }
-    }
-
-    if (e.key === 'Delete' || e.key === 'Backspace') {
-      if(selectedId && document.body.classList.contains('edit-mode')) deleteElement();
-    }
+    if (e.ctrlKey && e.key.toLowerCase() === 'c') { e.preventDefault(); if(selectedId) { clipboard = JSON.parse(JSON.stringify(elements.find(x => x.id === selectedId))); } }
+    if (e.ctrlKey && e.key.toLowerCase() === 'v') { e.preventDefault(); if(clipboard) duplicateElement(clipboard); }
+    if (e.key === 'Delete' || e.key === 'Backspace') { if(selectedId && document.body.classList.contains('edit-mode')) deleteElement(); }
   });
 
   function duplicateElement(sourceData = null) {
     const source = sourceData || elements.find(e => e.id === selectedId);
     if(!source) return;
-    
     let newEl = JSON.parse(JSON.stringify(source));
-    newEl.id = `el_${counter++}`;
-    newEl.x += 20; // Offset para que no caiga exactamente encima
-    newEl.y += 20;
-    
+    newEl.id = `el_${counter++}`; newEl.x += 20; newEl.y += 20;
     elements.push(newEl);
-    
-    const node = document.createElement('div');
-    node.id = newEl.id; node.className = 'element';
-    node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
-    
-    node.addEventListener('mousedown', (e) => { 
-      if(document.body.classList.contains('interact-mode')) return;
-      if(e.target.classList.contains('resizer')) return; 
-      selectElement(newEl.id); startDrag(e, newEl, node); 
-    });
-    const resizer = node.querySelector('.resizer');
-    resizer.addEventListener('mousedown', (e) => { 
-      if(document.body.classList.contains('interact-mode')) return;
-      e.stopPropagation(); selectElement(newEl.id); startResize(e, newEl, node); 
-    });
-    
-    canvas.appendChild(node);
-    applyStylesAndCompile();
-    selectElement(newEl.id);
-    saveState();
+    const node = document.createElement('div'); node.id = newEl.id; node.className = 'element'; node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
+    node.addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; if(e.target.classList.contains('resizer')) return; selectElement(newEl.id); startDrag(e, newEl, node); });
+    node.querySelector('.resizer').addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; e.stopPropagation(); selectElement(newEl.id); startResize(e, newEl, node); });
+    canvas.appendChild(node); applyStylesAndCompile(); selectElement(newEl.id); saveState();
+  }
+  function deleteElement() { if(!selectedId) return; elements = elements.filter(x => x.id !== selectedId); document.getElementById(selectedId).remove(); selectElement(null); applyStylesAndCompile(); saveState(); }
+  function resetTransforms() { if(!selectedId) return; const el = elements.find(e => e.id === selectedId); el.rotY = 0; el.rotZ = 0; el.scale = 1; updatePropsUI(); updateElUI(); saveState(); }
+  function resetSize() { if(!selectedId) return; const el = elements.find(e => e.id === selectedId); if(el.baseW && el.baseH) { el.w = el.baseW; el.h = el.baseH; } updatePropsUI(); updateElUI(); saveState(); }
+  function obsAlign(act) {
+    if(!selectedId) return; const el = elements.find(e => e.id === selectedId); const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+    if(act === 'centerH') el.x = (cw - el.w) / 2; if(act === 'centerV') el.y = (ch - el.h) / 2;
+    if(act === 'stretchW') { el.x = 0; el.w = cw; } if(act === 'stretchH') { el.y = 0; el.h = ch; }
+    if(act === 'fit') { el.x = 0; el.y = 0; el.w = cw; el.h = ch; }
+    updatePropsUI(); updateElUI(); saveState();
   }
 
-  function deleteElement() {
-    if(!selectedId) return;
-    elements = elements.filter(x => x.id !== selectedId); 
-    document.getElementById(selectedId).remove(); 
-    selectElement(null); 
-    applyStylesAndCompile();
-    saveState();
-  }
-
-
-  // --- CATÁLOGO DE COMPONENTES ---
+  // --- CATÁLOGO SUPREMO (Más de 60 opciones) ---
   const catalogue = [
-    { cat: 'Layouts', items: [
-      { id: 'div', n: 'Caja Libre', t: 'div', w: 200, h: 200, bg: '#e2e8f0', c: '#0f172a', txt: 'Caja', baseW: 200, baseH: 200 },
-      { id: 'header', n: 'Nav Header', t: 'header', w: 1000, h: 60, bg: '#1e293b', c: '#fff', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 20px; align-items:center;"><b>LOGO</b><nav>Menu</nav></div>', baseW: 1000, baseH: 60 }
+    { cat: 'Layouts Comunes', items: [
+      { id: 'div', n: 'Caja Libre', t: 'div', w: 200, h: 200, bg: '#e2e8f0', c: '#000', txt: 'Caja', baseW: 200, baseH: 200 },
+      { id: 'hero', n: 'Hero Section', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #0f172a, #1e293b)', c: '#fff', fullW: true, txt: '<div style="text-align:center; margin:auto;"><h1 style="font-size:48px;">Web Visual</h1><p style="font-size:18px;">Sin código.</p></div>', baseW: 1000, baseH: 500 },
+      { id: 'navbar', n: 'Barra Nav', t: 'nav', w: 1000, h: 70, bg: '#fff', c: '#000', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 30px; align-items:center;"><b>LOGO</b><div style="display:flex; gap:15px;"><a>Inicio</a><a>Contacto</a></div></div>', baseW: 1000, baseH: 70 },
+      { id: 'footer', n: 'Pie de Página', t: 'footer', w: 1000, h: 100, bg: '#0f172a', c: '#fff', fullW: true, txt: '<div>© 2026 Reservados</div>', baseW: 1000, baseH: 100 },
+      { id: 'grid2', n: 'Grid 2x2', t: 'div', w: 300, h: 300, bg: 'transparent', c: '#000', func: 'grid2', txt: '<div style="background:#cbd5e1;">1</div><div style="background:#94a3b8;">2</div><div style="background:#94a3b8;">3</div><div style="background:#cbd5e1;">4</div>', baseW: 300, baseH: 300 },
+      { id: 'grid3', n: 'Grid 3 Col', t: 'div', w: 900, h: 250, bg: 'transparent', c: '#000', func: 'grid3', txt: '<div style="background:#cbd5e1;">A</div><div style="background:#94a3b8;">B</div><div style="background:#64748b; color:white;">C</div>', baseW: 900, baseH: 250 },
+      { id: 'macwin', n: 'Ventana Mac OS', t: 'div', w: 500, h: 300, bg: '#ffffff', c: '#000', r: 10, style: 'shadow', txt: '<div style="background:#e2e8f0; padding:10px; display:flex; gap:8px; border-radius:10px 10px 0 0;"><div style="width:12px; height:12px; background:#ef4444; border-radius:50%;"></div><div style="width:12px; height:12px; background:#f59e0b; border-radius:50%;"></div><div style="width:12px; height:12px; background:#10b981; border-radius:50%;"></div></div><div style="padding:20px;">Contenido de la ventana...</div>', baseW: 500, baseH: 300 }
     ]},
-    { cat: 'UI Avanzada', items: [
-      { id: 'dropdown', n: 'Menú Desplegable', t: 'div', w: 160, h: 50, bg: '#3b82f6', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Opciones ▼\n<ul class="sub">\n  <li><a href="#">Perfil</a></li>\n  <li><a href="#">Ajustes</a></li>\n  <li><a href="#">Salir</a></li>\n</ul>', baseW: 160, baseH: 50 },
-      { id: 'flipcard', n: 'Tarjeta 3D Flip', t: 'div', w: 250, h: 350, bg: 'transparent', c: '#ffffff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">FRENTE</div>\n<div class="back" style="background:#f43f5e; border-radius:12px;">REVERSO</div>', baseW: 250, baseH: 350 },
-      { id: 'tabs', n: 'Pestañas (Tabs)', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<!-- Pestañas CSS Puro -->\n<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Tab 1</label>\n  <label for="t2">Tab 2</label>\n</div>\n<div class="tab-content c1">Contenido 1</div>\n<div class="tab-content c2">Contenido 2</div>', baseW: 400, baseH: 250 },
+    { cat: 'UI Funcional (CSS Puro)', items: [
+      { id: 'dropdown', n: 'Menú Hover', t: 'div', w: 160, h: 50, bg: '#3b82f6', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Opciones ▼\n<ul class="sub">\n  <li><a href="#">Perfil</a></li>\n  <li><a href="#">Ajustes</a></li>\n</ul>', baseW: 160, baseH: 50 },
+      { id: 'tabs', n: 'Pestañas Tabs', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Diseño</label>\n  <label for="t2">Código</label>\n</div>\n<div class="tab-content c1">Panel 1.</div>\n<div class="tab-content c2">Panel 2.</div>', baseW: 400, baseH: 250 },
+      { id: 'flip', n: 'Flip Card 3D', t: 'div', w: 220, h: 320, bg: 'transparent', c: '#fff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">Pasa el Ratón</div>\n<div class="back" style="background:#f43f5e; border-radius:12px;">Sorpresa</div>', baseW: 220, baseH: 320 },
+      { id: 'carousel', n: 'Carrusel Auto', t: 'div', w: 600, h: 300, bg: '#ffffff', c: '#000', func: 'css-carousel', txt: '<div class="slides">\n  <div class="slide" style="background:#3b82f6; color:white;">SLIDE 1</div>\n  <div class="slide" style="background:#10b981; color:white;">SLIDE 2</div>\n  <div class="slide" style="background:#f43f5e; color:white;">SLIDE 3</div>\n</div>', baseW: 600, baseH: 300 },
+      { id: 'accordion', n: 'Acordeón', t: 'div', w: 300, h: 45, bg: '#ffffff', c: '#000', func: 'none', txt: '<details style="width:100%; padding:10px;"><summary style="font-weight:bold; cursor:pointer;">Desplegar Detalles</summary><p>Contenido nativo de HTML.</p></details>', baseW: 300, baseH: 45 },
+      { id: 'modal', n: 'Modal Pop-Up', t: 'div', w: 150, h: 50, bg: '#10b981', c: '#fff', r: 6, func: 'modal-hack', txt: '<label for="m1" style="cursor:pointer; width:100%; text-align:center;">Abrir Modal</label>\n<input type="checkbox" id="m1" class="m-check">\n<div class="m-window"><div class="m-box"><h2>Aviso</h2><p>Modal en CSS.</p><label for="m1" class="m-close">Cerrar</label></div></div>', baseW: 150, baseH: 50 },
+      { id: 'tooltip', n: 'Tooltip Globo', t: 'span', w: 120, h: 40, bg: '#e2e8f0', c: '#000', r: 4, func: 'tooltip', txt: 'Hover Me', baseW: 120, baseH: 40 },
+      { id: 'toggle', n: 'Switch Toggle', t: 'label', w: 60, h: 32, bg: 'transparent', c: '#10b981', func: 'toggle', txt: '<input type="checkbox"><span class="slider"></span>', baseW: 60, baseH: 32 }
     ]},
-    { cat: 'Estilos Visuales', items: [
-      { id: 'glass', n: 'Panel Glass', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.1)', c: '#fff', r: 16, style: 'glass', txt: 'Cristal', baseW: 300, baseH: 200 },
-      { id: 'neumorph', n: 'Boton Neumorfismo', t: 'button', w: 150, h: 60, bg: '#e0e5ec', c: '#4b5563', r: 30, style: 'neumorphism', txt: 'Presionar', baseW: 150, baseH: 60 }
+    { cat: 'Tarjetas & Diseño Pro', items: [
+      { id: 'pricing', n: 'Tabla Precios', t: 'div', w: 320, h: 450, bg: '#ffffff', c: '#0f172a', r: 16, style: 'shadow', txt: '<div style="padding:40px; text-align:center;"><h3 style="color:#64748b;">Plan PRO</h3><div style="font-size:48px; font-weight:900; margin:20px 0;">$29</div><ul style="list-style:none; padding:0; line-height:2.5; margin-bottom:30px;"><li>✔️ Ilimitado</li><li>✔️ Soporte</li></ul><button style="width:100%; padding:15px; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:bold;">Contratar</button></div>', baseW: 320, baseH: 450 },
+      { id: 'profile', n: 'Perfil Usuario', t: 'div', w: 300, h: 350, bg: '#ffffff', c: '#0f172a', r: 12, style: 'shadow', txt: '<div style="display:flex; flex-direction:column; align-items:center; padding:30px;"><img src="https://via.placeholder.com/100" style="border-radius:50%; margin-bottom:15px;"><h3>Admin</h3><div style="display:flex; gap:10px; margin-top:20px;"><button style="padding:8px 20px; background:#3b82f6; color:white; border:none; border-radius:20px;">Seguir</button></div></div>', baseW: 300, baseH: 350 },
+      { id: 'login', n: 'Login Form', t: 'div', w: 350, h: 400, bg: '#ffffff', c: '#000', r: 12, style: 'shadow', txt: '<div style="padding:30px;"><h2>Acceso</h2><input type="email" placeholder="Email" style="width:100%; padding:12px; margin:20px 0 10px 0; border:1px solid #ccc; border-radius:4px;"><input type="password" placeholder="Pass" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ccc; border-radius:4px;"><button style="width:100%; padding:12px; background:#000; color:#fff; border:none; border-radius:4px;">Entrar</button></div>', baseW: 350, baseH: 400 },
+      { id: 'chat', n: 'Chat Bubble', t: 'div', w: 250, h: 80, bg: '#10b981', c: '#fff', r: 20, txt: '<div style="padding:15px;">Hola, ¿cómo estás?</div><div style="position:absolute; bottom:0; right:-10px; width:20px; height:20px; background:#10b981; border-radius:50%;"></div>', baseW: 250, baseH: 80 },
+      { id: 'timeline', n: 'Timeline Line', t: 'div', w: 300, h: 200, bg: 'transparent', c: '#000', txt: '<div style="border-left:3px solid #3b82f6; padding-left:20px; margin-left:10px;"><div style="position:relative; margin-bottom:20px;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 1</b><p>Inicio</p></div><div style="position:relative;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 2</b><p>Fin</p></div></div>', baseW: 300, baseH: 200 }
+    ]},
+    { cat: 'Estilos Extremos (Render)', items: [
+      { id: 'glass-card', n: 'Glassmorfismo', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.15)', c: '#fff', r: 16, style: 'glass', txt: '<div style="padding:20px; font-size:18px; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.5);">Tarjeta de Cristal</div>', baseW: 300, baseH: 200 },
+      { id: 'neumorph', n: 'Neumorfismo Btn', t: 'button', w: 150, h: 150, bg: '#e0e5ec', c: '#4b5563', r: 75, style: 'neumorphism', txt: 'PULSAR', baseW: 150, baseH: 150 },
+      { id: 'cyberpunk', n: 'Cyberpunk Btn', t: 'button', w: 220, h: 65, bg: '#facc15', c: '#000', style: 'cyberpunk', txt: 'CYBERPUNK', baseW: 220, baseH: 65 },
+      { id: 'skeleton', n: 'Skeleton Loader', t: 'div', w: 300, h: 200, bg: '#e2e8f0', c: '#000', r: 8, style: 'skeleton', txt: '', baseW: 300, baseH: 200 },
+      { id: 'neon', n: 'Texto Neón', t: 'h2', w: 250, h: 60, bg: 'transparent', c: '#0ea5e9', style: 'neon', txt: 'NEÓN', baseW: 250, baseH: 60 },
+      { id: 'spinner', n: 'Spinner CSS', t: 'div', w: 50, h: 50, bg: 'transparent', c: '#000', txt: '<div style="width:100%; height:100%; border:5px solid #f3f3f3; border-top:5px solid #3b82f6; border-radius:50%; animation:animSpin 1s linear infinite;"></div>', baseW: 50, baseH: 50 }
+    ]},
+    { cat: 'Inputs & Formularios', items: [
+      { id: 'searchbar', n: 'Buscador Pro', t: 'div', w: 400, h: 50, bg: '#ffffff', c: '#000', r: 25, style: 'shadow', txt: '<div style="display:flex; width:100%; height:100%; padding:5px 5px 5px 20px;"><input type="text" placeholder="Buscar..." style="flex:1; border:none; outline:none;"><button style="width:80px; background:#3b82f6; color:white; border:none; border-radius:20px;">Ir</button></div>', baseW: 400, baseH: 50 },
+      { id: 'float-label', n: 'Input Animado', t: 'div', w: 250, h: 55, bg: '#fff', c: '#3b82f6', func: 'float-label', txt: '<input type="text" id="fl1" required>\n<label for="fl1">Nombre</label>', baseW: 250, baseH: 55 },
+      { id: 'input', n: 'Campo Texto', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', r: 4, attrs: 'placeholder="Escribe..."', baseW: 250, baseH: 45 },
+      { id: 'textarea', n: 'Caja Mensaje', t: 'textarea', w: 250, h: 100, bg: '#fff', c: '#000', r: 4, attrs: 'placeholder="Mensaje..."', baseW: 250, baseH: 100 },
+      { id: 'checkbox', n: 'Checkbox Custom', t: 'label', w: 150, h: 30, bg: 'transparent', c: '#fff', txt: '<div style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; accent-color:#10b981;" checked> Aceptar</div>', baseW: 150, baseH: 30 },
+      { id: 'range', n: 'Slider CSS', t: 'input', w: 200, h: 10, bg: '#e2e8f0', c: '#3b82f6', r: 5, attrs: 'type="range"', baseW: 200, baseH: 10 },
+      { id: 'color', n: 'Selector Color', t: 'input', w: 80, h: 40, bg: '#fff', c: '#000', attrs: 'type="color"', baseW: 80, baseH: 40 }
+    ]},
+    { cat: 'Datos & Status', items: [
+      { id: 'table', n: 'Tabla Datos', t: 'table', w: 400, h: 150, bg: '#fff', c: '#000', r: 8, style: 'shadow', txt: '<thead style="background:#f8fafc; text-align:left;"><tr><th style="padding:10px;">ID</th><th style="padding:10px;">User</th></tr></thead><tbody><tr><td style="padding:10px;">1</td><td style="padding:10px;">Admin</td></tr></tbody>', baseW: 400, baseH: 150 },
+      { id: 'progress', n: 'Barra Progreso', t: 'progress', w: 250, h: 15, bg: '#e2e8f0', c: '#10b981', r: 10, attrs: 'value="70" max="100"', baseW: 250, baseH: 15 },
+      { id: 'badge', n: 'Badge Alert', t: 'span', w: 80, h: 25, bg: '#ef4444', c: '#fff', r: 12, txt: '<b style="font-size:11px;">Nuevo</b>', baseW: 80, baseH: 25 },
+      { id: 'alert', n: 'Caja Alerta', t: 'div', w: 300, h: 60, bg: '#fef2f2', c: '#991b1b', r: 6, txt: '<div style="border-left:4px solid #ef4444; padding:10px 15px; width:100%; height:100%; display:flex; align-items:center;">⚠️ Error de conexión</div>', baseW: 300, baseH: 60 }
+    ]},
+    { cat: 'Multimedia & Gráficos', items: [
+      { id: 'img', n: 'Imagen', t: 'img', w: 300, h: 200, bg: '#cbd5e1', c: '#000', r: 8, attrs: 'src="https://via.placeholder.com/300"', baseW: 300, baseH: 200 },
+      { id: 'video', n: 'Reproductor Video', t: 'video', w: 400, h: 225, bg: '#000', c: '#fff', r: 8, attrs: 'controls', baseW: 400, baseH: 225 },
+      { id: 'audio', n: 'Reproductor Audio', t: 'audio', w: 300, h: 50, bg: '#f1f5f9', c: '#000', r: 25, attrs: 'controls', baseW: 300, baseH: 50 },
+      { id: 'iframe', n: 'Embed Mapa/YT', t: 'iframe', w: 400, h: 250, bg: '#e2e8f0', c: '#000', r: 4, txt: '', baseW: 400, baseH: 250 }
+    ]},
+    { cat: 'Geometría Pura (Clip-Path)', items: [
+      { id: 'circle', n: 'Círculo', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', clip: 'circle(50% at 50% 50%)', baseW: 150, baseH: 150 },
+      { id: 'triangle', n: 'Triángulo', t: 'div', w: 150, h: 150, bg: '#f59e0b', c: '#fff', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)', baseW: 150, baseH: 150 },
+      { id: 'hexagon', n: 'Hexágono', t: 'div', w: 150, h: 150, bg: '#8b5cf6', c: '#fff', clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)', baseW: 150, baseH: 150 },
+      { id: 'star', n: 'Estrella', t: 'div', w: 150, h: 150, bg: '#f43f5e', c: '#fff', clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', baseW: 150, baseH: 150 }
     ]}
   ];
 
   function buildSidebar() {
-    const sb = document.getElementById('sidebar-content');
-    sb.innerHTML = '';
+    const sb = document.getElementById('sidebar-content'); sb.innerHTML = '';
     catalogue.forEach(cat => {
-      let html = `<div class="cat-section"><h3 class="cat-title">${cat.cat}</h3>`;
-      cat.items.forEach(i => { html += `<button class="tool-btn" data-name="${i.n.toLowerCase()}" onclick="addElement('${i.id}')">${i.n} <span class="tool-tag">+</span></button>`; });
+      let html = `<div class="cat-section" data-cat="${cat.cat.toLowerCase()}"><h3 class="cat-title">${cat.cat}</h3>`;
+      cat.items.forEach(i => { html += `<button class="tool-btn" data-name="${i.n.toLowerCase()} ${i.id.toLowerCase()}" onclick="addElement('${i.id}')">${i.n} <span class="tool-tag">+</span></button>`; });
       sb.innerHTML += html + `</div>`;
     });
   }
   buildSidebar();
 
   function filterSidebar() {
-    const query = document.getElementById('cat-search').value.toLowerCase();
+    const q = document.getElementById('cat-search').value.toLowerCase();
     document.querySelectorAll('.cat-section').forEach(sec => {
       let has = false;
-      sec.querySelectorAll('.tool-btn').forEach(btn => {
-        if (btn.getAttribute('data-name').includes(query)) { btn.style.display = 'flex'; has = true; } 
-        else btn.style.display = 'none';
-      });
+      sec.querySelectorAll('.tool-btn').forEach(btn => { if (btn.getAttribute('data-name').includes(q)) { btn.style.display = 'flex'; has = true; } else btn.style.display = 'none'; });
       sec.style.display = has ? 'block' : 'none';
     });
   }
 
-  // --- RESET & ALINEACIÓN (OBS STYLE) ---
-  function resetTransforms() {
-    if(!selectedId) return;
-    const el = elements.find(e => e.id === selectedId);
-    el.rotY = 0; el.rotZ = 0; el.scale = 1;
-    updatePropsUI(); updateElUI(); saveState();
-  }
-
-  function resetSize() {
-    if(!selectedId) return;
-    const el = elements.find(e => e.id === selectedId);
-    if(el.baseW && el.baseH) { el.w = el.baseW; el.h = el.baseH; }
-    updatePropsUI(); updateElUI(); saveState();
-  }
-
-  function obsAlign(action) {
-    if(!selectedId) return;
-    const el = elements.find(e => e.id === selectedId);
-    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-    if(action === 'centerH') el.x = (cw - el.w) / 2;
-    if(action === 'centerV') el.y = (ch - el.h) / 2;
-    if(action === 'stretchW') { el.x = 0; el.w = cw; }
-    if(action === 'stretchH') { el.y = 0; el.h = ch; }
-    if(action === 'fit') { el.x = 0; el.y = 0; el.w = cw; el.h = ch; }
-    updatePropsUI(); updateElUI(); saveState();
-  }
-
-  // --- MODOS ---
+  // --- MODO INTERACTIVO ---
   function setMode(mode) {
     document.body.className = `${mode}-mode`;
     document.getElementById('btn-edit').className = mode === 'edit' ? 'active' : '';
@@ -512,204 +448,150 @@
   function addElement(tKey) {
     let t = null; catalogue.forEach(c => { const f = c.items.find(i => i.id === tKey); if(f) t = f; });
     if(!t) return;
-
     const id = `el_${counter++}`;
-    let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2));
-    let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
+    let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2)); let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
     if(t.fullW) { sX = 0; sY = (t.t==='header') ? 0 : sY; } 
 
-    const newEl = { 
-      id, name: `${t.n} ${counter-1}`, tag: t.t,
-      x: sX, y: sY, w: t.w, h: t.h, baseW: t.baseW, baseH: t.baseH,
-      bg: t.bg, color: t.c, text: t.txt, radius: t.r || 0, 
-      opacity: 100, rotY: 0, rotZ: 0, scale: 1,
-      style: t.style || 'none', func: t.func || 'none'
-    };
-    
+    const newEl = { id, name: `${t.n} ${counter-1}`, tag: t.t, attrs: t.attrs || '', x: sX, y: sY, w: t.w, h: t.h, baseW: t.baseW, baseH: t.baseH, bg: t.bg, color: t.c, text: t.txt || '', radius: t.r || 0, opacity: 100, rotY: 0, rotZ: 0, scale: 1, style: t.style || 'none', func: t.func || 'none', anim: 'none', clip: t.clip || 'none' };
     elements.push(newEl);
     
-    const node = document.createElement('div');
-    node.id = id; node.className = 'element';
-    node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
+    const node = document.createElement('div'); node.id = id; node.className = 'element'; node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
+    node.addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; if(e.target.classList.contains('resizer')) return; selectElement(id); startDrag(e, newEl, node); });
+    node.querySelector('.resizer').addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; e.stopPropagation(); selectElement(id); startResize(e, newEl, node); });
     
-    node.addEventListener('mousedown', (e) => { 
-      if(document.body.classList.contains('interact-mode')) return;
-      if(e.target.classList.contains('resizer')) return; 
-      selectElement(id); startDrag(e, newEl, node); 
-    });
-    
-    const resizer = node.querySelector('.resizer');
-    resizer.addEventListener('mousedown', (e) => { 
-      if(document.body.classList.contains('interact-mode')) return;
-      e.stopPropagation(); selectElement(id); startResize(e, newEl, node); 
-    });
-    
-    canvas.appendChild(node);
-    applyStylesAndCompile(); 
-    selectElement(id);
-    saveState();
+    canvas.appendChild(node); applyStylesAndCompile(); selectElement(id); saveState();
   }
 
-  // --- MOTOR COMPILADOR ---
+  // --- MOTOR CSS DINÁMICO ---
   function applyStylesAndCompile() {
-    let globalDynamicCSS = ""; 
-
+    let gCSS = ""; 
     elements.forEach((el, idx) => {
-      const node = document.getElementById(el.id);
-      if(!node) return;
-      node.style.zIndex = idx + 1;
+      const node = document.getElementById(el.id); if(!node) return;
+      node.style.zIndex = idx + 1; node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
       
-      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`;
-      node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
+      let cB = `.${el.id} {\n  background: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n  opacity: ${el.opacity/100};\n  transition: all 0.3s ease;\n  transform: rotateZ(${el.rotZ}deg) rotateY(${el.rotY}deg) scale(${el.scale});\n`;
+      if(el.clip !== 'none') cB += `  clip-path: ${el.clip};\n`;
       
-      let cBlock = `.${el.id} {\n  background: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n  opacity: ${el.opacity/100};\n  transition: all 0.3s ease;\n  transform: rotateZ(${el.rotZ}deg) rotateY(${el.rotY}deg) scale(${el.scale});\n`;
-      
-      // Estilos Render
-      if(el.style === 'shadow') cBlock += `  box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n`;
-      else if(el.style === 'neumorphism') cBlock += `  box-shadow: 8px 8px 16px #c5c9d1, -8px -8px 16px #ffffff;\n  display: flex; align-items: center; justify-content: center; font-weight: bold; border:none;\n`;
-      else if(el.style === 'glass') cBlock += `  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);\n  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);\n  border: 1px solid rgba(255,255,255,0.18);\n`;
+      if(el.style === 'shadow') cB += `  box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n`;
+      else if(el.style === 'neumorphism') cB += `  box-shadow: 8px 8px 16px #c5c9d1, -8px -8px 16px #ffffff;\n  display: flex; align-items: center; justify-content: center; font-weight: bold; border:none;\n`;
+      else if(el.style === 'glass') cB += `  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);\n  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);\n  border: 1px solid rgba(255,255,255,0.18);\n`;
+      else if(el.style === 'neon') cB += `  text-shadow: 0 0 5px ${el.bg}, 0 0 20px ${el.bg};\n  box-shadow: 0 0 10px ${el.bg}, inset 0 0 10px ${el.bg};\n  border: 2px solid ${el.bg}; display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 2px; color: ${el.color};\n`;
+      else if(el.style === 'cyberpunk') cB += `  background: linear-gradient(45deg, transparent 5%, ${el.bg} 5%);\n  box-shadow: 6px 0px 0px #00e6f6;\n  display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 3px; border: none; outline: transparent; clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 80%);\n`;
+      else if(el.style === 'skeleton') cB += `  background: linear-gradient(90deg, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%);\n  background-size: 200% 100%;\n  animation: skeletonLoad 1.5s infinite linear;\n`;
 
-      cBlock += `}\n`;
+      if(el.anim === 'float') cB += `  animation: animFloat 3s ease-in-out infinite;\n`;
+      if(el.anim === 'pulse') cB += `  animation: animPulse 2s infinite;\n`;
+      if(el.anim === 'spin') cB += `  animation: animSpin 4s linear infinite;\n`;
+      cB += `}\n`;
 
-      // Logica CSS Puro
+      // CSS Lógica
       if(el.func === 'hover-dropdown') {
-        cBlock += `.${el.id} .inner-content { flex-direction: column; position: relative; cursor: pointer; align-items:center; justify-content:center; }\n.${el.id} .sub { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); list-style: none; padding: 0; margin: 5px 0 0 0; border-radius: 4px; overflow: hidden; z-index:50; }\n.${el.id}:hover .sub { display: block; }\n.${el.id} .sub li a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }\n.${el.id} .sub li a:hover { background: #f8fafc; }\n`;
-      }
-      else if(el.func === 'hover-flip') {
-        cBlock += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }\n.${el.id}:hover .inner-content { transform: rotateY(180deg); }\n.${el.id} .front, .${el.id} .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; }\n.${el.id} .back { transform: rotateY(180deg); }\n`;
-      }
-      else if(el.func === 'css-tabs') {
-        cBlock += `.${el.id} .inner-content { flex-direction: column; width: 100%; height: 100%; }\n.${el.id} input[type="radio"] { display: none; }\n.${el.id} .tab-headers { display: flex; border-bottom: 2px solid #e2e8f0; }\n.${el.id} label { padding: 15px 20px; cursor: pointer; color: #64748b; font-weight: bold; transition: 0.2s; }\n.${el.id} .tab-content { display: none; padding: 20px; flex: 1; background: #f8fafc; }\n.${el.id} #t1:checked ~ .tab-headers label[for="t1"], .${el.id} #t2:checked ~ .tab-headers label[for="t2"] { color: #3b82f6; border-bottom: 2px solid #3b82f6; margin-bottom: -2px; }\n.${el.id} #t1:checked ~ .c1 { display: block; }\n.${el.id} #t2:checked ~ .c2 { display: block; }\n`;
-      }
-      else if(el.func === 'tooltip') {
-        cBlock += `.${el.id} { display:flex; align-items:center; justify-content:center; position: relative; cursor: help; }\n.${el.id}::after { content: "Tooltip Info"; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; }\n.${el.id}:hover::after { opacity: 1; visibility: visible; bottom: 110%; }\n`;
-      }
-      else if(el.func === 'none') {
-        cBlock += `.${el.id} .inner-content { display:flex; align-items:center; justify-content:center; width:100%; height:100%; }\n`;
+        cB += `.${el.id} .inner-content { flex-direction: column; position: relative; cursor: pointer; align-items:center; justify-content:center; }\n.${el.id} .sub { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); list-style: none; padding: 0; margin: 5px 0 0 0; border-radius: 4px; overflow: hidden; z-index:50; }\n.${el.id}:hover .sub { display: block; }\n.${el.id} .sub li a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }\n.${el.id} .sub li a:hover { background: #f8fafc; }\n`;
+      } else if(el.func === 'hover-flip') {
+        cB += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }\n.${el.id}:hover .inner-content { transform: rotateY(180deg); }\n.${el.id} .front, .${el.id} .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; }\n.${el.id} .back { transform: rotateY(180deg); }\n`;
+      } else if(el.func === 'tooltip') {
+        cB += `.${el.id} { display:flex; align-items:center; justify-content:center; position: relative; cursor: help; }\n.${el.id}::after { content: "Tooltip Info"; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; }\n.${el.id}:hover::after { opacity: 1; visibility: visible; bottom: 110%; }\n`;
+      } else if(el.func === 'css-tabs') {
+        cB += `.${el.id} .inner-content { flex-direction: column; width: 100%; height: 100%; }\n.${el.id} input[type="radio"] { display: none; }\n.${el.id} .tab-headers { display: flex; border-bottom: 2px solid #e2e8f0; }\n.${el.id} label { padding: 15px 20px; cursor: pointer; color: #64748b; font-weight: bold; transition: 0.2s; }\n.${el.id} .tab-content { display: none; padding: 20px; flex: 1; background: #f8fafc; }\n.${el.id} #t1:checked ~ .tab-headers label[for="t1"], .${el.id} #t2:checked ~ .tab-headers label[for="t2"] { color: #3b82f6; border-bottom: 2px solid #3b82f6; margin-bottom: -2px; }\n.${el.id} #t1:checked ~ .c1 { display: block; }\n.${el.id} #t2:checked ~ .c2 { display: block; }\n`;
+      } else if(el.func === 'toggle') {
+        cB += `.${el.id} .inner-content { position: relative; display: inline-block; width: 100%; height: 100%; }\n.${el.id} input { opacity: 0; width: 0; height: 0; }\n.${el.id} .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }\n.${el.id} .slider:before { position: absolute; content: ""; height: calc(100% - 8px); width: calc(100% - 8px); max-width: calc(100% / 2); left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }\n.${el.id} input:checked + .slider { background-color: ${el.color}; }\n.${el.id} input:checked + .slider:before { transform: translateX(calc(100% - 4px)); }\n`;
+      } else if(el.func === 'css-carousel') {
+        cB += `.${el.id} .inner-content { width: 100%; height: 100%; overflow: hidden; }\n.${el.id} .slides { display: flex; width: 300%; height: 100%; animation: slideAnim 9s infinite; }\n.${el.id} .slide { width: 33.33%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; }\n`;
+      } else if(el.func === 'grid2') {
+        cB += `.${el.id} .inner-content { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; width: 100%; height: 100%; }\n.${el.id} .inner-content > div { border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }\n`;
+      } else if(el.func === 'grid3') {
+        cB += `.${el.id} .inner-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; height: 100%; }\n.${el.id} .inner-content > div { border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }\n`;
+      } else if(el.func === 'float-label') {
+        cB += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; }\n.${el.id} input { width: 100%; height: 100%; padding: 20px 15px 5px 15px; border: 1px solid #cbd5e1; border-radius: ${el.radius}px; outline: none; font-size:16px; background:transparent; }\n.${el.id} label { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #94a3b8; transition: 0.2s; pointer-events: none; }\n.${el.id} input:focus ~ label, .${el.id} input:valid ~ label { top: 12px; font-size: 11px; color: ${el.color}; }\n.${el.id} input:focus { border-color: ${el.color}; }\n`;
+      } else if(el.func === 'modal-hack') {
+        cB += `.${el.id} .m-check { display: none; }\n.${el.id} .m-window { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 10000; }\n.${el.id} .m-box { background: #fff; padding: 30px; border-radius: 8px; transform: translateY(-20px); transition: 0.3s; width: 300px; color: #000; }\n.${el.id} .m-check:checked ~ .m-window { opacity: 1; visibility: visible; }\n.${el.id} .m-check:checked ~ .m-window .m-box { transform: translateY(0); }\n.${el.id} .m-close { display: inline-block; margin-top: 15px; padding: 8px 15px; background: #ef4444; color: #fff; border-radius: 4px; cursor: pointer; }\n`;
+      } else {
+        cB += `.${el.id} .inner-content { width: 100%; height: 100%; overflow: hidden; }\n`;
       }
 
-      globalDynamicCSS += cBlock;
-
-      // Inyectar HTML real para el componente (Editable desde textarea)
+      gCSS += cB;
       const inner = node.querySelector('.inner-content');
-      inner.innerHTML = el.text;
+      // Inyección viva de HTML editado por el usuario
+      if(!['input','textarea','select','video','audio','iframe','img','progress'].includes(el.tag)) {
+        inner.innerHTML = el.text;
+      }
     });
 
-    dynamicCss.textContent = globalDynamicCSS;
-    generateCode(); // Actualizar tabs de texto HTML/CSS
+    gCSS += `\n@keyframes animFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }\n@keyframes animPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }\n@keyframes animSpin { 100% { transform: rotateY(360deg); } }\n@keyframes slideAnim { 0%, 25% { transform: translateX(0); } 33%, 58% { transform: translateX(-33.33%); } 66%, 91% { transform: translateX(-66.66%); } 100% { transform: translateX(0); } }\n@keyframes skeletonLoad { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`;
+    dynamicCss.textContent = gCSS; generateCode(); 
   }
 
-  // --- DRAG & RESIZE ---
+  // --- ARRASTRAR / REDIMENSIONAR ---
   function startDrag(e, el, node) {
-    if(document.body.classList.contains('interact-mode')) return;
-    e.preventDefault();
-    let sX = e.clientX, sY = e.clientY;
-    let moved = false;
-    function move(ev) {
-      moved = true;
-      el.x += ev.clientX - sX; el.y += ev.clientY - sY;
-      sX = ev.clientX; sY = ev.clientY;
-      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`;
-      updatePropsUI();
-    }
+    if(document.body.classList.contains('interact-mode')) return; e.preventDefault(); let sX = e.clientX, sY = e.clientY; let moved = false;
+    function move(ev) { moved = true; el.x += ev.clientX - sX; el.y += ev.clientY - sY; sX = ev.clientX; sY = ev.clientY; node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; updatePropsUI(); }
     function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); if(moved) saveState(); }
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
-
   function startResize(e, el, node) {
-    if(document.body.classList.contains('interact-mode')) return;
-    e.preventDefault();
-    let sX = e.clientX, sY = e.clientY;
-    let moved = false;
-    function move(ev) {
-      moved = true;
-      el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY));
-      sX = ev.clientX; sY = ev.clientY;
-      node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
-      updatePropsUI();
-    }
+    if(document.body.classList.contains('interact-mode')) return; e.preventDefault(); let sX = e.clientX, sY = e.clientY; let moved = false;
+    function move(ev) { moved = true; el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY)); sX = ev.clientX; sY = ev.clientY; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`; updatePropsUI(); }
     function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); if(moved) saveState(); }
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
 
-  // --- INIT & GLOBAL UI ---
-  function initCanvas() {
-    canvasBg.style.background = '#1a1d27';
-    canvasBg.style.opacity = '0.05'; 
-    saveState(); // Estado inicial (vacío)
-  }
+  // --- UI CONTROLES ---
+  function initCanvas() { canvasBg.style.background = '#1a1d27'; canvasBg.style.opacity = '0.05'; saveState(); }
+  function updateCanvas() { canvasBg.style.background = document.getElementById('canvas-color').value; canvasBg.style.opacity = document.getElementById('canvas-opacity').value / 100; generateCode(); }
+  function selectElement(id) { selectedId = id; document.querySelectorAll('.element').forEach(n => n.classList.remove('selected')); if(id && document.body.classList.contains('edit-mode')) document.getElementById(id).classList.add('selected'); updatePropsUI(); }
+  canvas.addEventListener('mousedown', (e) => { if(e.target === canvas || e.target === canvasBg) selectElement(null); });
   
-  function updateCanvas() {
-    canvasBg.style.background = document.getElementById('canvas-color').value;
-    canvasBg.style.opacity = document.getElementById('canvas-opacity').value / 100;
-    generateCode();
-  }
-
-  function selectElement(id) { 
-    selectedId = id; 
-    document.querySelectorAll('.element').forEach(n => n.classList.remove('selected'));
-    if(id && document.body.classList.contains('edit-mode')) document.getElementById(id).classList.add('selected');
-    updatePropsUI(); 
-  }
-
-  canvas.addEventListener('mousedown', (e) => { 
-    if(e.target === canvas || e.target === canvasBg) selectElement(null); 
-  });
-
   function updatePropsUI() {
-    if(!selectedId) { 
-      document.getElementById('canvas-props').style.display='block'; document.getElementById('layer-props').style.display='none'; return; 
-    }
+    if(!selectedId) { document.getElementById('canvas-props').style.display='block'; document.getElementById('layer-props').style.display='none'; return; }
     document.getElementById('canvas-props').style.display='none'; document.getElementById('layer-props').style.display='block';
-    
     const el = elements.find(e => e.id === selectedId);
-    ['x','y','w','h','radius','rotY','rotZ','scale'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
+    ['x','y','w','h','radius','rotY','rotZ','scale'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p]));
     document.getElementById('prop-bg').value = el.bg; document.getElementById('prop-color').value = el.color.startsWith('#')?el.color:'#ffffff';
-    ['text','style','func'].forEach(p => document.getElementById(`prop-${p}`).value = el[p]);
+    ['text','style','func','anim'].forEach(p => document.getElementById(`prop-${p}`).value = el[p] || '');
   }
-
   function updateElUI() {
     if(!selectedId) return; const el = elements.find(e => e.id === selectedId);
     ['x','y','w','h','radius','rotY','rotZ','scale'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
-    ['bg','color','text','style','func'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
+    ['bg','color','text','style','func','anim'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
     applyStylesAndCompile(); 
   }
-
-  // Escuchar cuando el usuario termina de escribir en un input para guardar el estado del historial
-  document.querySelectorAll('#layer-props input, #layer-props textarea, #layer-props select').forEach(input => {
-    input.addEventListener('change', () => { saveState(); });
-  });
-
   function switchTab(t) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
   function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; }
 
-  // --- EXPORTACIÓN ---
+  // --- EXPORTADOR A HTML/CSS ---
   function generateCode() {
-    let canvasBgColor = document.getElementById('canvas-color').value;
-    let canvasOp = document.getElementById('canvas-opacity').value / 100;
-
+    let bgC = document.getElementById('canvas-color').value; let bgO = document.getElementById('canvas-opacity').value / 100;
     let htmlG = `<div class="pro-layout">\n`;
-    let cssG = `/* Reset Global */\n* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }\n\n.pro-layout {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  overflow-x: hidden;\n  background-color: transparent;\n  perspective: 1500px;\n}\n.pro-layout::before {\n  content: "";\n  position: absolute;\n  inset: 0;\n  background-color: ${canvasBgColor};\n  opacity: ${canvasOp};\n  z-index: -1;\n}\n\n`;
+    let cssG = `/* Reset Global */\n* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }\n\n.pro-layout {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  overflow-x: hidden;\n  background-color: transparent;\n  perspective: 1500px;\n}\n.pro-layout::before {\n  content: "";\n  position: absolute;\n  inset: 0;\n  background-color: ${bgC};\n  opacity: ${bgO};\n  z-index: -1;\n}\n\n`;
 
-    let stylesRules = dynamicCss.textContent; 
+    let sR = dynamicCss.textContent; 
 
-    elements.forEach((el, index) => {
-      htmlG += `  <!-- ${el.name} -->\n  <${el.tag} class="${el.id}">\n    <div class="inner-content">\n      ${el.text.replace(/\n/g, '\n      ')}\n    </div>\n  </${el.tag}>\n`;
-      let wRule = `width: ${Math.round(el.w)}px;`;
-      if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) wRule = `width: 100%;`;
-      cssG += `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${index + 1};\n  ${wRule} height: ${Math.round(el.h)}px;\n}\n\n`;
+    elements.forEach((el, i) => {
+      let attrs = el.attrs ? ` ${el.attrs}` : '';
+      if(el.tag === 'img' && !attrs.includes('src')) attrs += ' src="imagen.jpg"';
+      
+      let inHtml = el.text ? `\n    <div class="inner-content">\n      ${el.text.replace(/\n/g, '\n      ')}\n    </div>\n  ` : '';
+      if(['input','textarea','select','video','audio','iframe','img','progress'].includes(el.tag)) { htmlG += `  <!-- ${el.name} -->\n  <${el.tag} class="${el.id}"${attrs}></${el.tag}>\n`; }
+      else { htmlG += `  <!-- ${el.name} -->\n  <${el.tag} class="${el.id}"${attrs}>${inHtml}</${el.tag}>\n`; }
+      
+      let wR = `width: ${Math.round(el.w)}px;`; if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) wR = `width: 100%;`;
+      cssG += `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${i + 1};\n  ${wR} height: ${Math.round(el.h)}px;\n}\n\n`;
     });
     
-    htmlG += `</div>`; cssG += stylesRules; 
+    htmlG += `</div>`; cssG += sR; 
     document.getElementById('code-html-global').textContent = htmlG; document.getElementById('code-css-global').textContent = cssG;
 
     if(selectedId) {
       const el = elements.find(e => e.id === selectedId);
-      document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente">\n  <div class="inner-content">\n    ${el.text.replace(/\n/g, '\n    ')}\n  </div>\n</${el.tag}>`;
-      let singleCSS = `.mi-componente {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n}\n\n`;
+      let attrs = el.attrs ? ` ${el.attrs}` : ''; if(el.tag === 'img' && !attrs.includes('src')) attrs += ' src="imagen.jpg"';
+      let inHtml = el.text ? `\n  <div class="inner-content">\n    ${el.text.replace(/\n/g, '\n    ')}\n  </div>\n` : '';
+      if(['input','textarea','select','video','audio','iframe','img','progress'].includes(el.tag)) document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente"${attrs}></${el.tag}>`;
+      else document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente"${attrs}>${inHtml}</${el.tag}>`;
+      
+      let sCSS = `.mi-componente {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n}\n\n`;
       let regex = new RegExp(`\\.${el.id}(.*?)\\{([\\s\\S]*?)\\}`, 'g'); let match;
-      while ((match = regex.exec(stylesRules)) !== null) { singleCSS += `.mi-componente${match[1]} {${match[2]}}\n`; }
-      document.getElementById('code-css-single').textContent = singleCSS;
+      while ((match = regex.exec(sR)) !== null) { sCSS += `.mi-componente${match[1]} {${match[2]}}\n`; }
+      document.getElementById('code-css-single').textContent = sCSS;
     } else {
       document.getElementById('code-html-single').textContent = '<!-- Selecciona un elemento -->'; document.getElementById('code-css-single').textContent = '/* Selecciona un elemento */';
     }
@@ -717,13 +599,12 @@
 
   function downloadProject() {
     if(elements.length === 0) return alert("El lienzo está vacío.");
-    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V4</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
+    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V15</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n</body>\n</html>`;
     downloadFile('index.html', html); setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
   }
   function downloadFile(f, t) { const a = document.createElement('a'); a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(t); a.download = f; a.style.display = 'none'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
 
-  initCanvas();
-  generateCode();
+  initCanvas(); generateCode();
 </script>
 </body>
 </html>
