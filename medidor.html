@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout Pro - V17 Ultimate JS Engine</title>
+<title>Master Layout Pro - V18 Ultimate</title>
 <style>
   :root { 
     --bg-app: #0f111a; --bg-panel: #1a1d27; --bg-light: #282c3a;
@@ -12,10 +12,10 @@
     --border: #334155; --bg-input: #0b0d14;
   }
   * { box-sizing: border-box; }
-  body, html { margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif; background: var(--bg-app); color: var(--text-main); overflow: hidden; }
+  body, html { margin: 0; padding: 0; height: 100%; font-family: system-ui, -apple-system, sans-serif; background: var(--bg-app); color: var(--text-main); overflow: hidden; }
 
-  /* HEADER */
-  header { background: #0b0d14; padding: 10px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+  /* HEADER & TOOLBAR */
+  header { background: #0b0d14; padding: 10px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
   .logo h1 { margin: 0; font-size: 16px; font-weight: 800; background: linear-gradient(90deg, #10b981, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .logo p { margin: 0; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
   
@@ -33,7 +33,7 @@
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
   
   /* SIDEBAR (CATÁLOGO) */
-  .sidebar { width: 290px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  .sidebar { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
   .search-box { padding: 15px; border-bottom: 1px solid var(--border); background: #14171f; }
   .search-box input { width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 12px; outline: none; }
   .search-box input:focus { border-color: var(--accent); }
@@ -55,6 +55,8 @@
 
   /* ELEMENTS */
   .element { position: absolute; box-sizing: border-box; display: flex; overflow: visible; }
+  
+  /* MODO DE INTERACCIÓN Y EDICIÓN */
   body.edit-mode .element { cursor: grab; }
   body.edit-mode .element:active { cursor: grabbing; }
   body.edit-mode .inner-content { pointer-events: none !important; } 
@@ -66,8 +68,8 @@
   .resizer { width: 12px; height: 12px; background: var(--accent); position: absolute; right: -6px; bottom: -6px; cursor: nwse-resize; display: none; z-index: 9999; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
   .element.selected .resizer { display: block; }
   
-  /* CONTENEDOR VISUAL: Separamos la forma física de la forma gráfica para el Clip-Path */
-  .inner-content { width: 100%; height: 100%; display: flex; transition: all 0.3s ease; position: relative; overflow: hidden;}
+  /* El Inner-Content maneja lo visual. Esto arregla el bug del arrastre (Drag Lag) */
+  .inner-content { width: 100%; height: 100%; display: flex; transition: background 0.3s, box-shadow 0.3s, border-radius 0.3s, filter 0.3s, opacity 0.3s; position: relative; overflow: hidden;}
 
   /* RIGHT PANEL */
   .right-panel { width: 380px; background: var(--bg-panel); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
@@ -86,6 +88,7 @@
   .obs-controls { display: flex; justify-content: space-between; background: var(--bg-input); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px;}
   .obs-controls button { flex: 1; background: transparent; color: #cbd5e1; border: none; font-size: 16px; cursor: pointer; padding: 5px; border-radius: 4px; transition: 0.2s; }
   .obs-controls button:hover { background: #334155; color: #fff; }
+  
   .prop-section { margin-bottom: 15px; background: #1e293b; padding: 12px; border-radius: 6px; border: 1px solid var(--border); }
   .prop-section h4 { margin: 0 0 12px 0; font-size: 10px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px;}
   .prop-row { display: flex; gap: 10px; margin-bottom: 10px; }
@@ -109,24 +112,26 @@
   body.preview-mode #canvas { box-shadow: none; border: none; border-radius: 0; }
   .btn-exit-preview { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999999; background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
   body.preview-mode .btn-exit-preview { display: block; }
+
 </style>
+<!-- Inyector CSS Dinámico -->
 <style id="dynamic-css"></style>
 </head>
 <body class="edit-mode">
 
   <header>
     <div class="logo">
-      <h1>Master Layout Pro V17</h1>
-      <p>HTML + CSS + Motor JS en Vivo</p>
+      <h1>Master Layout Pro V18</h1>
+      <p>HTML + CSS + Motor JavaScript</p>
     </div>
     
     <div class="controls-center">
-      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶</button>
-      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷</button>
+      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶ Deshacer</button>
+      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷ Rehacer</button>
       <div class="divider"></div>
       <button class="active" id="btn-edit" onclick="setMode('edit')" title="Construir Layout">🛠️ Edición</button>
-      <button id="btn-interact" onclick="setMode('interact')" title="Ejecuta el JS y CSS">🖱️ Interactividad JS/CSS</button>
-      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview Final</button>
+      <button id="btn-interact" onclick="setMode('interact')" title="Ejecuta JS, Cliks y Hovers">🖱️ Interactuar</button>
+      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview Real</button>
     </div>
 
     <div class="viewports" id="viewport-controls">
@@ -135,7 +140,7 @@
       <button onclick="setViewport('mobile')">Móvil</button>
     </div>
     <div class="top-actions">
-      <button onclick="downloadProject()">⬇ Exportar Proyecto</button>
+      <button onclick="downloadProject()">⬇ Exportar Proyecto ZIP</button>
     </div>
   </header>
 
@@ -145,7 +150,7 @@
     <!-- SIDEBAR (CATÁLOGO MASIVO) -->
     <div class="sidebar">
       <div class="search-box">
-        <input type="text" id="cat-search" placeholder="🔍 Buscar elemento (ej. 'slider', 'js')..." oninput="filterSidebar()">
+        <input type="text" id="cat-search" placeholder="🔍 Buscar (ej. 'slider', 'js', 'card')..." oninput="filterSidebar()">
       </div>
       <div class="catalog-scroll" id="sidebar-content"></div>
     </div>
@@ -173,8 +178,11 @@
           <div id="canvas-props" style="display: block;">
             <div style="text-align: center; margin-bottom: 15px; font-size: 11px; color: var(--accent);">⚙️ Lienzo Global</div>
             <div class="prop-section">
-              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()" onchange="saveState()"></div>
+              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo (Lienzo)</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()" onchange="saveState()"></div>
               <div class="prop-group"><label>Opacidad Lienzo (%)</label><input type="number" id="canvas-opacity" value="10" min="0" max="100" oninput="updateCanvas()" onchange="saveState()"></div>
+            </div>
+            <div style="color: #64748b; font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">
+              <strong>Atajos Pro:</strong><br>Ctrl+Z: Deshacer | Ctrl+Y: Rehacer<br>Ctrl+C: Copiar | Ctrl+V: Pegar<br>Supr: Borrar | Esc: Salir Preview
             </div>
           </div>
 
@@ -187,6 +195,7 @@
               <button onclick="deleteElement()" style="color:#ef4444; border-color:#7f1d1d;">🗑️ Borrar Capa</button>
             </div>
 
+            <!-- BOTONES OBS -->
             <div class="obs-controls">
               <button onclick="obsAlign('centerH')" title="Centrar Horizontal">↔</button>
               <button onclick="obsAlign('centerV')" title="Centrar Vertical">↕</button>
@@ -196,10 +205,10 @@
             </div>
 
             <div class="prop-section">
-              <h4>Posición y Tamaño</h4>
+              <h4>Dimensiones & Posición</h4>
               <div class="prop-row">
-                <div class="prop-group"><label>X</label><input type="number" id="prop-x" oninput="updateElUI()" onchange="saveState()"></div>
-                <div class="prop-group"><label>Y</label><input type="number" id="prop-y" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>X (Left)</label><input type="number" id="prop-x" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Y (Top)</label><input type="number" id="prop-y" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
               <div class="prop-row">
                 <div class="prop-group"><label>Ancho (W)</label><input type="number" id="prop-w" oninput="updateElUI()" onchange="saveState()"></div>
@@ -208,45 +217,48 @@
             </div>
 
             <div class="prop-section">
-              <h4>Apariencia Personalizada</h4>
+              <h4>Estética Personalizada</h4>
               <div class="prop-group" style="margin-bottom:10px;"><label>Fondo (HEX/Gradient/URL)</label><input type="text" id="prop-bg" oninput="updateElUI()" onchange="saveState()"></div>
               <div class="prop-row">
                 <div class="prop-group"><label>Color Texto</label><input type="color" id="prop-color" oninput="updateElUI()" onchange="saveState()"></div>
-                <div class="prop-group"><label>Borde G. (px)</label><input type="number" id="prop-bw" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Opacidad (%)</label><input type="number" id="prop-opacity" min="0" max="100" oninput="updateElUI()" onchange="saveState()"></div>
+              </div>
+              <div class="prop-row">
+                <div class="prop-group"><label>Bordes (px)</label><input type="number" id="prop-radius" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Grosor Borde</label><input type="number" id="prop-bw" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
               <div class="prop-row">
                 <div class="prop-group"><label>Color Borde</label><input type="color" id="prop-bc" oninput="updateElUI()" onchange="saveState()"></div>
-                <div class="prop-group"><label>Radius (px)</label><input type="number" id="prop-radius" oninput="updateElUI()" onchange="saveState()"></div>
-              </div>
-              <div class="prop-row">
-                <div class="prop-group"><label>Padding (px)</label><input type="number" id="prop-pad" oninput="updateElUI()" onchange="saveState()"></div>
+                <div class="prop-group"><label>Padding Int.</label><input type="number" id="prop-pad" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Estructura Interna HTML</h4>
+              <h4>Estructura Interna HTML (Nesting)</h4>
               <div class="prop-group">
-                <textarea id="prop-text" oninput="updateElUI()" onchange="saveState()" rows="4" style="font-family: monospace; color:#e6db74; white-space: pre; font-size:10px;"></textarea>
+                <textarea id="prop-text" oninput="updateElUI()" onchange="saveState()" rows="5" style="font-family: monospace; color:#e6db74; white-space: pre; font-size:10px;"></textarea>
               </div>
             </div>
 
+            <!-- NUEVA PESTAÑA DE JS EN PROPIEDADES -->
             <div class="prop-section">
-              <h4>Lógica JavaScript (NUEVO)</h4>
+              <h4>Lógica JavaScript Dinámica</h4>
               <div class="prop-group">
                 <label style="color:var(--accent-js);">Código JS Ejecutable (Usa 'this' para el elemento)</label>
-                <textarea id="prop-js" oninput="updateElUI()" onchange="saveState()" rows="4" style="font-family: monospace; color:#f59e0b; font-size:10px;" placeholder="ej: this.addEventListener('click', () => alert('Hola'));"></textarea>
+                <textarea id="prop-js" oninput="updateElUI()" onchange="saveState()" rows="4" style="font-family: monospace; color:#f59e0b; font-size:10px;" placeholder="this.addEventListener('click', () => alert('Hola'));"></textarea>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Transformaciones & CSS Avanzado</h4>
+              <h4>Transformaciones & Filtros 3D</h4>
               <div class="prop-row">
                 <div class="prop-group"><label>Rot Y (3D)</label><input type="number" id="prop-rotY" oninput="updateElUI()" onchange="saveState()"></div>
                 <div class="prop-group"><label>Rot Z</label><input type="number" id="prop-rotZ" oninput="updateElUI()" onchange="saveState()"></div>
                 <div class="prop-group"><label>Escala</label><input type="number" step="0.1" id="prop-scale" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
+              
               <div class="prop-group" style="margin-top:10px; margin-bottom:10px;">
-                <label>Estilo Visual Especial</label>
+                <label>Estilo de Renderizado (Visual)</label>
                 <select id="prop-style" oninput="updateElUI()" onchange="saveState()">
                   <option value="none">Normal</option>
                   <option value="shadow">Sombra Paralela</option>
@@ -254,19 +266,31 @@
                   <option value="glass">Glassmorfismo (Cristal)</option>
                   <option value="cyberpunk">Cyberpunk (Neón + Glitch)</option>
                   <option value="skeleton">Skeleton Loader</option>
+                  <option value="neon">Brillo Neón Intenso</option>
                 </select>
               </div>
-              <div class="prop-group">
-                <label>Comportamiento Interactivo CSS</label>
+
+              <div class="prop-group" style="margin-bottom:10px;">
+                <label>Lógica Funcional (CSS Puro)</label>
                 <select id="prop-func" oninput="updateElUI()" onchange="saveState()">
-                  <option value="none">Estático</option>
+                  <option value="none">Ninguno (Estático)</option>
                   <option value="hover-dropdown">Menú Desplegable (Hover)</option>
                   <option value="hover-flip">Tarjeta 3D Flip (Hover)</option>
                   <option value="tooltip">Globo de Tooltip (Hover)</option>
-                  <option value="css-tabs">Pestañas (CSS puro)</option>
+                  <option value="css-tabs">Pestañas Radiales (CSS puro)</option>
                   <option value="toggle">Interruptor Toggle</option>
                   <option value="modal-hack">Modal Pop-Up</option>
-                  <option value="css-carousel">Carrusel Infinito</option>
+                  <option value="css-carousel">Carrusel Infinito Automático</option>
+                </select>
+              </div>
+              
+              <div class="prop-group">
+                <label>Animación Continua (@keyframes)</label>
+                <select id="prop-anim" oninput="updateElUI()" onchange="saveState()">
+                  <option value="none">Ninguna</option>
+                  <option value="float">Flotar (Float)</option>
+                  <option value="pulse">Latir (Pulse)</option>
+                  <option value="spin">Rotar 3D Infinito</option>
                 </select>
               </div>
             </div>
@@ -291,14 +315,15 @@
     </div>
   </div>
 
-<!-- SCRIPT EJECUTOR EN VIVO -->
+<!-- CONTENEDOR PARA EJECUCIÓN DE JS EN VIVO -->
 <div id="live-js-container"></div>
 
 <script>
   // --- CORE ENGINE ---
   let elements = []; let selectedId = null; let counter = 1; 
   let historyStack = []; let historyIndex = -1; let clipboard = null;
-  const canvas = document.getElementById('canvas'); const canvasBg = document.getElementById('canvas-bg'); const dynamicCss = document.getElementById('dynamic-css'); const liveJs = document.getElementById('live-js-container');
+  const canvas = document.getElementById('canvas'); const canvasBg = document.getElementById('canvas-bg'); 
+  const dynamicCss = document.getElementById('dynamic-css'); const liveJs = document.getElementById('live-js-container');
   
   function saveState() {
     const state = JSON.stringify(elements);
@@ -323,7 +348,7 @@
     selectElement(elements.find(e => e.id === prevSelected) ? prevSelected : null);
   }
 
-  // --- SHORTCUTS ---
+  // --- SHORTCUTS (Ctrl+Z, Ctrl+C, etc) ---
   document.addEventListener('keydown', (e) => {
     if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
     if (e.key === 'Escape' && document.body.classList.contains('preview-mode')) setMode('edit');
@@ -356,56 +381,74 @@
     updatePropsUI(); updateElUI(); saveState();
   }
 
-  // --- MEGA CATÁLOGO (V17: CIENTOS DE VARIANTES REPRESENTADAS) ---
+  // --- MEGA CATÁLOGO DEFINITIVO (+60 Componentes V18) ---
   const catalogue = [
-    { cat: 'Secciones / Layout', items: [
-      { id: 'hero', n: 'Hero Básico', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #1e293b, #0f172a)', c: '#fff', fullW: true, txt: '<div style="text-align:center; margin:auto;"><h1 style="font-size:48px;">Título</h1><p>Subtítulo genial.</p></div>' },
-      { id: 'navbar', n: 'Navbar', t: 'nav', w: 1000, h: 70, bg: '#fff', c: '#000', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 30px; align-items:center;"><b>LOGO</b><div style="display:flex; gap:15px;"><a>Inicio</a><a>Contacto</a></div></div>' },
-      { id: 'footer', n: 'Footer', t: 'footer', w: 1000, h: 100, bg: '#0f172a', c: '#fff', fullW: true, txt: '<div style="margin:auto;">© 2026 Reservados</div>' },
+    { cat: 'Layouts & Estructura', items: [
+      { id: 'hero', n: 'Hero Landing', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #1e293b, #0f172a)', c: '#fff', fullW: true, txt: '<div style="text-align:center; margin:auto;"><h1 style="font-size:48px; margin-bottom:20px;">Visión del Futuro</h1><p style="font-size:18px; color:#cbd5e1; margin-bottom:30px;">Crea interfaces espectaculares.</p><button style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:8px; font-weight:bold;">Empezar</button></div>' },
+      { id: 'navbar', n: 'Header Navbar', t: 'nav', w: 1000, h: 70, bg: '#ffffff', c: '#0f172a', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 30px; align-items:center;"><b style="font-size:20px; color:#3b82f6;">BRAND</b><div style="display:flex; gap:20px; font-weight:600;"><a href="#">Inicio</a><a href="#">Servicios</a></div><button style="padding:10px 20px; background:#0f172a; color:#fff; border:none; border-radius:6px;">Login</button></div>' },
+      { id: 'footer', n: 'Footer Moderno', t: 'footer', w: 1000, h: 150, bg: '#0f172a', c: '#94a3b8', fullW: true, txt: '<div style="display:flex; justify-content:space-around; width:100%; padding:30px;"><div><h3 style="color:#fff;">Compañía</h3><p>Software V18.</p></div><div><h3 style="color:#fff;">Redes</h3><p>Twitter | Github</p></div></div>' },
+      { id: 'sidebar', n: 'Panel Admin', t: 'aside', w: 250, h: 800, bg: '#ffffff', c: '#1e293b', txt: '<div style="padding:30px; border-right:1px solid #e2e8f0; height:100%;"><h2 style="color:#3b82f6; margin-bottom:30px;">Dashboard</h2><ul style="list-style:none; padding:0; line-height:3; font-weight:600;"><li style="color:#10b981;">🏠 Inicio</li><li>📊 Datos</li><li>⚙️ Ajustes</li></ul></div>' },
       { id: 'grid2', n: 'Grid 2x2', t: 'div', w: 400, h: 400, bg: 'transparent', c: '#000', func: 'grid2', txt: '<div style="background:#cbd5e1;">A</div><div style="background:#94a3b8;">B</div><div style="background:#94a3b8;">C</div><div style="background:#cbd5e1;">D</div>' },
-      { id: 'grid3', n: 'Grid 3 Col', t: 'div', w: 900, h: 300, bg: 'transparent', c: '#000', func: 'grid3', txt: '<div style="background:#cbd5e1;">1</div><div style="background:#94a3b8;">2</div><div style="background:#64748b; color:white;">3</div>' },
-      { id: 'macwin', n: 'Ventana Mac', t: 'div', w: 500, h: 300, bg: '#ffffff', c: '#000', r: 10, style: 'shadow', txt: '<div style="background:#e2e8f0; padding:10px; display:flex; gap:8px;"><div style="width:12px; height:12px; background:#ef4444; border-radius:50%;"></div><div style="width:12px; height:12px; background:#f59e0b; border-radius:50%;"></div><div style="width:12px; height:12px; background:#10b981; border-radius:50%;"></div></div><div style="padding:20px;">Contenido...</div>' }
+      { id: 'grid3', n: 'Grid 3 Col', t: 'div', w: 900, h: 250, bg: 'transparent', c: '#000', func: 'grid3', txt: '<div style="background:#cbd5e1;">1</div><div style="background:#94a3b8;">2</div><div style="background:#64748b; color:white;">3</div>' },
+      { id: 'macwin', n: 'Ventana Mac OS', t: 'div', w: 500, h: 300, bg: '#ffffff', c: '#000', r: 10, style: 'shadow', txt: '<div style="background:#e2e8f0; padding:10px; display:flex; gap:8px;"><div style="width:12px; height:12px; background:#ef4444; border-radius:50%;"></div><div style="width:12px; height:12px; background:#f59e0b; border-radius:50%;"></div><div style="width:12px; height:12px; background:#10b981; border-radius:50%;"></div></div><div style="padding:20px;">Explorador de archivos...</div>' },
+      { id: 'div', n: 'Caja Libre', t: 'div', w: 200, h: 200, bg: '#e2e8f0', c: '#000', txt: 'Caja', baseW: 200, baseH: 200 }
     ]},
-    { cat: 'JavaScript Funcional (NUEVO)', items: [
-      { id: 'js_alert', n: 'Botón Alerta JS', t: 'button', w: 150, h: 50, bg: '#f59e0b', c: '#fff', r: 6, txt: 'Clic Alerta', js: 'this.addEventListener("click", () => alert("¡Ejecución JS exitosa en Master Layout!"));' },
-      { id: 'js_counter', n: 'Contador JS', t: 'div', w: 200, h: 100, bg: '#fff', c: '#000', r: 8, style:'shadow', txt: '<div style="text-align:center;"><h3>0</h3><button class="btn-add" style="padding:5px 10px;">Sumar</button></div>', js: 'let c=0; const num = this.querySelector("h3"); this.querySelector(".btn-add").addEventListener("click", () => { c++; num.innerText=c; });' },
-      { id: 'js_clock', n: 'Reloj en Vivo JS', t: 'div', w: 200, h: 60, bg: '#0f172a', c: '#10b981', r: 6, txt: '<h2 style="margin:auto; font-family:monospace;">00:00:00</h2>', js: 'setInterval(() => { this.querySelector("h2").innerText = new Date().toLocaleTimeString(); }, 1000);' },
-      { id: 'js_color', n: 'Random Color JS', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', r: 8, txt: '<div style="margin:auto; font-weight:bold; cursor:pointer;">Cambiar Color</div>', js: 'this.addEventListener("click", () => { this.querySelector(".inner-content").style.background = "#" + Math.floor(Math.random()*16777215).toString(16); });' }
+    { cat: 'Motor JavaScript (Pruébalos)', items: [
+      { id: 'js_alert', n: 'Botón Alerta JS', t: 'button', w: 150, h: 50, bg: '#f59e0b', c: '#fff', r: 6, txt: 'Clic Alerta', js: 'this.addEventListener("click", () => alert("¡Ejecución JS nativa en V18!"));' },
+      { id: 'js_counter', n: 'Contador Lógico', t: 'div', w: 200, h: 100, bg: '#ffffff', c: '#0f172a', r: 8, style:'shadow', txt: '<div style="text-align:center;"><h3 style="font-size:30px; margin:0 0 10px 0;">0</h3><button class="btn-add" style="padding:8px 15px; background:#3b82f6; color:white; border:none; border-radius:4px; cursor:pointer;">Sumar +1</button></div>', js: 'let c=0; const num = this.querySelector("h3"); this.querySelector(".btn-add").addEventListener("click", () => { c++; num.innerText=c; });' },
+      { id: 'js_clock', n: 'Reloj en Vivo', t: 'div', w: 220, h: 60, bg: '#0f172a', c: '#10b981', r: 6, txt: '<h2 style="margin:auto; font-family:monospace; font-size:24px;">00:00:00</h2>', js: 'setInterval(() => { this.querySelector("h2").innerText = new Date().toLocaleTimeString(); }, 1000);' },
+      { id: 'js_color', n: 'Random Color JS', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', r: 8, txt: '<div style="margin:auto; font-weight:bold; cursor:pointer; text-align:center;">Clic para<br>cambiar color</div>', js: 'this.addEventListener("click", () => { this.querySelector(".inner-content").style.background = "#" + Math.floor(Math.random()*16777215).toString(16); });' },
+      { id: 'js_mouse', n: 'Mouse Tracker', t: 'div', w: 300, h: 150, bg: '#1e293b', c: '#fff', r: 8, txt: '<div style="margin:auto; font-family:monospace;">Mueve el ratón aquí</div>', js: 'this.addEventListener("mousemove", (e) => { const rect = this.getBoundingClientRect(); const x = Math.round(e.clientX - rect.left); const y = Math.round(e.clientY - rect.top); this.querySelector(".inner-content div").innerText = `X: ${x} | Y: ${y}`; });' }
     ]},
-    { cat: 'UI Funcional CSS', items: [
+    { cat: 'Interactividad CSS (Sin JS)', items: [
       { id: 'dropdown', n: 'Menú Hover', t: 'div', w: 160, h: 50, bg: '#3b82f6', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Opciones ▼\n<ul class="sub">\n  <li><a href="#">Perfil</a></li>\n  <li><a href="#">Ajustes</a></li>\n</ul>' },
       { id: 'tabs', n: 'Pestañas Tabs', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Diseño</label>\n  <label for="t2">Código</label>\n</div>\n<div class="tab-content c1">Panel 1.</div>\n<div class="tab-content c2">Panel 2.</div>' },
       { id: 'flip', n: 'Flip Card 3D', t: 'div', w: 220, h: 320, bg: 'transparent', c: '#fff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">Pasa el Ratón</div>\n<div class="back" style="background:#f43f5e; border-radius:12px;">Sorpresa</div>' },
       { id: 'carousel', n: 'Carrusel Auto', t: 'div', w: 600, h: 300, bg: '#ffffff', c: '#000', func: 'css-carousel', txt: '<div class="slides">\n  <div class="slide" style="background:#3b82f6; color:white;">SLIDE 1</div>\n  <div class="slide" style="background:#10b981; color:white;">SLIDE 2</div>\n  <div class="slide" style="background:#f43f5e; color:white;">SLIDE 3</div>\n</div>' },
       { id: 'modal', n: 'Modal Pop-Up', t: 'div', w: 150, h: 50, bg: '#10b981', c: '#fff', r: 6, func: 'modal-hack', txt: '<label for="m1" style="cursor:pointer; width:100%; text-align:center;">Abrir Modal</label>\n<input type="checkbox" id="m1" class="m-check">\n<div class="m-window"><div class="m-box"><h2>Aviso</h2><p>Modal en CSS.</p><label for="m1" class="m-close">Cerrar</label></div></div>' },
+      { id: 'accordion', n: 'Acordeón', t: 'div', w: 300, h: 45, bg: '#ffffff', c: '#000', txt: '<details style="width:100%; padding:10px;"><summary style="font-weight:bold; cursor:pointer;">Desplegar Detalles</summary><p style="margin-top:10px; color:#555;">Contenido nativo de HTML.</p></details>' },
       { id: 'tooltip', n: 'Tooltip Globo', t: 'span', w: 120, h: 40, bg: '#e2e8f0', c: '#000', r: 4, func: 'tooltip', txt: 'Hover Me' },
       { id: 'toggle', n: 'Switch Toggle', t: 'label', w: 60, h: 32, bg: 'transparent', c: '#10b981', func: 'toggle', txt: '<input type="checkbox"><span class="slider"></span>' }
     ]},
-    { cat: 'Tarjetas & Diseño Pro', items: [
+    { cat: 'Tarjetas & Diseño UI', items: [
       { id: 'pricing', n: 'Tabla Precios', t: 'div', w: 320, h: 450, bg: '#ffffff', c: '#0f172a', r: 16, style: 'shadow', txt: '<div style="padding:40px; text-align:center;"><h3 style="color:#64748b;">Plan PRO</h3><div style="font-size:48px; font-weight:900; margin:20px 0;">$29</div><ul style="list-style:none; padding:0; line-height:2.5; margin-bottom:30px;"><li>✔️ Ilimitado</li><li>✔️ Soporte</li></ul><button style="width:100%; padding:15px; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:bold;">Contratar</button></div>' },
       { id: 'profile', n: 'Perfil Usuario', t: 'div', w: 300, h: 350, bg: '#ffffff', c: '#0f172a', r: 12, style: 'shadow', txt: '<div style="display:flex; flex-direction:column; align-items:center; padding:30px;"><img src="https://via.placeholder.com/100" style="border-radius:50%; margin-bottom:15px;"><h3>Admin</h3><div style="display:flex; gap:10px; margin-top:20px;"><button style="padding:8px 20px; background:#3b82f6; color:white; border:none; border-radius:20px;">Seguir</button></div></div>' },
       { id: 'login', n: 'Login Form', t: 'div', w: 350, h: 400, bg: '#ffffff', c: '#000', r: 12, style: 'shadow', txt: '<div style="padding:30px;"><h2>Acceso</h2><input type="email" placeholder="Email" style="width:100%; padding:12px; margin:20px 0 10px 0; border:1px solid #ccc; border-radius:4px;"><input type="password" placeholder="Pass" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ccc; border-radius:4px;"><button style="width:100%; padding:12px; background:#000; color:#fff; border:none; border-radius:4px;">Entrar</button></div>' },
       { id: 'chat', n: 'Chat Bubble', t: 'div', w: 250, h: 80, bg: '#10b981', c: '#fff', r: 20, txt: '<div style="padding:15px;">Hola, ¿cómo estás?</div><div style="position:absolute; bottom:0; right:-10px; width:20px; height:20px; background:#10b981; border-radius:50%;"></div>' },
-      { id: 'timeline', n: 'Timeline Line', t: 'div', w: 300, h: 200, bg: 'transparent', c: '#000', txt: '<div style="border-left:3px solid #3b82f6; padding-left:20px; margin-left:10px;"><div style="position:relative; margin-bottom:20px;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 1</b><p>Inicio</p></div><div style="position:relative;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 2</b><p>Fin</p></div></div>' }
+      { id: 'timeline', n: 'Timeline Vertical', t: 'div', w: 300, h: 200, bg: 'transparent', c: '#000', txt: '<div style="border-left:3px solid #3b82f6; padding-left:20px; margin-left:10px;"><div style="position:relative; margin-bottom:20px;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 1</b><p>Inicio</p></div><div style="position:relative;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 2</b><p>Fin</p></div></div>' }
     ]},
-    { cat: 'Estilos Visuales', items: [
+    { cat: 'Estilos Extremos (Render)', items: [
       { id: 'glass-card', n: 'Glassmorfismo', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.15)', c: '#fff', r: 16, style: 'glass', txt: '<div style="padding:20px; font-size:18px; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.5);">Tarjeta de Cristal</div>' },
       { id: 'neumorph', n: 'Neumorfismo Btn', t: 'button', w: 150, h: 150, bg: '#e0e5ec', c: '#4b5563', r: 75, style: 'neumorphism', txt: 'PULSAR' },
       { id: 'cyberpunk', n: 'Cyberpunk Btn', t: 'button', w: 220, h: 65, bg: '#facc15', c: '#000', style: 'cyberpunk', txt: 'CYBERPUNK' },
-      { id: 'skeleton', n: 'Skeleton Loader', t: 'div', w: 300, h: 200, bg: '#e2e8f0', c: '#000', r: 8, style: 'skeleton', txt: '' }
+      { id: 'skeleton', n: 'Skeleton Loader', t: 'div', w: 300, h: 200, bg: '#e2e8f0', c: '#000', r: 8, style: 'skeleton', txt: '' },
+      { id: 'neon', n: 'Texto Neón', t: 'h2', w: 250, h: 60, bg: 'transparent', c: '#0ea5e9', style: 'neon', txt: 'NEÓN' },
+      { id: 'spinner', n: 'Spinner CSS', t: 'div', w: 50, h: 50, bg: 'transparent', c: '#000', txt: '<div style="width:100%; height:100%; border:5px solid #f3f3f3; border-top:5px solid #3b82f6; border-radius:50%; animation:animSpin 1s linear infinite;"></div>' }
     ]},
-    { cat: 'Inputs & Formularios', items: [
+    { cat: 'Inputs & Controles', items: [
       { id: 'searchbar', n: 'Buscador Pro', t: 'div', w: 400, h: 50, bg: '#ffffff', c: '#000', r: 25, style: 'shadow', txt: '<div style="display:flex; width:100%; height:100%; padding:5px 5px 5px 20px;"><input type="text" placeholder="Buscar..." style="flex:1; border:none; outline:none;"><button style="width:80px; background:#3b82f6; color:white; border:none; border-radius:20px;">Ir</button></div>' },
       { id: 'float-label', n: 'Input Animado', t: 'div', w: 250, h: 55, bg: '#fff', c: '#3b82f6', func: 'float-label', txt: '<input type="text" id="fl1" required>\n<label for="fl1">Nombre</label>' },
-      { id: 'input', n: 'Campo Texto', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', r: 4, attrs: 'placeholder="Escribe..."' },
-      { id: 'textarea', n: 'Caja Mensaje', t: 'textarea', w: 250, h: 100, bg: '#fff', c: '#000', r: 4, attrs: 'placeholder="Mensaje..."' },
+      { id: 'input', n: 'Campo Texto', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', r: 4, bw: 1, bc: '#cbd5e1', attrs: 'placeholder="Escribe..."' },
+      { id: 'textarea', n: 'Caja Mensaje', t: 'textarea', w: 250, h: 100, bg: '#fff', c: '#000', r: 4, bw: 1, bc: '#cbd5e1', attrs: 'placeholder="Mensaje..."' },
       { id: 'range', n: 'Slider CSS', t: 'input', w: 200, h: 10, bg: '#e2e8f0', c: '#3b82f6', r: 5, attrs: 'type="range"' }
     ]},
-    { cat: 'Geometría & Formas (Clip-Path)', items: [
+    { cat: 'Geometría Pura (Clip-Path)', items: [
       { id: 'circle', n: 'Círculo Perfecto', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', clip: 'circle(50% at 50% 50%)' },
       { id: 'triangle', n: 'Triángulo', t: 'div', w: 150, h: 150, bg: '#f59e0b', c: '#fff', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
       { id: 'hexagon', n: 'Hexágono', t: 'div', w: 150, h: 150, bg: '#8b5cf6', c: '#fff', clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
       { id: 'star', n: 'Estrella', t: 'div', w: 150, h: 150, bg: '#f43f5e', c: '#fff', clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }
+    ]},
+    { cat: 'Datos & Status', items: [
+      { id: 'table', n: 'Tabla Datos', t: 'table', w: 400, h: 150, bg: '#fff', c: '#000', r: 8, style: 'shadow', txt: '<thead style="background:#f8fafc; text-align:left;"><tr><th style="padding:10px;">ID</th><th style="padding:10px;">User</th></tr></thead><tbody><tr><td style="padding:10px;">1</td><td style="padding:10px;">Admin</td></tr></tbody>' },
+      { id: 'progress', n: 'Barra Progreso', t: 'progress', w: 250, h: 15, bg: '#e2e8f0', c: '#10b981', r: 10, attrs: 'value="70" max="100"' },
+      { id: 'badge', n: 'Badge Alert', t: 'span', w: 80, h: 25, bg: '#ef4444', c: '#fff', r: 12, txt: '<b style="font-size:11px;">Nuevo</b>' },
+      { id: 'alert', n: 'Caja Alerta', t: 'div', w: 300, h: 60, bg: '#fef2f2', c: '#991b1b', r: 6, txt: '<div style="border-left:4px solid #ef4444; padding:10px 15px; width:100%; height:100%; display:flex; align-items:center;">⚠️ Error de conexión</div>' }
+    ]},
+    { cat: 'Multimedia & Gráficos', items: [
+      { id: 'img', n: 'Imagen', t: 'img', w: 300, h: 200, bg: '#cbd5e1', c: '#000', r: 8, attrs: 'src="https://via.placeholder.com/300"' },
+      { id: 'video', n: 'Reproductor Video', t: 'video', w: 400, h: 225, bg: '#000', c: '#fff', r: 8, attrs: 'controls' },
+      { id: 'audio', n: 'Reproductor Audio', t: 'audio', w: 300, h: 50, bg: '#f1f5f9', c: '#000', r: 25, attrs: 'controls' },
+      { id: 'iframe', n: 'Embed Mapa/YT', t: 'iframe', w: 400, h: 250, bg: '#e2e8f0', c: '#000', r: 4, txt: '' }
     ]}
   ];
 
@@ -435,9 +478,9 @@
     document.getElementById('btn-interact').className = mode === 'interact' ? 'active' : '';
     if(mode === 'interact') {
       selectElement(null); 
-      executeLiveJS(); // Corre el motor JS al interactuar
+      executeLiveJS();
     } else {
-      liveJs.innerHTML = ''; // Limpia scripts al editar
+      liveJs.innerHTML = '';
     }
   }
 
@@ -445,7 +488,6 @@
     liveJs.innerHTML = '';
     elements.forEach(el => {
       if(el.js) {
-        // Envolvemos el código JS para que 'this' apunte al elemento exacto en el DOM
         const script = document.createElement('script');
         script.innerHTML = `(function(){ const el = document.getElementById('${el.id}'); if(el){ el.boundJS = function() { ${el.js} }; el.boundJS(); } })();`;
         liveJs.appendChild(script);
@@ -461,8 +503,8 @@
     let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2)); let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
     if(t.fullW) { sX = 0; sY = (t.t==='header') ? 0 : sY; } 
 
-    // Nuevas propiedades: border Width, border Color, Padding, JS
-    const newEl = { id, name: `${t.n} ${counter-1}`, tag: t.t, attrs: t.attrs || '', x: sX, y: sY, w: t.w, h: t.h, baseW: t.w, baseH: t.h, bg: t.bg, color: t.c, text: t.txt || '', radius: t.r || 0, bw: 0, bc: '#000000', pad: 0, opacity: 100, rotY: 0, rotZ: 0, scale: 1, style: t.style || 'none', func: t.func || 'none', anim: 'none', clip: t.clip || 'none', js: t.js || '' };
+    // Aquí se asignan los valores base y propiedades avanzadas (bw=border width, bc=border color, pad=padding)
+    const newEl = { id, name: `${t.n} ${counter-1}`, tag: t.t, attrs: t.attrs || '', x: sX, y: sY, w: t.w, h: t.h, baseW: t.w, baseH: t.h, bg: t.bg, color: t.c, text: t.txt || '', radius: t.r || 0, bw: t.bw || 0, bc: t.bc || '#000000', pad: 0, opacity: 100, rotY: 0, rotZ: 0, scale: 1, style: t.style || 'none', func: t.func || 'none', anim: 'none', clip: t.clip || 'none', js: t.js || '' };
     elements.push(newEl);
     
     const node = document.createElement('div'); node.id = id; node.className = 'element'; node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
@@ -478,22 +520,21 @@
     elements.forEach((el, idx) => {
       const node = document.getElementById(el.id); if(!node) return;
       
-      // EL WRAPPER (Físico, transparente, para el Drag y Resize)
+      // EL WRAPPER (Controla el motor físico y Drag, NUNCA lleva transición de left/top para evitar el lag de arrastre)
       node.style.zIndex = idx + 1; node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
       
       let wRule = `width: ${Math.round(el.w)}px;`; if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) wRule = `width: 100%;`;
       
-      // LA MAGIA: El Wrapper (node) maneja posiciones y transformaciones. El Inner (.inner-content) maneja el visual y CLIP-PATH.
       let cB = `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${idx+1};\n  ${wRule} height: ${Math.round(el.h)}px;\n  transform: rotateZ(${el.rotZ}deg) rotateY(${el.rotY}deg) scale(${el.scale});\n}\n`;
       
+      // INNER CONTENT (Controla lo visual: fondo, opacidad, bordes, clip-path)
       cB += `.${el.id} .inner-content {\n  background: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n`;
       if(el.bw > 0) cB += `  border: ${el.bw}px solid ${el.bc};\n`;
       if(el.pad > 0) cB += `  padding: ${el.pad}px;\n`;
-      cB += `  opacity: ${el.opacity/100};\n  transition: all 0.3s ease;\n`;
-      
-      // Fix del Clip-path: Se aplica al inner-content, para no cortar el resizer
+      cB += `  opacity: ${el.opacity/100};\n  transition: background 0.3s, color 0.3s, box-shadow 0.3s, border-radius 0.3s, opacity 0.3s;\n`;
       if(el.clip !== 'none') cB += `  clip-path: ${el.clip};\n`;
       
+      // Estilos Extremos
       if(el.style === 'shadow') cB += `  box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n`;
       else if(el.style === 'neumorphism') cB += `  box-shadow: 8px 8px 16px #c5c9d1, -8px -8px 16px #ffffff;\n  display: flex; align-items: center; justify-content: center; font-weight: bold; border:none;\n`;
       else if(el.style === 'glass') cB += `  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);\n  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);\n  border: 1px solid rgba(255,255,255,0.18);\n`;
@@ -542,7 +583,7 @@
     dynamicCss.textContent = gCSS; generateCode(); 
   }
 
-  // --- ARRASTRAR / REDIMENSIONAR ---
+  // --- ARRASTRAR / REDIMENSIONAR FÍSICO ---
   function startDrag(e, el, node) {
     if(document.body.classList.contains('interact-mode')) return; e.preventDefault(); let sX = e.clientX, sY = e.clientY; let moved = false;
     function move(ev) { moved = true; el.x += ev.clientX - sX; el.y += ev.clientY - sY; sX = ev.clientX; sY = ev.clientY; node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; updatePropsUI(); }
@@ -622,7 +663,7 @@
 
   function downloadProject() {
     if(elements.length === 0) return alert("El lienzo está vacío.");
-    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V17</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n<script src="script.js"><\/script>\n</body>\n</html>`;
+    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V18</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n<script src="script.js"><\/script>\n</body>\n</html>`;
     downloadFile('index.html', html); 
     setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
     setTimeout(() => downloadFile('script.js', document.getElementById('code-js-global').textContent), 1000);
