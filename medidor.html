@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout Pro - V18 Ultimate</title>
+<title>Master Layout Pro - V19 Community Edition</title>
+<meta name="description" content="Herramienta visual gratuita para crear, previsualizar y exportar layouts HTML, CSS y JS. Ideal para principiantes y expertos.">
+<meta property="og:title" content="Master Layout Pro V19">
+<meta property="og:description" content="El 'Photopea' para programadores web. Genera código limpio al instante.">
+<meta property="og:type" content="website">
+
 <style>
   :root { 
     --bg-app: #0f111a; --bg-panel: #1a1d27; --bg-light: #282c3a;
@@ -20,14 +25,20 @@
   .logo p { margin: 0; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
   
   .controls-center { display: flex; gap: 5px; background: #1a1d27; padding: 5px; border-radius: 6px; border: 1px solid var(--border); align-items: center;}
-  .controls-center button { background: transparent; border: none; color: var(--text-muted); padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; transition: 0.2s;}
+  .controls-center button { background: transparent; border: none; color: var(--text-muted); padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; transition: 0.2s; display: flex; align-items: center; gap: 4px;}
   .controls-center button.active, .controls-center button:hover { background: var(--border); color: #fff; }
   .controls-center .divider { width: 1px; height: 15px; background: var(--border); margin: 0 5px; }
 
   .viewports button { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 5px 12px; margin-left: 5px; border-radius: 4px; cursor: pointer; font-size: 11px; }
   .viewports button.active { background: var(--bg-light); color: white; border-color: #555; }
+  
+  .top-actions { display: flex; gap: 10px; align-items: center; }
+  .zoom-control { display: flex; align-items: center; gap: 5px; color: var(--text-muted); font-size: 11px; }
+  .zoom-control input { width: 80px; accent-color: var(--accent); }
   .top-actions button { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.2s; }
   .top-actions button:hover { background: #2563eb; }
+  .top-actions button.secondary { background: var(--bg-light); border: 1px solid var(--border); }
+  .top-actions button.secondary:hover { background: var(--border); }
   
   /* WORKSPACE */
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
@@ -38,7 +49,7 @@
   .search-box input { width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 12px; outline: none; }
   .search-box input:focus { border-color: var(--accent); }
   .catalog-scroll { flex: 1; overflow-y: auto; }
-  .catalog-scroll::-webkit-scrollbar { width: 5px; } .catalog-scroll::-webkit-scrollbar-thumb { background: #475569; }
+  .catalog-scroll::-webkit-scrollbar { width: 5px; } .catalog-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
   .cat-section { padding: 15px 15px 0 15px; }
   .cat-title { font-size: 10px; text-transform: uppercase; color: #cbd5e1; margin: 0 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: 700;}
   .tool-btn { width: 100%; background: #1e293b; color: #cbd5e1; border: 1px solid var(--border); padding: 8px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 11px; margin-bottom: 6px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
@@ -47,16 +58,15 @@
 
   /* CANVAS ENGINE */
   .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#334155 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; position: relative; }
-  #canvas { position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.9); transition: width 0.3s, height 0.3s; perspective: 1500px; }
+  #canvas-container { transition: transform 0.2s ease; transform-origin: center top; }
+  #canvas { position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.9); transition: width 0.3s, height 0.3s; perspective: 1500px; background: transparent; }
   #canvas.desktop { width: 100%; height: 100%; min-height: 800px; }
-  #canvas.tablet { width: 768px; height: 1024px; border-radius: 4px; }
+  #canvas.tablet { width: 768px; height: 1024px; border-radius: 4px; border: 1px solid #334155; }
   #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 12px solid #0f172a; }
-  .canvas-bg { position: absolute; inset: 0; z-index: 0; transition: background 0.3s, opacity 0.3s; }
+  .canvas-bg { position: absolute; inset: 0; z-index: 0; transition: background 0.3s, opacity 0.3s; pointer-events: none; }
 
   /* ELEMENTS */
   .element { position: absolute; box-sizing: border-box; display: flex; overflow: visible; }
-  
-  /* MODO DE INTERACCIÓN Y EDICIÓN */
   body.edit-mode .element { cursor: grab; }
   body.edit-mode .element:active { cursor: grabbing; }
   body.edit-mode .inner-content { pointer-events: none !important; } 
@@ -68,7 +78,6 @@
   .resizer { width: 12px; height: 12px; background: var(--accent); position: absolute; right: -6px; bottom: -6px; cursor: nwse-resize; display: none; z-index: 9999; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
   .element.selected .resizer { display: block; }
   
-  /* El Inner-Content maneja lo visual. Esto arregla el bug del arrastre (Drag Lag) */
   .inner-content { width: 100%; height: 100%; display: flex; transition: background 0.3s, box-shadow 0.3s, border-radius 0.3s, filter 0.3s, opacity 0.3s; position: relative; overflow: hidden;}
 
   /* RIGHT PANEL */
@@ -85,6 +94,9 @@
   .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
   .action-grid button { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: 0.2s; text-transform: uppercase; font-weight: bold;}
   .action-grid button:hover { background: #334155; color: #fff; border-color: var(--accent); }
+  .action-grid button.danger { color:#ef4444; border-color:#7f1d1d; }
+  .action-grid button.danger:hover { background: #450a0a; }
+  
   .obs-controls { display: flex; justify-content: space-between; background: var(--bg-input); padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px;}
   .obs-controls button { flex: 1; background: transparent; color: #cbd5e1; border: none; font-size: 16px; cursor: pointer; padding: 5px; border-radius: 4px; transition: 0.2s; }
   .obs-controls button:hover { background: #334155; color: #fff; }
@@ -100,54 +112,71 @@
   
   /* CÓDIGO */
   .code-section { margin: 15px; background: var(--bg-input); border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
-  .code-header { background: #0b0d14; padding: 8px 12px; font-size: 10px; font-weight: bold; color: #94a3b8; border-bottom: 1px solid var(--border); text-transform: uppercase;}
-  pre { margin: 0; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; max-height: 300px; overflow-y: auto;}
+  .code-header { background: #0b0d14; padding: 8px 12px; font-size: 10px; font-weight: bold; color: #94a3b8; border-bottom: 1px solid var(--border); text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;}
+  .copy-btn { background: var(--bg-light); border: 1px solid var(--border); color: var(--text-muted); padding: 2px 8px; border-radius: 3px; font-size: 9px; cursor: pointer; transition: 0.2s; }
+  .copy-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+  pre { margin: 0; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; max-height: 300px; overflow-y: auto; color: #cbd5e1;}
   .html-code { color: #e6db74; } .css-code { color: #66d9ef; } .js-code { color: #f59e0b; }
 
   /* PREVIEW MODE */
   body.preview-mode header { display: none; }
   body.preview-mode .sidebar { display: none; }
   body.preview-mode .right-panel { display: none; }
-  body.preview-mode .canvas-wrapper { padding: 0; }
-  body.preview-mode #canvas { box-shadow: none; border: none; border-radius: 0; }
+  body.preview-mode .canvas-wrapper { padding: 0; background: #fff; }
+  body.preview-mode #canvas-container { transform: none !important; }
+  body.preview-mode #canvas { box-shadow: none; border: none; border-radius: 0; width: 100% !important; height: 100% !important; min-height: 100vh; }
   .btn-exit-preview { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999999; background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
   body.preview-mode .btn-exit-preview { display: block; }
 
+  /* Grid Overlay */
+  .grid-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; background-size: 10px 10px; background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); display: none; }
+  body.snap-active .grid-overlay { display: block; }
 </style>
-<!-- Inyector CSS Dinámico -->
 <style id="dynamic-css"></style>
 </head>
 <body class="edit-mode">
 
   <header>
     <div class="logo">
-      <h1>Master Layout Pro V18</h1>
+      <h1>Master Layout Pro V19</h1>
       <p>HTML + CSS + Motor JavaScript</p>
     </div>
     
     <div class="controls-center">
-      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶ Deshacer</button>
-      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷ Rehacer</button>
+      <button onclick="undo()" title="Deshacer (Ctrl+Z)">↶</button>
+      <button onclick="redo()" title="Rehacer (Ctrl+Y)">↷</button>
       <div class="divider"></div>
       <button class="active" id="btn-edit" onclick="setMode('edit')" title="Construir Layout">🛠️ Edición</button>
       <button id="btn-interact" onclick="setMode('interact')" title="Ejecuta JS, Cliks y Hovers">🖱️ Interactuar</button>
-      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview Real</button>
+      <button onclick="setMode('preview')" title="Pantalla Completa">📺 Preview</button>
+      <div class="divider"></div>
+      <button id="btn-snap" onclick="toggleSnap()" title="Ajustar a cuadrícula de 10px">🧲 Snap</button>
     </div>
 
-    <div class="viewports" id="viewport-controls">
-      <button class="active" onclick="setViewport('desktop')">PC</button>
-      <button onclick="setViewport('tablet')">Tablet</button>
-      <button onclick="setViewport('mobile')">Móvil</button>
-    </div>
-    <div class="top-actions">
-      <button onclick="downloadProject()">⬇ Exportar Proyecto ZIP</button>
+    <div style="display:flex; align-items:center; gap: 15px;">
+      <div class="viewports" id="viewport-controls">
+        <button class="active" onclick="setViewport('desktop')">PC</button>
+        <button onclick="setViewport('tablet')">Tablet</button>
+        <button onclick="setViewport('mobile')">Móvil</button>
+      </div>
+      
+      <div class="zoom-control">
+        <span>🔍</span>
+        <input type="range" min="0.5" max="1.5" step="0.1" value="1" oninput="setZoom(this.value)">
+        <span id="zoom-label">100%</span>
+      </div>
+
+      <div class="top-actions">
+        <button class="secondary" onclick="newProject()" title="Borrar todo y empezar de cero">🗑️ Nuevo</button>
+        <button onclick="downloadProject()">⬇ Exportar ZIP</button>
+      </div>
     </div>
   </header>
 
   <button class="btn-exit-preview" onclick="setMode('edit')">Salir del Preview (Esc)</button>
 
   <div class="workspace">
-    <!-- SIDEBAR (CATÁLOGO MASIVO) -->
+    <!-- SIDEBAR (CATÁLOGO) -->
     <div class="sidebar">
       <div class="search-box">
         <input type="text" id="cat-search" placeholder="🔍 Buscar (ej. 'slider', 'js', 'card')..." oninput="filterSidebar()">
@@ -157,8 +186,11 @@
 
     <!-- CANVAS -->
     <div class="canvas-wrapper" id="canvas-wrapper">
-      <div id="canvas" class="desktop">
-        <div class="canvas-bg" id="canvas-bg"></div>
+      <div id="canvas-container">
+        <div id="canvas" class="desktop">
+          <div class="grid-overlay"></div>
+          <div class="canvas-bg" id="canvas-bg"></div>
+        </div>
       </div>
     </div>
 
@@ -191,8 +223,13 @@
             <div class="action-grid">
               <button onclick="resetTransforms()">🔄 Reset Transform</button>
               <button onclick="resetSize()">📐 Reset Tamaño</button>
-              <button onclick="duplicateElement()">📑 Clonar Capa</button>
-              <button onclick="deleteElement()" style="color:#ef4444; border-color:#7f1d1d;">🗑️ Borrar Capa</button>
+              <button onclick="duplicateElement()">📑 Clonar</button>
+              <button class="danger" onclick="deleteElement()">🗑️ Borrar</button>
+            </div>
+            
+            <div class="action-grid">
+              <button onclick="moveLayer('up')">⬆️ Subir Capa</button>
+              <button onclick="moveLayer('down')">⬇️ Bajar Capa</button>
             </div>
 
             <!-- BOTONES OBS -->
@@ -240,11 +277,10 @@
               </div>
             </div>
 
-            <!-- NUEVA PESTAÑA DE JS EN PROPIEDADES -->
             <div class="prop-section">
               <h4>Lógica JavaScript Dinámica</h4>
               <div class="prop-group">
-                <label style="color:var(--accent-js);">Código JS Ejecutable (Usa 'this' para el elemento)</label>
+                <label style="color:var(--accent-js);">Código JS (Usa 'this' para el elemento)</label>
                 <textarea id="prop-js" oninput="updateElUI()" onchange="saveState()" rows="4" style="font-family: monospace; color:#f59e0b; font-size:10px;" placeholder="this.addEventListener('click', () => alert('Hola'));"></textarea>
               </div>
             </div>
@@ -301,38 +337,85 @@
 
       <!-- TABS HTML, CSS, JS -->
       <div id="tab-html" class="tab-content">
-        <div class="code-section"><div class="code-header">Layout Global</div><pre class="html-code" id="code-html-global"></pre></div>
-        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Aislada</div><pre class="html-code" id="code-html-single"></pre></div>
+        <div class="code-section">
+          <div class="code-header">Layout Global <button class="copy-btn" onclick="copyCode('code-html-global')">Copiar</button></div>
+          <pre class="html-code" id="code-html-global"></pre>
+        </div>
+        <div class="code-section">
+          <div class="code-header" style="color:var(--accent);">Capa Aislada <button class="copy-btn" onclick="copyCode('code-html-single')">Copiar</button></div>
+          <pre class="html-code" id="code-html-single"></pre>
+        </div>
       </div>
       <div id="tab-css" class="tab-content">
-        <div class="code-section"><div class="code-header">Estilos Globales</div><pre class="css-code" id="code-css-global"></pre></div>
-        <div class="code-section"><div class="code-header" style="color:var(--accent);">Capa Aislada</div><pre class="css-code" id="code-css-single"></pre></div>
+        <div class="code-section">
+          <div class="code-header">Estilos Globales <button class="copy-btn" onclick="copyCode('code-css-global')">Copiar</button></div>
+          <pre class="css-code" id="code-css-global"></pre>
+        </div>
+        <div class="code-section">
+          <div class="code-header" style="color:var(--accent);">Capa Aislada <button class="copy-btn" onclick="copyCode('code-css-single')">Copiar</button></div>
+          <pre class="css-code" id="code-css-single"></pre>
+        </div>
       </div>
       <div id="tab-js" class="tab-content">
-        <div class="code-section"><div class="code-header" style="color:var(--accent-js);">Script Global Proyecto</div><pre class="js-code" id="code-js-global"></pre></div>
+        <div class="code-section">
+          <div class="code-header" style="color:var(--accent-js);">Script Global Proyecto <button class="copy-btn" onclick="copyCode('code-js-global')">Copiar</button></div>
+          <pre class="js-code" id="code-js-global"></pre>
+        </div>
       </div>
 
     </div>
   </div>
 
-<!-- CONTENEDOR PARA EJECUCIÓN DE JS EN VIVO -->
 <div id="live-js-container"></div>
 
 <script>
   // --- CORE ENGINE ---
   let elements = []; let selectedId = null; let counter = 1; 
   let historyStack = []; let historyIndex = -1; let clipboard = null;
-  const canvas = document.getElementById('canvas'); const canvasBg = document.getElementById('canvas-bg'); 
-  const dynamicCss = document.getElementById('dynamic-css'); const liveJs = document.getElementById('live-js-container');
+  let snapToGrid = false; const gridSize = 10;
   
+  const canvas = document.getElementById('canvas'); 
+  const canvasContainer = document.getElementById('canvas-container');
+  const canvasBg = document.getElementById('canvas-bg'); 
+  const dynamicCss = document.getElementById('dynamic-css'); 
+  const liveJs = document.getElementById('live-js-container');
+  
+  function snap(val) {
+    if (!snapToGrid) return val;
+    return Math.round(val / gridSize) * gridSize;
+  }
+
   function saveState() {
     const state = JSON.stringify(elements);
     if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex + 1);
     historyStack.push(state); historyIndex++;
-    if(historyStack.length > 30) { historyStack.shift(); historyIndex--; }
+    if(historyStack.length > 40) { historyStack.shift(); historyIndex--; }
+    
+    // Auto-guardado en LocalStorage
+    localStorage.setItem('mlp_v19_project', state);
+    localStorage.setItem('mlp_v19_canvas', JSON.stringify({
+      bg: canvasBg.style.background,
+      opacity: canvasBg.style.opacity
+    }));
   }
-  function undo() { if (historyIndex > 0) { historyIndex--; elements = JSON.parse(historyStack[historyIndex]); rebuildDOM(); } }
-  function redo() { if (historyIndex < historyStack.length - 1) { historyIndex++; elements = JSON.parse(historyStack[historyIndex]); rebuildDOM(); } }
+
+  function loadProject() {
+    const saved = localStorage.getItem('mlp_v19_project');
+    const savedCanvas = localStorage.getItem('mlp_v19_canvas');
+    if (saved) {
+      elements = JSON.parse(saved);
+      rebuildDOM();
+    }
+    if (savedCanvas) {
+      const c = JSON.parse(savedCanvas);
+      document.getElementById('canvas-color').value = c.bg || '#1a1d27';
+      document.getElementById('canvas-opacity').value = Math.round((c.opacity || 0.1) * 100);
+      updateCanvas();
+    }
+  }
+
+  function undo() { if (historyIndex > 0) { historyIndex--; elements = JSON.parse(historyStack[historyIndex]); rebuildDOM(); saveState(); } }
+  function redo() { if (historyIndex < historyStack.length - 1) { historyIndex++; elements = JSON.parse(historyStack[historyIndex]); rebuildDOM(); saveState(); } }
   
   function rebuildDOM() {
     const prevSelected = selectedId;
@@ -348,7 +431,7 @@
     selectElement(elements.find(e => e.id === prevSelected) ? prevSelected : null);
   }
 
-  // --- SHORTCUTS (Ctrl+Z, Ctrl+C, etc) ---
+  // --- SHORTCUTS ---
   document.addEventListener('keydown', (e) => {
     if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
     if (e.key === 'Escape' && document.body.classList.contains('preview-mode')) setMode('edit');
@@ -363,44 +446,67 @@
     const source = sourceData || elements.find(e => e.id === selectedId);
     if(!source) return;
     let newEl = JSON.parse(JSON.stringify(source));
-    newEl.id = `el_${counter++}`; newEl.x += 20; newEl.y += 20;
+    newEl.id = `el_${counter++}`; newEl.x = snap(newEl.x + 20); newEl.y = snap(newEl.y + 20);
     elements.push(newEl);
     const node = document.createElement('div'); node.id = newEl.id; node.className = 'element'; node.innerHTML = `<div class="inner-content"></div><div class="resizer"></div>`;
     node.addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; if(e.target.classList.contains('resizer')) return; selectElement(newEl.id); startDrag(e, newEl, node); });
     node.querySelector('.resizer').addEventListener('mousedown', (e) => { if(document.body.classList.contains('interact-mode')) return; e.stopPropagation(); selectElement(newEl.id); startResize(e, newEl, node); });
     canvas.appendChild(node); applyStylesAndCompile(); selectElement(newEl.id); saveState();
   }
+
   function deleteElement() { if(!selectedId) return; elements = elements.filter(x => x.id !== selectedId); document.getElementById(selectedId).remove(); selectElement(null); applyStylesAndCompile(); saveState(); }
+  
+  function moveLayer(dir) {
+    if(!selectedId) return;
+    const idx = elements.findIndex(e => e.id === selectedId);
+    if(dir === 'up' && idx < elements.length - 1) {
+      [elements[idx], elements[idx+1]] = [elements[idx+1], elements[idx]];
+    } else if(dir === 'down' && idx > 0) {
+      [elements[idx], elements[idx-1]] = [elements[idx-1], elements[idx]];
+    }
+    applyStylesAndCompile(); saveState();
+  }
+
   function resetTransforms() { if(!selectedId) return; const el = elements.find(e => e.id === selectedId); el.rotY = 0; el.rotZ = 0; el.scale = 1; updatePropsUI(); updateElUI(); saveState(); }
   function resetSize() { if(!selectedId) return; const el = elements.find(e => e.id === selectedId); if(el.baseW && el.baseH) { el.w = el.baseW; el.h = el.baseH; } updatePropsUI(); updateElUI(); saveState(); }
+  
   function obsAlign(act) {
-    if(!selectedId) return; const el = elements.find(e => e.id === selectedId); const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-    if(act === 'centerH') el.x = (cw - el.w) / 2; if(act === 'centerV') el.y = (ch - el.h) / 2;
-    if(act === 'stretchW') { el.x = 0; el.w = cw; } if(act === 'stretchH') { el.y = 0; el.h = ch; }
+    if(!selectedId) return; const el = elements.find(e => e.id === selectedId); 
+    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+    if(act === 'centerH') el.x = snap((cw - el.w) / 2); 
+    if(act === 'centerV') el.y = snap((ch - el.h) / 2);
+    if(act === 'stretchW') { el.x = 0; el.w = cw; } 
+    if(act === 'stretchH') { el.y = 0; el.h = ch; }
     if(act === 'fit') { el.x = 0; el.y = 0; el.w = cw; el.h = ch; }
     updatePropsUI(); updateElUI(); saveState();
   }
 
-  // --- MEGA CATÁLOGO DEFINITIVO (+60 Componentes V18) ---
+  function toggleSnap() {
+    snapToGrid = !snapToGrid;
+    document.getElementById('btn-snap').classList.toggle('active', snapToGrid);
+    document.body.classList.toggle('snap-active', snapToGrid);
+  }
+
+  // --- MEGA CATÁLOGO ---
   const catalogue = [
     { cat: 'Layouts & Estructura', items: [
       { id: 'hero', n: 'Hero Landing', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #1e293b, #0f172a)', c: '#fff', fullW: true, txt: '<div style="text-align:center; margin:auto;"><h1 style="font-size:48px; margin-bottom:20px;">Visión del Futuro</h1><p style="font-size:18px; color:#cbd5e1; margin-bottom:30px;">Crea interfaces espectaculares.</p><button style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:8px; font-weight:bold;">Empezar</button></div>' },
       { id: 'navbar', n: 'Header Navbar', t: 'nav', w: 1000, h: 70, bg: '#ffffff', c: '#0f172a', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 30px; align-items:center;"><b style="font-size:20px; color:#3b82f6;">BRAND</b><div style="display:flex; gap:20px; font-weight:600;"><a href="#">Inicio</a><a href="#">Servicios</a></div><button style="padding:10px 20px; background:#0f172a; color:#fff; border:none; border-radius:6px;">Login</button></div>' },
-      { id: 'footer', n: 'Footer Moderno', t: 'footer', w: 1000, h: 150, bg: '#0f172a', c: '#94a3b8', fullW: true, txt: '<div style="display:flex; justify-content:space-around; width:100%; padding:30px;"><div><h3 style="color:#fff;">Compañía</h3><p>Software V18.</p></div><div><h3 style="color:#fff;">Redes</h3><p>Twitter | Github</p></div></div>' },
+      { id: 'footer', n: 'Footer Moderno', t: 'footer', w: 1000, h: 150, bg: '#0f172a', c: '#94a3b8', fullW: true, txt: '<div style="display:flex; justify-content:space-around; width:100%; padding:30px;"><div><h3 style="color:#fff;">Compañía</h3><p>Software V19.</p></div><div><h3 style="color:#fff;">Redes</h3><p>Twitter | Github</p></div></div>' },
       { id: 'sidebar', n: 'Panel Admin', t: 'aside', w: 250, h: 800, bg: '#ffffff', c: '#1e293b', txt: '<div style="padding:30px; border-right:1px solid #e2e8f0; height:100%;"><h2 style="color:#3b82f6; margin-bottom:30px;">Dashboard</h2><ul style="list-style:none; padding:0; line-height:3; font-weight:600;"><li style="color:#10b981;">🏠 Inicio</li><li>📊 Datos</li><li>⚙️ Ajustes</li></ul></div>' },
       { id: 'grid2', n: 'Grid 2x2', t: 'div', w: 400, h: 400, bg: 'transparent', c: '#000', func: 'grid2', txt: '<div style="background:#cbd5e1;">A</div><div style="background:#94a3b8;">B</div><div style="background:#94a3b8;">C</div><div style="background:#cbd5e1;">D</div>' },
       { id: 'grid3', n: 'Grid 3 Col', t: 'div', w: 900, h: 250, bg: 'transparent', c: '#000', func: 'grid3', txt: '<div style="background:#cbd5e1;">1</div><div style="background:#94a3b8;">2</div><div style="background:#64748b; color:white;">3</div>' },
       { id: 'macwin', n: 'Ventana Mac OS', t: 'div', w: 500, h: 300, bg: '#ffffff', c: '#000', r: 10, style: 'shadow', txt: '<div style="background:#e2e8f0; padding:10px; display:flex; gap:8px;"><div style="width:12px; height:12px; background:#ef4444; border-radius:50%;"></div><div style="width:12px; height:12px; background:#f59e0b; border-radius:50%;"></div><div style="width:12px; height:12px; background:#10b981; border-radius:50%;"></div></div><div style="padding:20px;">Explorador de archivos...</div>' },
       { id: 'div', n: 'Caja Libre', t: 'div', w: 200, h: 200, bg: '#e2e8f0', c: '#000', txt: 'Caja', baseW: 200, baseH: 200 }
     ]},
-    { cat: 'Motor JavaScript (Pruébalos)', items: [
-      { id: 'js_alert', n: 'Botón Alerta JS', t: 'button', w: 150, h: 50, bg: '#f59e0b', c: '#fff', r: 6, txt: 'Clic Alerta', js: 'this.addEventListener("click", () => alert("¡Ejecución JS nativa en V18!"));' },
+    { cat: 'Motor JavaScript', items: [
+      { id: 'js_alert', n: 'Botón Alerta JS', t: 'button', w: 150, h: 50, bg: '#f59e0b', c: '#fff', r: 6, txt: 'Clic Alerta', js: 'this.addEventListener("click", () => alert("¡Ejecución JS nativa en V19!"));' },
       { id: 'js_counter', n: 'Contador Lógico', t: 'div', w: 200, h: 100, bg: '#ffffff', c: '#0f172a', r: 8, style:'shadow', txt: '<div style="text-align:center;"><h3 style="font-size:30px; margin:0 0 10px 0;">0</h3><button class="btn-add" style="padding:8px 15px; background:#3b82f6; color:white; border:none; border-radius:4px; cursor:pointer;">Sumar +1</button></div>', js: 'let c=0; const num = this.querySelector("h3"); this.querySelector(".btn-add").addEventListener("click", () => { c++; num.innerText=c; });' },
       { id: 'js_clock', n: 'Reloj en Vivo', t: 'div', w: 220, h: 60, bg: '#0f172a', c: '#10b981', r: 6, txt: '<h2 style="margin:auto; font-family:monospace; font-size:24px;">00:00:00</h2>', js: 'setInterval(() => { this.querySelector("h2").innerText = new Date().toLocaleTimeString(); }, 1000);' },
       { id: 'js_color', n: 'Random Color JS', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', r: 8, txt: '<div style="margin:auto; font-weight:bold; cursor:pointer; text-align:center;">Clic para<br>cambiar color</div>', js: 'this.addEventListener("click", () => { this.querySelector(".inner-content").style.background = "#" + Math.floor(Math.random()*16777215).toString(16); });' },
       { id: 'js_mouse', n: 'Mouse Tracker', t: 'div', w: 300, h: 150, bg: '#1e293b', c: '#fff', r: 8, txt: '<div style="margin:auto; font-family:monospace;">Mueve el ratón aquí</div>', js: 'this.addEventListener("mousemove", (e) => { const rect = this.getBoundingClientRect(); const x = Math.round(e.clientX - rect.left); const y = Math.round(e.clientY - rect.top); this.querySelector(".inner-content div").innerText = `X: ${x} | Y: ${y}`; });' }
     ]},
-    { cat: 'Interactividad CSS (Sin JS)', items: [
+    { cat: 'Interactividad CSS', items: [
       { id: 'dropdown', n: 'Menú Hover', t: 'div', w: 160, h: 50, bg: '#3b82f6', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Opciones ▼\n<ul class="sub">\n  <li><a href="#">Perfil</a></li>\n  <li><a href="#">Ajustes</a></li>\n</ul>' },
       { id: 'tabs', n: 'Pestañas Tabs', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Diseño</label>\n  <label for="t2">Código</label>\n</div>\n<div class="tab-content c1">Panel 1.</div>\n<div class="tab-content c2">Panel 2.</div>' },
       { id: 'flip', n: 'Flip Card 3D', t: 'div', w: 220, h: 320, bg: 'transparent', c: '#fff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">Pasa el Ratón</div>\n<div class="back" style="background:#f43f5e; border-radius:12px;">Sorpresa</div>' },
@@ -417,7 +523,7 @@
       { id: 'chat', n: 'Chat Bubble', t: 'div', w: 250, h: 80, bg: '#10b981', c: '#fff', r: 20, txt: '<div style="padding:15px;">Hola, ¿cómo estás?</div><div style="position:absolute; bottom:0; right:-10px; width:20px; height:20px; background:#10b981; border-radius:50%;"></div>' },
       { id: 'timeline', n: 'Timeline Vertical', t: 'div', w: 300, h: 200, bg: 'transparent', c: '#000', txt: '<div style="border-left:3px solid #3b82f6; padding-left:20px; margin-left:10px;"><div style="position:relative; margin-bottom:20px;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 1</b><p>Inicio</p></div><div style="position:relative;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 2</b><p>Fin</p></div></div>' }
     ]},
-    { cat: 'Estilos Extremos (Render)', items: [
+    { cat: 'Estilos Extremos', items: [
       { id: 'glass-card', n: 'Glassmorfismo', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.15)', c: '#fff', r: 16, style: 'glass', txt: '<div style="padding:20px; font-size:18px; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.5);">Tarjeta de Cristal</div>' },
       { id: 'neumorph', n: 'Neumorfismo Btn', t: 'button', w: 150, h: 150, bg: '#e0e5ec', c: '#4b5563', r: 75, style: 'neumorphism', txt: 'PULSAR' },
       { id: 'cyberpunk', n: 'Cyberpunk Btn', t: 'button', w: 220, h: 65, bg: '#facc15', c: '#000', style: 'cyberpunk', txt: 'CYBERPUNK' },
@@ -432,7 +538,7 @@
       { id: 'textarea', n: 'Caja Mensaje', t: 'textarea', w: 250, h: 100, bg: '#fff', c: '#000', r: 4, bw: 1, bc: '#cbd5e1', attrs: 'placeholder="Mensaje..."' },
       { id: 'range', n: 'Slider CSS', t: 'input', w: 200, h: 10, bg: '#e2e8f0', c: '#3b82f6', r: 5, attrs: 'type="range"' }
     ]},
-    { cat: 'Geometría Pura (Clip-Path)', items: [
+    { cat: 'Geometría (Clip-Path)', items: [
       { id: 'circle', n: 'Círculo Perfecto', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', clip: 'circle(50% at 50% 50%)' },
       { id: 'triangle', n: 'Triángulo', t: 'div', w: 150, h: 150, bg: '#f59e0b', c: '#fff', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
       { id: 'hexagon', n: 'Hexágono', t: 'div', w: 150, h: 150, bg: '#8b5cf6', c: '#fff', clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
@@ -444,7 +550,7 @@
       { id: 'badge', n: 'Badge Alert', t: 'span', w: 80, h: 25, bg: '#ef4444', c: '#fff', r: 12, txt: '<b style="font-size:11px;">Nuevo</b>' },
       { id: 'alert', n: 'Caja Alerta', t: 'div', w: 300, h: 60, bg: '#fef2f2', c: '#991b1b', r: 6, txt: '<div style="border-left:4px solid #ef4444; padding:10px 15px; width:100%; height:100%; display:flex; align-items:center;">⚠️ Error de conexión</div>' }
     ]},
-    { cat: 'Multimedia & Gráficos', items: [
+    { cat: 'Multimedia', items: [
       { id: 'img', n: 'Imagen', t: 'img', w: 300, h: 200, bg: '#cbd5e1', c: '#000', r: 8, attrs: 'src="https://via.placeholder.com/300"' },
       { id: 'video', n: 'Reproductor Video', t: 'video', w: 400, h: 225, bg: '#000', c: '#fff', r: 8, attrs: 'controls' },
       { id: 'audio', n: 'Reproductor Audio', t: 'audio', w: 300, h: 50, bg: '#f1f5f9', c: '#000', r: 25, attrs: 'controls' },
@@ -471,7 +577,7 @@
     });
   }
 
-  // --- MODO INTERACTIVO JS / CSS ---
+  // --- MODO INTERACTIVO ---
   function setMode(mode) {
     document.body.className = `${mode}-mode`;
     document.getElementById('btn-edit').className = mode === 'edit' ? 'active' : '';
@@ -500,10 +606,10 @@
     let t = null; catalogue.forEach(c => { const f = c.items.find(i => i.id === tKey); if(f) t = f; });
     if(!t) return;
     const id = `el_${counter++}`;
-    let sX = Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2)); let sY = Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2));
-    if(t.fullW) { sX = 0; sY = (t.t==='header') ? 0 : sY; } 
+    let sX = snap(Math.max(0, (canvas.offsetWidth / 2) - (t.w / 2))); 
+    let sY = snap(Math.max(50, (canvas.offsetHeight / 2) - (t.h / 2)));
+    if(t.fullW) { sX = 0; } 
 
-    // Aquí se asignan los valores base y propiedades avanzadas (bw=border width, bc=border color, pad=padding)
     const newEl = { id, name: `${t.n} ${counter-1}`, tag: t.t, attrs: t.attrs || '', x: sX, y: sY, w: t.w, h: t.h, baseW: t.w, baseH: t.h, bg: t.bg, color: t.c, text: t.txt || '', radius: t.r || 0, bw: t.bw || 0, bc: t.bc || '#000000', pad: 0, opacity: 100, rotY: 0, rotZ: 0, scale: 1, style: t.style || 'none', func: t.func || 'none', anim: 'none', clip: t.clip || 'none', js: t.js || '' };
     elements.push(newEl);
     
@@ -514,27 +620,24 @@
     canvas.appendChild(node); applyStylesAndCompile(); selectElement(id); saveState();
   }
 
-  // --- MOTOR CSS DINÁMICO & SHAPES FIX ---
+  // --- MOTOR CSS DINÁMICO ---
   function applyStylesAndCompile() {
     let gCSS = ""; 
     elements.forEach((el, idx) => {
       const node = document.getElementById(el.id); if(!node) return;
       
-      // EL WRAPPER (Controla el motor físico y Drag, NUNCA lleva transición de left/top para evitar el lag de arrastre)
       node.style.zIndex = idx + 1; node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`;
       
       let wRule = `width: ${Math.round(el.w)}px;`; if (el.x === 0 && Math.abs(el.w - canvas.offsetWidth) < 5) wRule = `width: 100%;`;
       
       let cB = `.${el.id} {\n  position: absolute; left: ${Math.round(el.x)}px; top: ${Math.round(el.y)}px; z-index: ${idx+1};\n  ${wRule} height: ${Math.round(el.h)}px;\n  transform: rotateZ(${el.rotZ}deg) rotateY(${el.rotY}deg) scale(${el.scale});\n}\n`;
       
-      // INNER CONTENT (Controla lo visual: fondo, opacidad, bordes, clip-path)
       cB += `.${el.id} .inner-content {\n  background: ${el.bg};\n  color: ${el.color};\n  border-radius: ${el.radius}px;\n`;
       if(el.bw > 0) cB += `  border: ${el.bw}px solid ${el.bc};\n`;
       if(el.pad > 0) cB += `  padding: ${el.pad}px;\n`;
       cB += `  opacity: ${el.opacity/100};\n  transition: background 0.3s, color 0.3s, box-shadow 0.3s, border-radius 0.3s, opacity 0.3s;\n`;
       if(el.clip !== 'none') cB += `  clip-path: ${el.clip};\n`;
       
-      // Estilos Extremos
       if(el.style === 'shadow') cB += `  box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n`;
       else if(el.style === 'neumorphism') cB += `  box-shadow: 8px 8px 16px #c5c9d1, -8px -8px 16px #ffffff;\n  display: flex; align-items: center; justify-content: center; font-weight: bold; border:none;\n`;
       else if(el.style === 'glass') cB += `  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);\n  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);\n  border: 1px solid rgba(255,255,255,0.18);\n`;
@@ -547,7 +650,6 @@
       if(el.anim === 'spin') cB += `  animation: animSpin 4s linear infinite;\n`;
       cB += `}\n`;
 
-      // CSS Lógica Funcional
       if(el.func === 'hover-dropdown') {
         cB += `.${el.id} .inner-content { flex-direction: column; position: relative; cursor: pointer; align-items:center; justify-content:center; }\n.${el.id} .sub { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); list-style: none; padding: 0; margin: 5px 0 0 0; border-radius: 4px; overflow: hidden; z-index:50; }\n.${el.id}:hover .sub { display: block; }\n.${el.id} .sub li a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }\n.${el.id} .sub li a:hover { background: #f8fafc; }\n`;
       } else if(el.func === 'hover-flip') {
@@ -583,44 +685,112 @@
     dynamicCss.textContent = gCSS; generateCode(); 
   }
 
-  // --- ARRASTRAR / REDIMENSIONAR FÍSICO ---
+  // --- ARRASTRAR / REDIMENSIONAR ---
   function startDrag(e, el, node) {
     if(document.body.classList.contains('interact-mode')) return; e.preventDefault(); let sX = e.clientX, sY = e.clientY; let moved = false;
-    function move(ev) { moved = true; el.x += ev.clientX - sX; el.y += ev.clientY - sY; sX = ev.clientX; sY = ev.clientY; node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; updatePropsUI(); }
+    function move(ev) { 
+      moved = true; 
+      el.x = snap(el.x + (ev.clientX - sX)); 
+      el.y = snap(el.y + (ev.clientY - sY)); 
+      sX = ev.clientX; sY = ev.clientY; 
+      node.style.left = `${el.x}px`; node.style.top = `${el.y}px`; 
+      updatePropsUI(); 
+    }
     function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); if(moved) saveState(); }
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
+  
   function startResize(e, el, node) {
     if(document.body.classList.contains('interact-mode')) return; e.preventDefault(); let sX = e.clientX, sY = e.clientY; let moved = false;
-    function move(ev) { moved = true; el.w = Math.max(20, el.w + (ev.clientX - sX)); el.h = Math.max(20, el.h + (ev.clientY - sY)); sX = ev.clientX; sY = ev.clientY; node.style.width = `${el.w}px`; node.style.height = `${el.h}px`; updatePropsUI(); }
+    function move(ev) { 
+      moved = true; 
+      el.w = snap(Math.max(20, el.w + (ev.clientX - sX))); 
+      el.h = snap(Math.max(20, el.h + (ev.clientY - sY))); 
+      sX = ev.clientX; sY = ev.clientY; 
+      node.style.width = `${el.w}px`; node.style.height = `${el.h}px`; 
+      updatePropsUI(); 
+    }
     function up() { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); generateCode(); if(moved) saveState(); }
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
 
   // --- UI CONTROLES ---
-  function initCanvas() { canvasBg.style.background = '#1a1d27'; canvasBg.style.opacity = '0.10'; saveState(); }
-  function updateCanvas() { canvasBg.style.background = document.getElementById('canvas-color').value; canvasBg.style.opacity = document.getElementById('canvas-opacity').value / 100; generateCode(); }
-  function selectElement(id) { selectedId = id; document.querySelectorAll('.element').forEach(n => n.classList.remove('selected')); if(id && document.body.classList.contains('edit-mode')) document.getElementById(id).classList.add('selected'); updatePropsUI(); }
-  canvas.addEventListener('mousedown', (e) => { if(e.target === canvas || e.target === canvasBg) selectElement(null); });
+  function initCanvas() { 
+    canvasBg.style.background = '#1a1d27'; 
+    canvasBg.style.opacity = '0.10'; 
+    loadProject(); // Cargar desde LocalStorage si existe
+  }
+  
+  function updateCanvas() { 
+    canvasBg.style.background = document.getElementById('canvas-color').value; 
+    canvasBg.style.opacity = document.getElementById('canvas-opacity').value / 100; 
+    generateCode(); 
+  }
+  
+  function selectElement(id) { 
+    selectedId = id; 
+    document.querySelectorAll('.element').forEach(n => n.classList.remove('selected')); 
+    if(id && document.body.classList.contains('edit-mode')) document.getElementById(id).classList.add('selected'); 
+    updatePropsUI(); 
+  }
+  canvas.addEventListener('mousedown', (e) => { if(e.target === canvas || e.target === canvasBg || e.target.classList.contains('grid-overlay')) selectElement(null); });
   
   function updatePropsUI() {
     if(!selectedId) { document.getElementById('canvas-props').style.display='block'; document.getElementById('layer-props').style.display='none'; return; }
     document.getElementById('canvas-props').style.display='none'; document.getElementById('layer-props').style.display='block';
     const el = elements.find(e => e.id === selectedId);
     ['x','y','w','h','radius','bw','pad','rotY','rotZ','scale'].forEach(p => document.getElementById(`prop-${p}`).value = Math.round(el[p]));
-    document.getElementById('prop-bg').value = el.bg; document.getElementById('prop-color').value = el.color.startsWith('#')?el.color:'#ffffff'; document.getElementById('prop-bc').value = el.bc.startsWith('#')?el.bc:'#000000';
+    document.getElementById('prop-bg').value = el.bg || ''; 
+    document.getElementById('prop-color').value = (el.color && el.color.startsWith('#')) ? el.color : '#ffffff'; 
+    document.getElementById('prop-bc').value = (el.bc && el.bc.startsWith('#')) ? el.bc : '#000000';
     ['text','style','func','anim','js'].forEach(p => document.getElementById(`prop-${p}`).value = el[p] || '');
   }
+  
   function updateElUI() {
     if(!selectedId) return; const el = elements.find(e => e.id === selectedId);
     ['x','y','w','h','radius','bw','pad','rotY','rotZ','scale'].forEach(p => el[p] = parseFloat(document.getElementById(`prop-${p}`).value) || 0);
     ['bg','color','bc','text','style','func','anim','js'].forEach(p => el[p] = document.getElementById(`prop-${p}`).value);
     applyStylesAndCompile(); 
   }
+  
   function switchTab(t) { document.querySelectorAll('.tab-btn, .tab-content').forEach(e => e.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
-  function setViewport(t) { document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); canvas.className = t; }
+  
+  function setViewport(t) { 
+    document.querySelectorAll('.viewports button').forEach(b => b.classList.remove('active')); 
+    event.target.classList.add('active'); 
+    canvas.className = t; 
+  }
 
-  // --- EXPORTADOR A HTML/CSS/JS ---
+  function setZoom(val) {
+    canvasContainer.style.transform = `scale(${val})`;
+    document.getElementById('zoom-label').textContent = Math.round(val * 100) + '%';
+  }
+
+  function newProject() {
+    if(confirm('¿Estás seguro de borrar todo el proyecto actual? Esta acción no se puede deshacer.')) {
+      elements = []; counter = 1; selectedId = null; historyStack = []; historyIndex = -1;
+      localStorage.removeItem('mlp_v19_project');
+      rebuildDOM(); saveState();
+    }
+  }
+
+  // --- EXPORTADOR Y COPIA ---
+  function copyCode(elementId) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '¡Copiado!';
+      btn.style.background = 'var(--accent)';
+      btn.style.color = 'white';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 1500);
+    });
+  }
+
   function generateCode() {
     let bgC = document.getElementById('canvas-color').value; let bgO = document.getElementById('canvas-opacity').value / 100;
     let htmlG = `<div class="pro-layout">\n`;
@@ -663,7 +833,7 @@
 
   function downloadProject() {
     if(elements.length === 0) return alert("El lienzo está vacío.");
-    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V18</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n<script src="script.js"><\/script>\n</body>\n</html>`;
+    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V19</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n<script src="script.js"><\/script>\n</body>\n</html>`;
     downloadFile('index.html', html); 
     setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
     setTimeout(() => downloadFile('script.js', document.getElementById('code-js-global').textContent), 1000);
