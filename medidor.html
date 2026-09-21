@@ -3,12 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Layout Pro - V19 Community Edition</title>
-<meta name="description" content="Herramienta visual gratuita para crear, previsualizar y exportar layouts HTML, CSS y JS. Ideal para principiantes y expertos.">
-<meta property="og:title" content="Master Layout Pro V19">
-<meta property="og:description" content="El 'Photopea' para programadores web. Genera código limpio al instante.">
-<meta property="og:type" content="website">
-
+<title>Master Layout Pro - V20 GitHub Pages Edition</title>
+<meta name="description" content="Generador visual de código HTML, CSS y JS estático optimizado para GitHub Pages.">
 <style>
   :root { 
     --bg-app: #0f111a; --bg-panel: #1a1d27; --bg-light: #282c3a;
@@ -43,27 +39,47 @@
   /* WORKSPACE */
   .workspace { display: flex; flex: 1; height: calc(100vh - 55px); }
   
-  /* SIDEBAR (CATÁLOGO) */
-  .sidebar { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+  /* SIDEBAR (CATÁLOGO MASIVO) */
+  .sidebar { width: 320px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
   .search-box { padding: 15px; border-bottom: 1px solid var(--border); background: #14171f; }
   .search-box input { width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); color: #fff; border-radius: 6px; font-size: 12px; outline: none; }
   .search-box input:focus { border-color: var(--accent); }
   .catalog-scroll { flex: 1; overflow-y: auto; }
   .catalog-scroll::-webkit-scrollbar { width: 5px; } .catalog-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
   .cat-section { padding: 15px 15px 0 15px; }
-  .cat-title { font-size: 10px; text-transform: uppercase; color: #cbd5e1; margin: 0 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: 700;}
+  .cat-title { font-size: 10px; text-transform: uppercase; color: #cbd5e1; margin: 0 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: 700; display: flex; justify-content: space-between; }
+  .cat-count { background: var(--bg-light); padding: 1px 6px; border-radius: 10px; font-size: 9px; }
   .tool-btn { width: 100%; background: #1e293b; color: #cbd5e1; border: 1px solid var(--border); padding: 8px 10px; border-radius: 4px; cursor: pointer; text-align: left; font-size: 11px; margin-bottom: 6px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
   .tool-btn:hover { background: #334155; border-color: var(--accent); color: #fff; }
-  .tool-tag { font-size: 9px; background: #0f172a; padding: 2px 5px; border-radius: 3px; color: #94a3b8; }
+  .tool-tag { font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+  .tag-html { background: #e34c26; color: white; }
+  .tag-css { background: #264de4; color: white; }
+  .tag-js { background: #f59e0b; color: black; }
+  .tag-gh { background: #ffffff; color: black; }
 
-  /* CANVAS ENGINE */
-  .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; background-image: radial-gradient(#334155 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 20px; position: relative; }
-  #canvas-container { transition: transform 0.2s ease; transform-origin: center top; }
-  #canvas { position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.9); transition: width 0.3s, height 0.3s; perspective: 1500px; background: transparent; }
-  #canvas.desktop { width: 100%; height: 100%; min-height: 800px; }
-  #canvas.tablet { width: 768px; height: 1024px; border-radius: 4px; border: 1px solid #334155; }
-  #canvas.mobile { width: 375px; height: 667px; border-radius: 30px; border: 12px solid #0f172a; }
+  /* CANVAS ENGINE (VISIBILIDAD MÁXIMA) */
+  .canvas-wrapper { flex: 1; display: flex; justify-content: center; align-items: flex-start; background-color: #0b0d14; background-image: radial-gradient(#334155 1px, transparent 0); background-size: 20px 20px; overflow: auto; padding: 40px; position: relative; }
+  #canvas-container { transition: transform 0.2s ease; transform-origin: center top; margin-bottom: 100px; }
+  
+  /* El lienzo ahora es INCONFUNDIBLE */
+  #canvas { 
+    position: relative; 
+    box-shadow: 0 25px 80px rgba(0,0,0,0.8); 
+    transition: width 0.3s, height 0.3s; 
+    perspective: 1500px; 
+    background: #ffffff; /* Fondo blanco por defecto para que se vea el lienzo */
+    overflow: hidden;
+  }
+  body.edit-mode #canvas {
+    border: 3px dashed var(--accent); /* Borde punteado verde en modo edición */
+  }
+  #canvas.desktop { width: 100%; min-width: 1024px; height: 800px; }
+  #canvas.tablet { width: 768px; height: 1024px; border-radius: 8px; }
+  #canvas.mobile { width: 375px; height: 667px; border-radius: 24px; border: 12px solid #0f172a !important; }
+  
   .canvas-bg { position: absolute; inset: 0; z-index: 0; transition: background 0.3s, opacity 0.3s; pointer-events: none; }
+  .grid-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; background-size: 10px 10px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); display: none; }
+  body.snap-active .grid-overlay { display: block; }
 
   /* ELEMENTS */
   .element { position: absolute; box-sizing: border-box; display: flex; overflow: visible; }
@@ -74,8 +90,8 @@
   body.interact-mode .resizer { display: none !important; }
   body.interact-mode .element.selected { outline: none; }
   
-  .element.selected { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 99999 !important; }
-  .resizer { width: 12px; height: 12px; background: var(--accent); position: absolute; right: -6px; bottom: -6px; cursor: nwse-resize; display: none; z-index: 9999; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
+  .element.selected { outline: 2px solid var(--accent-blue); outline-offset: 2px; z-index: 99999 !important; }
+  .resizer { width: 14px; height: 14px; background: var(--accent-blue); position: absolute; right: -7px; bottom: -7px; cursor: nwse-resize; display: none; z-index: 9999; border-radius: 50%; box-shadow: 0 0 0 2px #fff, 0 0 5px rgba(0,0,0,0.5);}
   .element.selected .resizer { display: block; }
   
   .inner-content { width: 100%; height: 100%; display: flex; transition: background 0.3s, box-shadow 0.3s, border-radius 0.3s, filter 0.3s, opacity 0.3s; position: relative; overflow: hidden;}
@@ -123,14 +139,10 @@
   body.preview-mode .sidebar { display: none; }
   body.preview-mode .right-panel { display: none; }
   body.preview-mode .canvas-wrapper { padding: 0; background: #fff; }
-  body.preview-mode #canvas-container { transform: none !important; }
-  body.preview-mode #canvas { box-shadow: none; border: none; border-radius: 0; width: 100% !important; height: 100% !important; min-height: 100vh; }
+  body.preview-mode #canvas-container { transform: none !important; margin: 0; }
+  body.preview-mode #canvas { box-shadow: none; border: none !important; border-radius: 0; width: 100% !important; height: 100% !important; min-height: 100vh; }
   .btn-exit-preview { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999999; background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
   body.preview-mode .btn-exit-preview { display: block; }
-
-  /* Grid Overlay */
-  .grid-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; background-size: 10px 10px; background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); display: none; }
-  body.snap-active .grid-overlay { display: block; }
 </style>
 <style id="dynamic-css"></style>
 </head>
@@ -138,8 +150,8 @@
 
   <header>
     <div class="logo">
-      <h1>Master Layout Pro V19</h1>
-      <p>HTML + CSS + Motor JavaScript</p>
+      <h1>Master Layout Pro V20</h1>
+      <p>Optimizado para GitHub Pages (HTML/CSS/JS Estático)</p>
     </div>
     
     <div class="controls-center">
@@ -162,7 +174,7 @@
       
       <div class="zoom-control">
         <span>🔍</span>
-        <input type="range" min="0.5" max="1.5" step="0.1" value="1" oninput="setZoom(this.value)">
+        <input type="range" min="0.4" max="1.5" step="0.1" value="1" oninput="setZoom(this.value)">
         <span id="zoom-label">100%</span>
       </div>
 
@@ -176,15 +188,15 @@
   <button class="btn-exit-preview" onclick="setMode('edit')">Salir del Preview (Esc)</button>
 
   <div class="workspace">
-    <!-- SIDEBAR (CATÁLOGO) -->
+    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="search-box">
-        <input type="text" id="cat-search" placeholder="🔍 Buscar (ej. 'slider', 'js', 'card')..." oninput="filterSidebar()">
+        <input type="text" id="cat-search" placeholder="🔍 Buscar (ej. 'bento', 'glitch', 'gh')..." oninput="filterSidebar()">
       </div>
       <div class="catalog-scroll" id="sidebar-content"></div>
     </div>
 
-    <!-- CANVAS -->
+    <!-- CANVAS (Ahora con visibilidad máxima) -->
     <div class="canvas-wrapper" id="canvas-wrapper">
       <div id="canvas-container">
         <div id="canvas" class="desktop">
@@ -203,15 +215,13 @@
         <button class="tab-btn tab-js" onclick="switchTab('js')">JS</button>
       </div>
 
-      <!-- PROPIEDADES -->
       <div id="tab-props" class="tab-content active">
         <div class="props-container">
-          
           <div id="canvas-props" style="display: block;">
             <div style="text-align: center; margin-bottom: 15px; font-size: 11px; color: var(--accent);">⚙️ Lienzo Global</div>
             <div class="prop-section">
-              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo (Lienzo)</label><input type="color" id="canvas-color" value="#1a1d27" oninput="updateCanvas()" onchange="saveState()"></div>
-              <div class="prop-group"><label>Opacidad Lienzo (%)</label><input type="number" id="canvas-opacity" value="10" min="0" max="100" oninput="updateCanvas()" onchange="saveState()"></div>
+              <div class="prop-group" style="margin-bottom:10px;"><label>Color Fondo (Lienzo)</label><input type="color" id="canvas-color" value="#ffffff" oninput="updateCanvas()" onchange="saveState()"></div>
+              <div class="prop-group"><label>Opacidad Lienzo (%)</label><input type="number" id="canvas-opacity" value="100" min="0" max="100" oninput="updateCanvas()" onchange="saveState()"></div>
             </div>
             <div style="color: #64748b; font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">
               <strong>Atajos Pro:</strong><br>Ctrl+Z: Deshacer | Ctrl+Y: Rehacer<br>Ctrl+C: Copiar | Ctrl+V: Pegar<br>Supr: Borrar | Esc: Salir Preview
@@ -219,20 +229,17 @@
           </div>
 
           <div id="layer-props" style="display: none;">
-            
             <div class="action-grid">
               <button onclick="resetTransforms()">🔄 Reset Transform</button>
               <button onclick="resetSize()">📐 Reset Tamaño</button>
               <button onclick="duplicateElement()">📑 Clonar</button>
               <button class="danger" onclick="deleteElement()">🗑️ Borrar</button>
             </div>
-            
             <div class="action-grid">
-              <button onclick="moveLayer('up')">⬆️ Subir Capa</button>
-              <button onclick="moveLayer('down')">⬇️ Bajar Capa</button>
+              <button onclick="moveLayer('up')">⬆️ Subir Capa (Z)</button>
+              <button onclick="moveLayer('down')">⬇️ Bajar Capa (Z)</button>
             </div>
 
-            <!-- BOTONES OBS -->
             <div class="obs-controls">
               <button onclick="obsAlign('centerH')" title="Centrar Horizontal">↔</button>
               <button onclick="obsAlign('centerV')" title="Centrar Vertical">↕</button>
@@ -271,14 +278,14 @@
             </div>
 
             <div class="prop-section">
-              <h4>Estructura Interna HTML (Nesting)</h4>
+              <h4>Estructura Interna HTML</h4>
               <div class="prop-group">
-                <textarea id="prop-text" oninput="updateElUI()" onchange="saveState()" rows="5" style="font-family: monospace; color:#e6db74; white-space: pre; font-size:10px;"></textarea>
+                <textarea id="prop-text" oninput="updateElUI()" onchange="saveState()" rows="6" style="font-family: monospace; color:#e6db74; white-space: pre; font-size:10px;"></textarea>
               </div>
             </div>
 
             <div class="prop-section">
-              <h4>Lógica JavaScript Dinámica</h4>
+              <h4>Lógica JavaScript</h4>
               <div class="prop-group">
                 <label style="color:var(--accent-js);">Código JS (Usa 'this' para el elemento)</label>
                 <textarea id="prop-js" oninput="updateElUI()" onchange="saveState()" rows="4" style="font-family: monospace; color:#f59e0b; font-size:10px;" placeholder="this.addEventListener('click', () => alert('Hola'));"></textarea>
@@ -286,15 +293,14 @@
             </div>
 
             <div class="prop-section">
-              <h4>Transformaciones & Filtros 3D</h4>
+              <h4>Transformaciones & Efectos</h4>
               <div class="prop-row">
                 <div class="prop-group"><label>Rot Y (3D)</label><input type="number" id="prop-rotY" oninput="updateElUI()" onchange="saveState()"></div>
                 <div class="prop-group"><label>Rot Z</label><input type="number" id="prop-rotZ" oninput="updateElUI()" onchange="saveState()"></div>
                 <div class="prop-group"><label>Escala</label><input type="number" step="0.1" id="prop-scale" oninput="updateElUI()" onchange="saveState()"></div>
               </div>
-              
               <div class="prop-group" style="margin-top:10px; margin-bottom:10px;">
-                <label>Estilo de Renderizado (Visual)</label>
+                <label>Estilo de Renderizado</label>
                 <select id="prop-style" oninput="updateElUI()" onchange="saveState()">
                   <option value="none">Normal</option>
                   <option value="shadow">Sombra Paralela</option>
@@ -303,9 +309,9 @@
                   <option value="cyberpunk">Cyberpunk (Neón + Glitch)</option>
                   <option value="skeleton">Skeleton Loader</option>
                   <option value="neon">Brillo Neón Intenso</option>
+                  <option value="gradient-border">Borde Gradiente Animado</option>
                 </select>
               </div>
-
               <div class="prop-group" style="margin-bottom:10px;">
                 <label>Lógica Funcional (CSS Puro)</label>
                 <select id="prop-func" oninput="updateElUI()" onchange="saveState()">
@@ -315,11 +321,11 @@
                   <option value="tooltip">Globo de Tooltip (Hover)</option>
                   <option value="css-tabs">Pestañas Radiales (CSS puro)</option>
                   <option value="toggle">Interruptor Toggle</option>
-                  <option value="modal-hack">Modal Pop-Up</option>
+                  <option value="modal-hack">Modal Pop-Up (CSS)</option>
                   <option value="css-carousel">Carrusel Infinito Automático</option>
+                  <option value="typewriter">Efecto Máquina de Escribir</option>
                 </select>
               </div>
-              
               <div class="prop-group">
                 <label>Animación Continua (@keyframes)</label>
                 <select id="prop-anim" oninput="updateElUI()" onchange="saveState()">
@@ -327,15 +333,14 @@
                   <option value="float">Flotar (Float)</option>
                   <option value="pulse">Latir (Pulse)</option>
                   <option value="spin">Rotar 3D Infinito</option>
+                  <option value="slide-up">Aparecer desde abajo</option>
                 </select>
               </div>
             </div>
-
           </div>
         </div>
       </div>
 
-      <!-- TABS HTML, CSS, JS -->
       <div id="tab-html" class="tab-content">
         <div class="code-section">
           <div class="code-header">Layout Global <button class="copy-btn" onclick="copyCode('code-html-global')">Copiar</button></div>
@@ -358,11 +363,10 @@
       </div>
       <div id="tab-js" class="tab-content">
         <div class="code-section">
-          <div class="code-header" style="color:var(--accent-js);">Script Global Proyecto <button class="copy-btn" onclick="copyCode('code-js-global')">Copiar</button></div>
+          <div class="code-header" style="color:var(--accent-js);">Script Global <button class="copy-btn" onclick="copyCode('code-js-global')">Copiar</button></div>
           <pre class="js-code" id="code-js-global"></pre>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -389,27 +393,26 @@
     const state = JSON.stringify(elements);
     if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex + 1);
     historyStack.push(state); historyIndex++;
-    if(historyStack.length > 40) { historyStack.shift(); historyIndex--; }
+    if(historyStack.length > 50) { historyStack.shift(); historyIndex--; }
     
-    // Auto-guardado en LocalStorage
-    localStorage.setItem('mlp_v19_project', state);
-    localStorage.setItem('mlp_v19_canvas', JSON.stringify({
+    localStorage.setItem('mlp_v20_project', state);
+    localStorage.setItem('mlp_v20_canvas', JSON.stringify({
       bg: canvasBg.style.background,
       opacity: canvasBg.style.opacity
     }));
   }
 
   function loadProject() {
-    const saved = localStorage.getItem('mlp_v19_project');
-    const savedCanvas = localStorage.getItem('mlp_v19_canvas');
+    const saved = localStorage.getItem('mlp_v20_project');
+    const savedCanvas = localStorage.getItem('mlp_v20_canvas');
     if (saved) {
       elements = JSON.parse(saved);
       rebuildDOM();
     }
     if (savedCanvas) {
       const c = JSON.parse(savedCanvas);
-      document.getElementById('canvas-color').value = c.bg || '#1a1d27';
-      document.getElementById('canvas-opacity').value = Math.round((c.opacity || 0.1) * 100);
+      document.getElementById('canvas-color').value = c.bg || '#ffffff';
+      document.getElementById('canvas-opacity').value = Math.round((c.opacity || 1) * 100);
       updateCanvas();
     }
   }
@@ -431,7 +434,6 @@
     selectElement(elements.find(e => e.id === prevSelected) ? prevSelected : null);
   }
 
-  // --- SHORTCUTS ---
   document.addEventListener('keydown', (e) => {
     if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
     if (e.key === 'Escape' && document.body.classList.contains('preview-mode')) setMode('edit');
@@ -487,82 +489,66 @@
     document.body.classList.toggle('snap-active', snapToGrid);
   }
 
-  // --- MEGA CATÁLOGO ---
+  // --- CATÁLOGO MASIVO (80+ Componentes) ---
   const catalogue = [
-    { cat: 'Layouts & Estructura', items: [
-      { id: 'hero', n: 'Hero Landing', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #1e293b, #0f172a)', c: '#fff', fullW: true, txt: '<div style="text-align:center; margin:auto;"><h1 style="font-size:48px; margin-bottom:20px;">Visión del Futuro</h1><p style="font-size:18px; color:#cbd5e1; margin-bottom:30px;">Crea interfaces espectaculares.</p><button style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:8px; font-weight:bold;">Empezar</button></div>' },
-      { id: 'navbar', n: 'Header Navbar', t: 'nav', w: 1000, h: 70, bg: '#ffffff', c: '#0f172a', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 30px; align-items:center;"><b style="font-size:20px; color:#3b82f6;">BRAND</b><div style="display:flex; gap:20px; font-weight:600;"><a href="#">Inicio</a><a href="#">Servicios</a></div><button style="padding:10px 20px; background:#0f172a; color:#fff; border:none; border-radius:6px;">Login</button></div>' },
-      { id: 'footer', n: 'Footer Moderno', t: 'footer', w: 1000, h: 150, bg: '#0f172a', c: '#94a3b8', fullW: true, txt: '<div style="display:flex; justify-content:space-around; width:100%; padding:30px;"><div><h3 style="color:#fff;">Compañía</h3><p>Software V19.</p></div><div><h3 style="color:#fff;">Redes</h3><p>Twitter | Github</p></div></div>' },
-      { id: 'sidebar', n: 'Panel Admin', t: 'aside', w: 250, h: 800, bg: '#ffffff', c: '#1e293b', txt: '<div style="padding:30px; border-right:1px solid #e2e8f0; height:100%;"><h2 style="color:#3b82f6; margin-bottom:30px;">Dashboard</h2><ul style="list-style:none; padding:0; line-height:3; font-weight:600;"><li style="color:#10b981;">🏠 Inicio</li><li>📊 Datos</li><li>⚙️ Ajustes</li></ul></div>' },
-      { id: 'grid2', n: 'Grid 2x2', t: 'div', w: 400, h: 400, bg: 'transparent', c: '#000', func: 'grid2', txt: '<div style="background:#cbd5e1;">A</div><div style="background:#94a3b8;">B</div><div style="background:#94a3b8;">C</div><div style="background:#cbd5e1;">D</div>' },
-      { id: 'grid3', n: 'Grid 3 Col', t: 'div', w: 900, h: 250, bg: 'transparent', c: '#000', func: 'grid3', txt: '<div style="background:#cbd5e1;">1</div><div style="background:#94a3b8;">2</div><div style="background:#64748b; color:white;">3</div>' },
-      { id: 'macwin', n: 'Ventana Mac OS', t: 'div', w: 500, h: 300, bg: '#ffffff', c: '#000', r: 10, style: 'shadow', txt: '<div style="background:#e2e8f0; padding:10px; display:flex; gap:8px;"><div style="width:12px; height:12px; background:#ef4444; border-radius:50%;"></div><div style="width:12px; height:12px; background:#f59e0b; border-radius:50%;"></div><div style="width:12px; height:12px; background:#10b981; border-radius:50%;"></div></div><div style="padding:20px;">Explorador de archivos...</div>' },
-      { id: 'div', n: 'Caja Libre', t: 'div', w: 200, h: 200, bg: '#e2e8f0', c: '#000', txt: 'Caja', baseW: 200, baseH: 200 }
+    { cat: 'GitHub Pages Ready', items: [
+      { id: 'gh_seo', n: 'SEO Meta Tags', t: 'div', w: 400, h: 150, bg: '#f8fafc', c: '#0f172a', r: 8, txt: '<div style="padding:20px; font-family:monospace; font-size:10px; color:#334155;">&lt;meta name="description" content="..."&gt;<br>&lt;meta property="og:title" content="..."&gt;<br>&lt;meta name="robots" content="index, follow"&gt;</div>', tag: 'gh' },
+      { id: 'gh_404', n: 'Página 404', t: 'div', w: 400, h: 300, bg: '#0f172a', c: '#fff', r: 12, txt: '<div style="text-align:center; padding:40px;"><h1 style="font-size:80px; margin:0; color:#ef4444;">404</h1><p>Página no encontrada en GitHub Pages.</p><a href="/" style="color:#3b82f6;">Volver al inicio</a></div>', tag: 'gh' },
+      { id: 'gh_construction', n: 'Under Construction', t: 'div', w: 500, h: 250, bg: '#f59e0b', c: '#000', r: 12, txt: '<div style="text-align:center; padding:40px;"><h2 style="font-size:32px; margin-bottom:10px;">🚧 En Construcción</h2><p>Este sitio se está desplegando en GitHub Pages.</p><div style="margin-top:20px; height:6px; background:#000; border-radius:3px; width:60%; margin-left:auto; margin-right:auto;"><div style="width:60%; height:100%; background:#fff; border-radius:3px; animation: animPulse 1s infinite;"></div></div></div>', tag: 'gh' },
+      { id: 'gh_cookie', n: 'Cookie Consent', t: 'div', w: 350, h: 120, bg: '#1e293b', c: '#fff', r: 8, style: 'shadow', txt: '<div style="padding:20px; display:flex; justify-content:space-between; align-items:center; gap:15px;"><p style="font-size:12px; margin:0;">Usamos cookies para mejorar tu experiencia.</p><button style="padding:8px 16px; background:#10b981; color:white; border:none; border-radius:4px; font-size:12px; cursor:pointer;">Aceptar</button></div>', tag: 'gh' }
     ]},
-    { cat: 'Motor JavaScript', items: [
-      { id: 'js_alert', n: 'Botón Alerta JS', t: 'button', w: 150, h: 50, bg: '#f59e0b', c: '#fff', r: 6, txt: 'Clic Alerta', js: 'this.addEventListener("click", () => alert("¡Ejecución JS nativa en V19!"));' },
-      { id: 'js_counter', n: 'Contador Lógico', t: 'div', w: 200, h: 100, bg: '#ffffff', c: '#0f172a', r: 8, style:'shadow', txt: '<div style="text-align:center;"><h3 style="font-size:30px; margin:0 0 10px 0;">0</h3><button class="btn-add" style="padding:8px 15px; background:#3b82f6; color:white; border:none; border-radius:4px; cursor:pointer;">Sumar +1</button></div>', js: 'let c=0; const num = this.querySelector("h3"); this.querySelector(".btn-add").addEventListener("click", () => { c++; num.innerText=c; });' },
+    { cat: 'Layouts Estructurales', items: [
+      { id: 'hero', n: 'Hero Landing', t: 'section', w: 1000, h: 500, bg: 'linear-gradient(135deg, #1e293b, #0f172a)', c: '#fff', fullW: true, txt: '<div style="text-align:center; margin:auto; padding:20px;"><h1 style="font-size:48px; margin-bottom:20px;">Visión del Futuro</h1><p style="font-size:18px; color:#cbd5e1; margin-bottom:30px;">Crea interfaces espectaculares estáticas.</p><button style="padding:15px 30px; background:#10b981; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Empezar</button></div>' },
+      { id: 'navbar', n: 'Header Navbar', t: 'nav', w: 1000, h: 70, bg: '#ffffff', c: '#0f172a', fullW: true, txt: '<div style="display:flex; justify-content:space-between; width:100%; padding:0 30px; align-items:center; height:100%;"><b style="font-size:20px; color:#3b82f6;">BRAND</b><div style="display:flex; gap:20px; font-weight:600;"><a href="#" style="text-decoration:none; color:inherit;">Inicio</a><a href="#" style="text-decoration:none; color:inherit;">Servicios</a></div><button style="padding:10px 20px; background:#0f172a; color:#fff; border:none; border-radius:6px;">Login</button></div>' },
+      { id: 'footer', n: 'Footer Moderno', t: 'footer', w: 1000, h: 150, bg: '#0f172a', c: '#94a3b8', fullW: true, txt: '<div style="display:flex; justify-content:space-around; width:100%; padding:30px; height:100%; align-items:center;"><div><h3 style="color:#fff; margin:0 0 10px 0;">Compañía</h3><p>Software V20.</p></div><div><h3 style="color:#fff; margin:0 0 10px 0;">Redes</h3><p>Twitter | Github</p></div></div>' },
+      { id: 'bento', n: 'Bento Grid', t: 'div', w: 600, h: 400, bg: '#f1f5f9', c: '#0f172a', r: 16, txt: '<div style="display:grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap:15px; padding:15px; width:100%; height:100%;"><div style="background:#fff; border-radius:12px; padding:20px;">Principal</div><div style="background:#3b82f6; color:white; border-radius:12px; padding:20px;">Stats</div><div style="background:#10b981; color:white; border-radius:12px; padding:20px; grid-column: span 2;">Footer del Grid</div></div>' },
+      { id: 'split', n: 'Split Screen', t: 'div', w: 800, h: 500, bg: '#ffffff', c: '#000', txt: '<div style="display:flex; width:100%; height:100%;"><div style="flex:1; background:#0f172a; color:white; display:flex; align-items:center; justify-content:center;"><h2>Imagen / Video</h2></div><div style="flex:1; padding:40px; display:flex; flex-direction:column; justify-content:center;"><h2>Contenido</h2><p>Descripción detallada del producto o servicio.</p></div></div>' }
+    ]},
+    { cat: 'CSS Puro (Avanzado)', items: [
+      { id: 'css_glitch', n: 'Glitch Text', t: 'h2', w: 300, h: 80, bg: 'transparent', c: '#fff', style: 'cyberpunk', txt: 'GLITCH', func: 'typewriter' },
+      { id: 'css_gradient_border', n: 'Borde Gradiente', t: 'div', w: 250, h: 150, bg: '#0f172a', c: '#fff', r: 12, style: 'gradient-border', txt: '<div style="padding:20px; text-align:center; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">Contenido</div>' },
+      { id: 'css_loader_1', n: 'Loader Spinner', t: 'div', w: 60, h: 60, bg: 'transparent', c: '#000', txt: '<div style="width:100%; height:100%; border:4px solid #e2e8f0; border-top:4px solid #3b82f6; border-radius:50%; animation: animSpin 1s linear infinite;"></div>' },
+      { id: 'css_loader_2', n: 'Loader Dots', t: 'div', w: 100, h: 40, bg: 'transparent', c: '#000', txt: '<div style="display:flex; gap:8px; align-items:center; justify-content:center; width:100%; height:100%;"><div style="width:12px; height:12px; background:#3b82f6; border-radius:50%; animation: animPulse 0.6s infinite alternate;"></div><div style="width:12px; height:12px; background:#3b82f6; border-radius:50%; animation: animPulse 0.6s 0.2s infinite alternate;"></div><div style="width:12px; height:12px; background:#3b82f6; border-radius:50%; animation: animPulse 0.6s 0.4s infinite alternate;"></div></div>' },
+      { id: 'css_tooltip', n: 'Tooltip CSS', t: 'span', w: 120, h: 40, bg: '#e2e8f0', c: '#000', r: 4, func: 'tooltip', txt: 'Hover Me' },
+      { id: 'css_flip', n: 'Flip Card 3D', t: 'div', w: 220, h: 320, bg: 'transparent', c: '#fff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">Frente</div>\n<div class="back" style="background:#f43f5e; border-radius:12px; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">Reverso</div>' },
+      { id: 'css_tabs', n: 'Tabs CSS', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Diseño</label>\n  <label for="t2">Código</label>\n</div>\n<div class="tab-content c1" style="padding:20px;">Panel de Diseño.</div>\n<div class="tab-content c2" style="padding:20px;">Panel de Código.</div>' }
+    ]},
+    { cat: 'JavaScript Interactivo', items: [
+      { id: 'js_darkmode', n: 'Dark Mode Toggle', t: 'div', w: 200, h: 50, bg: '#ffffff', c: '#000', r: 25, style: 'shadow', txt: '<button id="dm-btn" style="width:100%; height:100%; border:none; background:transparent; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:10px;">🌙 Modo Oscuro</button>', js: 'this.querySelector("#dm-btn").addEventListener("click", () => { document.body.classList.toggle("dark-mode"); const isDark = document.body.classList.contains("dark-mode"); this.querySelector("#dm-btn").innerHTML = isDark ? "☀️ Modo Claro" : "🌙 Modo Oscuro"; });' },
+      { id: 'js_counter', n: 'Contador Animado', t: 'div', w: 200, h: 100, bg: '#ffffff', c: '#0f172a', r: 8, style:'shadow', txt: '<div style="text-align:center; width:100%;"><h3 style="font-size:30px; margin:0 0 10px 0;">0</h3><button class="btn-add" style="padding:8px 15px; background:#3b82f6; color:white; border:none; border-radius:4px; cursor:pointer;">Sumar +1</button></div>', js: 'let c=0; const num = this.querySelector("h3"); this.querySelector(".btn-add").addEventListener("click", () => { c++; num.innerText=c; });' },
       { id: 'js_clock', n: 'Reloj en Vivo', t: 'div', w: 220, h: 60, bg: '#0f172a', c: '#10b981', r: 6, txt: '<h2 style="margin:auto; font-family:monospace; font-size:24px;">00:00:00</h2>', js: 'setInterval(() => { this.querySelector("h2").innerText = new Date().toLocaleTimeString(); }, 1000);' },
-      { id: 'js_color', n: 'Random Color JS', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', r: 8, txt: '<div style="margin:auto; font-weight:bold; cursor:pointer; text-align:center;">Clic para<br>cambiar color</div>', js: 'this.addEventListener("click", () => { this.querySelector(".inner-content").style.background = "#" + Math.floor(Math.random()*16777215).toString(16); });' },
-      { id: 'js_mouse', n: 'Mouse Tracker', t: 'div', w: 300, h: 150, bg: '#1e293b', c: '#fff', r: 8, txt: '<div style="margin:auto; font-family:monospace;">Mueve el ratón aquí</div>', js: 'this.addEventListener("mousemove", (e) => { const rect = this.getBoundingClientRect(); const x = Math.round(e.clientX - rect.left); const y = Math.round(e.clientY - rect.top); this.querySelector(".inner-content div").innerText = `X: ${x} | Y: ${y}`; });' }
+      { id: 'js_copy', n: 'Copiar al Portapapeles', t: 'div', w: 250, h: 50, bg: '#10b981', c: '#fff', r: 6, txt: '<button style="width:100%; height:100%; background:transparent; border:none; color:white; font-weight:bold; cursor:pointer;">📋 Copiar Texto</button>', js: 'this.querySelector("button").addEventListener("click", () => { navigator.clipboard.writeText("Texto copiado desde GitHub Pages!"); alert("¡Copiado!"); });' },
+      { id: 'js_form_val', n: 'Validación Form JS', t: 'div', w: 300, h: 120, bg: '#fff', c: '#000', r: 8, style: 'shadow', txt: '<div style="padding:20px; width:100%;"><input type="email" id="email-in" placeholder="Email" style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px;"><button id="val-btn" style="width:100%; padding:8px; background:#3b82f6; color:white; border:none; border-radius:4px;">Validar</button><p id="val-msg" style="font-size:11px; margin-top:5px;"></p></div>', js: 'this.querySelector("#val-btn").addEventListener("click", () => { const email = this.querySelector("#email-in").value; const msg = this.querySelector("#val-msg"); if(email.includes("@")) { msg.style.color="green"; msg.innerText="Email válido"; } else { msg.style.color="red"; msg.innerText="Email inválido"; } });' }
     ]},
-    { cat: 'Interactividad CSS', items: [
-      { id: 'dropdown', n: 'Menú Hover', t: 'div', w: 160, h: 50, bg: '#3b82f6', c: '#ffffff', r: 6, func: 'hover-dropdown', txt: 'Opciones ▼\n<ul class="sub">\n  <li><a href="#">Perfil</a></li>\n  <li><a href="#">Ajustes</a></li>\n</ul>' },
-      { id: 'tabs', n: 'Pestañas Tabs', t: 'div', w: 400, h: 250, bg: '#ffffff', c: '#000000', r: 8, func: 'css-tabs', txt: '<input type="radio" name="t" id="t1" checked>\n<input type="radio" name="t" id="t2">\n<div class="tab-headers">\n  <label for="t1">Diseño</label>\n  <label for="t2">Código</label>\n</div>\n<div class="tab-content c1">Panel 1.</div>\n<div class="tab-content c2">Panel 2.</div>' },
-      { id: 'flip', n: 'Flip Card 3D', t: 'div', w: 220, h: 320, bg: 'transparent', c: '#fff', func: 'hover-flip', txt: '<div class="front" style="background:#3b82f6; border-radius:12px;">Pasa el Ratón</div>\n<div class="back" style="background:#f43f5e; border-radius:12px;">Sorpresa</div>' },
-      { id: 'carousel', n: 'Carrusel Auto', t: 'div', w: 600, h: 300, bg: '#ffffff', c: '#000', func: 'css-carousel', txt: '<div class="slides">\n  <div class="slide" style="background:#3b82f6; color:white;">SLIDE 1</div>\n  <div class="slide" style="background:#10b981; color:white;">SLIDE 2</div>\n  <div class="slide" style="background:#f43f5e; color:white;">SLIDE 3</div>\n</div>' },
-      { id: 'modal', n: 'Modal Pop-Up', t: 'div', w: 150, h: 50, bg: '#10b981', c: '#fff', r: 6, func: 'modal-hack', txt: '<label for="m1" style="cursor:pointer; width:100%; text-align:center;">Abrir Modal</label>\n<input type="checkbox" id="m1" class="m-check">\n<div class="m-window"><div class="m-box"><h2>Aviso</h2><p>Modal en CSS.</p><label for="m1" class="m-close">Cerrar</label></div></div>' },
-      { id: 'accordion', n: 'Acordeón', t: 'div', w: 300, h: 45, bg: '#ffffff', c: '#000', txt: '<details style="width:100%; padding:10px;"><summary style="font-weight:bold; cursor:pointer;">Desplegar Detalles</summary><p style="margin-top:10px; color:#555;">Contenido nativo de HTML.</p></details>' },
-      { id: 'tooltip', n: 'Tooltip Globo', t: 'span', w: 120, h: 40, bg: '#e2e8f0', c: '#000', r: 4, func: 'tooltip', txt: 'Hover Me' },
-      { id: 'toggle', n: 'Switch Toggle', t: 'label', w: 60, h: 32, bg: 'transparent', c: '#10b981', func: 'toggle', txt: '<input type="checkbox"><span class="slider"></span>' }
+    { cat: 'Componentes UI Modernos', items: [
+      { id: 'ui_glass', n: 'Glassmorphism Card', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.15)', c: '#fff', r: 16, style: 'glass', txt: '<div style="padding:20px; font-size:18px; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.5); width:100%; height:100%; display:flex; align-items:center; justify-content:center;">Tarjeta de Cristal</div>' },
+      { id: 'ui_neumorph', n: 'Neumorfismo Btn', t: 'button', w: 150, h: 150, bg: '#e0e5ec', c: '#4b5563', r: 75, style: 'neumorphism', txt: 'PULSAR' },
+      { id: 'ui_pricing', n: 'Tabla Precios', t: 'div', w: 320, h: 450, bg: '#ffffff', c: '#0f172a', r: 16, style: 'shadow', txt: '<div style="padding:40px; text-align:center; height:100%; display:flex; flex-direction:column; justify-content:space-between;"><div><h3 style="color:#64748b;">Plan PRO</h3><div style="font-size:48px; font-weight:900; margin:20px 0;">$29</div><ul style="list-style:none; padding:0; line-height:2.5;"><li>✔️ Ilimitado</li><li>✔️ Soporte</li></ul></div><button style="width:100%; padding:15px; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Contratar</button></div>' },
+      { id: 'ui_testimonial', n: 'Testimonio', t: 'div', w: 350, h: 200, bg: '#f8fafc', c: '#0f172a', r: 12, txt: '<div style="padding:30px; display:flex; flex-direction:column; height:100%;"><p style="font-style:italic; font-size:14px; line-height:1.6; flex:1;">"Esta herramienta es increíble para generar código estático rápido."</p><div style="display:flex; align-items:center; gap:10px; margin-top:15px;"><div style="width:40px; height:40px; background:#cbd5e1; border-radius:50%;"></div><div><b style="font-size:14px;">Dev Junior</b><br><span style="font-size:12px; color:#64748b;">Frontend Dev</span></div></div></div>' },
+      { id: 'ui_timeline', n: 'Timeline Vertical', t: 'div', w: 300, h: 250, bg: 'transparent', c: '#000', txt: '<div style="border-left:3px solid #3b82f6; padding-left:20px; margin-left:10px; height:100%;"><div style="position:relative; margin-bottom:30px;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b style="font-size:14px;">Paso 1</b><p style="font-size:12px; color:#64748b; margin:5px 0 0 0;">Inicio del proyecto</p></div><div style="position:relative;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#10b981; border-radius:50%;"></div><b style="font-size:14px;">Paso 2</b><p style="font-size:12px; color:#64748b; margin:5px 0 0 0;">Despliegue en GitHub</p></div></div>' }
     ]},
-    { cat: 'Tarjetas & Diseño UI', items: [
-      { id: 'pricing', n: 'Tabla Precios', t: 'div', w: 320, h: 450, bg: '#ffffff', c: '#0f172a', r: 16, style: 'shadow', txt: '<div style="padding:40px; text-align:center;"><h3 style="color:#64748b;">Plan PRO</h3><div style="font-size:48px; font-weight:900; margin:20px 0;">$29</div><ul style="list-style:none; padding:0; line-height:2.5; margin-bottom:30px;"><li>✔️ Ilimitado</li><li>✔️ Soporte</li></ul><button style="width:100%; padding:15px; background:#3b82f6; color:white; border:none; border-radius:8px; font-weight:bold;">Contratar</button></div>' },
-      { id: 'profile', n: 'Perfil Usuario', t: 'div', w: 300, h: 350, bg: '#ffffff', c: '#0f172a', r: 12, style: 'shadow', txt: '<div style="display:flex; flex-direction:column; align-items:center; padding:30px;"><img src="https://via.placeholder.com/100" style="border-radius:50%; margin-bottom:15px;"><h3>Admin</h3><div style="display:flex; gap:10px; margin-top:20px;"><button style="padding:8px 20px; background:#3b82f6; color:white; border:none; border-radius:20px;">Seguir</button></div></div>' },
-      { id: 'login', n: 'Login Form', t: 'div', w: 350, h: 400, bg: '#ffffff', c: '#000', r: 12, style: 'shadow', txt: '<div style="padding:30px;"><h2>Acceso</h2><input type="email" placeholder="Email" style="width:100%; padding:12px; margin:20px 0 10px 0; border:1px solid #ccc; border-radius:4px;"><input type="password" placeholder="Pass" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ccc; border-radius:4px;"><button style="width:100%; padding:12px; background:#000; color:#fff; border:none; border-radius:4px;">Entrar</button></div>' },
-      { id: 'chat', n: 'Chat Bubble', t: 'div', w: 250, h: 80, bg: '#10b981', c: '#fff', r: 20, txt: '<div style="padding:15px;">Hola, ¿cómo estás?</div><div style="position:absolute; bottom:0; right:-10px; width:20px; height:20px; background:#10b981; border-radius:50%;"></div>' },
-      { id: 'timeline', n: 'Timeline Vertical', t: 'div', w: 300, h: 200, bg: 'transparent', c: '#000', txt: '<div style="border-left:3px solid #3b82f6; padding-left:20px; margin-left:10px;"><div style="position:relative; margin-bottom:20px;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 1</b><p>Inicio</p></div><div style="position:relative;"><div style="position:absolute; left:-29px; top:0; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></div><b>Paso 2</b><p>Fin</p></div></div>' }
+    { cat: 'Formularios & Inputs', items: [
+      { id: 'form_login', n: 'Login Form', t: 'div', w: 350, h: 350, bg: '#ffffff', c: '#000', r: 12, style: 'shadow', txt: '<div style="padding:30px; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center;"><h2 style="margin-bottom:20px;">Acceso</h2><input type="email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #cbd5e1; border-radius:6px; outline:none;"><input type="password" placeholder="Contraseña" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #cbd5e1; border-radius:6px; outline:none;"><button style="width:100%; padding:12px; background:#0f172a; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Entrar</button></div>' },
+      { id: 'form_search', n: 'Buscador Pro', t: 'div', w: 400, h: 50, bg: '#ffffff', c: '#000', r: 25, style: 'shadow', txt: '<div style="display:flex; width:100%; height:100%; padding:5px 5px 5px 20px; align-items:center;"><input type="text" placeholder="Buscar..." style="flex:1; border:none; outline:none; font-size:14px;"><button style="width:80px; height:40px; background:#3b82f6; color:white; border:none; border-radius:20px; cursor:pointer;">Ir</button></div>' },
+      { id: 'form_float', n: 'Input Animado', t: 'div', w: 250, h: 60, bg: '#fff', c: '#3b82f6', func: 'float-label', txt: '<input type="text" id="fl1" required style="width:100%; height:100%;">\n<label for="fl1" style="position:absolute; top:50%; left:15px; transform:translateY(-50%); color:#94a3b8; transition:0.2s; pointer-events:none;">Nombre</label>' },
+      { id: 'form_toggle', n: 'Switch Toggle', t: 'label', w: 60, h: 32, bg: 'transparent', c: '#10b981', func: 'toggle', txt: '<input type="checkbox" style="opacity:0; width:0; height:0;"><span class="slider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#ccc; transition:.4s; border-radius:34px;"></span>' }
     ]},
-    { cat: 'Estilos Extremos', items: [
-      { id: 'glass-card', n: 'Glassmorfismo', t: 'div', w: 300, h: 200, bg: 'rgba(255,255,255,0.15)', c: '#fff', r: 16, style: 'glass', txt: '<div style="padding:20px; font-size:18px; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.5);">Tarjeta de Cristal</div>' },
-      { id: 'neumorph', n: 'Neumorfismo Btn', t: 'button', w: 150, h: 150, bg: '#e0e5ec', c: '#4b5563', r: 75, style: 'neumorphism', txt: 'PULSAR' },
-      { id: 'cyberpunk', n: 'Cyberpunk Btn', t: 'button', w: 220, h: 65, bg: '#facc15', c: '#000', style: 'cyberpunk', txt: 'CYBERPUNK' },
-      { id: 'skeleton', n: 'Skeleton Loader', t: 'div', w: 300, h: 200, bg: '#e2e8f0', c: '#000', r: 8, style: 'skeleton', txt: '' },
-      { id: 'neon', n: 'Texto Neón', t: 'h2', w: 250, h: 60, bg: 'transparent', c: '#0ea5e9', style: 'neon', txt: 'NEÓN' },
-      { id: 'spinner', n: 'Spinner CSS', t: 'div', w: 50, h: 50, bg: 'transparent', c: '#000', txt: '<div style="width:100%; height:100%; border:5px solid #f3f3f3; border-top:5px solid #3b82f6; border-radius:50%; animation:animSpin 1s linear infinite;"></div>' }
-    ]},
-    { cat: 'Inputs & Controles', items: [
-      { id: 'searchbar', n: 'Buscador Pro', t: 'div', w: 400, h: 50, bg: '#ffffff', c: '#000', r: 25, style: 'shadow', txt: '<div style="display:flex; width:100%; height:100%; padding:5px 5px 5px 20px;"><input type="text" placeholder="Buscar..." style="flex:1; border:none; outline:none;"><button style="width:80px; background:#3b82f6; color:white; border:none; border-radius:20px;">Ir</button></div>' },
-      { id: 'float-label', n: 'Input Animado', t: 'div', w: 250, h: 55, bg: '#fff', c: '#3b82f6', func: 'float-label', txt: '<input type="text" id="fl1" required>\n<label for="fl1">Nombre</label>' },
-      { id: 'input', n: 'Campo Texto', t: 'input', w: 250, h: 45, bg: '#fff', c: '#000', r: 4, bw: 1, bc: '#cbd5e1', attrs: 'placeholder="Escribe..."' },
-      { id: 'textarea', n: 'Caja Mensaje', t: 'textarea', w: 250, h: 100, bg: '#fff', c: '#000', r: 4, bw: 1, bc: '#cbd5e1', attrs: 'placeholder="Mensaje..."' },
-      { id: 'range', n: 'Slider CSS', t: 'input', w: 200, h: 10, bg: '#e2e8f0', c: '#3b82f6', r: 5, attrs: 'type="range"' }
-    ]},
-    { cat: 'Geometría (Clip-Path)', items: [
-      { id: 'circle', n: 'Círculo Perfecto', t: 'div', w: 150, h: 150, bg: '#3b82f6', c: '#fff', clip: 'circle(50% at 50% 50%)' },
-      { id: 'triangle', n: 'Triángulo', t: 'div', w: 150, h: 150, bg: '#f59e0b', c: '#fff', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' },
-      { id: 'hexagon', n: 'Hexágono', t: 'div', w: 150, h: 150, bg: '#8b5cf6', c: '#fff', clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
-      { id: 'star', n: 'Estrella', t: 'div', w: 150, h: 150, bg: '#f43f5e', c: '#fff', clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }
-    ]},
-    { cat: 'Datos & Status', items: [
-      { id: 'table', n: 'Tabla Datos', t: 'table', w: 400, h: 150, bg: '#fff', c: '#000', r: 8, style: 'shadow', txt: '<thead style="background:#f8fafc; text-align:left;"><tr><th style="padding:10px;">ID</th><th style="padding:10px;">User</th></tr></thead><tbody><tr><td style="padding:10px;">1</td><td style="padding:10px;">Admin</td></tr></tbody>' },
-      { id: 'progress', n: 'Barra Progreso', t: 'progress', w: 250, h: 15, bg: '#e2e8f0', c: '#10b981', r: 10, attrs: 'value="70" max="100"' },
-      { id: 'badge', n: 'Badge Alert', t: 'span', w: 80, h: 25, bg: '#ef4444', c: '#fff', r: 12, txt: '<b style="font-size:11px;">Nuevo</b>' },
-      { id: 'alert', n: 'Caja Alerta', t: 'div', w: 300, h: 60, bg: '#fef2f2', c: '#991b1b', r: 6, txt: '<div style="border-left:4px solid #ef4444; padding:10px 15px; width:100%; height:100%; display:flex; align-items:center;">⚠️ Error de conexión</div>' }
-    ]},
-    { cat: 'Multimedia', items: [
-      { id: 'img', n: 'Imagen', t: 'img', w: 300, h: 200, bg: '#cbd5e1', c: '#000', r: 8, attrs: 'src="https://via.placeholder.com/300"' },
-      { id: 'video', n: 'Reproductor Video', t: 'video', w: 400, h: 225, bg: '#000', c: '#fff', r: 8, attrs: 'controls' },
-      { id: 'audio', n: 'Reproductor Audio', t: 'audio', w: 300, h: 50, bg: '#f1f5f9', c: '#000', r: 25, attrs: 'controls' },
-      { id: 'iframe', n: 'Embed Mapa/YT', t: 'iframe', w: 400, h: 250, bg: '#e2e8f0', c: '#000', r: 4, txt: '' }
+    { cat: 'Datos & Multimedia', items: [
+      { id: 'data_table', n: 'Tabla Datos', t: 'table', w: 400, h: 150, bg: '#fff', c: '#000', r: 8, style: 'shadow', txt: '<table style="width:100%; border-collapse:collapse; font-size:12px;"><thead style="background:#f8fafc; text-align:left;"><tr><th style="padding:10px; border-bottom:1px solid #e2e8f0;">ID</th><th style="padding:10px; border-bottom:1px solid #e2e8f0;">User</th><th style="padding:10px; border-bottom:1px solid #e2e8f0;">Status</th></tr></thead><tbody><tr><td style="padding:10px;">1</td><td style="padding:10px;">Admin</td><td style="padding:10px; color:green;">Active</td></tr></tbody></table>' },
+      { id: 'data_progress', n: 'Barra Progreso', t: 'div', w: 250, h: 20, bg: '#e2e8f0', c: '#10b981', r: 10, txt: '<div style="width:70%; height:100%; background:#10b981; border-radius:10px; transition:width 1s;"></div>' },
+      { id: 'media_img', n: 'Imagen con Overlay', t: 'div', w: 300, h: 200, bg: '#cbd5e1', c: '#fff', r: 8, txt: '<div style="width:100%; height:100%; background:url(https://via.placeholder.com/300x200) center/cover; position:relative; border-radius:8px;"><div style="position:absolute; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; border-radius:8px;"><b>Hover Effect</b></div></div>' }
     ]}
   ];
 
   function buildSidebar() {
     const sb = document.getElementById('sidebar-content'); sb.innerHTML = '';
     catalogue.forEach(cat => {
-      let html = `<div class="cat-section" data-cat="${cat.cat.toLowerCase()}"><h3 class="cat-title">${cat.cat}</h3>`;
-      cat.items.forEach(i => { html += `<button class="tool-btn" data-name="${i.n.toLowerCase()} ${i.id.toLowerCase()}" onclick="addElement('${i.id}')">${i.n} <span class="tool-tag">+</span></button>`; });
+      let html = `<div class="cat-section" data-cat="${cat.cat.toLowerCase()}"><h3 class="cat-title">${cat.cat} <span class="cat-count">${cat.items.length}</span></h3>`;
+      cat.items.forEach(i => { 
+        let tagClass = i.tag === 'gh' ? 'tag-gh' : (i.js ? 'tag-js' : (i.func && i.func.includes('css') ? 'tag-css' : 'tag-html'));
+        let tagName = i.tag === 'gh' ? 'GH' : (i.js ? 'JS' : 'HTML');
+        html += `<button class="tool-btn" data-name="${i.n.toLowerCase()} ${i.id.toLowerCase()}" onclick="addElement('${i.id}')">${i.n} <span class="tool-tag ${tagClass}">${tagName}</span></button>`; 
+      });
       sb.innerHTML += html + `</div>`;
     });
   }
@@ -577,7 +563,6 @@
     });
   }
 
-  // --- MODO INTERACTIVO ---
   function setMode(mode) {
     document.body.className = `${mode}-mode`;
     document.getElementById('btn-edit').className = mode === 'edit' ? 'active' : '';
@@ -601,7 +586,6 @@
     });
   }
 
-  // --- CREAR ELEMENTO ---
   function addElement(tKey) {
     let t = null; catalogue.forEach(c => { const f = c.items.find(i => i.id === tKey); if(f) t = f; });
     if(!t) return;
@@ -620,7 +604,6 @@
     canvas.appendChild(node); applyStylesAndCompile(); selectElement(id); saveState();
   }
 
-  // --- MOTOR CSS DINÁMICO ---
   function applyStylesAndCompile() {
     let gCSS = ""; 
     elements.forEach((el, idx) => {
@@ -641,51 +624,51 @@
       if(el.style === 'shadow') cB += `  box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n`;
       else if(el.style === 'neumorphism') cB += `  box-shadow: 8px 8px 16px #c5c9d1, -8px -8px 16px #ffffff;\n  display: flex; align-items: center; justify-content: center; font-weight: bold; border:none;\n`;
       else if(el.style === 'glass') cB += `  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);\n  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);\n  border: 1px solid rgba(255,255,255,0.18);\n`;
-      else if(el.style === 'neon') cB += `  text-shadow: 0 0 5px ${el.bg}, 0 0 20px ${el.bg};\n  box-shadow: 0 0 10px ${el.bg}, inset 0 0 10px ${el.bg};\n  border: 2px solid ${el.bg}; display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 2px; color: ${el.color};\n`;
-      else if(el.style === 'cyberpunk') cB += `  background: linear-gradient(45deg, transparent 5%, ${el.bg} 5%);\n  box-shadow: 6px 0px 0px #00e6f6;\n  display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 3px; border: none; outline: transparent; clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 80%);\n`;
+      else if(el.style === 'neon') cB += `  text-shadow: 0 0 5px ${el.color}, 0 0 20px ${el.color};\n  display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 2px;\n`;
+      else if(el.style === 'cyberpunk') cB += `  background: linear-gradient(45deg, transparent 5%, ${el.bg} 5%);\n  box-shadow: 6px 0px 0px #00e6f6;\n  display: flex; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 3px; border: none; clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 80%);\n`;
       else if(el.style === 'skeleton') cB += `  background: linear-gradient(90deg, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%);\n  background-size: 200% 100%;\n  animation: skeletonLoad 1.5s infinite linear;\n`;
+      else if(el.style === 'gradient-border') cB += `  position: relative;\n  background: #0f172a;\n  z-index: 1;\n}\n.${el.id}::before {\n  content: "";\n  position: absolute;\n  inset: -2px;\n  z-index: -1;\n  background: linear-gradient(45deg, #f59e0b, #10b981, #3b82f6, #f59e0b);\n  background-size: 400%;\n  border-radius: ${el.radius + 2}px;\n  animation: gradientAnim 3s linear infinite;\n`;
 
       if(el.anim === 'float') cB += `  animation: animFloat 3s ease-in-out infinite;\n`;
       if(el.anim === 'pulse') cB += `  animation: animPulse 2s infinite;\n`;
       if(el.anim === 'spin') cB += `  animation: animSpin 4s linear infinite;\n`;
+      if(el.anim === 'slide-up') cB += `  animation: slideUp 0.6s ease-out forwards;\n`;
       cB += `}\n`;
 
       if(el.func === 'hover-dropdown') {
-        cB += `.${el.id} .inner-content { flex-direction: column; position: relative; cursor: pointer; align-items:center; justify-content:center; }\n.${el.id} .sub { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); list-style: none; padding: 0; margin: 5px 0 0 0; border-radius: 4px; overflow: hidden; z-index:50; }\n.${el.id}:hover .sub { display: block; }\n.${el.id} .sub li a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }\n.${el.id} .sub li a:hover { background: #f8fafc; }\n`;
+        cB += `.${el.id} .inner-content { flex-direction: column; position: relative; cursor: pointer; align-items:center; justify-content:center; }\n.${el.id} .sub { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); list-style: none; padding: 0; margin: 5px 0 0 0; border-radius: 4px; overflow: hidden; z-index:50; color:#000; }\n.${el.id}:hover .sub { display: block; }\n.${el.id} .sub li a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }\n`;
       } else if(el.func === 'hover-flip') {
-        cB += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }\n.${el.id}:hover .inner-content { transform: rotateY(180deg); }\n.${el.id} .front, .${el.id} .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; }\n.${el.id} .back { transform: rotateY(180deg); }\n`;
+        cB += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }\n.${el.id}:hover .inner-content { transform: rotateY(180deg); }\n.${el.id} .front, .${el.id} .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px; border-radius: ${el.radius}px; }\n.${el.id} .back { transform: rotateY(180deg); }\n`;
       } else if(el.func === 'tooltip') {
         cB += `.${el.id} { display:flex; align-items:center; justify-content:center; position: relative; cursor: help; }\n.${el.id}::after { content: "Tooltip Info"; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s; }\n.${el.id}:hover::after { opacity: 1; visibility: visible; bottom: 110%; }\n`;
       } else if(el.func === 'css-tabs') {
-        cB += `.${el.id} .inner-content { flex-direction: column; width: 100%; height: 100%; }\n.${el.id} input[type="radio"] { display: none; }\n.${el.id} .tab-headers { display: flex; border-bottom: 2px solid #e2e8f0; }\n.${el.id} label { padding: 15px 20px; cursor: pointer; color: #64748b; font-weight: bold; transition: 0.2s; }\n.${el.id} .tab-content { display: none; padding: 20px; flex: 1; background: #f8fafc; }\n.${el.id} #t1:checked ~ .tab-headers label[for="t1"], .${el.id} #t2:checked ~ .tab-headers label[for="t2"] { color: #3b82f6; border-bottom: 2px solid #3b82f6; margin-bottom: -2px; }\n.${el.id} #t1:checked ~ .c1 { display: block; }\n.${el.id} #t2:checked ~ .c2 { display: block; }\n`;
+        cB += `.${el.id} .inner-content { flex-direction: column; width: 100%; height: 100%; }\n.${el.id} input[type="radio"] { display: none; }\n.${el.id} .tab-headers { display: flex; border-bottom: 2px solid #e2e8f0; }\n.${el.id} label { padding: 15px 20px; cursor: pointer; color: #64748b; font-weight: bold; transition: 0.2s; }\n.${el.id} .tab-content { display: none; flex: 1; }\n.${el.id} #t1:checked ~ .tab-headers label[for="t1"], .${el.id} #t2:checked ~ .tab-headers label[for="t2"] { color: #3b82f6; border-bottom: 2px solid #3b82f6; }\n.${el.id} #t1:checked ~ .c1 { display: block; }\n.${el.id} #t2:checked ~ .c2 { display: block; }\n`;
       } else if(el.func === 'toggle') {
-        cB += `.${el.id} .inner-content { position: relative; display: inline-block; width: 100%; height: 100%; }\n.${el.id} input { opacity: 0; width: 0; height: 0; }\n.${el.id} .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }\n.${el.id} .slider:before { position: absolute; content: ""; height: calc(100% - 8px); width: calc(100% - 8px); max-width: calc(100% / 2); left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }\n.${el.id} input:checked + .slider { background-color: ${el.color}; }\n.${el.id} input:checked + .slider:before { transform: translateX(calc(100% - 4px)); }\n`;
+        cB += `.${el.id} .inner-content { position: relative; display: inline-block; width: 100%; height: 100%; }\n.${el.id} .slider:before { position: absolute; content: ""; height: calc(100% - 8px); width: calc(100% - 8px); max-width: calc(100% / 2); left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }\n.${el.id} input:checked + .slider { background-color: ${el.color}; }\n.${el.id} input:checked + .slider:before { transform: translateX(calc(100% - 4px)); }\n`;
       } else if(el.func === 'css-carousel') {
         cB += `.${el.id} .inner-content { width: 100%; height: 100%; overflow: hidden; }\n.${el.id} .slides { display: flex; width: 300%; height: 100%; animation: slideAnim 9s infinite; }\n.${el.id} .slide { width: 33.33%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; }\n`;
-      } else if(el.func === 'grid2') {
-        cB += `.${el.id} .inner-content { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; width: 100%; height: 100%; }\n.${el.id} .inner-content > div { border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }\n`;
-      } else if(el.func === 'grid3') {
-        cB += `.${el.id} .inner-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; height: 100%; }\n.${el.id} .inner-content > div { border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }\n`;
       } else if(el.func === 'float-label') {
-        cB += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; }\n.${el.id} input { width: 100%; height: 100%; padding: 20px 15px 5px 15px; border: 1px solid #cbd5e1; border-radius: ${el.radius}px; outline: none; font-size:16px; background:transparent; }\n.${el.id} label { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #94a3b8; transition: 0.2s; pointer-events: none; }\n.${el.id} input:focus ~ label, .${el.id} input:valid ~ label { top: 12px; font-size: 11px; color: ${el.color}; }\n.${el.id} input:focus { border-color: ${el.color}; }\n`;
+        cB += `.${el.id} .inner-content { position: relative; width: 100%; height: 100%; }\n.${el.id} input:focus ~ label, .${el.id} input:valid ~ label { top: 12px; font-size: 11px; color: ${el.color}; }\n.${el.id} input:focus { border-color: ${el.color}; }\n`;
       } else if(el.func === 'modal-hack') {
         cB += `.${el.id} .m-check { display: none; }\n.${el.id} .m-window { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 10000; }\n.${el.id} .m-box { background: #fff; padding: 30px; border-radius: 8px; transform: translateY(-20px); transition: 0.3s; width: 300px; color: #000; }\n.${el.id} .m-check:checked ~ .m-window { opacity: 1; visibility: visible; }\n.${el.id} .m-check:checked ~ .m-window .m-box { transform: translateY(0); }\n.${el.id} .m-close { display: inline-block; margin-top: 15px; padding: 8px 15px; background: #ef4444; color: #fff; border-radius: 4px; cursor: pointer; }\n`;
-      } else if(el.clip === 'none') {
+      } else if(el.func === 'typewriter') {
+        cB += `.${el.id} { overflow: hidden; border-right: 3px solid ${el.color}; white-space: nowrap; animation: typing 3s steps(30, end), blink-caret 0.75s step-end infinite; display: flex; align-items: center; justify-content: center; }\n`;
+      } else if(el.clip === 'none' && el.style !== 'gradient-border') {
         cB += `.${el.id} .inner-content { display:flex; align-items:center; justify-content:center; width:100%; height:100%; overflow:hidden; }\n`;
       }
 
       gCSS += cB;
       const inner = node.querySelector('.inner-content');
-      if(!['input','textarea','select','video','audio','iframe','img','progress'].includes(el.tag)) {
+      if(!['input','textarea','select','video','audio','iframe','img','progress','table'].includes(el.tag)) {
         inner.innerHTML = el.text;
       }
     });
 
-    gCSS += `\n@keyframes animFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }\n@keyframes animPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }\n@keyframes animSpin { 100% { transform: rotateY(360deg); } }\n@keyframes slideAnim { 0%, 25% { transform: translateX(0); } 33%, 58% { transform: translateX(-33.33%); } 66%, 91% { transform: translateX(-66.66%); } 100% { transform: translateX(0); } }\n@keyframes skeletonLoad { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`;
+    gCSS += `\n@keyframes animFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }\n@keyframes animPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }\n@keyframes animSpin { 100% { transform: rotateY(360deg); } }\n@keyframes slideAnim { 0%, 25% { transform: translateX(0); } 33%, 58% { transform: translateX(-33.33%); } 66%, 91% { transform: translateX(-66.66%); } 100% { transform: translateX(0); } }\n@keyframes skeletonLoad { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }\n@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }\n@keyframes typing { from { width: 0 } to { width: 100% } }\n@keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: currentColor } }\n@keyframes gradientAnim { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }`;
+    
     dynamicCss.textContent = gCSS; generateCode(); 
   }
 
-  // --- ARRASTRAR / REDIMENSIONAR ---
   function startDrag(e, el, node) {
     if(document.body.classList.contains('interact-mode')) return; e.preventDefault(); let sX = e.clientX, sY = e.clientY; let moved = false;
     function move(ev) { 
@@ -714,11 +697,10 @@
     document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
   }
 
-  // --- UI CONTROLES ---
   function initCanvas() { 
-    canvasBg.style.background = '#1a1d27'; 
-    canvasBg.style.opacity = '0.10'; 
-    loadProject(); // Cargar desde LocalStorage si existe
+    canvasBg.style.background = '#ffffff'; 
+    canvasBg.style.opacity = '1'; 
+    loadProject(); 
   }
   
   function updateCanvas() { 
@@ -769,12 +751,11 @@
   function newProject() {
     if(confirm('¿Estás seguro de borrar todo el proyecto actual? Esta acción no se puede deshacer.')) {
       elements = []; counter = 1; selectedId = null; historyStack = []; historyIndex = -1;
-      localStorage.removeItem('mlp_v19_project');
+      localStorage.removeItem('mlp_v20_project');
       rebuildDOM(); saveState();
     }
   }
 
-  // --- EXPORTADOR Y COPIA ---
   function copyCode(elementId) {
     const text = document.getElementById(elementId).textContent;
     navigator.clipboard.writeText(text).then(() => {
@@ -794,7 +775,7 @@
   function generateCode() {
     let bgC = document.getElementById('canvas-color').value; let bgO = document.getElementById('canvas-opacity').value / 100;
     let htmlG = `<div class="pro-layout">\n`;
-    let cssG = `/* Reset Global */\n* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }\n\n.pro-layout {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  overflow-x: hidden;\n  background-color: transparent;\n  perspective: 1500px;\n}\n.pro-layout::before {\n  content: "";\n  position: absolute;\n  inset: 0;\n  background-color: ${bgC};\n  opacity: ${bgO};\n  z-index: -1;\n}\n\n`;
+    let cssG = `/* Reset Global */\n* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }\n\n.pro-layout {\n  position: relative;\n  width: 100%;\n  min-height: 100vh;\n  overflow-x: hidden;\n  background-color: ${bgC};\n  perspective: 1500px;\n}\n\n`;
     let jsG = `// Scripts Globales del Proyecto\ndocument.addEventListener("DOMContentLoaded", () => {\n`;
 
     let sR = dynamicCss.textContent; 
@@ -804,8 +785,11 @@
       if(el.tag === 'img' && !attrs.includes('src')) attrs += ' src="imagen.jpg"';
       
       let inHtml = el.text ? `\n    <div class="inner-content">\n      ${el.text.replace(/\n/g, '\n      ')}\n    </div>\n  ` : '';
-      if(['input','textarea','select','video','audio','iframe','img','progress'].includes(el.tag)) { htmlG += `  <!-- ${el.name} -->\n  <${el.tag} id="${el.id}" class="${el.id}"${attrs}></${el.tag}>\n`; }
-      else { htmlG += `  <!-- ${el.name} -->\n  <${el.tag} id="${el.id}" class="${el.id}"${attrs}>${inHtml}</${el.tag}>\n`; }
+      if(['input','textarea','select','video','audio','iframe','img','progress','table'].includes(el.tag)) { 
+        htmlG += `  <!-- ${el.name} -->\n  <${el.tag} id="${el.id}" class="${el.id}"${attrs}></${el.tag}>\n`; 
+      } else { 
+        htmlG += `  <!-- ${el.name} -->\n  <${el.tag} id="${el.id}" class="${el.id}"${attrs}>${inHtml}</${el.tag}>\n`; 
+      }
       
       if(el.js) {
         jsG += `  // Script para ${el.name}\n  (function(){\n    const el = document.getElementById('${el.id}');\n    if(el) { ${el.js.replace(/this/g, 'el')} }\n  })();\n\n`;
@@ -819,7 +803,7 @@
       const el = elements.find(e => e.id === selectedId);
       let attrs = el.attrs ? ` ${el.attrs}` : ''; if(el.tag === 'img' && !attrs.includes('src')) attrs += ' src="imagen.jpg"';
       let inHtml = el.text ? `\n  <div class="inner-content">\n    ${el.text.replace(/\n/g, '\n    ')}\n  </div>\n` : '';
-      if(['input','textarea','select','video','audio','iframe','img','progress'].includes(el.tag)) document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente"${attrs}></${el.tag}>`;
+      if(['input','textarea','select','video','audio','iframe','img','progress','table'].includes(el.tag)) document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente"${attrs}></${el.tag}>`;
       else document.getElementById('code-html-single').textContent = `<${el.tag} class="mi-componente"${attrs}>${inHtml}</${el.tag}>`;
       
       let sCSS = `.mi-componente {\n  width: ${Math.round(el.w)}px; height: ${Math.round(el.h)}px;\n}\n\n`;
@@ -833,7 +817,7 @@
 
   function downloadProject() {
     if(elements.length === 0) return alert("El lienzo está vacío.");
-    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V19</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n<script src="script.js"><\/script>\n</body>\n</html>`;
+    const html = `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Master Pro Layout V20</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n${document.getElementById('code-html-global').textContent}\n\n<script src="script.js"><\/script>\n</body>\n</html>`;
     downloadFile('index.html', html); 
     setTimeout(() => downloadFile('style.css', document.getElementById('code-css-global').textContent), 500);
     setTimeout(() => downloadFile('script.js', document.getElementById('code-js-global').textContent), 1000);
