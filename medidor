@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Medidor Dinámico de Píxeles</title>
+<style>
+  body { 
+    font-family: system-ui, -apple-system, sans-serif; 
+    padding: 40px; 
+    background: #1e1e1e; 
+    color: white;
+  }
+  .instrucciones {
+    margin-bottom: 20px;
+    color: #a0a0a0;
+  }
+  .container-resizable {
+    width: 400px;
+    height: 250px;
+    background: #2d2d2d;
+    border: 2px dashed #4A90E2;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    resize: both; /* Permite redimensionar */
+    overflow: auto;
+    box-sizing: border-box;
+  }
+  #medidas-caja { 
+    font-size: 28px; 
+    font-weight: bold; 
+    color: #4A90E2;
+    margin-bottom: 15px;
+  }
+  input { 
+    padding: 12px; 
+    width: 80%; /* Se adapta al contenedor */
+    border-radius: 4px;
+    border: 1px solid #555;
+    background: #121212;
+    color: white;
+    resize: both; /* Permite redimensionar el input también */
+  }
+  #medidas-input { 
+    margin-top: 10px; 
+    font-size: 14px; 
+    color: #43b581;
+  }
+</style>
+</head>
+<body>
+
+  <div class="instrucciones">
+    Haz clic y arrastra la esquina inferior derecha del contenedor o del input para cambiar su tamaño.
+  </div>
+
+  <div class="container-resizable" id="caja">
+    <div id="medidas-caja">400px × 250px</div>
+    
+    <input type="text" id="inputPrueba" placeholder="Input de prueba (arrastra mi esquina)">
+    <div id="medidas-input">Ancho del input: -- px</div>
+  </div>
+
+  <script>
+    const caja = document.getElementById('caja');
+    const medidasCaja = document.getElementById('medidas-caja');
+    const inputPrueba = document.getElementById('inputPrueba');
+    const medidasInput = document.getElementById('medidas-input');
+
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        if(entry.target === caja) {
+            medidasCaja.textContent = `Contenedor: ${caja.offsetWidth}px × ${caja.offsetHeight}px`;
+        }
+        if(entry.target === inputPrueba) {
+            medidasInput.textContent = `Input: ${inputPrueba.offsetWidth}px × ${inputPrueba.offsetHeight}px`;
+        }
+      }
+    });
+
+    observer.observe(caja);
+    observer.observe(inputPrueba);
+  </script>
+
+</body>
+</html>
