@@ -1,429 +1,383 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-
-const MIN_DIMENSION = 20;
-
-const DEFAULT_ELEMENTS = {
-  container: { w: 200, h: 200, bg: '#2d3748', radius: 8, text: '' },
-  button: { w: 120, h: 48, bg: '#3b82f6', radius: 6, text: 'Click Me' },
-  input: { w: 250, h: 40, bg: '#1f2937', radius: 4, text: 'Placeholder...' },
-  popup: { w: 300, h: 150, bg: '#4b5563', radius: 12, text: 'Popup Content' },
-};
-
-const PRESETS = [
-  { id: 'free', name: 'Freeform', w: '100%', h: '100%' },
-  { id: 'desktop', name: 'Desktop', w: 1024, h: 768 },
-  { id: 'tablet', name: 'Tablet', w: 768, h: 1024 },
-  { id: 'mobile', name: 'Mobile', w: 375, h: 667 },
-];
-
-const Icons = {
-  Monitor: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
-  Smartphone: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
-  Tablet: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
-  Maximize: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>,
-  Square: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>,
-  Type: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>,
-  HandPoint: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>,
-  Layers: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>,
-  Code: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
-  X: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-};
-
-export default function App() {
-  const [elements, setElements] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
-  const [activeAction, setActiveAction] = useState(null);
-  const [canvasPreset, setCanvasPreset] = useState(PRESETS[0]);
-  const [showCode, setShowCode] = useState(false);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder Visual & Medidor de Píxeles</title>
+<style>
+  :root { 
+    --bg-color: #1e1e2f; 
+    --panel-bg: #2a2a40; 
+    --text-color: #e0e0e0; 
+    --accent: #4A90E2; 
+    --accent-hover: #357ABD;
+  }
   
-  const canvasRef = useRef(null);
+  body, html { 
+    margin: 0; padding: 0; height: 100%; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background-color: var(--bg-color); color: var(--text-color); 
+    display: flex; flex-direction: column; overflow: hidden;
+  }
 
-  useEffect(() => {
-    if (!activeAction) return;
+  /* Header */
+  header { 
+    background: #151522; padding: 15px 20px; 
+    display: flex; justify-content: space-between; align-items: center; 
+    border-bottom: 1px solid #333; z-index: 10;
+  }
+  header h1 { margin: 0; font-size: 18px; color: var(--accent); }
+  
+  /* Layout principal */
+  .workspace { display: flex; flex: 1; overflow: hidden; }
+  
+  /* Paneles laterales */
+  .sidebar { width: 250px; background: var(--panel-bg); padding: 15px; border-right: 1px solid #333; overflow-y: auto; }
+  .properties { width: 280px; background: var(--panel-bg); padding: 15px; border-left: 1px solid #333; overflow-y: auto; }
+  
+  /* Lienzo (Canvas) */
+  .canvas-container { 
+    flex: 1; position: relative; background: #12121c; 
+    overflow: auto; 
+    /* Cuadrícula de fondo para medir visualmente */
+    background-image: radial-gradient(#444 1px, transparent 0); 
+    background-size: 20px 20px; 
+  }
+  #canvas { width: 100%; height: 100%; position: relative; }
+  
+  /* Panel de Código */
+  .code-panel { 
+    height: 150px; background: #0a0a0f; border-top: 1px solid #333; 
+    display: flex; flex-direction: column;
+  }
+  .code-panel-header { padding: 5px 15px; background: #151522; font-size: 12px; font-weight: bold; }
+  #code-output { 
+    flex: 1; padding: 15px; color: #43b581; font-family: monospace; 
+    font-size: 13px; overflow-y: auto; white-space: pre-wrap; margin: 0;
+  }
 
-    const handleMouseMove = (e) => {
-      e.preventDefault();
-      const dx = e.clientX - activeAction.startX;
-      const dy = e.clientY - activeAction.startY;
+  /* Botones e Inputs de la UI */
+  button.btn-add { 
+    background: var(--accent); color: white; border: none; 
+    padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; 
+    margin-bottom: 10px; font-weight: 600; transition: 0.2s;
+  }
+  button.btn-add:hover { background: var(--accent-hover); }
+  
+  .prop-group { margin-bottom: 12px; }
+  .prop-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; }
+  .prop-group input { 
+    width: 100%; padding: 8px; border-radius: 4px; 
+    border: 1px solid #444; background: #151522; color: white; box-sizing: border-box;
+  }
 
-      setElements(prev => prev.map(el => {
-        if (el.id !== activeAction.id) return el;
+  /* Elementos creados en el lienzo */
+  .canvas-element { 
+    position: absolute; display: flex; align-items: center; justify-content: center;
+    box-sizing: border-box; cursor: grab; color: #000;
+  }
+  .canvas-element.selected { outline: 2px dashed var(--accent); outline-offset: 2px; }
+  .canvas-element:active { cursor: grabbing; }
+  
+  /* Tirador para redimensionar */
+  .resizer { 
+    width: 12px; height: 12px; background: var(--accent); 
+    position: absolute; right: -6px; bottom: -6px; 
+    border-radius: 50%; cursor: nwse-resize; z-index: 10; display: none;
+  }
+  .canvas-element.selected .resizer { display: block; }
+  
+  .medidas-tooltip {
+    position: absolute; top: -25px; left: 0; background: var(--accent);
+    color: white; padding: 2px 6px; font-size: 10px; border-radius: 3px;
+    white-space: nowrap; pointer-events: none; display: none;
+  }
+  .canvas-element.selected .medidas-tooltip { display: block; }
+</style>
+</head>
+<body>
 
-        if (activeAction.type === 'drag') {
-          return {
-            ...el,
-            x: Math.round(activeAction.initX + dx),
-            y: Math.round(activeAction.initY + dy)
-          };
-        } else if (activeAction.type === 'resize') {
-          return {
-            ...el,
-            w: Math.max(MIN_DIMENSION, Math.round(activeAction.initW + dx)),
-            h: Math.max(MIN_DIMENSION, Math.round(activeAction.initH + dy))
-          };
-        }
-        return el;
-      }));
+  <header>
+    <h1>Medidor Visual & Exportador a HTML/CSS</h1>
+    <div style="font-size: 13px; color: #aaa;">Herramienta gratuita para medir y maquetar sin saber código</div>
+  </header>
+
+  <div class="workspace">
+    <!-- BARRA IZQUIERDA: Herramientas -->
+    <div class="sidebar">
+      <h3 style="margin-top: 0; font-size: 14px; color: #aaa;">Agregar Elementos</h3>
+      <button class="btn-add" onclick="addElement('container')">+ Contenedor (Div)</button>
+      <button class="btn-add" onclick="addElement('text')">+ Cuadro de Texto</button>
+      <button class="btn-add" onclick="addElement('button')">+ Botón</button>
+      <button class="btn-add" onclick="addElement('input')">+ Input (Campo de texto)</button>
+      <button class="btn-add" style="background:#555;" onclick="clearCanvas()">🗑️ Limpiar todo</button>
+      
+      <div style="margin-top: 20px; font-size: 12px; color: #888; line-height: 1.5;">
+        <strong>Instrucciones:</strong><br>
+        1. Agrega elementos desde este menú.<br>
+        2. Arrástralos libremente por el lienzo.<br>
+        3. Usa la esquina inferior derecha del elemento para cambiar su tamaño.<br>
+        4. El código HTML/CSS exacto se genera automáticamente abajo.
+      </div>
+    </div>
+
+    <!-- CENTRO: Lienzo Interactivo -->
+    <div class="canvas-container" id="canvas-container">
+      <div id="canvas"></div>
+    </div>
+
+    <!-- BARRA DERECHA: Propiedades del elemento seleccionado -->
+    <div class="properties" id="properties-panel">
+      <h3 style="margin-top: 0; font-size: 14px; color: #aaa;">Propiedades (Selecciona algo)</h3>
+      <div id="props-content" style="display: none;">
+        <div class="prop-group">
+          <label>Ancho (px)</label>
+          <input type="number" id="prop-w" oninput="updateSelectedElement()">
+        </div>
+        <div class="prop-group">
+          <label>Alto (px)</label>
+          <input type="number" id="prop-h" oninput="updateSelectedElement()">
+        </div>
+        <div class="prop-group">
+          <label>Posición X (Izquierda)</label>
+          <input type="number" id="prop-x" oninput="updateSelectedElement()">
+        </div>
+        <div class="prop-group">
+          <label>Posición Y (Arriba)</label>
+          <input type="number" id="prop-y" oninput="updateSelectedElement()">
+        </div>
+        <div class="prop-group">
+          <label>Color de fondo (HEX, Ej: #ff0000)</label>
+          <input type="text" id="prop-bg" oninput="updateSelectedElement()">
+        </div>
+        <div class="prop-group">
+          <label>Texto del elemento</label>
+          <input type="text" id="prop-text" oninput="updateSelectedElement()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL INFERIOR: Código generado -->
+  <div class="code-panel">
+    <div class="code-panel-header">Código HTML/CSS Generado en Tiempo Real</div>
+    <pre id="code-output">&lt;!-- Agrega elementos para ver el código aquí --&gt;</pre>
+  </div>
+
+<script>
+  let elements = [];
+  let selectedElementId = null;
+  let idCounter = 0;
+
+  const canvas = document.getElementById('canvas');
+  const codeOutput = document.getElementById('code-output');
+  const propsContent = document.getElementById('props-content');
+
+  // Valores por defecto según el tipo
+  const defaultStyles = {
+    container: { w: 200, h: 200, bg: '#e0e0e0', text: 'Contenedor' },
+    text: { w: 150, h: 50, bg: 'transparent', text: 'Tu texto aquí' },
+    button: { w: 120, h: 40, bg: '#4A90E2', text: 'Haz clic' },
+    input: { w: 200, h: 40, bg: '#ffffff', text: 'Escribe aquí...' }
+  };
+
+  function addElement(type) {
+    const id = 'el_' + idCounter++;
+    const config = defaultStyles[type];
+    const newEl = {
+      id: id, type: type, x: 50, y: 50, w: config.w, h: config.h, bg: config.bg, text: config.text
     };
+    elements.push(newEl);
+    renderCanvas();
+    selectElement(id);
+  }
 
-    const handleMouseUp = () => setActiveAction(null);
+  function clearCanvas() {
+    elements = [];
+    selectedElementId = null;
+    renderCanvas();
+    updatePropsPanel();
+  }
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [activeAction]);
+  function renderCanvas() {
+    canvas.innerHTML = '';
+    elements.forEach(el => {
+      const domEl = document.createElement('div');
+      domEl.id = el.id;
+      domEl.className = `canvas-element ${selectedElementId === el.id ? 'selected' : ''}`;
+      domEl.style.left = el.x + 'px';
+      domEl.style.top = el.y + 'px';
+      domEl.style.width = el.w + 'px';
+      domEl.style.height = el.h + 'px';
+      domEl.style.backgroundColor = el.bg;
+      
+      // Estilos específicos
+      if(el.type === 'button') domEl.style.borderRadius = '5px';
+      if(el.type === 'input') domEl.style.border = '1px solid #ccc';
+      if(el.type === 'container') domEl.style.border = '2px dashed #999';
 
-  const addElement = (type) => {
-    const newId = `el_${Math.random().toString(36).substr(2, 6)}`;
-    const def = DEFAULT_ELEMENTS[type];
-    const offset = elements.length * 20;
+      domEl.innerHTML = `
+        <div class="medidas-tooltip">${el.w}px × ${el.h}px</div>
+        <span style="pointer-events:none; font-family:sans-serif; font-size:14px; text-align:center;">${el.text}</span>
+        <div class="resizer"></div>
+      `;
+
+      // Eventos para arrastrar y seleccionar
+      domEl.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('resizer')) return; // Si toca el resizer, que no arrastre
+        selectElement(el.id);
+        startDrag(e, el.id);
+      });
+
+      // Evento para redimensionar
+      const resizer = domEl.querySelector('.resizer');
+      resizer.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        selectElement(el.id);
+        startResize(e, el.id);
+      });
+
+      canvas.appendChild(domEl);
+    });
     
-    setElements([...elements, {
-      id: newId,
-      type,
-      x: 50 + offset,
-      y: 50 + offset,
-      w: def.w,
-      h: def.h,
-      bg: def.bg,
-      radius: def.radius,
-      text: def.text
-    }]);
-    setSelectedId(newId);
-  };
+    generateCode();
+  }
 
-  const removeElement = (id) => {
-    setElements(elements.filter(e => e.id !== id));
-    if (selectedId === id) setSelectedId(null);
-  };
+  function selectElement(id) {
+    selectedElementId = id;
+    renderCanvas();
+    updatePropsPanel();
+  }
 
-  const updateSelected = (key, value) => {
-    setElements(prev => prev.map(el => 
-      el.id === selectedId ? { ...el, [key]: value } : el
-    ));
-  };
+  // --- Lógica para Arrastrar (Mover) ---
+  function startDrag(e, id) {
+    e.preventDefault();
+    const el = elements.find(item => item.id === id);
+    let startX = e.clientX;
+    let startY = e.clientY;
 
-  const selectedElement = elements.find(e => e.id === selectedId);
+    function onMouseMove(moveEvent) {
+      const dx = moveEvent.clientX - startX;
+      const dy = moveEvent.clientY - startY;
+      el.x += dx;
+      el.y += dy;
+      startX = moveEvent.clientX;
+      startY = moveEvent.clientY;
+      renderCanvas();
+      updatePropsPanel();
+    }
 
-  const generateLiveCode = () => {
-    if (elements.length === 0) return { html: '<!-- El lienzo está vacío -->', css: '/* Sin estilos aún */' };
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
 
-    let html = `<div class="canvas-wrapper">\n`;
-    let css = `.canvas-wrapper {\n  position: relative;\n  width: ${typeof canvasPreset.w === 'number' ? canvasPreset.w + 'px' : canvasPreset.w};\n  height: ${typeof canvasPreset.h === 'number' ? canvasPreset.h + 'px' : canvasPreset.h};\n}\n\n`;
+  // --- Lógica para Redimensionar (Medir) ---
+  function startResize(e, id) {
+    e.preventDefault();
+    const el = elements.find(item => item.id === id);
+    let startX = e.clientX;
+    let startY = e.clientY;
 
-    elements.forEach((el, index) => {
-      const className = `${el.type}-${index + 1}`;
-      
-      let innerHTML = '';
+    function onMouseMove(moveEvent) {
+      const dx = moveEvent.clientX - startX;
+      const dy = moveEvent.clientY - startY;
+      el.w = Math.max(20, el.w + dx); // mínimo 20px
+      el.h = Math.max(20, el.h + dy); // mínimo 20px
+      startX = moveEvent.clientX;
+      startY = moveEvent.clientY;
+      renderCanvas();
+      updatePropsPanel();
+    }
+
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
+
+  // --- Panel de Propiedades ---
+  function updatePropsPanel() {
+    if (!selectedElementId) {
+      propsContent.style.display = 'none';
+      return;
+    }
+    propsContent.style.display = 'block';
+    const el = elements.find(item => item.id === selectedElementId);
+    document.getElementById('prop-w').value = el.w;
+    document.getElementById('prop-h').value = el.h;
+    document.getElementById('prop-x').value = el.x;
+    document.getElementById('prop-y').value = el.y;
+    document.getElementById('prop-bg').value = el.bg;
+    document.getElementById('prop-text').value = el.text;
+  }
+
+  function updateSelectedElement() {
+    if (!selectedElementId) return;
+    const el = elements.find(item => item.id === selectedElementId);
+    el.w = parseInt(document.getElementById('prop-w').value) || 0;
+    el.h = parseInt(document.getElementById('prop-h').value) || 0;
+    el.x = parseInt(document.getElementById('prop-x').value) || 0;
+    el.y = parseInt(document.getElementById('prop-y').value) || 0;
+    el.bg = document.getElementById('prop-bg').value;
+    el.text = document.getElementById('prop-text').value;
+    renderCanvas();
+  }
+
+  // --- Generador de Código HTML/CSS ---
+  function generateCode() {
+    if (elements.length === 0) {
+      codeOutput.textContent = '<!-- Agrega elementos para ver el código aquí -->';
+      return;
+    }
+    
+    let htmlCode = `<div class="mi-diseno" style="position: relative; width: 100%; height: 500px;">\n`;
+    let cssCode = `\n<style>\n`;
+
+    elements.forEach(el => {
       let tag = 'div';
-      if (el.type === 'button') { tag = 'button'; innerHTML = el.text; }
-      else if (el.type === 'input') { tag = 'input'; html += `  <${tag} class="${className}" placeholder="${el.text}" />\n`; }
-      else if (el.type === 'popup') { innerHTML = el.text; }
-      
-      if (el.type !== 'input') {
-        html += `  <${tag} class="${className}">${innerHTML}</${tag}>\n`;
+      if(el.type === 'button') tag = 'button';
+      if(el.type === 'input') tag = 'input';
+
+      let innerHtml = (el.type === 'input') ? `placeholder="${el.text}"` : `>${el.text}</${tag}>`;
+      if (el.type === 'input') {
+        htmlCode += `  <${tag} id="${el.id}" ${innerHtml} />\n`;
+      } else {
+        htmlCode += `  <${tag} id="${el.id}" class="elemento">${el.text}</${tag}>\n`;
       }
 
-      css += `.${className} {\n`;
-      css += `  position: absolute;\n`;
-      css += `  left: ${el.x}px;\n`;
-      css += `  top: ${el.y}px;\n`;
-      css += `  width: ${el.w}px;\n`;
-      css += `  height: ${el.h}px;\n`;
-      css += `  background-color: ${el.bg};\n`;
-      css += `  border-radius: ${el.radius}px;\n`;
-      if (el.type === 'button' || el.type === 'popup') {
-        css += `  color: #ffffff;\n`;
-        css += `  display: flex;\n`;
-        css += `  align-items: center;\n`;
-        css += `  justify-content: center;\n`;
-        css += `  border: none;\n`;
-      }
-      if (el.type === 'input') {
-        css += `  color: #ffffff;\n  padding: 0 10px;\n  border: 1px solid #4b5563;\n`;
-      }
-      css += `}\n\n`;
+      cssCode += `  #${el.id} {\n`;
+      cssCode += `    position: absolute;\n`;
+      cssCode += `    left: ${el.x}px;\n`;
+      cssCode += `    top: ${el.y}px;\n`;
+      cssCode += `    width: ${el.w}px;\n`;
+      cssCode += `    height: ${el.h}px;\n`;
+      cssCode += `    background-color: ${el.bg};\n`;
+      if(el.type === 'button') cssCode += `    border: none; border-radius: 5px; color: white; cursor: pointer;\n`;
+      if(el.type === 'input') cssCode += `    border: 1px solid #ccc; padding: 5px; box-sizing: border-box;\n`;
+      cssCode += `  }\n`;
     });
 
-    html += `</div>`;
-    return { html, css };
-  };
+    htmlCode += `</div>`;
+    cssCode += `</style>`;
 
-  const { html: htmlCode, css: cssCode } = generateLiveCode();
+    codeOutput.textContent = htmlCode + cssCode;
+  }
 
-  return (
-    <div className="flex flex-col h-screen w-screen bg-neutral-950 text-neutral-200 font-sans overflow-hidden select-none">
-      
-      {/* Top Navbar */}
-      <header className="h-14 border-b border-neutral-800 bg-neutral-900 flex items-center justify-between px-4 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="bg-indigo-600 p-1.5 rounded-lg text-white">
-            <Icons.Maximize />
-          </div>
-          <div>
-            <h1 className="font-bold text-sm tracking-wide text-white">Visual Layout Builder</h1>
-            <p className="text-[10px] text-neutral-400">Diseña y mide píxeles sin ser experto en HTML/CSS</p>
-          </div>
-        </div>
+  // Deseleccionar al hacer clic en el fondo del lienzo
+  canvas.addEventListener('mousedown', (e) => {
+    if (e.target === canvas) {
+      selectedElementId = null;
+      renderCanvas();
+      updatePropsPanel();
+    }
+  });
 
-        <div className="flex items-center bg-neutral-950 p-1 rounded-lg border border-neutral-800">
-          {PRESETS.map(preset => (
-            <button
-              key={preset.id}
-              onClick={() => setCanvasPreset(preset)}
-              className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                canvasPreset.id === preset.id 
-                  ? 'bg-neutral-800 text-white shadow-sm' 
-                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900/50'
-              }`}
-            >
-              {preset.id === 'desktop' && <Icons.Monitor />}
-              {preset.id === 'tablet' && <Icons.Tablet />}
-              {preset.id === 'mobile' && <Icons.Smartphone />}
-              {preset.id === 'free' && <Icons.Maximize />}
-              <span className="hidden sm:inline">{preset.name}</span>
-            </button>
-          ))}
-        </div>
-
-        <button 
-          onClick={() => setShowCode(!showCode)}
-          className={`flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors border ${
-            showCode ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-neutral-800 border-neutral-700 hover:bg-neutral-700'
-          }`}
-        >
-          <Icons.Code />
-          {showCode ? 'Ocultar Código' : 'Ver Código'}
-        </button>
-      </header>
-
-      <div className="flex flex-1 overflow-hidden">
-        
-        {/* Left Toolbar */}
-        <aside className="w-16 sm:w-56 border-r border-neutral-800 bg-neutral-900 flex flex-col items-center sm:items-stretch py-4 shrink-0 z-20">
-          <div className="px-4 pb-2 hidden sm:block text-xs font-semibold text-neutral-500 uppercase tracking-wider">Elementos</div>
-          <div className="flex flex-col gap-2 px-2 sm:px-3">
-            <ToolButton icon={<Icons.Square />} label="Contenedor" onClick={() => addElement('container')} />
-            <ToolButton icon={<Icons.Type />} label="Input Texto" onClick={() => addElement('input')} />
-            <ToolButton icon={<Icons.HandPoint />} label="Botón" onClick={() => addElement('button')} />
-            <ToolButton icon={<Icons.Layers />} label="Popup/Modal" onClick={() => addElement('popup')} />
-          </div>
-        </aside>
-
-        {}
-        <main 
-          className="flex-1 bg-neutral-950 overflow-auto flex items-center justify-center relative p-8"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) setSelectedId(null); // Click background to deselect
-          }}
-        >
-          {/* Canvas Wrapper */}
-          <div 
-            ref={canvasRef}
-            className="bg-neutral-900 relative shadow-2xl transition-all duration-300 ring-1 ring-neutral-800"
-            style={{
-              width: canvasPreset.w,
-              height: canvasPreset.h,
-              backgroundImage: 'radial-gradient(#3f3f46 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-              overflow: 'hidden' // Clip elements outside preset bounds
-            }}
-          >
-            {elements.map((el) => (
-              <div
-                key={el.id}
-                onMouseDown={(e) => {
-                  if (e.button !== 0) return;
-                  e.stopPropagation();
-                  setSelectedId(el.id);
-                  setActiveAction({
-                    type: 'drag', id: el.id,
-                    startX: e.clientX, startY: e.clientY,
-                    initX: el.x, initY: el.y, initW: el.w, initH: el.h
-                  });
-                }}
-                className={`absolute group box-border
-                  ${selectedId === el.id ? 'ring-2 ring-indigo-500 z-50' : 'hover:ring-1 hover:ring-neutral-500 z-10'}
-                `}
-                style={{
-                  left: el.x, top: el.y, width: el.w, height: el.h,
-                  backgroundColor: el.bg, borderRadius: el.radius,
-                  cursor: activeAction?.id === el.id && activeAction.type === 'drag' ? 'grabbing' : 'grab'
-                }}
-              >
-                {/* Visual rendering based on type */}
-                <div className="w-full h-full flex items-center justify-center text-sm overflow-hidden p-2" style={{ color: '#fff' }}>
-                  {el.type === 'button' && <span className="font-semibold pointer-events-none">{el.text}</span>}
-                  {el.type === 'popup' && <span className="text-center pointer-events-none">{el.text}</span>}
-                  {el.type === 'input' && <span className="text-neutral-400 whitespace-nowrap pointer-events-none">{el.text}</span>}
-                </div>
-
-                {/* Overlays on Select */}
-                {selectedId === el.id && (
-                  <>
-                    {/* Delete button */}
-                    <button
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onClick={() => removeElement(el.id)}
-                      className="absolute -top-3 -right-3 w-6 h-6 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer z-50"
-                    >
-                      <Icons.X />
-                    </button>
-                    
-                    {/* Dimension tooltip */}
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-mono px-2 py-1 rounded shadow pointer-events-none whitespace-nowrap">
-                      {el.w} × {el.h} px
-                    </div>
-                    {/* Distance Indicators (X, Y lines conceptually) */}
-                    <div className="absolute top-1/2 -left-12 text-[10px] text-indigo-400 font-mono w-10 text-right">{el.x}px</div>
-                    <div className="absolute -top-6 left-2 text-[10px] text-indigo-400 font-mono">{el.y}px</div>
-
-                    {/* Resize Handle */}
-                    <div
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        if (e.button !== 0) return;
-                        setActiveAction({
-                          type: 'resize', id: el.id,
-                          startX: e.clientX, startY: e.clientY,
-                          initX: el.x, initY: el.y, initW: el.w, initH: el.h
-                        });
-                      }}
-                      className="absolute right-0 bottom-0 w-4 h-4 cursor-nwse-resize bg-indigo-500 rounded-tl-md shadow-sm z-50"
-                    />
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </main>
-
-        {}
-        <aside className="w-64 border-l border-neutral-800 bg-neutral-900 flex flex-col shrink-0 z-20 overflow-y-auto">
-          <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-neutral-950/50">
-            <h2 className="text-sm font-bold text-neutral-200">Propiedades</h2>
-          </div>
-          
-          <div className="p-4 flex-1">
-            {selectedElement ? (
-              <div className="space-y-5">
-                {/* Posición y Tamaño */}
-                <div className="space-y-3">
-                  <h3 className="text-xs font-semibold text-neutral-500 uppercase">Posición y Tamaño (px)</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <PropInput label="X (Left)" value={selectedElement.x} onChange={(v) => updateSelected('x', Number(v))} />
-                    <PropInput label="Y (Top)" value={selectedElement.y} onChange={(v) => updateSelected('y', Number(v))} />
-                    <PropInput label="Width" value={selectedElement.w} onChange={(v) => updateSelected('w', Number(v))} />
-                    <PropInput label="Height" value={selectedElement.h} onChange={(v) => updateSelected('h', Number(v))} />
-                  </div>
-                </div>
-
-                <hr className="border-neutral-800" />
-
-                {/* Estilos */}
-                <div className="space-y-3">
-                  <h3 className="text-xs font-semibold text-neutral-500 uppercase">Apariencia</h3>
-                  
-                  <div className="space-y-1.5">
-                    <label className="text-xs text-neutral-400">Color de Fondo</label>
-                    <div className="flex items-center gap-2">
-                      <input 
-                        type="color" 
-                        value={selectedElement.bg} 
-                        onChange={(e) => updateSelected('bg', e.target.value)}
-                        className="w-8 h-8 rounded cursor-pointer bg-neutral-800 border-none outline-none"
-                      />
-                      <input 
-                        type="text" 
-                        value={selectedElement.bg}
-                        onChange={(e) => updateSelected('bg', e.target.value)}
-                        className="flex-1 bg-neutral-950 border border-neutral-800 rounded px-2 py-1.5 text-xs text-white"
-                      />
-                    </div>
-                  </div>
-
-                  <PropInput label="Border Radius (px)" value={selectedElement.radius} onChange={(v) => updateSelected('radius', Number(v))} />
-                </div>
-
-                {/* Contenido Texto (si aplica) */}
-                {['button', 'input', 'popup'].includes(selectedElement.type) && (
-                  <>
-                    <hr className="border-neutral-800" />
-                    <div className="space-y-1.5">
-                      <label className="text-xs text-neutral-400 uppercase font-semibold">Texto / Contenido</label>
-                      <input 
-                        type="text" 
-                        value={selectedElement.text || ''}
-                        onChange={(e) => updateSelected('text', e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded px-2 py-2 text-sm text-white"
-                      />
-                    </div>
-                  </>
-                )}
-
-              </div>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center text-neutral-500 gap-3 mt-10">
-                <Icons.HandPoint />
-                <p className="text-sm">Selecciona un elemento en el lienzo para editar sus propiedades exactas.</p>
-              </div>
-            )}
-          </div>
-        </aside>
-      </div>
-
-      {}
-      {showCode && (
-        <div className="h-64 border-t border-neutral-800 bg-neutral-950 flex flex-col shrink-0 animate-in slide-in-from-bottom-10 z-30">
-          <div className="flex bg-neutral-900 border-b border-neutral-800 text-sm">
-            <div className="px-4 py-2 border-b-2 border-indigo-500 text-indigo-400 font-semibold bg-neutral-800/50">HTML & CSS (Exportable)</div>
-            <div className="flex-1"></div>
-            <button onClick={() => setShowCode(false)} className="px-4 py-2 text-neutral-400 hover:text-white">Cerrar</button>
-          </div>
-          <div className="flex flex-1 overflow-hidden">
-            <div className="w-1/2 p-4 overflow-auto border-r border-neutral-800">
-              <h3 className="text-xs font-mono text-neutral-500 mb-2">index.html</h3>
-              <pre className="text-xs font-mono text-green-400 select-all"><code>{htmlCode}</code></pre>
-            </div>
-            <div className="w-1/2 p-4 overflow-auto bg-neutral-900/50">
-              <h3 className="text-xs font-mono text-neutral-500 mb-2">styles.css</h3>
-              <pre className="text-xs font-mono text-blue-400 select-all"><code>{cssCode}</code></pre>
-            </div>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-}
-
-function ToolButton({ icon, label, onClick }) {
-  return (
-    <button 
-      onClick={onClick}
-      className="flex flex-col sm:flex-row items-center gap-0 sm:gap-3 p-2 sm:px-3 sm:py-2.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors w-full group"
-    >
-      <div className="text-neutral-500 group-hover:text-indigo-400 transition-colors">
-        {icon}
-      </div>
-      <span className="text-[10px] sm:text-xs font-medium mt-1 sm:mt-0 text-center sm:text-left">{label}</span>
-    </button>
-  );
-}
-
-function PropInput({ label, value, onChange }) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] text-neutral-400">{label}</label>
-      <input 
-        type="number" 
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-neutral-950 border border-neutral-800 rounded px-2 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors font-mono"
-      />
-    </div>
-  );
-}
+</script>
+</body>
+</html>
