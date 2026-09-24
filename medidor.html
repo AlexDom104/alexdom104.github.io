@@ -85,7 +85,6 @@ button { cursor: pointer; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent-2); outline-offset: 1px; }
 ::selection { background: var(--accent-soft); color: var(--text-bright); }
-/* ---------- layout ---------- */
 #app {
 display: grid;
 height: 100%;
@@ -104,7 +103,6 @@ body.preview #left, body.preview #right { visibility: hidden; overflow: hidden; 
 #right { grid-area: right; background: var(--panel); border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
 #center { grid-area: center; position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 #status { grid-area: status; display: flex; align-items: center; gap: 14px; padding: 0 12px; background: var(--panel); border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
-/* ---------- top bar ---------- */
 .brand { display: flex; align-items: center; gap: 10px; margin-right: 8px; }
 .brand-mark {
 font-family: var(--mono); font-size: 12px; font-weight: 700;
@@ -162,7 +160,6 @@ box-shadow: var(--shadow); padding: 6px; z-index: 200;
 .menu button small { display: block; color: var(--muted); font-size: 10.5px; margin-top: 2px; }
 .menu hr { border: 0; border-top: 1px solid var(--line); margin: 6px 4px; }
 .menu .k { margin-left: auto; color: var(--muted); font-size: 10px; font-family: var(--mono); }
-/* ---------- side panels ---------- */
 .tabs { display: flex; border-bottom: 1px solid var(--line); flex: none; background: var(--bg-2); }
 .tabs button {
 flex: 1; height: 38px; border: 0; background: transparent;
@@ -208,7 +205,6 @@ transition: all .12s ease;
 .tool .nm { font-size: 11.5px; line-height: 1.25; color: var(--text-bright); }
 .tool .tg { font-family: var(--mono); font-size: 10px; color: var(--c-comment); }
 .cat-empty { padding: 30px 16px; text-align: center; color: var(--muted); }
-/* layers */
 .layer-tools {
 display: flex; gap: 4px; padding: 8px 10px; border-bottom: 1px solid var(--line);
 position: sticky; top: 0; background: var(--panel); z-index: 2; align-items: center;
@@ -229,7 +225,6 @@ border-bottom: 1px solid transparent; cursor: default; font-size: 12px;
 .layer .btn.act { color: var(--accent-2); }
 .layer-name-input { flex: 1; min-height: 22px !important; padding: 2px 6px !important; font-size: 11px !important; }
 .empty-note { padding: 28px 18px; color: var(--muted); text-align: center; line-height: 1.6; font-size: 11px; }
-/* ---------- properties ---------- */
 .props { padding: 10px 12px 30px; }
 .props details { border: 1px solid var(--line); border-radius: 4px; margin-bottom: 8px; background: var(--panel-2); }
 .props summary {
@@ -273,7 +268,6 @@ font-family: var(--mono); font-size: 10px; background: var(--panel-3);
 border: 1px solid var(--line-2); border-bottom-width: 2px;
 border-radius: 3px; padding: 1px 5px; color: var(--text-bright);
 }
-/* ---------- code ---------- */
 .code-head { display: flex; gap: 6px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--panel); z-index: 2; }
 .code-head .seg { flex: 1; }
 .code-head .seg button { flex: 1; justify-content: center; }
@@ -292,7 +286,6 @@ cursor: pointer; font-size: 11px; color: var(--text-bright);
 .tk-t { color: var(--c-html); } .tk-a { color: var(--c-css); } .tk-s { color: var(--c-string); } .tk-c { color: var(--c-comment); font-style: italic; }
 .tk-p { color: var(--c-css); } .tk-k { color: var(--c-keyword); } .tk-n { color: var(--c-js); } .tk-v { color: var(--text); } .tk-sel { color: var(--c-js); }
 .code-note { margin: 8px 10px; color: var(--muted); font-size: 11px; line-height: 1.5; }
-/* ---------- audit ---------- */
 .audit-item { display: flex; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 11px; }
 .audit-item .lv { flex: none; width: 4px; border-radius: 2px; }
 .audit-item.err .lv { background: var(--danger); } .audit-item.warn .lv { background: var(--warn); } .audit-item.info .lv { background: var(--info); }
@@ -300,7 +293,6 @@ cursor: pointer; font-size: 11px; color: var(--text-bright);
 .audit-item b { display: block; margin-bottom: 2px; color: var(--text-bright); font-size: 12px; }
 .audit-item p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .audit-ok { padding: 30px 16px; text-align: center; color: var(--ok); line-height: 1.6; }
-/* ---------- canvas ---------- */
 #edit-view { position: relative; flex: 1; min-height: 0; }
 #canvas-wrap {
 position: absolute; inset: 0; overflow: auto; display: flex; padding: 56px;
@@ -348,7 +340,6 @@ max-width: 400px; line-height: 1.6; font-size: 12px;
 #ctx button:hover { background: var(--accent-soft); }
 #ctx .k { margin-left: auto; color: var(--muted); font: 10px var(--mono); }
 #ctx hr { border: 0; border-top: 1px solid var(--line); margin: 4px; }
-/* ---------- preview ---------- */
 #preview-view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .pv-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
 .pv-bar input[type="number"] { width: 78px; }
@@ -362,7 +353,6 @@ max-width: 400px; line-height: 1.6; font-size: 12px;
 #console-lines div { padding: 2px 0; border-bottom: 1px dashed var(--line); white-space: pre-wrap; word-break: break-word; }
 #console-lines .warn { color: var(--warn); } #console-lines .error { color: var(--danger); } #console-lines .info { color: var(--info); }
 #console-lines .muted { color: var(--muted); }
-/* ---------- status bar ---------- */
 #status .grow { flex: 1; }
 #status .btn { height: 22px; font-size: 11px; color: var(--muted); padding: 0 7px; }
 #status .btn.on { color: var(--accent-2); }
@@ -371,7 +361,6 @@ max-width: 400px; line-height: 1.6; font-size: 12px;
 .saved { display: inline-flex; align-items: center; gap: 6px; }
 .saved i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); display: inline-block; box-shadow: 0 0 6px var(--ok); }
 .saved.err i { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
-/* ---------- modals ---------- */
 #modal-root .back { position: fixed; inset: 0; background: rgba(6, 8, 12, .75); display: flex; align-items: center; justify-content: center; z-index: 500; padding: 20px; backdrop-filter: blur(4px); }
 .modal { background: var(--panel); border: 1px solid var(--line-2); border-radius: 8px; box-shadow: var(--shadow); width: min(720px, 100%); max-height: calc(100vh - 40px); display: flex; flex-direction: column; }
 .modal.wide { width: min(900px, 100%); }
@@ -417,7 +406,6 @@ border: 1px solid var(--line-2); font-size: 12px;
 #small-screen { display: none; padding: 8px 12px; background: var(--warn); color: #1b1300; font-weight: 600; text-align: center; font-size: 12px; }
 @media (max-width: 980px) { #small-screen { display: block; } }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
-/* Projects list */
 .proj-item {
 display: flex; align-items: center; gap: 10px; padding: 10px 12px;
 border: 1px solid var(--line); border-radius: 6px; margin-bottom: 6px;
@@ -428,7 +416,6 @@ background: var(--panel-2); cursor: pointer; transition: all .12s ease;
 .proj-item .info b { display: block; color: var(--text-bright); font-size: 12px; }
 .proj-item .info span { color: var(--muted); font-size: 10px; }
 .proj-item .btn { flex: none; }
-/* Confirm dialog */
 .confirm-warn {
 display: flex; align-items: flex-start; gap: 12px;
 padding: 12px; background: rgba(248, 81, 73, .08);
@@ -438,7 +425,6 @@ margin: 12px 0; color: var(--text);
 .confirm-warn .ic { color: var(--danger); font-size: 18px; flex: none; }
 .confirm-warn p { margin: 0; font-size: 12px; line-height: 1.5; }
 .confirm-warn b { color: var(--danger); }
-/* Blinking cursor */
 @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
 .cursor-blink::after { content: "▊"; color: var(--ok); animation: blink 1s infinite; margin-left: 2px; }
 </style>
@@ -446,7 +432,6 @@ margin: 12px 0; color: var(--text);
 <body class="edit-mode">
 <div id="small-screen">Este editor está pensado para pantallas grandes (computadora o tablet en horizontal).</div>
 <div id="app">
-<!-- ===== Top bar ===== -->
 <header id="top">
 <div class="brand">
 <span class="brand-mark" aria-hidden="true">dev</span>
@@ -494,7 +479,6 @@ margin: 12px 0; color: var(--text);
 <button class="btn icon on" id="btn-pr" title="Panel derecho"><span class="ic" data-ic="panelR"></span></button>
 </div>
 </header>
-<!-- ===== Left panel ===== -->
 <aside id="left">
 <div class="tabs" role="tablist">
 <button data-ltab="components" class="on">components</button>
@@ -514,7 +498,6 @@ margin: 12px 0; color: var(--text);
 <div id="layers"></div>
 </div>
 </aside>
-<!-- ===== Center ===== -->
 <main id="center">
 <div id="edit-view">
 <div id="canvas-wrap">
@@ -557,7 +540,6 @@ Arrastra un componente desde el panel izquierdo o elige una plantilla en <em>fil
 </div>
 </div>
 </main>
-<!-- ===== Right panel ===== -->
 <aside id="right">
 <div class="tabs" role="tablist">
 <button data-rtab="design" class="on">design</button>
@@ -570,7 +552,6 @@ Arrastra un componente desde el panel izquierdo o elige una plantilla en <em>fil
 <div class="pane" id="rtab-audit" hidden></div>
 <div class="pane" id="rtab-page" hidden><div class="props" id="page-props"></div></div>
 </aside>
-<!-- ===== Status bar ===== -->
 <footer id="status">
 <span class="saved" id="saved"><i></i><span>auto-saved</span></span>
 <span id="sel-info"></span>
@@ -593,9 +574,6 @@ Arrastra un componente desde el panel izquierdo o elige una plantilla en <em>fil
 <input type="file" id="file-img" accept="image/*" hidden>
 <script>
 'use strict';
-/* =====================================================================
-DevCanvas Studio — Editor visual para devs
-===================================================================== */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -610,7 +588,7 @@ String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 const cssIdent = s => { const r = slug(s, 'el'); return /^[0-9]/.test(r) ? 'c-' + r : r; };
 const deepCopy = o => JSON.parse(JSON.stringify(o));
 const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
-/* ---------- iconos ASCII ---------- */
+
 const ICONS = {
 undo: '↶', redo: '↷', eye: '◉', eyeoff: '◎', lock: '▣', unlock: '▢',
 trash: '✕', copy: '⎘', plus: '+', minus: '−', download: '↓',
@@ -625,7 +603,7 @@ distH: '⇹', distV: '⇳', stretchW: '↔', stretchH: '↕', fit: '⛶'
 function icon(name) { return esc(ICONS[name] || '·'); }
 function initIcons(root = document) { $$('[data-ic]', root).forEach(n => { n.textContent = icon(n.dataset.ic); }); }
 const ic = n => '<span class="ic">' + icon(n) + '</span>';
-/* ---------- valores ---------- */
+
 const INK = '#0f172a', MUTED = '#64748b', BLUE = '#2563eb', LINE = '#e2e8f0', SOFT = '#f1f5f9';
 const LOREM = 'Escribe aquí tu texto. Haz doble clic sobre el elemento para editarlo directamente en el lienzo.';
 const VOID = new Set(['img', 'input', 'hr', 'br']);
@@ -645,9 +623,7 @@ const FONTS = [
 { label: 'Roboto Mono', css: '"Roboto Mono", monospace', g: 'Roboto+Mono:wght@400;500;700' },
 { label: 'JetBrains Mono', css: '"JetBrains Mono", monospace', g: 'JetBrains+Mono:wght@400;500;700' }
 ];
-/* =====================================================================
-CATÁLOGO
-===================================================================== */
+
 const CATALOG = [
 { cat: 'Texto', items: [
 { id: 'h1', n: 'Título H1', t: 'h1', w: 640, h: 64, fs: 44, fw: 800, lh: 1.1, c: INK, txt: 'Título principal' },
@@ -718,7 +694,7 @@ txt: '<span class="pos" style="font-family:ui-monospace,Menlo,monospace">Mueve e
 js: 'const out = this.querySelector(".pos");\nthis.addEventListener("mousemove", (e) => {\nconst r = this.getBoundingClientRect();\nout.textContent = "X: " + Math.round(e.clientX - r.left) + " | Y: " + Math.round(e.clientY - r.top);\n});' },
 { id: 'js_form', n: 'Form validado', t: 'div', w: 340, h: 220, bg: '#fff', c: INK, r: 12, sh: 'md',
 txt: '<form novalidate style="display:flex;flex-direction:column;gap:10px;padding:20px;width:100%"><label for="{{id}}-e" style="font-weight:600">Tu correo</label><input id="{{id}}-e" type="email" placeholder="tu@correo.com" style="padding:10px;border:1px solid #cbd5e1;border-radius:6px"><button type="submit" style="padding:10px;background:#2563eb;color:#fff;border:0;border-radius:6px;font-weight:600;cursor:pointer">Suscribirme</button><p class="msg" role="status" style="min-height:18px;font-size:13px"></p></form>',
-js: String.raw`const form = this.querySelector("form");\nconst msg = this.querySelector(".msg");\nform.addEventListener("submit", (e) => {\ne.preventDefault();\nconst v = form.querySelector("input").value.trim();\nconst ok = /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v);\nmsg.textContent = ok ? "¡Listo!" : "Correo inválido.";\nmsg.style.color = ok ? "#16a34a" : "#dc2626";\n});` }
+js: 'const form = this.querySelector("form");\nconst msg = this.querySelector(".msg");\nform.addEventListener("submit", (e) => {\ne.preventDefault();\nconst v = form.querySelector("input").value.trim();\nconst ok = /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v);\nmsg.textContent = ok ? "¡Listo!" : "Correo inválido.";\nmsg.style.color = ok ? "#16a34a" : "#dc2626";\n});' }
 ]},
 { cat: 'Tarjetas', items: [
 { id: 'feature', n: 'Feature', t: 'div', w: 340, h: 190, bg: '#fff', c: INK, r: 14, bw: 1, bc: LINE, pad: 24,
@@ -787,9 +763,7 @@ txt: '<thead style="background:#f8fafc"><tr><th style="padding:12px 14px">ID</th
 ];
 const CAT = {};
 CATALOG.forEach(c => c.items.forEach(i => { CAT[i.id] = i; }));
-/* =====================================================================
-MODELO
-===================================================================== */
+
 const APP_VERSION = 20;
 const STORE_KEY = 'mlp.project.v20';
 const PROJECTS_KEY = 'mlp.projects.list.v20';
@@ -899,9 +873,7 @@ const m = /^e(\d+)$/.exec(e.id); if (m) p.seq = Math.max(p.seq, +m[1] + 1);
 });
 return p;
 }
-/* =====================================================================
-GENERADOR
-===================================================================== */
+
 const SHADOWS = {
 none: '',
 sm: '0 2px 8px rgba(15, 23, 42, .10)',
@@ -929,7 +901,8 @@ skeleton: '@keyframes mlp-skeleton {\nto { background-position: -200% 0; }\n}'
 };
 const cmt = s => String(s).replace(/\*\//g, '* /').replace(/[\r\n]+/g, ' ');
 const indent = (s, n) => String(s).split('\n').map(l => (l.trim() ? ' '.repeat(n) + l : l)).join('\n');
-/* ---------- FIX: switch corregido ---------- */
+
+/* ====== FUNCIÓN CRÍTICA CORREGIDA ====== */
 function funcCSS(el) {
 const c = '.' + el.cls;
 const accent = '#2563eb';
@@ -962,6 +935,7 @@ default:
 return '';
 }
 }
+
 function elDecls(el, idx, mode) {
 const W = S.p.W, D = [];
 const add = (k, v) => D.push(k + ': ' + v + ';');
@@ -1206,9 +1180,7 @@ html = head + (opts.preview ? '  ' + CONSOLE_HOOK : '') + '  <style>\n' + indent
 }
 return { html, css, js, body, R };
 }
-/* =====================================================================
-ZIP
-===================================================================== */
+
 const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
 function crc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
 function makeZip(files) {
@@ -1258,9 +1230,7 @@ document.body.appendChild(t); t.select();
 try { document.execCommand('copy'); done(); } catch (e) { toast('no se pudo copiar'); }
 t.remove();
 }
-/* =====================================================================
-CACHE MEJORADO — Multi-proyecto
-===================================================================== */
+
 function getProjectsList() {
 try {
 const raw = localStorage.getItem(PROJECTS_KEY);
@@ -1283,10 +1253,8 @@ data: JSON.stringify({ app: 'devcanvas-studio', v: APP_VERSION, project: S.p })
 };
 if (idx >= 0) list[idx] = entry;
 else list.unshift(entry);
-// Mantener solo los últimos 10
 while (list.length > 10) list.pop();
 saveProjectsList(list);
-// También guardar el actual como "último abierto"
 localStorage.setItem(STORE_KEY, entry.data);
 setSaved(true);
 } catch (err) {
@@ -1309,9 +1277,7 @@ function deleteProjectFromCache(name) {
 const list = getProjectsList().filter(p => p.name !== name);
 saveProjectsList(list);
 }
-/* =====================================================================
-EDITOR
-===================================================================== */
+
 const stage = $('#stage'), pageHost = $('#page'), overlay = $('#overlay'), holder = $('#holder'), wrap = $('#canvas-wrap');
 const shadow = pageHost.attachShadow({ mode: 'open' });
 shadow.innerHTML = '<style id="s-edit">' +
@@ -1695,7 +1661,7 @@ if (!S.p.els.length) { toast('no layers to clear'); return; }
 const count = S.p.els.length;
 confirmModal(
 'Eliminar todas las capas',
-`<div class="confirm-warn"><span class="ic">${ic('alertTri')}</span><div><p>Estás a punto de eliminar <b>${count} capa${count > 1 ? 's' : ''}</b> del lienzo.</p><p style="margin-top:6px;color:var(--muted)">Esta acción se puede deshacer con <kbd>Ctrl+Z</kbd>, pero asegúrate de haber guardado tu trabajo.</p></div></div>`,
+'<div class="confirm-warn"><span class="ic">' + ic('alertTri') + '</span><div><p>Estás a punto de eliminar <b>' + count + ' capa' + (count > 1 ? 's' : '') + '</b> del lienzo.</p><p style="margin-top:6px;color:var(--muted)">Esta acción se puede deshacer con <kbd>Ctrl+Z</kbd>, pero asegúrate de haber guardado tu trabajo.</p></div></div>',
 '✕ Eliminar todo',
 () => {
 S.p.els = [];
@@ -1703,7 +1669,7 @@ S.sel = [];
 renderPage();
 selectionChanged();
 commit();
-toast(`${count} layers removed`);
+toast(count + ' layers removed');
 }
 );
 }
@@ -1846,9 +1812,7 @@ if (e.key === 'Enter' && S.sel.length === 1) { startTextEdit(S.sel[0]); e.preven
 });
 document.addEventListener('keyup', e => { if (e.code === 'Space') { S.space = false; wrap.classList.remove('pan'); } });
 window.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && ['=', '+', '-', '0'].includes(e.key)) e.preventDefault(); }, { capture: true });
-/* =====================================================================
-PANELES
-===================================================================== */
+
 function setLeftTab(t) {
 S.ltab = t;
 $$('#left .tabs button').forEach(b => b.classList.toggle('on', b.dataset.ltab === t));
@@ -2081,8 +2045,7 @@ if (['x', 'y', 'w', 'h'].includes(k)) { updateStatusSel(); }
 if (k === 'hidden' || k === 'locked') refreshLayers();
 if (!live) commitLater();
 };
-const ev = (inp.tagName === 'SELECT' || inp.type === 'checkbox' || inp.type === 'color') ? 'input' : 'input';
-inp.addEventListener(ev, () => apply(inp.tagName !== 'SELECT' && inp.type !== 'checkbox' && inp.type !== 'color'));
+inp.addEventListener('input', () => apply(inp.tagName !== 'SELECT' && inp.type !== 'checkbox' && inp.type !== 'color'));
 inp.addEventListener('change', () => { apply(false); commit(); });
 });
 }
@@ -2475,9 +2438,7 @@ kv('Save project', 'Ctrl+S') + kv('This help', '?') + '</div>' +
 }
 function kv(a, b) { return '<div><span>' + esc(a) + '</span><b>' + esc(b) + '</b></div>'; }
 $('#btn-help').addEventListener('click', openHelp);
-/* =====================================================================
-PLANTILLAS — NUEVAS AÑADIDAS
-===================================================================== */
+
 const TEMPLATES = [
 { id: 'blank', name: 'Lienzo en blanco', desc: 'Empieza desde cero', build: () => { S.p = blankProject(); } },
 { id: 'landing', name: 'Landing producto', desc: 'Hero + features + CTA', build: buildLandingTemplate },
@@ -2539,14 +2500,13 @@ function buildLoginTemplate() {
 const p = blankProject(); p.name = 'pantalla-acceso'; p.title = 'Iniciar sesión'; p.bg = '#0f172a'; S.p = p;
 addTplEl('login', (p.W - CAT.login.w) / 2, (p.H - CAT.login.h) / 2);
 }
-/* NUEVAS PLANTILLAS */
 function buildBlogTemplate() {
 const p = blankProject(); p.name = 'blog-articulo'; p.title = 'Mi blog'; S.p = p;
 addTplEl('navbar', 0, 0);
 const h1 = addTplEl('h1', 60, 100); h1.w = 700; h1.text = 'Cómo construir interfaces modernas';
 const meta = addTplEl('p', 60, 180); meta.w = 700; meta.fs = 14; meta.c = '#64748b'; meta.text = 'Por Ana Pérez · 15 min de lectura · 24 septiembre 2026';
 const article = addTplEl('p', 60, 240); article.w = 700; article.h = 400;
-article.text = '<p style="margin-bottom:16px">Las interfaces modernas combinan diseño limpio con interacciones significativas. En este artículo exploramos los principios fundamentales.</p><h2 style="margin:24px 0 12px;font-size:24px">Principios clave</h2><p style="margin-bottom:16px">La jerarquía visual, el contraste adecuado y la consistencia son los pilares de cualquier buena interfaz.</p>';
+article.text = '<p style="margin-bottom:16px">Las interfaces modernas combinan diseño limpio con interacciones significativas.</p><h2 style="margin:24px 0 12px;font-size:24px">Principios clave</h2><p style="margin-bottom:16px">La jerarquía visual, el contraste adecuado y la consistencia son los pilares de cualquier buena interfaz.</p>';
 const sidebar = addTplEl('box', 800, 240); sidebar.w = 400; sidebar.h = 400; sidebar.bg = '#f8fafc';
 sidebar.text = '<div style="padding:24px"><h3 style="margin-bottom:12px">Suscríbete</h3><p style="color:#64748b;margin-bottom:16px;font-size:14px">Recibe nuevos artículos cada semana.</p><input type="email" placeholder="tu@email.com" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:10px"><button style="width:100%;padding:10px;background:#2563eb;color:#fff;border:0;border-radius:6px;font-weight:600">Suscribirme</button></div>';
 addTplEl('footer', 0, 700);
@@ -2603,9 +2563,7 @@ const el = mkEl(key); el.x = x === undefined ? el.x : x; el.y = y === undefined 
 if (CAT[key].w === 'full') el.x = 0;
 S.p.els.push(el); return el;
 }
-/* =====================================================================
-PROYECTOS GUARDADOS
-===================================================================== */
+
 function openProjects() {
 const list = getProjectsList();
 let body = '';
@@ -2645,9 +2603,7 @@ openProjects();
 toast('project removed from cache');
 }));
 }
-/* =====================================================================
-CARGA INICIAL
-===================================================================== */
+
 function loadInitial() {
 let raw = null;
 try { raw = localStorage.getItem(STORE_KEY); } catch (e) {}
@@ -2663,7 +2619,6 @@ buildLandingTemplate();
 resetHistory();
 renderPage();
 requestAnimationFrame(() => { fitZoom(); refreshPanels(true); refreshUndoRedo(); });
-// Guardar inmediatamente al cargar para asegurar caché inicial
 setTimeout(saveCurrentProjectToCache, 100);
 }
 loadInitial();
