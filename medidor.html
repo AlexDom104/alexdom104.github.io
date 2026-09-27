@@ -552,6 +552,41 @@ const FONTS = [
    func = comportamiento CSS · js = código JavaScript (usa this / el)
    {{id}} dentro del HTML se cambia por un identificador único.
    ===================================================================== */
+function portfolioCard(title) {
+  return '<div class="ov-card" style="position:relative;border-radius:10px;overflow:hidden"><img src="asset:ph" alt="' + title + '" style="width:100%;height:100%;object-fit:cover;display:block"><div class="ov-cap"><b>' + title + '</b></div></div>';
+}
+function teamCard(initials, name, role) {
+  return '<div style="text-align:center"><div style="width:76px;height:76px;border-radius:50%;background:#dbeafe;color:#1d4ed8;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;margin:0 auto 12px">' + initials + '</div><b>' + name + '</b><div style="color:#64748b;font-size:13px;margin-top:2px">' + role + '</div></div>';
+}
+function reviewCard(quote, author) {
+  return '<div style="background:#fff;border:1px solid ' + LINE + ';border-radius:12px;padding:20px;text-align:left"><p style="font-size:14px;line-height:1.6;margin-bottom:12px;color:#334155">' + quote + '</p><b style="font-size:13px">' + author + '</b></div>';
+}
+function stepCard(n, label) {
+  return '<div style="text-align:center"><div style="width:40px;height:40px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin:0 auto 10px">' + n + '</div><div style="font-weight:600;font-size:14px">' + label + '</div></div>';
+}
+function faqItem(q, a) {
+  return '<details style="border-bottom:1px solid ' + LINE + ';padding:14px 0"><summary style="font-weight:600;cursor:pointer;list-style:none">' + q + '</summary><p style="margin-top:10px;color:#64748b;font-size:14px;line-height:1.6">' + a + '</p></details>';
+}
+function compareRow(label, a, b) {
+  return '<tr><td style="padding:12px 14px;text-align:left;border-top:1px solid ' + LINE + '">' + label + '</td><td style="padding:12px 14px;border-top:1px solid ' + LINE + '">' + a + '</td><td style="padding:12px 14px;border-top:1px solid ' + LINE + ';background:#eff6ff">' + b + '</td></tr>';
+}
+function blogCard(title, date) {
+  return '<div style="background:#fff;border-radius:10px;overflow:hidden;border:1px solid ' + LINE + '"><img src="asset:ph" alt="' + title + '" style="width:100%;height:140px;object-fit:cover"><div style="padding:16px"><span style="color:#94a3b8;font-size:12px">' + date + '</span><h3 style="font-size:16px;margin-top:6px">' + title + '</h3></div></div>';
+}
+function miniStat(label, value) {
+  return '<div style="flex:1;background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:16px"><div style="color:#94a3b8;font-size:12px">' + label + '</div><div style="font-size:22px;font-weight:800;margin-top:4px">' + value + '</div></div>';
+}
+
+function scrollCard(color, label) {
+  return '<div style="flex:none;width:180px;height:100%;scroll-snap-align:start;background:' + color + ';color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">' + label + '</div>';
+}
+function peekCard(color, label) {
+  return '<div style="flex:none;width:100%;max-width:420px;height:230px;scroll-snap-align:center;background:' + color + ';color:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;box-shadow:0 14px 30px rgba(0,0,0,.15)">' + label + '</div>';
+}
+function marqueeLogos() {
+  return ['ACME', 'NORTE', 'VELOX', 'ORBIT', 'PIXEL'].map(n => '<b style="font-size:18px;color:#94a3b8;white-space:nowrap;flex:none">' + n + '</b>').join('');
+}
+
 const CATALOG = [
   { cat: 'Texto', items: [
     { id: 'h1', n: 'Título (H1)', t: 'h1', w: 640, h: 64, fs: 44, fw: 800, lh: 1.1, c: INK, txt: 'Título principal' },
@@ -568,6 +603,18 @@ const CATALOG = [
     { id: 'btn', n: 'Botón principal', t: 'button', w: 160, h: 46, bg: BLUE, c: '#fff', r: 8, fs: 15, fw: 600, cur: 'pointer', hbg: '#1d4ed8', al: 'c', attrs: 'type="button"', txt: 'Comenzar' },
     { id: 'btn-outline', n: 'Botón con borde', t: 'button', w: 160, h: 46, bg: 'transparent', c: BLUE, r: 8, bw: 2, bc: BLUE, fs: 15, fw: 600, cur: 'pointer', hbg: BLUE, hcolor: '#ffffff', al: 'c', attrs: 'type="button"', txt: 'Saber más' },
     { id: 'btn-pill', n: 'Botón redondeado', t: 'button', w: 170, h: 46, bg: INK, c: '#fff', r: 999, fs: 15, fw: 600, cur: 'pointer', hscale: 1.05, al: 'c', attrs: 'type="button"', txt: 'Descargar' },
+    { id: 'btn-gradient', n: 'Botón degradado', t: 'button', w: 180, h: 46, bg: 'linear-gradient(120deg, #6366f1, #8b5cf6)', c: '#fff', r: 10, fs: 15, fw: 700, cur: 'pointer', hscale: 1.03, al: 'c', shadow: 'md', attrs: 'type="button"', txt: 'Probar gratis' },
+    { id: 'btn-ghost', n: 'Botón fantasma', t: 'button', w: 160, h: 46, bg: 'transparent', c: INK, r: 8, fs: 15, fw: 600, cur: 'pointer', hbg: SOFT, al: 'c', attrs: 'type="button"', txt: 'Cancelar' },
+    { id: 'btn-icon', n: 'Botón con ícono', t: 'button', w: 190, h: 46, bg: BLUE, c: '#fff', r: 8, fs: 15, fw: 600, cur: 'pointer', hbg: '#1d4ed8', attrs: 'type="button"',
+      txt: '<span style="display:flex;align-items:center;gap:8px;margin:auto"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Continuar</span>' },
+    { id: 'btn-3d', n: 'Botón 3D (con relieve)', t: 'button', w: 170, h: 48, bg: '#22c55e', c: '#fff', r: 10, fs: 15, fw: 700, cur: 'pointer', al: 'c', css: 'box-shadow: 0 5px 0 #15803d; border: 0;', attrs: 'type="button"', txt: 'Jugar' },
+    { id: 'btn-neon', n: 'Botón neón', t: 'button', w: 180, h: 48, bg: 'transparent', c: '#22d3ee', r: 8, fs: 15, fw: 700, cur: 'pointer', style: 'neon', attrs: 'type="button"', txt: 'ENTRAR' },
+    { id: 'btn-glass', n: 'Botón cristal (glass)', t: 'button', w: 170, h: 46, bg: 'rgba(255,255,255,.18)', c: '#fff', r: 10, fs: 15, fw: 600, cur: 'pointer', style: 'glass', attrs: 'type="button"', txt: 'Ver más' },
+    { id: 'btn-sm', n: 'Botón pequeño', t: 'button', w: 96, h: 32, bg: INK, c: '#fff', r: 6, fs: 13, fw: 600, cur: 'pointer', al: 'c', attrs: 'type="button"', txt: 'Guardar' },
+    { id: 'btn-lg', n: 'Botón grande (CTA)', t: 'button', w: 240, h: 60, bg: BLUE, c: '#fff', r: 12, fs: 18, fw: 700, cur: 'pointer', hbg: '#1d4ed8', al: 'c', shadow: 'md', attrs: 'type="button"', txt: 'Empezar ahora →' },
+    { id: 'btn-disabled', n: 'Botón deshabilitado', t: 'button', w: 160, h: 46, bg: '#e2e8f0', c: '#94a3b8', r: 8, fs: 15, fw: 600, cur: 'not-allowed', al: 'c', attrs: 'type="button" disabled aria-disabled="true"', txt: 'No disponible' },
+    { id: 'btn-loading', n: 'Botón cargando…', t: 'button', w: 170, h: 46, bg: '#93c5fd', c: '#fff', r: 8, fs: 15, fw: 600, cur: 'progress', attrs: 'type="button" aria-busy="true"',
+      txt: '<span style="display:flex;align-items:center;gap:9px;margin:auto"><span style="width:14px;height:14px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:mlp-rotate 1s linear infinite"></span>Enviando…</span>' },
     { id: 'badge', n: 'Insignia', t: 'span', w: 84, h: 26, bg: '#dcfce7', c: '#166534', r: 13, fs: 12, fw: 700, al: 'c', txt: 'Nuevo' },
     { id: 'chip', n: 'Etiqueta (tag)', t: 'span', w: 110, h: 30, bg: SOFT, c: '#334155', r: 15, bw: 1, bc: LINE, fs: 13, fw: 500, al: 'c', txt: '#diseño' }
   ]},
@@ -589,6 +636,37 @@ const CATALOG = [
       txt: '<div style="background:#e2e8f0;padding:11px 14px;display:flex;gap:8px"><i style="width:12px;height:12px;background:#ef4444;border-radius:50%"></i><i style="width:12px;height:12px;background:#f59e0b;border-radius:50%"></i><i style="width:12px;height:12px;background:#22c55e;border-radius:50%"></i></div><div style="padding:22px">Contenido de la ventana…</div>' },
     { id: 'cta', n: 'Banner de llamada a la acción', t: 'section', w: 1000, h: 170, bg: 'linear-gradient(120deg, #2563eb, #7c3aed)', c: '#fff', r: 16, al: 'c',
       txt: '<div style="text-align:center;padding:0 24px"><h2 style="font-size:28px;margin-bottom:14px">¿Listo para empezar?</h2><a href="#" style="display:inline-block;padding:12px 26px;background:#fff;color:#1e3a8a;border-radius:8px;font-weight:700;text-decoration:none">Crear cuenta</a></div>' }
+  ]},
+  { cat: 'Carruseles y sliders', items: [
+    { id: 'car-auto', n: '1. Automático (desliza solo)', t: 'div', w: 640, h: 300, bg: '#fff', r: 14, ov: 1, func: 'css-carousel',
+      txt: '<div class="slides"><div class="slide" style="background:#2563eb;color:#fff">Diapositiva 1</div><div class="slide" style="background:#059669;color:#fff">Diapositiva 2</div><div class="slide" style="background:#e11d48;color:#fff">Diapositiva 3</div></div>' },
+    { id: 'car-fade', n: '2. Con fundido (crossfade)', t: 'div', w: 640, h: 300, bg: '#0f172a', r: 14, ov: 1, func: 'carousel-fade',
+      txt: '<div class="slide s1" style="background:#2563eb">Diapositiva 1</div><div class="slide s2" style="background:#059669">Diapositiva 2</div><div class="slide s3" style="background:#e11d48">Diapositiva 3</div>' },
+    { id: 'car-arrows', n: '3. Con flechas (manual + contador)', t: 'div', w: 640, h: 320, bg: '#fff', r: 14, ov: 1, bw: 1, bc: LINE, css: 'display:flex;flex-direction:column;',
+      txt: '<div style="flex:1;overflow:hidden"><div class="track" style="display:flex;width:300%;height:100%;transition:transform .4s ease"><div style="width:33.3333%;height:100%;flex:none;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700">Diapositiva 1</div><div style="width:33.3333%;height:100%;flex:none;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700">Diapositiva 2</div><div style="width:33.3333%;height:100%;flex:none;background:#e11d48;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700">Diapositiva 3</div></div></div><div style="height:42px;flex:none;display:flex;align-items:center;justify-content:center;gap:16px;background:#f8fafc;border-top:1px solid #e2e8f0"><button type="button" class="prev" style="width:28px;height:28px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer">‹</button><span class="count" style="font-size:12px;font-weight:700;color:#334155">1 / 3</span><button type="button" class="next" style="width:28px;height:28px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer">›</button></div>',
+      js: String.raw`const track = this.querySelector(".track");
+const count = this.querySelector(".count");
+let i = 0; const n = 3;
+function render(){ track.style.transform = "translateX(-" + (i * 33.3333) + "%)"; count.textContent = (i + 1) + " / " + n; }
+this.querySelector(".prev").addEventListener("click", () => { i = (i - 1 + n) % n; render(); });
+this.querySelector(".next").addEventListener("click", () => { i = (i + 1) % n; render(); });` },
+    { id: 'car-dots', n: '4. Con puntos (clic para saltar)', t: 'div', w: 640, h: 300, bg: '#fff', r: 14, ov: 1, func: 'carousel-dots',
+      txt: '<input type="radio" name="{{id}}" id="{{id}}-1" checked style="position:absolute;opacity:0"><input type="radio" name="{{id}}" id="{{id}}-2" style="position:absolute;opacity:0"><input type="radio" name="{{id}}" id="{{id}}-3" style="position:absolute;opacity:0"><div class="slide d1" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#2563eb;color:#fff;font-size:22px;font-weight:700">Diapositiva 1</div><div class="slide d2" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#059669;color:#fff;font-size:22px;font-weight:700">Diapositiva 2</div><div class="slide d3" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#e11d48;color:#fff;font-size:22px;font-weight:700">Diapositiva 3</div><div class="dots" style="position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:9px"><label for="{{id}}-1" style="width:10px;height:10px;border-radius:50%;background:#fff;opacity:.55;cursor:pointer"></label><label for="{{id}}-2" style="width:10px;height:10px;border-radius:50%;background:#fff;opacity:.55;cursor:pointer"></label><label for="{{id}}-3" style="width:10px;height:10px;border-radius:50%;background:#fff;opacity:.55;cursor:pointer"></label></div>' },
+    { id: 'car-scroll', n: '5. Deslizable (arrastra o desliza)', t: 'div', w: 680, h: 260, bg: 'transparent',
+      css: 'display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 6px 14px;',
+      txt: scrollCard('#2563eb', 'Tarjeta 1') + scrollCard('#059669', 'Tarjeta 2') + scrollCard('#e11d48', 'Tarjeta 3') + scrollCard('#7c3aed', 'Tarjeta 4') },
+    { id: 'car-peek', n: '6. Con vista previa (peek)', t: 'div', w: 680, h: 300, bg: 'transparent',
+      css: 'display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 60px;align-items:center;',
+      txt: peekCard('#0ea5e9', 'Destacado 1') + peekCard('#f59e0b', 'Destacado 2') + peekCard('#10b981', 'Destacado 3') },
+    { id: 'car-vertical', n: '7. Vertical automático', t: 'div', w: 340, h: 220, bg: '#fff', r: 14, ov: 1, func: 'css-carousel-v',
+      txt: '<div class="slides"><div class="slide" style="background:#0f172a;color:#fff">Tip #1</div><div class="slide" style="background:#1e293b;color:#fff">Tip #2</div><div class="slide" style="background:#334155;color:#fff">Tip #3</div></div>' },
+    { id: 'car-marquee', n: '8. Marquesina de logos (bucle infinito)', t: 'div', w: 700, h: 90, bg: SOFT, r: 10, ov: 1,
+      txt: '<div style="display:flex;align-items:center;gap:50px;width:max-content;height:100%;animation:mlp-marquee 12s linear infinite">' + marqueeLogos() + marqueeLogos() + '</div>' },
+    { id: 'car-thumbs', n: '9. Con miniaturas', t: 'div', w: 400, h: 300, bg: '#fff', r: 14, ov: 1, func: 'carousel-dots',
+      txt: '<input type="radio" name="{{id}}" id="{{id}}-1" checked style="position:absolute;opacity:0"><input type="radio" name="{{id}}" id="{{id}}-2" style="position:absolute;opacity:0"><input type="radio" name="{{id}}" id="{{id}}-3" style="position:absolute;opacity:0"><div class="slide d1" style="position:absolute;top:0;left:0;right:0;bottom:52px;display:flex;align-items:center;justify-content:center;background:#2563eb;color:#fff;font-size:20px;font-weight:700">Foto 1</div><div class="slide d2" style="position:absolute;top:0;left:0;right:0;bottom:52px;display:flex;align-items:center;justify-content:center;background:#059669;color:#fff;font-size:20px;font-weight:700">Foto 2</div><div class="slide d3" style="position:absolute;top:0;left:0;right:0;bottom:52px;display:flex;align-items:center;justify-content:center;background:#e11d48;color:#fff;font-size:20px;font-weight:700">Foto 3</div><div class="dots" style="position:absolute;left:0;right:0;bottom:0;height:52px;display:flex;align-items:center;justify-content:center;gap:8px;background:#f8fafc"><label for="{{id}}-1" style="width:44px;height:34px;border-radius:6px;background:#2563eb;opacity:.55;cursor:pointer"></label><label for="{{id}}-2" style="width:44px;height:34px;border-radius:6px;background:#059669;opacity:.55;cursor:pointer"></label><label for="{{id}}-3" style="width:44px;height:34px;border-radius:6px;background:#e11d48;opacity:.55;cursor:pointer"></label></div>' },
+    { id: 'car-stack', n: '10. En pila (efecto de mazo)', t: 'div', w: 300, h: 340, bg: 'transparent', css: 'display:flex;flex-direction:column;', func: 'card-stack',
+      txt: '<div class="deck" style="position:relative;flex:1"><div class="card" style="position:absolute;inset:0;background:#2563eb;color:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 14px 30px rgba(0,0,0,.18)">Carta 1</div><div class="card" style="position:absolute;inset:0;background:#059669;color:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 14px 30px rgba(0,0,0,.18)">Carta 2</div><div class="card" style="position:absolute;inset:0;background:#e11d48;color:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 14px 30px rgba(0,0,0,.18)">Carta 3</div></div><button type="button" class="next" style="flex:none;margin-top:12px;height:38px;border:0;border-radius:8px;background:#0f172a;color:#fff;font-weight:600;cursor:pointer">Siguiente ↻</button>',
+      js: 'const deck = this.querySelector(".deck");\nthis.querySelector(".next").addEventListener("click", () => {\n  deck.appendChild(deck.firstElementChild);\n});' }
   ]},
   { cat: 'Interactividad solo con CSS', items: [
     { id: 'dropdown', n: 'Menú desplegable', t: 'div', w: 170, h: 46, bg: BLUE, c: '#fff', r: 8, fw: 600, al: 'c', cur: 'pointer', func: 'hover-dropdown', attrs: 'tabindex="0"',
@@ -688,6 +766,44 @@ form.addEventListener("submit", (e) => {
     { id: 'star', n: 'Estrella', t: 'div', w: 150, h: 150, bg: '#f43f5e', clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', ratio: 1 },
     { id: 'diamond', n: 'Rombo', t: 'div', w: 150, h: 150, bg: '#10b981', clip: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', ratio: 1 },
     { id: 'arrow', n: 'Flecha', t: 'div', w: 180, h: 100, bg: '#0ea5e9', clip: 'polygon(0 30%, 60% 30%, 60% 0, 100% 50%, 60% 100%, 60% 70%, 0 70%)', ratio: 1 }
+  ]},
+  { cat: 'Secciones grandes', items: [
+    { id: 'stats', n: 'Estadísticas en fila', t: 'section', w: 'full', h: 200, bg: INK, c: '#fff',
+      css: 'display:flex;align-items:center;justify-content:space-around;padding:0 30px;text-align:center;',
+      txt: '<div><div style="font-size:40px;font-weight:800">12k+</div><div style="color:#94a3b8;margin-top:6px">Usuarios activos</div></div><div><div style="font-size:40px;font-weight:800">98%</div><div style="color:#94a3b8;margin-top:6px">Satisfacción</div></div><div><div style="font-size:40px;font-weight:800">4.9★</div><div style="color:#94a3b8;margin-top:6px">Calificación</div></div><div><div style="font-size:40px;font-weight:800">24/7</div><div style="color:#94a3b8;margin-top:6px">Soporte</div></div>' },
+    { id: 'gallery', n: 'Galería de imágenes', t: 'div', w: 720, h: 420, bg: 'transparent',
+      css: 'display:grid;grid-template-columns:repeat(3,1fr);gap:14px;',
+      txt: '<img src="asset:ph" alt="Foto de la galería 1" style="width:100%;height:100%;object-fit:cover;border-radius:10px"><img src="asset:ph" alt="Foto de la galería 2" style="width:100%;height:100%;object-fit:cover;border-radius:10px"><img src="asset:ph" alt="Foto de la galería 3" style="width:100%;height:100%;object-fit:cover;border-radius:10px">' },
+    { id: 'portfolio', n: 'Portafolio con overlay', t: 'div', w: 720, h: 460, bg: 'transparent', func: 'hover-overlay',
+      css: 'display:grid;grid-template-columns:repeat(3,1fr);gap:14px;',
+      txt: portfolioCard('Proyecto uno') + portfolioCard('Proyecto dos') + portfolioCard('Proyecto tres') },
+    { id: 'team', n: 'Equipo', t: 'section', w: 'full', h: 320, bg: '#fff', c: INK,
+      css: 'display:flex;align-items:center;justify-content:space-around;padding:0 30px;',
+      txt: teamCard('AR', 'Ana Ruiz', 'Diseño') + teamCard('LM', 'Luis Mora', 'Desarrollo') + teamCard('CG', 'Carla Gil', 'Producto') },
+    { id: 'reviews', n: 'Reseñas en cuadrícula', t: 'div', w: 900, h: 260, bg: 'transparent',
+      css: 'display:grid;grid-template-columns:repeat(3,1fr);gap:16px;',
+      txt: reviewCard('"Lo configuré en una tarde. Sin vueltas."', 'Marcos T.') + reviewCard('"Justo lo que necesitaba para el MVP."', 'Sofía R.') + reviewCard('"El soporte responde rapidísimo."', 'Diego H.') },
+    { id: 'logos', n: 'Logos de clientes', t: 'section', w: 'full', h: 120, bg: SOFT, c: MUTED,
+      css: 'display:flex;align-items:center;justify-content:space-around;padding:0 30px;',
+      txt: '<b style="font-size:20px;letter-spacing:1px">ACME</b><b style="font-size:20px;letter-spacing:1px">NORTE</b><b style="font-size:20px;letter-spacing:1px">VELOX</b><b style="font-size:20px;letter-spacing:1px">ORBIT</b><b style="font-size:20px;letter-spacing:1px">PIXEL</b>' },
+    { id: 'splitimg', n: 'Imagen y texto', t: 'section', w: 'full', h: 380, bg: '#fff', c: INK,
+      txt: '<div style="display:flex;width:100%;height:100%"><img src="asset:ph" alt="Imagen ilustrativa" style="width:45%;height:100%;object-fit:cover"><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 44px"><h2 style="font-size:28px;margin-bottom:14px">Todo en un mismo lugar</h2><p style="color:#64748b;line-height:1.6;margin-bottom:18px">Explica aquí el beneficio con un par de líneas. No hace falta más para convencer.</p><a href="#" style="display:inline-block;padding:12px 22px;background:#2563eb;color:#fff;border-radius:8px;font-weight:700;text-decoration:none;width:fit-content">Conocer más</a></div></div>' },
+    { id: 'steps', n: 'Proceso en pasos', t: 'section', w: 'full', h: 200, bg: '#fff', c: INK,
+      css: 'display:flex;align-items:flex-start;justify-content:space-around;padding:0 30px;',
+      txt: stepCard('1', 'Crea tu cuenta') + stepCard('2', 'Arma tu página') + stepCard('3', 'Exporta el código') + stepCard('4', 'Publícala') },
+    { id: 'videosec', n: 'Sección de video', t: 'section', w: 'full', h: 380, bg: INK, c: '#fff',
+      txt: '<div style="display:flex;align-items:center;gap:40px;width:100%;height:100%;padding:0 44px"><div style="flex:1"><h2 style="font-size:28px;margin-bottom:14px">Míralo en acción</h2><p style="color:#94a3b8;line-height:1.6">Un video corto explicando el producto convierte mejor que un párrafo largo.</p></div><div style="flex:1;height:220px;background:#000;border-radius:14px;display:flex;align-items:center;justify-content:center;border:1px solid #334155"><div style="width:0;height:0;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent #fff;margin-left:6px"></div></div></div>' },
+    { id: 'newsletterband', n: 'Franja de boletín', t: 'section', w: 'full', h: 160, bg: 'linear-gradient(120deg, #0f172a, #1e293b)', c: '#fff', al: 'c',
+      txt: '<div style="text-align:center;padding:0 20px"><h3 style="font-size:22px;margin-bottom:14px">Recibe novedades por correo</h3><div style="display:flex;gap:10px;justify-content:center"><input type="email" placeholder="tu@correo.com" style="padding:12px 16px;border-radius:8px;border:0;width:240px"><button type="button" style="padding:12px 20px;background:#2563eb;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer">Suscribirme</button></div></div>' },
+    { id: 'faqsection', n: 'Preguntas frecuentes', t: 'section', w: 700, h: 340, bg: '#fff', c: INK,
+      txt: '<div style="padding:32px;width:100%"><h2 style="font-size:26px;margin-bottom:20px">Preguntas frecuentes</h2>' + faqItem('¿Necesito saber programar?', 'No. Puedes armar toda tu página arrastrando componentes y cambiando textos y colores desde los controles.') + faqItem('¿Puedo editar el código después?', 'Sí, exporta HTML/CSS/JS real y lo sigues editando donde quieras.') + faqItem('¿Tiene costo?', 'No, es gratis y de código abierto.') + '</div>' },
+    { id: 'comparetable', n: 'Tabla comparativa', t: 'table', w: 560, h: 260, bg: '#fff', c: INK, r: 12, bw: 1, bc: LINE, sh: 'sm', css: 'border-collapse: collapse; text-align: center;',
+      txt: '<thead><tr><th style="padding:14px;text-align:left">Función</th><th style="padding:14px">Básico</th><th style="padding:14px;background:#eff6ff">Pro</th></tr></thead><tbody>' + compareRow('Proyectos', '3', 'Ilimitados') + compareRow('Soporte', '✕', '✓') + compareRow('Exportar código', '✓', '✓') + compareRow('Dominio propio', '✕', '✓') + '</tbody>' },
+    { id: 'blogpost', n: 'Lista de artículos', t: 'section', w: 'full', h: 420, bg: SOFT, c: INK,
+      css: 'display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:24px;',
+      txt: blogCard('Cómo empezar', '12 mar 2026') + blogCard('Tips de diseño', '3 abr 2026') + blogCard('Novedades', '18 abr 2026') },
+    { id: 'admindash', n: 'Panel de administración', t: 'div', w: 900, h: 520, bg: '#f1f5f9', c: INK, r: 12, ov: 1, bw: 1, bc: LINE,
+      txt: '<div style="display:flex;width:100%;height:100%"><div style="width:200px;background:#0f172a;color:#fff;padding:24px 18px"><b style="color:#3b82f6">Panel</b><ul style="list-style:none;margin-top:24px;line-height:2.6;font-weight:600"><li style="color:#60a5fa">Resumen</li><li>Usuarios</li><li>Ventas</li><li>Ajustes</li></ul></div><div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px"><div style="display:flex;gap:16px">' + miniStat('Ventas', '$8,420') + miniStat('Pedidos', '312') + miniStat('Visitas', '9.1k') + '</div><div style="flex:1;background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:18px;color:#94a3b8;display:flex;align-items:center;justify-content:center">Tabla o gráfico aquí</div></div></div>' }
   ]},
   { cat: 'Multimedia', items: [
     { id: 'img', n: 'Imagen', t: 'img', w: 320, h: 213, bg: '#cbd5e1', r: 10, src: 'asset:ph', alt: 'Describe la imagen aquí', css: 'object-fit: cover;', ov: 1 },
@@ -842,7 +958,12 @@ const ANIMS = {
   spin: 'mlp-spin 4s linear infinite',
   rotate: 'mlp-rotate 1s linear infinite',
   fadein: 'mlp-fadein .8s ease both',
-  slideup: 'mlp-slideup .8s ease both'
+  slideup: 'mlp-slideup .8s ease both',
+  bounce: 'mlp-bounce 1.4s ease infinite',
+  shake: 'mlp-shake .5s ease-in-out infinite',
+  glow: 'mlp-glow 2s ease-in-out infinite',
+  zoomin: 'mlp-zoomin .5s ease both',
+  gradientshift: 'mlp-gradientshift 6s ease infinite'
 };
 const KEYFRAMES = {
   float: '@keyframes mlp-float {\n  0%, 100% { translate: 0 0; }\n  50% { translate: 0 -14px; }\n}',
@@ -852,7 +973,15 @@ const KEYFRAMES = {
   fadein: '@keyframes mlp-fadein {\n  from { opacity: 0; }\n}',
   slideup: '@keyframes mlp-slideup {\n  from { opacity: 0; translate: 0 24px; }\n}',
   slide: '@keyframes mlp-slide {\n  0%, 25% { transform: translateX(0); }\n  33%, 58% { transform: translateX(-33.333%); }\n  66%, 91% { transform: translateX(-66.666%); }\n  100% { transform: translateX(0); }\n}',
-  skeleton: '@keyframes mlp-skeleton {\n  to { background-position: -200% 0; }\n}'
+  skeleton: '@keyframes mlp-skeleton {\n  to { background-position: -200% 0; }\n}',
+  bounce: '@keyframes mlp-bounce {\n  0%, 20%, 50%, 80%, 100% { translate: 0 0; }\n  40% { translate: 0 -16px; }\n  60% { translate: 0 -7px; }\n}',
+  shake: '@keyframes mlp-shake {\n  0%, 100% { translate: 0 0; }\n  20% { translate: -6px 0; }\n  40% { translate: 6px 0; }\n  60% { translate: -4px 0; }\n  80% { translate: 4px 0; }\n}',
+  glow: '@keyframes mlp-glow {\n  0%, 100% { box-shadow: 0 0 0 rgba(37, 99, 235, 0); }\n  50% { box-shadow: 0 0 24px rgba(37, 99, 235, .55); }\n}',
+  zoomin: '@keyframes mlp-zoomin {\n  from { opacity: 0; scale: .85; }\n}',
+  gradientshift: '@keyframes mlp-gradientshift {\n  0% { background-position: 0% 50%; }\n  50% { background-position: 100% 50%; }\n  100% { background-position: 0% 50%; }\n}',
+  fade3: '@keyframes mlp-fade3 {\n  0%, 5% { opacity: 0; }\n  10%, 28% { opacity: 1; }\n  33%, 100% { opacity: 0; }\n}',
+  'slide-v': '@keyframes mlp-slide-v {\n  0%, 25% { transform: translateY(0); }\n  33%, 58% { transform: translateY(-33.333%); }\n  66%, 91% { transform: translateY(-66.666%); }\n  100% { transform: translateY(0); }\n}',
+  marquee: '@keyframes mlp-marquee {\n  from { transform: translateX(0); }\n  to { transform: translateX(-50%); }\n}'
 };
 const cmt = s => String(s).replace(/\*\//g, '* /').replace(/[\r\n]+/g, ' ');
 const indent = (s, n) => String(s).split('\n').map(l => (l.trim() ? ' '.repeat(n) + l : l)).join('\n');
@@ -922,6 +1051,36 @@ ${c} input:focus-visible + .slider { outline: 2px solid ${accent}; outline-offse
 ${c} .slides { display: flex; width: 300%; height: 100%; animation: mlp-slide 9s infinite; }
 ${c} .slide { width: 33.3333%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; }
 `;
+    case 'css-carousel-v':
+      return `${c} { overflow: hidden; }
+${c} .slides { display: flex; flex-direction: column; width: 100%; height: 300%; animation: mlp-slide-v 9s infinite; }
+${c} .slide { width: 100%; height: 33.3333%; flex: none; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; }
+`;
+    case 'carousel-fade':
+      return `${c} { overflow: hidden; }
+${c} .slide {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 26px; font-weight: 700; opacity: 0; animation: mlp-fade3 9s infinite;
+}
+${c} .s1 { animation-delay: 0s; }
+${c} .s2 { animation-delay: -3s; }
+${c} .s3 { animation-delay: -6s; }
+`;
+    case 'carousel-dots':
+      return `${c} input { position: absolute; opacity: 0; pointer-events: none; }
+${c} .slide { opacity: 0; transition: opacity .4s ease; }
+${c} label { transition: opacity .2s ease, box-shadow .2s ease; }
+${c} label:hover { opacity: .85 !important; }
+#${el.cls}-1:checked ~ .d1, #${el.cls}-2:checked ~ .d2, #${el.cls}-3:checked ~ .d3 { opacity: 1; }
+#${el.cls}-1:checked ~ .dots label:nth-child(1),
+#${el.cls}-2:checked ~ .dots label:nth-child(2),
+#${el.cls}-3:checked ~ .dots label:nth-child(3) { opacity: 1; box-shadow: 0 0 0 2px rgba(37, 99, 235, .55); }
+`;
+    case 'card-stack':
+      return `${c} .card { transition: transform .35s ease, opacity .35s ease; }
+${c} .card:nth-child(2) { transform: scale(.94) translateY(10px); z-index: -1; }
+${c} .card:nth-child(3) { transform: scale(.88) translateY(20px); z-index: -2; }
+`;
     case 'modal-hack':
       return `${c} .m-check { position: absolute; opacity: 0; width: 0; height: 0; }
 ${c} .m-window {
@@ -945,6 +1104,17 @@ ${c} > * { border-radius: 8px; display: flex; align-items: center; justify-conte
     case 'flexrow':
       return `${c} { display: flex; align-items: center; justify-content: space-around; gap: 16px; padding: 16px; }
 ${c} > * { flex: 1; padding: 12px; text-align: center; background: #f1f5f9; border-radius: 8px; }
+`;
+    case 'hover-overlay':
+      return `${c} .ov-card { position: relative; overflow: hidden; }
+${c} .ov-card img { transition: transform .4s ease; }
+${c} .ov-card:hover img { transform: scale(1.08); }
+${c} .ov-cap {
+  position: absolute; inset: auto 0 0 0; padding: 14px 16px; color: #fff; font-weight: 700;
+  background: linear-gradient(to top, rgba(0, 0, 0, .75), transparent);
+  opacity: 0; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease;
+}
+${c} .ov-card:hover .ov-cap { opacity: 1; transform: translateY(0); }
 `;
     case 'float-label':
       return `${c} input { width: 100%; height: 100%; padding: 20px 14px 6px; border: 1px solid #cbd5e1; border-radius: ${px(el.radius)}; outline: 0; font-size: 16px; background: transparent; color: #0f172a; }
@@ -1014,6 +1184,7 @@ function elDecls(el, idx, mode) {
   } else if (SHADOWS[el.shadow]) {
     add('box-shadow', SHADOWS[el.shadow]);
   }
+  if (el.anim === 'gradientshift') add('background-size', '200% 200%');
   if (ANIMS[el.anim]) add('animation', ANIMS[el.anim]);
   if (el.cur) add('cursor', el.cur);
 
@@ -1063,14 +1234,10 @@ function buildCSSParts(mode) {
   head.push(cont);
 
   const blocks = [];
-  const kf = new Set();
   let media = '';
   p.els.forEach((el, idx) => {
     if (el.hidden && !edit) return;
     const { D, hover } = elDecls(el, idx, mode);
-    if (el.anim in ANIMS) kf.add(el.anim);
-    if (el.style === 'skeleton') kf.add('skeleton');
-    if (el.func === 'css-carousel') kf.add('slide');
     if (edit && el.hidden) D.push('display: none !important;');
     let css = '/* ' + cmt(el.name) + ' */\n.' + el.cls + ' {\n  ' + D.join('\n  ') + '\n}\n' + hover + funcCSS(el);
     blocks.push({ id: el.id, name: el.name, css });
@@ -1085,7 +1252,11 @@ function buildCSSParts(mode) {
       (mode === 'stack' ? '  .pro-layout { display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 0; padding: 14px; }\n' : '') +
       media + '}';
   }
-  const kfCss = Array.from(kf).map(k => KEYFRAMES[k]).join('\n\n');
+  // Siempre se incluyen todas: pesa poco (unos KB) y evita que un componente
+  // que usa una animación "desde su propio HTML interno" (p.ej. un spinner
+  // dentro de un botón) se quede sin su @keyframes por no pasar por el
+  // mecanismo normal de detección.
+  const kfCss = Object.values(KEYFRAMES).join('\n\n');
   let tail = '';
   if (!edit) {
     tail = '@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }\n}';
@@ -1961,8 +2132,12 @@ $('[data-lact="down"]').addEventListener('click', () => reorder('down'));
 function fld(label, inner, extraCls) { return '<div class="fld' + (extraCls ? ' ' + extraCls : '') + '"><label>' + esc(label) + '</label>' + inner + '</div>'; }
 function numInput(k, v, opts) { return '<input type="number" data-k="' + k + '" value="' + (v === '' || v == null ? '' : rnd(v, 3)) + '"' + (opts || '') + '>'; }
 function textInput(k, v, ph) { return '<input type="text" data-k="' + k + '" value="' + escAttr(v || '') + '"' + (ph ? ' placeholder="' + escAttr(ph) + '"' : '') + '>'; }
+function hex6(v) {
+  const m = /^#([0-9a-f]{3})$/i.exec(v);
+  return m ? '#' + m[1].split('').map(c => c + c).join('') : v;
+}
 function colorRow(k, v, allowNone) {
-  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v) ? v : '#000000';
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v) ? hex6(v) : '#000000';
   return '<div class="pair"><input type="color" data-k="' + k + '" data-pair="' + k + '-text" value="' + hex + '">' +
     '<input type="text" data-k="' + k + '" data-pair="' + k + '-color" value="' + escAttr(v || '') + '" placeholder="' + (allowNone ? 'transparent' : '#000000') + '"></div>';
 }
@@ -1970,8 +2145,8 @@ function selectInput(k, v, options) {
   return '<select data-k="' + k + '">' + options.map(([val, label]) => '<option value="' + escAttr(val) + '"' + (val === v ? ' selected' : '') + '>' + esc(label) + '</option>').join('') + '</select>';
 }
 const STYLE_OPTS = [['none', 'Normal'], ['glass', 'Cristal (glass)'], ['neumorphism', 'Neumorfismo'], ['cyberpunk', 'Cyberpunk'], ['neon', 'Neón'], ['skeleton', 'Esqueleto de carga']];
-const FUNC_OPTS = [['none', 'Ninguno'], ['hover-dropdown', 'Menú al pasar el cursor'], ['hover-flip', 'Tarjeta que gira'], ['tooltip', 'Globo de ayuda'], ['css-tabs', 'Pestañas'], ['toggle', 'Interruptor'], ['modal-hack', 'Ventana modal'], ['css-carousel', 'Carrusel automático'], ['grid2', 'Cuadrícula 2×2'], ['grid3', 'Cuadrícula 3 columnas'], ['flexrow', 'Fila flexible'], ['float-label', 'Etiqueta flotante']];
-const ANIM_OPTS = [['none', 'Ninguna'], ['float', 'Flotar'], ['pulse', 'Latir'], ['spin', 'Girar en 3D'], ['rotate', 'Rotar (spinner)'], ['fadein', 'Aparecer'], ['slideup', 'Subir al aparecer']];
+const FUNC_OPTS = [['none', 'Ninguno'], ['hover-dropdown', 'Menú al pasar el cursor'], ['hover-flip', 'Tarjeta que gira'], ['hover-overlay', 'Overlay con texto (tarjetas .ov-card/.ov-cap)'], ['tooltip', 'Globo de ayuda'], ['css-tabs', 'Pestañas'], ['toggle', 'Interruptor'], ['modal-hack', 'Ventana modal'], ['css-carousel', 'Carrusel automático horizontal'], ['css-carousel-v', 'Carrusel automático vertical'], ['carousel-fade', 'Carrusel con fundido (3 .slide .s1/.s2/.s3)'], ['carousel-dots', 'Carrusel con puntos (radios #cls-1/2/3 + .dN + .dots)'], ['card-stack', 'Pila de cartas (.deck > .card)'], ['grid2', 'Cuadrícula 2×2'], ['grid3', 'Cuadrícula 3 columnas'], ['flexrow', 'Fila flexible'], ['float-label', 'Etiqueta flotante']];
+const ANIM_OPTS = [['none', 'Ninguna'], ['float', 'Flotar'], ['pulse', 'Latir'], ['bounce', 'Rebotar'], ['shake', 'Sacudir'], ['glow', 'Brillo pulsante'], ['spin', 'Girar en 3D'], ['rotate', 'Rotar (spinner)'], ['fadein', 'Aparecer'], ['zoomin', 'Aparecer con zoom'], ['slideup', 'Subir al aparecer'], ['gradientshift', 'Degradado en movimiento']];
 const SHADOW_OPTS = [['none', 'Ninguna'], ['sm', 'Suave'], ['md', 'Media'], ['lg', 'Grande'], ['inset', 'Hacia adentro']];
 const CURSOR_OPTS = [['', 'Normal'], ['pointer', 'Mano (pointer)'], ['text', 'Texto'], ['move', 'Mover'], ['help', 'Ayuda'], ['not-allowed', 'No permitido']];
 
@@ -2089,7 +2264,7 @@ function bindPropEvents(host, els) {
       const k = inp.dataset.k;
       let v = inp.dataset.bool ? (inp.checked ? 1 : 0) : inp.value;
       if (inp.type === 'color') { const pairEl = host.querySelector('[data-pair="' + k + '-color"]'); if (pairEl) pairEl.value = v; }
-      if (inp.dataset.pair && inp.dataset.pair.endsWith('-text')) { const hexEl = host.querySelector('input[type="color"][data-k="' + k + '"]'); if (hexEl && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v)) hexEl.value = v; }
+      if (inp.dataset.pair && inp.dataset.pair.endsWith('-text')) { const hexEl = host.querySelector('input[type="color"][data-k="' + k + '"]'); if (hexEl && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v)) hexEl.value = hex6(v); }
       els.forEach(e => {
         if (k === 'name' && els.length > 1) return;
         if (NUM_KEYS.includes(k)) { const n = parseFloat(v); e[k] = isFinite(n) ? n : 0; }
@@ -2539,7 +2714,11 @@ const TEMPLATES = [
   { id: 'blank', name: 'Lienzo en blanco', desc: 'Empieza desde cero', build: () => { S.p = blankProject(); } },
   { id: 'landing', name: 'Landing de producto', desc: 'Portada, características y llamada a la acción', build: buildLandingTemplate },
   { id: 'portfolio', name: 'Portafolio personal', desc: 'Presentación, proyectos y contacto', build: buildPortfolioTemplate },
-  { id: 'login', name: 'Pantalla de acceso', desc: 'Formulario de inicio de sesión centrado', build: buildLoginTemplate }
+  { id: 'login', name: 'Pantalla de acceso', desc: 'Formulario de inicio de sesión centrado', build: buildLoginTemplate },
+  { id: 'agency', name: 'Agencia / servicios', desc: 'Portada, estadísticas, equipo y reseñas', build: buildAgencyTemplate },
+  { id: 'pricingpage', name: 'Página de precios', desc: 'Tres planes en columnas + preguntas frecuentes', build: buildPricingTemplate },
+  { id: 'blogpage', name: 'Blog', desc: 'Encabezado, artículos en grilla y boletín', build: buildBlogTemplate },
+  { id: 'comingsoon', name: 'Muy pronto', desc: 'Página de espera con aviso por correo', build: buildComingSoonTemplate }
 ];
 function openTemplates() {
   openModal(
@@ -2558,6 +2737,9 @@ function tplPreview(id) {
   if (id === 'blank') return '<i style="inset:40% 30%"></i>';
   if (id === 'landing') return '<i class="a" style="left:8%;top:10%;width:84%;height:34%;border-radius:4px"></i><i style="left:8%;top:52%;width:26%;height:34%"></i><i style="left:37%;top:52%;width:26%;height:34%"></i><i style="left:66%;top:52%;width:26%;height:34%"></i>';
   if (id === 'portfolio') return '<i style="left:6%;top:8%;width:22%;height:84%"></i><i class="a" style="left:32%;top:8%;width:62%;height:20%"></i><i style="left:32%;top:34%;width:62%;height:58%"></i>';
+  if (id === 'agency') return '<i class="a" style="left:8%;top:8%;width:84%;height:26%;border-radius:4px"></i><i style="left:8%;top:40%;width:25%;height:20%;border-radius:50%"></i><i style="left:37%;top:40%;width:25%;height:20%;border-radius:50%"></i><i style="left:66%;top:40%;width:25%;height:20%;border-radius:50%"></i><i class="a" style="left:8%;top:68%;width:84%;height:22%"></i>';
+  if (id === 'pricingpage') return '<i style="left:8%;top:10%;width:25%;height:70%"></i><i class="a" style="left:37%;top:6%;width:25%;height:78%"></i><i style="left:66%;top:10%;width:25%;height:70%"></i>';
+  if (id === 'blogpage') return '<i style="left:8%;top:8%;width:25%;height:44%"></i><i style="left:37%;top:8%;width:25%;height:44%"></i><i style="left:66%;top:8%;width:25%;height:44%"></i><i class="a" style="left:8%;top:60%;width:84%;height:30%"></i>';
   return '<i class="a" style="left:32%;top:15%;width:36%;height:70%;border-radius:6px"></i>';
 }
 function buildLandingTemplate() {
@@ -2582,6 +2764,61 @@ function buildPortfolioTemplate() {
 function buildLoginTemplate() {
   const p = blankProject(); p.name = 'pantalla-acceso'; p.title = 'Iniciar sesión'; p.bg = '#0f172a'; S.p = p;
   const card = addTplEl('login', (p.W - CAT.login.w) / 2, (p.H - CAT.login.h) / 2);
+}
+function buildAgencyTemplate() {
+  const p = blankProject(); p.name = 'agencia-servicios'; p.title = 'Nuestra agencia'; S.p = p;
+  addTplEl('navbar', 0, 0);
+  const hero = addTplEl('hero', 0, 68); hero.h = 380;
+  hero.text = '<div style="text-align:center;max-width:720px;padding:0 24px"><h1 style="font-size:46px;line-height:1.15;margin-bottom:16px">Hacemos crecer marcas digitales</h1><p style="font-size:17px;color:#cbd5e1;margin-bottom:24px">Estrategia, diseño y desarrollo bajo un mismo techo.</p><a href="#contacto" style="display:inline-block;padding:13px 26px;background:#2563eb;color:#fff;border-radius:8px;font-weight:700;text-decoration:none">Hablemos de tu proyecto</a></div>';
+  addTplEl('stats', 0, 448);
+  addTplEl('team', 0, 648);
+  const rh = addTplEl('h2', 0, 998); rh.x = (p.W - rh.w) / 2; rh.text = 'Lo que dicen nuestros clientes';
+  const rv = addTplEl('reviews', (p.W - CAT.reviews.w) / 2, 1058);
+  addTplEl('cta', 0, 1338);
+  addTplEl('footer', 0, 1508);
+  p.H = 1648;
+}
+function buildPricingTemplate() {
+  const p = blankProject(); p.name = 'pagina-precios'; p.title = 'Precios'; S.p = p;
+  addTplEl('navbar', 0, 0);
+  const h1 = addTplEl('h1', 0, 90); h1.x = (p.W - h1.w) / 2; h1.text = 'Un plan para cada etapa';
+  const gap = (p.W - 3 * CAT.pricing.w) / 4;
+  const plans = [
+    { name: 'Básico', price: '$9', items: ['1 proyecto', 'Exportar código', 'Soporte por correo'], cta: 'Empezar' },
+    { name: 'Pro', price: '$29', items: ['Proyectos ilimitados', 'Soporte prioritario', 'Exportar código'], cta: 'Contratar', highlight: true },
+    { name: 'Empresas', price: '$79', items: ['Todo lo del plan Pro', 'Dominio propio', 'Cuenta de equipo'], cta: 'Contactar ventas' }
+  ];
+  plans.forEach((pl, i) => {
+    const card = addTplEl('pricing', gap + i * (CAT.pricing.w + gap), 190);
+    const items = pl.items.map(t => '<li>✔ ' + t + '</li>').join('');
+    card.text = '<div style="padding:40px;text-align:center;width:100%">' +
+      (pl.highlight ? '<span style="display:inline-block;padding:4px 12px;background:#dbeafe;color:#1d4ed8;border-radius:12px;font-size:12px;font-weight:700;margin-bottom:10px">Más elegido</span>' : '') +
+      '<h3 style="color:#64748b;font-size:16px">' + pl.name + '</h3><p style="font-size:48px;font-weight:900;margin:16px 0">' + pl.price + '</p>' +
+      '<ul style="list-style:none;line-height:2.4;margin-bottom:26px">' + items + '</ul>' +
+      '<a href="#" style="display:block;padding:14px;background:#2563eb;color:#fff;border-radius:10px;font-weight:700;text-decoration:none">' + pl.cta + '</a></div>';
+    if (pl.highlight) { card.shadow = 'lg'; card.bw = 2; card.bc = '#2563eb'; }
+  });
+  const faq = addTplEl('faqsection', (p.W - CAT.faqsection.w) / 2, 670);
+  addTplEl('footer', 0, 1050);
+  p.H = 1190;
+}
+function buildBlogTemplate() {
+  const p = blankProject(); p.name = 'blog'; p.title = 'Blog'; S.p = p;
+  addTplEl('navbar', 0, 0);
+  const h1 = addTplEl('h1', 0, 90); h1.x = (p.W - h1.w) / 2; h1.text = 'Nuestro blog';
+  const sub = addTplEl('p', 0, 168); sub.x = (p.W - sub.w) / 2; sub.text = 'Ideas, tutoriales y novedades del equipo.';
+  addTplEl('blogpost', 0, 250);
+  addTplEl('newsletterband', 0, 690);
+  addTplEl('footer', 0, 850);
+  p.H = 990;
+}
+function buildComingSoonTemplate() {
+  const p = blankProject(); p.name = 'muy-pronto'; p.title = 'Muy pronto'; p.bg = '#0f172a'; S.p = p;
+  const hero = addTplEl('hero', 0, 0); hero.h = 520;
+  hero.text = '<div style="text-align:center;max-width:640px;padding:0 24px"><h1 style="font-size:46px;margin-bottom:16px">Estamos preparando algo nuevo</h1><p style="font-size:17px;color:#cbd5e1">Muy pronto vas a poder verlo. Deja tu correo y te avisamos apenas esté listo.</p></div>';
+  addTplEl('newsletterband', 0, 520);
+  addTplEl('footer', 0, 680);
+  p.H = 820;
 }
 function addTplEl(key, x, y) {
   const el = mkEl(key); el.x = x === undefined ? el.x : x; el.y = y === undefined ? el.y : y;
