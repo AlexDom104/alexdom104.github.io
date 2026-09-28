@@ -141,7 +141,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 textarea { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; resize: vertical; white-space: pre; tab-size: 2; }
 select { padding-right: 4px; }
 
-.cat h3 { margin: 0; padding: 14px 12px 6px; font-size: 12px; font-weight: 700; color: var(--muted); }
+details.cat { border-bottom: 1px solid var(--line); }
+details.cat > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 11px 12px; font-size: 12.5px; font-weight: 700; color: var(--text); cursor: pointer; position: sticky; top: 0; background: var(--panel); z-index: 1; }
+details.cat > summary::-webkit-details-marker { display: none; }
+details.cat > summary::before { content: "▸"; color: var(--muted); font-size: 11px; transition: transform .15s; margin-right: 2px; }
+details.cat[open] > summary::before { transform: rotate(90deg); }
+details.cat > summary > span { flex: 1; }
+details.cat .cnt { font-style: normal; font-size: 11px; font-weight: 600; color: var(--muted); background: var(--panel-2); border-radius: 9px; padding: 1px 7px; }
+details.cat .cat-grid { padding-bottom: 12px; }
+.tiers { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.tier-chip { border: 1px solid var(--line); background: var(--panel-2); color: var(--muted); border-radius: 999px; padding: 2px 9px; font-size: 11px; }
+.tier-chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.cat-total { margin-top: 6px; font-size: 11px; color: var(--muted); }
+.tool { position: relative; }
+.tool .sw { position: absolute; top: 8px; right: 8px; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(128,128,128,.4); }
 .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 10px; }
 .tool { display: flex; flex-direction: column; gap: 6px; align-items: stretch; text-align: left; padding: 8px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; color: var(--text); min-height: 54px; }
 .tool:hover { border-color: var(--accent); background: var(--accent-soft); }
@@ -234,7 +247,7 @@ input[type="color"] { width: 34px; height: 30px; padding: 2px; border: 1px solid
 #holder { margin: auto; position: relative; flex: none; }
 #stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; box-shadow: 0 0 0 1px var(--line-2), var(--shadow); background: #fff; }
 #page { display: block; width: 100%; height: 100%; }
-#overlay { position: absolute; inset: 0; pointer-events: none; }
+#overlay { position: absolute; inset: 0; pointer-events: none; z-index: 999999; }
 #overlay.grid { background-image: linear-gradient(to right, rgba(91,134,255,.16) 1px, transparent 1px), linear-gradient(to bottom, rgba(91,134,255,.16) 1px, transparent 1px); background-size: var(--gs) var(--gs); }
 .sel-box { position: absolute; outline: calc(1.5px / var(--z)) solid var(--accent); pointer-events: none; }
 .sel-box.multi { outline-style: dashed; }
@@ -313,6 +326,7 @@ input[type="color"] { width: 34px; height: 30px; padding: 2px; border: 1px solid
 #small-screen { display: none; padding: 8px 12px; background: var(--warn); color: #1b1300; font-weight: 600; text-align: center; }
 @media (max-width: 980px) { #small-screen { display: block; } }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+.tool .nm { padding-right: 14px; }
 
 </style>
 </head>
@@ -381,7 +395,9 @@ input[type="color"] { width: 34px; height: 30px; padding: 2px; border: 1px solid
       <button data-ltab="layers">Capas <span class="count" id="layer-count">0</span></button>
     </div>
     <div class="pane" id="ltab-components">
-      <div class="search"><input type="search" id="cat-search" placeholder="Buscar: botón, tabla, slider, modal…" aria-label="Buscar componente"></div>
+      <div class="search"><input type="search" id="cat-search" placeholder="Buscar: botón verde, tarjeta, hero…" aria-label="Buscar componente">
+        <div class="tiers" role="group" aria-label="Filtrar por nivel"><button class="tier-chip on" data-tier="Todos">Todos</button><button class="tier-chip" data-tier="Básico">Básico</button><button class="tier-chip" data-tier="Intermedio">Intermedio</button><button class="tier-chip" data-tier="Profesional">Profesional</button><button class="tier-chip" data-tier="Alternativo">Alternativo</button></div>
+        <div class="cat-total" id="cat-total"></div></div>
       <div id="catalog"></div>
     </div>
     <div class="pane" id="ltab-layers" hidden>
@@ -938,6 +954,231 @@ function normalizeProject(raw) {
 
 
 /* =====================================================================
+   VARIANTES GENERADAS
+   ---------------------------------------------------------------------
+   En vez de escribir 1,200 componentes a mano, cada categoría se arma con
+   una plantilla por ESTILO (10) que se repite por cada PALETA de color (10).
+   Las plantillas son las mismas que ya funcionan en el resto del catálogo,
+   así que el riesgo de que algo salga roto es bajo y todo se puede buscar
+   por nombre ("botón verde", "tarjeta morada", "hero oscuro"...).
+   ===================================================================== */
+const PAL = [
+  { n: 'Azul',     c: '#2563eb', d: '#1d4ed8', s: '#dbeafe' },
+  { n: 'Verde',    c: '#16a34a', d: '#15803d', s: '#dcfce7' },
+  { n: 'Rojo',     c: '#dc2626', d: '#b91c1c', s: '#fee2e2' },
+  { n: 'Morado',   c: '#7c3aed', d: '#6d28d9', s: '#ede9fe' },
+  { n: 'Naranja',  c: '#ea580c', d: '#c2410c', s: '#ffedd5' },
+  { n: 'Rosa',     c: '#db2777', d: '#be185d', s: '#fce7f3' },
+  { n: 'Turquesa', c: '#0d9488', d: '#0f766e', s: '#ccfbf1' },
+  { n: 'Ámbar',    c: '#d97706', d: '#b45309', s: '#fef3c7' },
+  { n: 'Negro',    c: '#0f172a', d: '#020617', s: '#e2e8f0' },
+  { n: 'Cielo',    c: '#0284c7', d: '#0369a1', s: '#e0f2fe' }
+];
+
+/* Cada generador recibe (paleta) y devuelve el objeto del catálogo sin id/nombre */
+function genCategory(catName, styles, extra) {
+  const items = [];
+  styles.forEach((st, si) => {
+    PAL.forEach((p, pi) => {
+      const it = st.f(p, pi);
+      it.id = 'v' + catName.slice(0, 2).toLowerCase() + si + '-' + pi;
+      it.id = (extra && extra.prefix ? extra.prefix : 'v') + si + '-' + pi;
+      it.n = st.n + ' · ' + p.n;
+      it.sw = p.c;
+      items.push(it);
+    });
+  });
+  return { cat: catName, gen: 1, items };
+}
+const G = (o) => Object.assign({ t: 'div' }, o);
+const BT = 'type="button"';
+
+/* ---------- 1. BOTONES ---------- */
+const V_BTN = [
+  { n: 'Botón sólido',      f: p => G({ t: 'button', w: 170, h: 46, bg: p.c, c: '#fff', r: 8, fs: 15, fw: 600, cur: 'pointer', hbg: p.d, al: 'c', attrs: BT, txt: 'Comenzar' }) },
+  { n: 'Botón con borde',   f: p => G({ t: 'button', w: 170, h: 46, bg: 'transparent', c: p.c, r: 8, bw: 2, bc: p.c, fs: 15, fw: 600, cur: 'pointer', hbg: p.c, hcolor: '#fff', al: 'c', attrs: BT, txt: 'Saber más' }) },
+  { n: 'Botón suave',       f: p => G({ t: 'button', w: 170, h: 46, bg: p.s, c: p.d, r: 8, fs: 15, fw: 700, cur: 'pointer', hbg: p.c, hcolor: '#fff', al: 'c', attrs: BT, txt: 'Ver detalles' }) },
+  { n: 'Botón degradado',   f: p => G({ t: 'button', w: 180, h: 48, bg: 'linear-gradient(120deg,' + p.c + ',' + p.d + ')', c: '#fff', r: 10, fs: 15, fw: 700, cur: 'pointer', hscale: 1.04, al: 'c', shadow: 'md', attrs: BT, txt: 'Probar gratis' }) },
+  { n: 'Botón píldora',     f: p => G({ t: 'button', w: 180, h: 46, bg: p.c, c: '#fff', r: 999, fs: 15, fw: 600, cur: 'pointer', hscale: 1.05, al: 'c', attrs: BT, txt: 'Descargar' }) },
+  { n: 'Botón 3D',          f: p => G({ t: 'button', w: 170, h: 48, bg: p.c, c: '#fff', r: 10, fs: 15, fw: 700, cur: 'pointer', al: 'c', css: 'box-shadow: 0 5px 0 ' + p.d + '; border: 0;', attrs: BT, txt: 'Jugar' }) },
+  { n: 'Botón con flecha',  f: p => G({ t: 'button', w: 190, h: 46, bg: p.c, c: '#fff', r: 8, fs: 15, fw: 600, cur: 'pointer', hbg: p.d, al: 'c', attrs: BT, txt: 'Continuar →' }) },
+  { n: 'Botón cuadrado',    f: p => G({ t: 'button', w: 170, h: 46, bg: p.c, c: '#fff', r: 0, fs: 13, fw: 800, cur: 'pointer', hbg: p.d, al: 'c', css: 'text-transform: uppercase; letter-spacing: 2px;', attrs: BT, txt: 'Registrarme' }) },
+  { n: 'Botón con brillo',  f: p => G({ t: 'button', w: 170, h: 46, bg: p.c, c: '#fff', r: 12, fs: 15, fw: 700, cur: 'pointer', al: 'c', css: 'box-shadow: 0 10px 24px ' + p.c + '66;', attrs: BT, txt: 'Suscribirme' }) },
+  { n: 'Botón enlace',      f: p => G({ t: 'button', w: 130, h: 40, bg: 'transparent', c: p.c, r: 0, fs: 15, fw: 700, cur: 'pointer', al: 'c', css: 'border-bottom: 2px solid ' + p.c + ';', attrs: BT, txt: 'Leer más' }) }
+];
+
+/* ---------- 2. ETIQUETAS E INSIGNIAS ---------- */
+const V_TAG = [
+  { n: 'Insignia sólida',   f: p => G({ t: 'span', w: 90, h: 28, bg: p.c, c: '#fff', r: 14, fs: 12, fw: 700, al: 'c', txt: 'Nuevo' }) },
+  { n: 'Insignia suave',    f: p => G({ t: 'span', w: 90, h: 28, bg: p.s, c: p.d, r: 14, fs: 12, fw: 700, al: 'c', txt: 'Activo' }) },
+  { n: 'Insignia con borde', f: p => G({ t: 'span', w: 90, h: 28, bg: 'transparent', c: p.c, r: 14, bw: 1, bc: p.c, fs: 12, fw: 700, al: 'c', txt: 'Beta' }) },
+  { n: 'Estado con punto',  f: p => G({ t: 'span', w: 110, h: 30, bg: p.s, c: p.d, r: 15, fs: 12, fw: 700, al: 'c', txt: '<span style="display:flex;align-items:center;gap:7px"><i style="width:8px;height:8px;border-radius:50%;background:' + p.c + '"></i>En línea</span>' }) },
+  { n: 'Etiqueta grande',   f: p => G({ t: 'span', w: 130, h: 38, bg: p.c, c: '#fff', r: 999, fs: 14, fw: 700, al: 'c', txt: 'Más popular' }) },
+  { n: 'Etiqueta cuadrada', f: p => G({ t: 'span', w: 96, h: 28, bg: p.s, c: p.d, r: 4, fs: 12, fw: 800, al: 'c', css: 'text-transform: uppercase; letter-spacing: 1px;', txt: 'Oferta' }) },
+  { n: 'Etiqueta con ✓',    f: p => G({ t: 'span', w: 110, h: 30, bg: p.s, c: p.d, r: 15, fs: 13, fw: 700, al: 'c', txt: '✓ Listo' }) },
+  { n: 'Contador circular', f: p => G({ t: 'span', w: 30, h: 30, bg: p.c, c: '#fff', r: 999, fs: 13, fw: 800, al: 'c', ratio: 1, txt: '3' }) },
+  { n: 'Insignia degradada', f: p => G({ t: 'span', w: 100, h: 28, bg: 'linear-gradient(90deg,' + p.c + ',' + p.d + ')', c: '#fff', r: 14, fs: 12, fw: 700, al: 'c', txt: 'PRO' }) },
+  { n: 'Etiqueta punteada', f: p => G({ t: 'span', w: 110, h: 30, bg: 'transparent', c: p.d, r: 8, bw: 1, bc: p.c, fs: 12, fw: 600, al: 'c', css: 'border-style: dashed;', txt: '#etiqueta' }) }
+];
+
+/* ---------- 3. AVISOS Y ALERTAS ---------- */
+const V_ALERT = [
+  { n: 'Aviso con barra lateral', f: p => G({ w: 380, h: 60, bg: p.s, c: p.d, r: 8, al: 'l', pad: 16, css: 'border-left: 4px solid ' + p.c + ';', attrs: 'role="alert"', txt: 'Mensaje importante para el usuario.' }) },
+  { n: 'Aviso sólido',      f: p => G({ w: 380, h: 56, bg: p.c, c: '#fff', r: 8, al: 'l', pad: 16, fw: 600, attrs: 'role="alert"', txt: 'Tu cambio se guardó correctamente.' }) },
+  { n: 'Aviso con borde',   f: p => G({ w: 380, h: 56, bg: '#fff', c: p.d, r: 8, bw: 1, bc: p.c, al: 'l', pad: 16, attrs: 'role="alert"', txt: 'Revisa los datos antes de continuar.' }) },
+  { n: 'Aviso con título',  f: p => G({ w: 380, h: 80, bg: p.s, c: p.d, r: 10, pad: 16, attrs: 'role="alert"', txt: '<b style="display:block;margin-bottom:4px">Atención</b><span style="font-size:14px">Descripción breve de lo que pasó.</span>' }) },
+  { n: 'Aviso con ícono',   f: p => G({ w: 380, h: 64, bg: p.s, c: p.d, r: 10, al: 'l', pad: 14, attrs: 'role="alert"', txt: '<span style="width:30px;height:30px;border-radius:50%;background:' + p.c + ';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin-right:12px;flex:none">i</span>Tenemos novedades para ti.' }) },
+  { n: 'Aviso con cerrar',  f: p => G({ w: 380, h: 56, bg: p.c, c: '#fff', r: 8, pad: 16, attrs: 'role="alert"', css: 'display:flex;align-items:center;justify-content:space-between;', txt: '<span>Nueva versión disponible</span><b style="cursor:pointer;opacity:.8">✕</b>' }) },
+  { n: 'Aviso tipo notificación', f: p => G({ w: 340, h: 60, bg: '#0f172a', c: '#fff', r: 12, al: 'l', pad: 16, sh: 'lg', attrs: 'role="status"', txt: '<i style="width:10px;height:10px;border-radius:50%;background:' + p.c + ';margin-right:12px;flex:none"></i>Mensaje enviado con éxito' }) },
+  { n: 'Aviso borde superior', f: p => G({ w: 380, h: 64, bg: '#fff', c: '#334155', r: 8, al: 'l', pad: 16, sh: 'md', css: 'border-top: 4px solid ' + p.c + ';', attrs: 'role="status"', txt: 'Tu pedido está en camino.' }) },
+  { n: 'Aviso degradado',   f: p => G({ w: 380, h: 56, bg: 'linear-gradient(90deg,' + p.c + ',' + p.d + ')', c: '#fff', r: 10, al: 'l', pad: 16, fw: 600, attrs: 'role="status"', txt: '¡Felicidades! Completaste el paso.' }) },
+  { n: 'Aviso píldora',     f: p => G({ w: 320, h: 44, bg: p.s, c: p.d, r: 999, al: 'c', fw: 600, fs: 14, attrs: 'role="status"', txt: '● Cambios guardados' }) }
+];
+
+/* ---------- 4. ENCABEZADOS Y TÍTULOS ---------- */
+const V_HEAD = [
+  { n: 'Título de color',   f: p => G({ t: 'h2', w: 600, h: 52, c: p.c, fs: 36, fw: 800, txt: 'Título de la sección' }) },
+  { n: 'Título subrayado',  f: p => G({ t: 'h2', w: 600, h: 60, c: INK, fs: 34, fw: 800, txt: '<span style="border-bottom:5px solid ' + p.c + ';padding-bottom:4px">Título de la sección</span>' }) },
+  { n: 'Título degradado',  f: p => G({ t: 'h2', w: 600, h: 60, fs: 40, fw: 900, css: 'background:linear-gradient(90deg,' + p.c + ',' + p.d + ');-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;', txt: 'Título con degradado' }) },
+  { n: 'Título con etiqueta encima', f: p => G({ t: 'div', w: 600, h: 90, c: INK, txt: '<small style="display:block;color:' + p.c + ';font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:6px">Categoría</small><span style="font-size:34px;font-weight:800">Título de la sección</span>' }) },
+  { n: 'Título con barra lateral', f: p => G({ t: 'h2', w: 600, h: 56, c: INK, fs: 30, fw: 800, css: 'border-left:6px solid ' + p.c + ';padding-left:16px;', txt: 'Título de la sección' }) },
+  { n: 'Título centrado con línea', f: p => G({ t: 'div', w: 600, h: 80, c: INK, ta: 'center', txt: '<span style="font-size:32px;font-weight:800">Título centrado</span><i style="display:block;width:60px;height:4px;background:' + p.c + ';margin:12px auto 0;border-radius:2px"></i>' }) },
+  { n: 'Título resaltado',  f: p => G({ t: 'h2', w: 600, h: 56, c: INK, fs: 32, fw: 800, txt: '<span style="background:' + p.s + ';padding:0 10px;border-radius:6px">Título resaltado</span>' }) },
+  { n: 'Título en mayúsculas', f: p => G({ t: 'h2', w: 600, h: 40, c: p.c, fs: 15, fw: 800, ls: 4, css: 'text-transform: uppercase;', txt: 'Subtítulo espaciado' }) },
+  { n: 'Título numerado',   f: p => G({ t: 'h2', w: 600, h: 60, c: INK, fs: 28, fw: 800, txt: '<span style="color:' + p.c + ';font-size:46px;font-weight:900;margin-right:14px">01</span>Primer paso' }) },
+  { n: 'Título a dos tonos', f: p => G({ t: 'h2', w: 640, h: 56, c: INK, fs: 38, fw: 800, txt: 'Diseña algo <span style="color:' + p.c + '">increíble</span>' }) }
+];
+
+/* ---------- 5. TARJETAS ---------- */
+const V_CARD = [
+  { n: 'Tarjeta con franja', f: p => G({ w: 300, h: 190, bg: '#fff', c: INK, r: 12, sh: 'md', pad: 22, css: 'border-top:5px solid ' + p.c + ';', txt: '<h3 style="font-size:19px;margin-bottom:8px">Título de tarjeta</h3><p style="color:#64748b;line-height:1.6;font-size:14px">Un texto corto que describe el contenido de esta tarjeta.</p>' }) },
+  { n: 'Tarjeta con ícono', f: p => G({ w: 300, h: 210, bg: '#fff', c: INK, r: 14, bw: 1, bc: LINE, pad: 24, txt: '<div style="width:46px;height:46px;border-radius:12px;background:' + p.s + ';color:' + p.c + ';display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px">★</div><h3 style="font-size:18px;margin-bottom:6px">Característica</h3><p style="color:#64748b;line-height:1.6;font-size:14px">Explica el beneficio en una línea o dos.</p>' }) },
+  { n: 'Tarjeta con imagen', f: p => G({ w: 300, h: 320, bg: '#fff', c: INK, r: 14, sh: 'md', ov: 1, txt: '<img src="asset:ph" alt="Imagen de la tarjeta" style="width:100%;height:160px;object-fit:cover;display:block"><div style="padding:18px"><h3 style="font-size:18px;margin-bottom:6px">Título</h3><p style="color:#64748b;font-size:14px;margin-bottom:12px">Descripción breve del contenido.</p><a href="#" style="color:' + p.c + ';font-weight:700;text-decoration:none">Leer más →</a></div>' }) },
+  { n: 'Tarjeta horizontal', f: p => G({ w: 380, h: 120, bg: '#fff', c: INK, r: 12, sh: 'md', ov: 1, txt: '<div style="width:100px;background:' + p.c + ';color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;flex:none">A</div><div style="padding:16px 18px"><h3 style="font-size:17px;margin-bottom:6px">Título lateral</h3><p style="color:#64748b;font-size:13px;line-height:1.5">Descripción corta al costado.</p></div>', css: 'display:flex;' }) },
+  { n: 'Tarjeta de dato',   f: p => G({ w: 240, h: 130, bg: '#fff', c: INK, r: 14, bw: 1, bc: LINE, pad: 22, txt: '<div style="color:#64748b;font-size:13px;margin-bottom:6px">Ingresos</div><div style="font-size:34px;font-weight:800;color:' + p.c + '">$24,300</div><div style="font-size:12px;color:#16a34a;margin-top:4px">▲ 12% este mes</div>' }) },
+  { n: 'Tarjeta de perfil', f: p => G({ w: 260, h: 300, bg: '#fff', c: INK, r: 16, sh: 'lg', al: 'c', txt: '<div style="text-align:center;padding:24px"><div style="width:76px;height:76px;border-radius:50%;background:' + p.c + ';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;margin:0 auto 14px">AP</div><h3 style="font-size:19px">Ana Pérez</h3><p style="color:#64748b;font-size:14px;margin:4px 0 18px">Diseñadora</p><a href="#" style="display:inline-block;padding:9px 22px;background:' + p.c + ';color:#fff;border-radius:999px;font-weight:600;text-decoration:none;font-size:14px">Seguir</a></div>' }) },
+  { n: 'Tarjeta de cita',   f: p => G({ w: 340, h: 180, bg: p.s, c: INK, r: 14, pad: 24, txt: '<div style="font-size:44px;line-height:.6;color:' + p.c + ';font-weight:900">“</div><p style="font-size:16px;line-height:1.6;margin:10px 0 12px">Simplemente funciona. No cambiaría nada.</p><b style="font-size:14px;color:' + p.d + '">— Cliente feliz</b>' }) },
+  { n: 'Tarjeta con lista', f: p => G({ w: 280, h: 230, bg: '#fff', c: INK, r: 14, bw: 1, bc: LINE, pad: 22, txt: '<h3 style="font-size:18px;margin-bottom:12px">Incluye</h3><ul style="list-style:none;line-height:2.1;font-size:14px"><li><b style="color:' + p.c + '">✓</b> Primer beneficio</li><li><b style="color:' + p.c + '">✓</b> Segundo beneficio</li><li><b style="color:' + p.c + '">✓</b> Tercer beneficio</li></ul>' }) },
+  { n: 'Tarjeta degradada', f: p => G({ w: 300, h: 190, bg: 'linear-gradient(135deg,' + p.c + ',' + p.d + ')', c: '#fff', r: 16, sh: 'lg', pad: 24, txt: '<div style="font-size:13px;opacity:.85;margin-bottom:8px">Plan</div><div style="font-size:34px;font-weight:800;margin-bottom:8px">Premium</div><div style="font-size:14px;opacity:.9">Todo lo que necesitas para crecer.</div>' }) },
+  { n: 'Tarjeta oscura',    f: p => G({ w: 300, h: 190, bg: '#0f172a', c: '#e2e8f0', r: 14, pad: 24, css: 'border-bottom:3px solid ' + p.c + ';', txt: '<div style="color:' + p.c + ';font-size:12px;font-weight:800;letter-spacing:2px;margin-bottom:8px">DESTACADO</div><h3 style="font-size:20px;color:#fff;margin-bottom:8px">Título oscuro</h3><p style="font-size:14px;color:#94a3b8;line-height:1.6">Ideal para secciones con fondo oscuro.</p>' }) }
+];
+
+/* ---------- 6. FONDOS Y DEGRADADOS ---------- */
+const V_BG = [
+  { n: 'Fondo degradado lineal', f: p => G({ t: 'section', w: 'full', h: 260, bg: 'linear-gradient(135deg,' + p.c + ',' + p.d + ')' }) },
+  { n: 'Fondo suave',       f: p => G({ t: 'section', w: 'full', h: 260, bg: 'linear-gradient(180deg,' + p.s + ',#ffffff)' }) },
+  { n: 'Fondo radial',      f: p => G({ t: 'section', w: 'full', h: 260, bg: 'radial-gradient(circle at 30% 30%,' + p.c + ',' + p.d + ')' }) },
+  { n: 'Fondo cónico',      f: p => G({ t: 'section', w: 'full', h: 260, bg: 'conic-gradient(from 180deg at 50% 50%,' + p.c + ',' + p.d + ',' + p.c + ')' }) },
+  { n: 'Fondo malla (mesh)', f: p => G({ t: 'section', w: 'full', h: 260, bg: 'radial-gradient(at 20% 20%,' + p.c + ' 0,transparent 50%),radial-gradient(at 80% 30%,' + p.s + ' 0,transparent 50%),radial-gradient(at 50% 95%,' + p.d + ' 0,transparent 55%),#0f172a' }) },
+  { n: 'Fondo rayas',       f: p => G({ t: 'section', w: 'full', h: 260, bg: 'repeating-linear-gradient(45deg,' + p.c + ',' + p.c + ' 20px,' + p.d + ' 20px,' + p.d + ' 40px)' }) },
+  { n: 'Fondo con puntos',  f: p => G({ t: 'section', w: 'full', h: 260, bg: 'radial-gradient(rgba(255,255,255,.35) 2px,transparent 2px) 0 0/24px 24px,' + p.c }) },
+  { n: 'Fondo cuadrícula',  f: p => G({ t: 'section', w: 'full', h: 260, bg: 'linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px) 0 0/32px 32px,linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px) 0 0/32px 32px,' + p.c }) },
+  { n: 'Fondo dividido',    f: p => G({ t: 'section', w: 'full', h: 260, bg: 'linear-gradient(90deg,' + p.c + ' 50%,' + p.d + ' 50%)' }) },
+  { n: 'Fondo atardecer',   f: p => G({ t: 'section', w: 'full', h: 260, bg: 'linear-gradient(160deg,' + p.s + ' 0%,' + p.c + ' 55%,' + p.d + ' 100%)' }) }
+];
+
+/* ---------- 7. PORTADAS (HERO) ---------- */
+const HB = (p, t) => '<a href="#" style="display:inline-block;padding:13px 26px;background:' + p.c + ';color:#fff;border-radius:8px;font-weight:700;text-decoration:none">' + t + '</a>';
+const V_HERO = [
+  { n: 'Portada degradada', f: p => G({ t: 'section', w: 'full', h: 420, bg: 'linear-gradient(135deg,' + p.c + ',' + p.d + ')', c: '#fff', al: 'c', txt: '<div style="text-align:center;max-width:680px;padding:0 24px"><h1 style="font-size:46px;line-height:1.15;margin-bottom:16px">Tu idea, lista para el mundo</h1><p style="font-size:18px;opacity:.9;margin-bottom:26px">Un texto corto que explica qué ofreces.</p><a href="#" style="display:inline-block;padding:14px 28px;background:#fff;color:' + p.d + ';border-radius:8px;font-weight:800;text-decoration:none">Empezar</a></div>' }) },
+  { n: 'Portada oscura minimal', f: p => G({ t: 'section', w: 'full', h: 420, bg: '#0b1020', c: '#fff', al: 'c', txt: '<div style="text-align:center;max-width:640px;padding:0 24px"><i style="display:block;width:56px;height:4px;background:' + p.c + ';margin:0 auto 22px;border-radius:2px"></i><h1 style="font-size:48px;line-height:1.1;margin-bottom:16px">Simple. Directo.</h1><p style="color:#94a3b8;font-size:17px">Menos ruido, más resultados.</p></div>' }) },
+  { n: 'Portada clara con acento', f: p => G({ t: 'section', w: 'full', h: 420, bg: p.s, c: INK, al: 'c', txt: '<div style="text-align:center;max-width:660px;padding:0 24px"><h1 style="font-size:46px;line-height:1.15;margin-bottom:16px">Todo lo que <span style="color:' + p.c + '">necesitas</span></h1><p style="color:#475569;font-size:18px;margin-bottom:26px">Empieza hoy, sin complicaciones.</p>' + HB(p, 'Crear cuenta') + '</div>' }) },
+  { n: 'Portada texto + forma', f: p => G({ t: 'section', w: 'full', h: 420, bg: '#fff', c: INK, txt: '<div style="display:flex;align-items:center;justify-content:space-between;width:100%;height:100%;padding:0 70px"><div style="max-width:480px"><h1 style="font-size:44px;line-height:1.15;margin-bottom:16px">Construye <span style="color:' + p.c + '">más rápido</span></h1><p style="color:#64748b;font-size:17px;margin-bottom:24px">Herramientas simples para equipos que avanzan.</p>' + HB(p, 'Ver demo') + '</div><div style="width:280px;height:280px;border-radius:50%;background:linear-gradient(135deg,' + p.c + ',' + p.s + ')"></div></div>' }) },
+  { n: 'Portada con insignia y 2 botones', f: p => G({ t: 'section', w: 'full', h: 440, bg: '#0f172a', c: '#fff', al: 'c', txt: '<div style="text-align:center;max-width:700px;padding:0 24px"><span style="display:inline-block;padding:6px 14px;border-radius:999px;background:' + p.c + '33;color:' + p.s + ';font-size:13px;font-weight:700;margin-bottom:18px">Nuevo · Versión 2.0</span><h1 style="font-size:48px;line-height:1.1;margin-bottom:16px">La forma inteligente de crecer</h1><p style="color:#94a3b8;font-size:17px;margin-bottom:26px">Todo en un solo lugar.</p><div style="display:flex;gap:12px;justify-content:center">' + HB(p, 'Empezar gratis') + '<a href="#" style="display:inline-block;padding:13px 26px;border:1px solid #475569;color:#fff;border-radius:8px;font-weight:700;text-decoration:none">Ver más</a></div></div>' }) },
+  { n: 'Portada con cifras', f: p => G({ t: 'section', w: 'full', h: 460, bg: 'linear-gradient(135deg,' + p.d + ',' + p.c + ')', c: '#fff', al: 'c', txt: '<div style="text-align:center;padding:0 24px"><h1 style="font-size:44px;margin-bottom:28px">Resultados que se notan</h1><div style="display:flex;gap:56px;justify-content:center"><div><div style="font-size:40px;font-weight:800">10k+</div><div style="opacity:.8">Clientes</div></div><div><div style="font-size:40px;font-weight:800">99%</div><div style="opacity:.8">Satisfacción</div></div><div><div style="font-size:40px;font-weight:800">24/7</div><div style="opacity:.8">Soporte</div></div></div></div>' }) },
+  { n: 'Portada con imagen', f: p => G({ t: 'section', w: 'full', h: 440, bg: '#fff', c: INK, txt: '<div style="display:flex;align-items:center;width:100%;height:100%"><div style="flex:1;padding:0 60px"><h1 style="font-size:42px;line-height:1.15;margin-bottom:14px">Una imagen vale más</h1><p style="color:#64748b;font-size:17px;margin-bottom:22px">Muestra tu producto en acción.</p>' + HB(p, 'Descubrir') + '</div><img src="asset:ph" alt="Imagen principal" style="width:48%;height:100%;object-fit:cover"></div>' }) },
+  { n: 'Portada con buscador', f: p => G({ t: 'section', w: 'full', h: 380, bg: 'linear-gradient(135deg,' + p.c + ',' + p.d + ')', c: '#fff', al: 'c', txt: '<div style="text-align:center;padding:0 24px"><h1 style="font-size:40px;margin-bottom:20px">Encuentra lo que buscas</h1><div style="display:flex;background:#fff;border-radius:999px;padding:6px;width:480px;max-width:100%;margin:0 auto"><input type="search" placeholder="Buscar…" aria-label="Buscar" style="flex:1;border:0;outline:0;padding:0 18px;font-size:15px;border-radius:999px"><button type="button" style="padding:12px 26px;background:' + p.c + ';color:#fff;border:0;border-radius:999px;font-weight:700;cursor:pointer">Buscar</button></div></div>' }) },
+  { n: 'Portada con anuncio', f: p => G({ t: 'section', w: 'full', h: 400, bg: '#fff', c: INK, al: 'c', txt: '<div style="text-align:center;max-width:680px;padding:0 24px"><span style="display:inline-block;padding:6px 16px;border-radius:999px;background:' + p.s + ';color:' + p.d + ';font-size:13px;font-weight:700;margin-bottom:20px">🎉 Lanzamiento disponible</span><h1 style="font-size:46px;line-height:1.12;margin-bottom:16px">Presentamos algo nuevo</h1><p style="color:#64748b;font-size:18px;margin-bottom:24px">Conócelo hoy mismo.</p>' + HB(p, 'Conocer más') + '</div>' }) },
+  { n: 'Portada tipografía grande', f: p => G({ t: 'section', w: 'full', h: 420, bg: '#fff', c: INK, txt: '<div style="padding:0 70px;display:flex;flex-direction:column;justify-content:center;height:100%"><h1 style="font-size:84px;line-height:1;font-weight:900;letter-spacing:-2px">Diseña<span style="color:' + p.c + '">.</span><br>Crea<span style="color:' + p.c + '">.</span><br>Publica<span style="color:' + p.c + '">.</span></h1></div>' }) }
+];
+
+/* ---------- 8. FORMULARIOS ---------- */
+const V_FORM = [
+  { n: 'Campo con borde de color', f: p => G({ t: 'input', w: 300, h: 46, bg: '#fff', c: INK, r: 8, bw: 2, bc: p.c, pad: 12, fs: 15, attrs: 'type="text" placeholder="Tu nombre" aria-label="Tu nombre"' }) },
+  { n: 'Campo suave',       f: p => G({ t: 'input', w: 300, h: 46, bg: p.s, c: p.d, r: 10, pad: 14, fs: 15, attrs: 'type="text" placeholder="Escribe aquí" aria-label="Campo de texto"' }) },
+  { n: 'Campo subrayado',   f: p => G({ t: 'input', w: 300, h: 44, bg: 'transparent', c: INK, r: 0, pad: 8, fs: 15, css: 'border-bottom:2px solid ' + p.c + ';', attrs: 'type="text" placeholder="Correo electrónico" aria-label="Correo electrónico"' }) },
+  { n: 'Buscador píldora',  f: p => G({ w: 420, h: 50, bg: '#fff', c: INK, r: 999, sh: 'md', ov: 1, txt: '<div style="display:flex;width:100%;height:100%;padding:5px 5px 5px 20px"><input type="search" placeholder="Buscar…" aria-label="Buscar" style="flex:1;border:0;outline:0;background:transparent;font-size:15px"><button type="button" style="width:90px;background:' + p.c + ';color:#fff;border:0;border-radius:999px;font-weight:700;cursor:pointer">Ir</button></div>' }) },
+  { n: 'Suscripción en línea', f: p => G({ w: 440, h: 54, bg: '#fff', c: INK, r: 10, bw: 1, bc: LINE, ov: 1, txt: '<div style="display:flex;width:100%;height:100%"><input type="email" placeholder="tu@correo.com" aria-label="Correo" style="flex:1;border:0;outline:0;padding:0 16px;font-size:15px"><button type="button" style="padding:0 22px;background:' + p.c + ';color:#fff;border:0;font-weight:700;cursor:pointer">Suscribirme</button></div>' }) },
+  { n: 'Lista desplegable', f: p => G({ t: 'select', w: 260, h: 46, bg: '#fff', c: INK, r: 8, bw: 2, bc: p.c, pad: 10, fs: 15, attrs: 'aria-label="Elige una opción"', txt: '<option>Elige una opción</option><option>Opción 1</option><option>Opción 2</option>' }) },
+  { n: 'Área de mensaje',   f: p => G({ t: 'textarea', w: 320, h: 120, bg: '#fff', c: INK, r: 10, bw: 2, bc: p.c, pad: 12, fs: 15, css: 'resize:none;font-family:inherit;', attrs: 'placeholder="Tu mensaje…" aria-label="Mensaje"' }) },
+  { n: 'Casilla de color',  f: p => G({ t: 'label', w: 260, h: 30, c: INK, fs: 15, al: 'l', cur: 'pointer', txt: '<input type="checkbox" style="width:18px;height:18px;margin-right:10px;accent-color:' + p.c + '"> Acepto los términos' }) },
+  { n: 'Control deslizante', f: p => G({ t: 'input', w: 260, h: 24, bg: 'transparent', css: 'accent-color:' + p.c + ';', attrs: 'type="range" value="60" aria-label="Control deslizante"' }) },
+  { n: 'Interruptor',       f: p => G({ t: 'label', w: 58, h: 30, bg: '#cbd5e1', c: p.c, r: 999, func: 'toggle', txt: '<input type="checkbox" aria-label="Activar opción"><span class="slider"></span>' }) }
+];
+
+/* ---------- 9. NAVEGACIÓN Y PIES DE PÁGINA ---------- */
+const NAV_LINKS = c => '<div style="display:flex;gap:26px;font-weight:600;color:' + c + '"><a href="#" style="text-decoration:none">Inicio</a><a href="#" style="text-decoration:none">Servicios</a><a href="#" style="text-decoration:none">Contacto</a></div>';
+const V_NAV = [
+  { n: 'Barra clara',       f: p => G({ t: 'nav', w: 'full', h: 68, bg: '#fff', c: INK, css: 'border-bottom:1px solid #e2e8f0;', attrs: 'aria-label="Principal"', txt: '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100%;padding:0 32px"><strong style="font-size:20px;color:' + p.c + '">MARCA</strong>' + NAV_LINKS(INK) + '<a href="#" style="padding:10px 20px;background:' + p.c + ';color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Entrar</a></div>' }) },
+  { n: 'Barra de color',    f: p => G({ t: 'nav', w: 'full', h: 68, bg: p.c, c: '#fff', attrs: 'aria-label="Principal"', txt: '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100%;padding:0 32px"><strong style="font-size:20px">MARCA</strong>' + NAV_LINKS('#fff') + '<a href="#" style="padding:10px 20px;background:#fff;color:' + p.d + ';border-radius:8px;text-decoration:none;font-weight:700">Entrar</a></div>' }) },
+  { n: 'Barra oscura',      f: p => G({ t: 'nav', w: 'full', h: 68, bg: '#0f172a', c: '#fff', attrs: 'aria-label="Principal"', txt: '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100%;padding:0 32px"><strong style="font-size:20px">MARCA<span style="color:' + p.c + '">.</span></strong>' + NAV_LINKS('#cbd5e1') + '<a href="#" style="padding:10px 20px;background:' + p.c + ';color:#fff;border-radius:8px;text-decoration:none;font-weight:600">Empezar</a></div>' }) },
+  { n: 'Barra centrada',    f: p => G({ t: 'nav', w: 'full', h: 90, bg: p.s, c: INK, attrs: 'aria-label="Principal"', txt: '<div style="text-align:center;padding-top:12px"><strong style="font-size:22px;color:' + p.d + '">MARCA</strong><div style="display:flex;gap:28px;justify-content:center;margin-top:8px;font-weight:600;font-size:14px"><a href="#" style="text-decoration:none">Inicio</a><a href="#" style="text-decoration:none">Tienda</a><a href="#" style="text-decoration:none">Blog</a><a href="#" style="text-decoration:none">Contacto</a></div></div>' }) },
+  { n: 'Barra con píldora', f: p => G({ t: 'nav', w: 'full', h: 76, bg: '#fff', c: INK, attrs: 'aria-label="Principal"', txt: '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100%;padding:0 40px"><strong style="font-size:20px;color:' + INK + '">Marca</strong>' + NAV_LINKS('#475569') + '<a href="#" style="padding:11px 24px;background:' + p.c + ';color:#fff;border-radius:999px;text-decoration:none;font-weight:700">Contacto</a></div>' }) },
+  { n: 'Pie oscuro 3 columnas', f: p => G({ t: 'footer', w: 'full', h: 180, bg: '#0f172a', c: '#94a3b8', txt: '<div style="display:flex;justify-content:space-around;align-items:center;width:100%;height:100%;padding:0 32px"><div><h3 style="color:' + p.s + ';margin-bottom:8px">Empresa</h3><p>Sobre nosotros<br>Contacto</p></div><div><h3 style="color:' + p.s + ';margin-bottom:8px">Recursos</h3><p>Blog<br>Ayuda</p></div><div><h3 style="color:' + p.s + ';margin-bottom:8px">Legal</h3><p>Privacidad<br>Términos</p></div></div>' }) },
+  { n: 'Pie de color',      f: p => G({ t: 'footer', w: 'full', h: 130, bg: p.c, c: '#fff', al: 'c', txt: '<div style="text-align:center"><strong style="font-size:18px">MARCA</strong><p style="opacity:.85;margin-top:8px;font-size:14px">© 2026 Todos los derechos reservados.</p></div>' }) },
+  { n: 'Pie claro minimal', f: p => G({ t: 'footer', w: 'full', h: 110, bg: '#f8fafc', c: '#64748b', css: 'border-top:1px solid #e2e8f0;', txt: '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100%;padding:0 40px"><strong style="color:' + p.c + '">MARCA</strong><span style="font-size:14px">© 2026 · Hecho con cariño</span></div>' }) },
+  { n: 'Pie con redes',     f: p => G({ t: 'footer', w: 'full', h: 150, bg: '#0f172a', c: '#94a3b8', al: 'c', txt: '<div style="text-align:center"><strong style="color:#fff;font-size:18px">MARCA</strong><div style="display:flex;gap:14px;justify-content:center;margin:14px 0">' + ['IG', 'X', 'YT', 'IN'].map(s => '<span style="width:34px;height:34px;border-radius:50%;background:' + p.c + ';color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800">' + s + '</span>').join('') + '</div><span style="font-size:13px">© 2026</span></div>' }) },
+  { n: 'Pie con boletín',   f: p => G({ t: 'footer', w: 'full', h: 200, bg: '#0f172a', c: '#94a3b8', txt: '<div style="display:flex;justify-content:space-around;align-items:center;width:100%;height:100%;padding:0 40px"><div><strong style="color:#fff;font-size:20px">MARCA</strong><p style="margin-top:8px;font-size:14px">Novedades en tu correo.</p></div><div style="display:flex;gap:8px"><input type="email" placeholder="tu@correo.com" aria-label="Correo" style="padding:12px 16px;border-radius:8px;border:0;width:220px"><button type="button" style="padding:12px 20px;background:' + p.c + ';color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer">Unirme</button></div></div>' }) }
+];
+
+/* ---------- 10. FORMAS Y DECORACIÓN ---------- */
+const V_SHAPE = [
+  { n: 'Círculo',      f: p => G({ w: 150, h: 150, bg: p.c, r: 999, ratio: 1 }) },
+  { n: 'Triángulo',    f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(50% 0%, 0% 100%, 100% 100%)', ratio: 1 }) },
+  { n: 'Hexágono',     f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)', ratio: 1 }) },
+  { n: 'Estrella',     f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', ratio: 1 }) },
+  { n: 'Rombo',        f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', ratio: 1 }) },
+  { n: 'Flecha',       f: p => G({ w: 180, h: 100, bg: p.c, clip: 'polygon(0 30%, 60% 30%, 60% 0, 100% 50%, 60% 100%, 60% 70%, 0 70%)', ratio: 1 }) },
+  { n: 'Pentágono',    f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)', ratio: 1 }) },
+  { n: 'Octágono',     f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', ratio: 1 }) },
+  { n: 'Paralelogramo', f: p => G({ w: 200, h: 110, bg: p.c, clip: 'polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%)', ratio: 1 }) },
+  { n: 'Cruz',         f: p => G({ w: 150, h: 150, bg: p.c, clip: 'polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%)', ratio: 1 }) }
+];
+
+/* ---------- 11. ELEMENTOS ANIMADOS ---------- */
+const ANIM_LIST = [['float', 'Flotando'], ['pulse', 'Latiendo'], ['bounce', 'Rebotando'], ['shake', 'Sacudiéndose'], ['glow', 'Con brillo'], ['spin', 'Girando 3D'], ['fadein', 'Aparece'], ['zoomin', 'Aparece con zoom'], ['slideup', 'Sube al aparecer'], ['gradientshift', 'Degradado móvil']];
+const V_ANIM = ANIM_LIST.map(a => ({ n: a[1], f: p => G({ w: 180, h: 58, bg: 'linear-gradient(120deg,' + p.c + ',' + p.d + ')', c: '#fff', r: 14, fs: 16, fw: 700, al: 'c', anim: a[0], txt: a[1] }) }));
+
+/* ---------- 12. CARRUSELES EN TODOS LOS COLORES ---------- */
+function genCarousels() {
+  const bases = ['car-auto', 'car-fade', 'car-arrows', 'car-dots', 'car-scroll', 'car-peek', 'car-vertical', 'car-marquee', 'car-thumbs', 'car-stack'];
+  const items = [];
+  bases.forEach((bk, bi) => {
+    const b = CAT[bk]; if (!b) return;
+    PAL.forEach((p, pi) => {
+      const trio = [p.c, PAL[(pi + 3) % 10].c, PAL[(pi + 6) % 10].c];
+      const swap = s => s.split('#2563eb').join('@@1').split('#059669').join('@@2').split('#e11d48').join('@@3').split('@@1').join(trio[0]).split('@@2').join(trio[1]).split('@@3').join(trio[2]);
+      const it = Object.assign({}, b, { id: 'vc' + bi + '-' + pi, n: b.n.replace(/^\d+\.\s*/, '') + ' · ' + p.n, sw: p.c, txt: swap(b.txt || '') });
+      if (it.css) it.css = swap(it.css);
+      items.push(it);
+    });
+  });
+  return { cat: 'Carruseles en colores', gen: 1, items };
+}
+
+/* ---------- registro ---------- */
+(function registerVariants() {
+  const cats = [
+    genCategory('Botones (100 variantes)', V_BTN, { prefix: 'vb' }),
+    genCategory('Etiquetas e insignias (100)', V_TAG, { prefix: 'vt' }),
+    genCategory('Avisos y alertas (100)', V_ALERT, { prefix: 'va' }),
+    genCategory('Títulos y encabezados (100)', V_HEAD, { prefix: 'vh' }),
+    genCategory('Tarjetas (100 variantes)', V_CARD, { prefix: 'vk' }),
+    genCategory('Fondos y degradados (100)', V_BG, { prefix: 'vf' }),
+    genCategory('Portadas / Hero (100)', V_HERO, { prefix: 'vr' }),
+    genCategory('Formularios (100 variantes)', V_FORM, { prefix: 'vo' }),
+    genCategory('Menús y pies de página (100)', V_NAV, { prefix: 'vn' }),
+    genCategory('Formas geométricas (100)', V_SHAPE, { prefix: 'vs' }),
+    genCategory('Elementos animados (100)', V_ANIM, { prefix: 'vm' })
+  ];
+  cats.forEach(c => { c.items.forEach(i => { CAT[i.id] = i; }); CATALOG.push(c); });
+  const car = genCarousels();
+  car.items.forEach(i => { CAT[i.id] = i; });
+  CATALOG.push(car);
+})();
+
+
+/* =====================================================================
    GENERADOR: convierte el modelo en HTML + CSS + JS limpios
    Modos de CSS:
      edit     → píxeles exactos (lo que ves en el lienzo)
@@ -1460,7 +1701,7 @@ const shadow = pageHost.attachShadow({ mode: 'open' });
 shadow.innerHTML = '<style id="s-edit">' +
   ':host{display:block}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}' +
   'img,video,iframe{display:block}button,input,select,textarea{font:inherit;color:inherit}a{color:inherit}' +
-  '[data-eid]{cursor:default;-webkit-user-select:none;user-select:none}[data-eid] *{pointer-events:none}' +
+  '[data-eid]{cursor:default;-webkit-user-select:none;user-select:none}[data-eid] *{pointer-events:none}iframe[data-eid]{pointer-events:none}' +
   '[data-eid].editing{cursor:text;-webkit-user-select:text;user-select:text;outline:none}[data-eid].editing *{pointer-events:auto}' +
   '</style><style id="s-css"></style><div class="pro-layout" id="root"></div>';
 const rootEl = shadow.getElementById('root');
@@ -1644,10 +1885,20 @@ function toDesign(e) {
   return { x: (e.clientX - r.left) / S.zoom, y: (e.clientY - r.top) / S.zoom };
 }
 function hitId(e) {
+  /* Un <iframe> se traga los eventos de mouse (van a su documento interno, no
+     al del editor) y con pointer-events:none tampoco aparece en
+     elementsFromPoint. Por eso los iframes se detectan por geometría y el resto
+     por elementsFromPoint, recorriendo de arriba hacia abajo para respetar el
+     orden de apilado. */
   const list = shadow.elementsFromPoint(e.clientX, e.clientY);
-  for (const n of list) {
-    const id = n.dataset && n.dataset.eid;
-    if (id) { const el = byId(id); if (el && !el.locked && !el.hidden) return id; }
+  const p = toDesign(e);
+  for (let i = S.p.els.length - 1; i >= 0; i--) {
+    const el = S.p.els[i];
+    if (el.hidden || el.locked) continue;
+    const hit = el.tag === 'iframe'
+      ? (p.x >= el.x && p.x <= el.x + el.w && p.y >= el.y && p.y <= el.y + el.h)
+      : list.includes(nodeOf(el.id));
+    if (hit) return el.id;
   }
   return null;
 }
@@ -1676,10 +1927,22 @@ function livePos(el, keys) {
 }
 function clearLive(el) { const n = nodeOf(el.id); if (n) { n.style.left = n.style.top = n.style.width = n.style.height = ''; } }
 
+/* ---------- blindaje de iframes durante el arrastre ----------
+   Un <iframe> abre su propio contexto de navegación: en cuanto el cursor
+   pasa por encima mientras se arrastra, el mousemove deja de llegar al
+   documento del editor y el arrastre se "congela". Mientras dura CUALQUIER
+   operación de arrastre (mover, redimensionar, marquesina) desactivamos el
+   pointer-events de los iframes del lienzo, y lo restauramos al soltar. */
+function shieldIframes() {
+  const list = Array.from(shadow.querySelectorAll('iframe'));
+  list.forEach(f => { f.dataset.mlpPe = f.style.pointerEvents || ''; f.style.pointerEvents = 'none'; });
+  return () => list.forEach(f => { f.style.pointerEvents = f.dataset.mlpPe; delete f.dataset.mlpPe; });
+}
+
 /* ---------- arrastrar ---------- */
-function startDrag(e) {
+function startDrag(e, unshield) {
   const els = selEls().filter(x => !x.locked && !x.hidden);
-  if (!els.length) return;
+  if (!els.length) { if (unshield) unshield(); return; }
   const start = els.map(x => ({ el: x, x: x.x, y: x.y }));
   const bb = bbox(els);
   const sx = e.clientX, sy = e.clientY;
@@ -1703,13 +1966,14 @@ function startDrag(e) {
     view.guides = [];
     if (moved) { start.forEach(o => clearLive(o.el)); renderPage(); commit(); }
     drawOverlay();
+    if (unshield) unshield();
   }
   document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
 }
 
 /* ---------- redimensionar ---------- */
-function startResize(e, handle) {
-  const el = one(); if (!el) return;
+function startResize(e, handle, unshield) {
+  const el = one(); if (!el) { if (unshield) unshield(); return; }
   e.preventDefault(); e.stopPropagation();
   const s = { x: el.x, y: el.y, w: el.w, h: el.h }, sx = e.clientX, sy = e.clientY, ratio = s.w / s.h;
   let moved = false;
@@ -1731,12 +1995,13 @@ function startResize(e, handle) {
   function up() {
     document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up);
     if (moved) { clearLive(el); renderPage(); commit(); }
+    if (unshield) unshield();
   }
   document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
 }
 
 /* ---------- selección por recuadro y desplazamiento ---------- */
-function startMarquee(e) {
+function startMarquee(e, unshield) {
   const base = e.shiftKey ? S.sel.slice() : [];
   const p0 = toDesign(e);
   function move(ev) {
@@ -1751,6 +2016,7 @@ function startMarquee(e) {
   function up() {
     document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up);
     view.marq = null; selectionChanged();
+    if (unshield) unshield();
   }
   document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
 }
@@ -1770,17 +2036,18 @@ wrap.addEventListener('mousedown', e => {
   if (e.button === 1 || (e.button === 0 && S.space)) { startPan(e); return; }
   if (e.button !== 0) return;
   const hnd = e.target.closest && e.target.closest('.hnd');
-  if (hnd) { startResize(e, hnd.dataset.h); return; }
+  if (hnd) { const unshield = shieldIframes(); startResize(e, hnd.dataset.h, unshield); return; }
   const id = hitId(e);
   if (view.editingId && id !== view.editingId) endTextEdit();
   if (view.editingId && id === view.editingId) return;
-  if (!id) { if (!e.shiftKey) select([]); startMarquee(e); return; }
+  if (!id) { if (!e.shiftKey) select([]); const unshield = shieldIframes(); startMarquee(e, unshield); return; }
   e.preventDefault();
   if (e.shiftKey) {
     if (S.sel.includes(id)) { select(S.sel.filter(x => x !== id)); return; }
     select(S.sel.concat(id));
   } else if (!S.sel.includes(id)) select([id]);
-  startDrag(e);
+  const unshield = shieldIframes();
+  startDrag(e, unshield);
 });
 wrap.addEventListener('mousemove', e => {
   if (S.mode !== 'edit') return;
@@ -2046,28 +2313,54 @@ function refreshPanels(fromLoad) {
 }
 
 /* ===================== CATÁLOGO ===================== */
+/* Nivel de cada categoría, para el filtro "Básico / Intermedio / Profesional / Alternativo" */
+const TIERS = {
+  'Básico': ['Texto', 'Botones y etiquetas', 'Formas', 'Formularios', 'Datos y estado', 'Botones (100 variantes)', 'Etiquetas e insignias (100)', 'Formas geométricas (100)', 'Formularios (100 variantes)', 'Multimedia'],
+  'Intermedio': ['Estructura', 'Tarjetas y bloques', 'Interactividad solo con CSS', 'Avisos y alertas (100)', 'Títulos y encabezados (100)', 'Tarjetas (100 variantes)', 'Menús y pies de página (100)'],
+  'Profesional': ['Secciones grandes', 'Carruseles y sliders', 'Portadas / Hero (100)', 'Carruseles en colores'],
+  'Alternativo': ['Efectos visuales', 'Con JavaScript', 'Fondos y degradados (100)', 'Elementos animados (100)']
+};
+const tierOf = name => { for (const t in TIERS) if (TIERS[t].includes(name)) return t; return 'Intermedio'; };
+let catTier = 'Todos';
+
 function buildCatalog() {
   const host = $('#catalog');
-  host.innerHTML = CATALOG.map(cat =>
-    '<div class="cat" data-cat="' + escAttr(cat.cat.toLowerCase()) + '"><h3>' + esc(cat.cat) + '</h3><div class="cat-grid">' +
+  const total = CATALOG.reduce((n, c) => n + c.items.length, 0);
+  $('#cat-total').textContent = total + ' componentes';
+  host.innerHTML = CATALOG.map((cat, ci) =>
+    '<details class="cat" data-tier="' + tierOf(cat.cat) + '"' + (ci < 2 ? ' open' : '') + '><summary><span>' + esc(cat.cat) + '</span><em class="cnt">' + cat.items.length + '</em></summary><div class="cat-grid">' +
     cat.items.map(i =>
       '<button class="tool" draggable="true" data-key="' + i.id + '" data-hay="' + escAttr((i.n + ' ' + i.id + ' ' + cat.cat).toLowerCase()) + '" title="Añadir: ' + escAttr(i.n) + '">' +
+      (i.sw ? '<i class="sw" style="background:' + i.sw + '"></i>' : '') +
       '<span class="nm">' + esc(i.n) + '</span><span class="tg">&lt;' + i.t + '&gt;</span></button>'
-    ).join('') + '</div></div>'
-  ).join('') + '<div class="cat-empty" id="cat-empty" hidden>No hay componentes que coincidan.<br>Prueba con otra palabra.</div>';
+    ).join('') + '</div></details>'
+  ).join('') + '<div class="cat-empty" id="cat-empty" hidden>No hay componentes que coincidan.<br>Prueba con otra palabra (p. ej. “botón verde”, “tarjeta”, “hero”).</div>';
   host.addEventListener('click', e => { const b = e.target.closest('.tool'); if (b) addElement(b.dataset.key); });
   host.addEventListener('dragstart', e => { const b = e.target.closest('.tool'); if (b) e.dataTransfer.setData('text/x-mlp', b.dataset.key); });
+  $$('.tier-chip').forEach(c => c.addEventListener('click', () => {
+    catTier = c.dataset.tier;
+    $$('.tier-chip').forEach(x => x.classList.toggle('on', x === c));
+    filterCatalog();
+  }));
 }
-$('#cat-search').addEventListener('input', debounce(() => {
+function filterCatalog() {
   const q = $('#cat-search').value.trim().toLowerCase();
+  const words = q.split(/\s+/).filter(Boolean);
   let any = false;
   $$('.cat').forEach(sec => {
-    let has = false;
-    $$('.tool', sec).forEach(b => { const ok = !q || b.dataset.hay.includes(q); b.style.display = ok ? '' : 'none'; if (ok) has = true; });
-    sec.style.display = has ? '' : 'none'; if (has) any = true;
+    const tierOk = catTier === 'Todos' || sec.dataset.tier === catTier;
+    let has = 0;
+    $$('.tool', sec).forEach(b => {
+      const ok = tierOk && words.every(w => b.dataset.hay.includes(w));
+      b.style.display = ok ? '' : 'none'; if (ok) has++;
+    });
+    sec.style.display = has ? '' : 'none';
+    if (words.length && has) sec.open = true;
+    if (has) any = true;
   });
   $('#cat-empty').hidden = any;
-}, 80));
+}
+$('#cat-search').addEventListener('input', debounce(filterCatalog, 120));
 
 /* ===================== CAPAS ===================== */
 let dragLayerId = null;
